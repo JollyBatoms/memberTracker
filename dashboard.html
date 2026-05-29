@@ -53,9 +53,8 @@
 
     .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.6rem; }
     .stat-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.2rem 1.1rem; box-shadow:0 1px 4px rgba(0,0,0,.04); transition:box-shadow .2s,border-color .2s; }
-    .stat-card:hover { box-shadow:0 3px 10px rgba(0,0,0,.09); }
     .stat-card.clickable { cursor:pointer; }
-    .stat-card.clickable:hover { border-color:#0066cc; }
+    .stat-card.clickable:hover { border-color:#0066cc; box-shadow:0 3px 10px rgba(0,0,0,.09); }
     .stat-label { font-size:.7rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#999; margin-bottom:.5rem; }
     .stat-value { font-size:2rem; font-weight:700; line-height:1; margin-bottom:.3rem; }
     .stat-sub { font-size:.75rem; color:#aaa; }
@@ -114,19 +113,21 @@
     .badge-blue { background:#eef4ff; color:#0066cc; }
     .badge-green { background:#eafaf0; color:#1e7e34; }
     .badge-orange { background:#fff4e6; color:#c45f00; }
+    .badge-purple { background:#f0eeff; color:#5e35b1; }
 
-    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; }
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; }
     .modal-overlay.show { display:flex; }
     .modal { background:#fff; border-radius:8px; padding:1.8rem; width:90%; max-width:440px; max-height:80vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); }
     .modal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem; }
     .modal-title { font-family:'Merriweather',serif; font-size:1rem; font-weight:700; color:#dc3545; }
     .modal-close { background:none; border:none; font-size:1.6rem; cursor:pointer; color:#888; line-height:1; }
-    .modal-close:hover { color:#333; }
     .lost-item { display:flex; align-items:center; justify-content:space-between; padding:.65rem 0; border-bottom:1px solid #f0f0f0; }
     .lost-item:last-child { border-bottom:none; }
     .lost-name { font-size:.88rem; font-weight:700; }
     .lost-dept { font-size:.75rem; color:#888; margin-top:.1rem; }
-    .lost-weeks { font-size:.75rem; font-weight:700; color:#dc3545; white-space:nowrap; }
+    .lost-weeks { font-size:.75rem; font-weight:700; color:#dc3545; }
+
+    .loading { text-align:center; padding:2rem; color:#aaa; font-size:.85rem; }
 
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
@@ -148,6 +149,10 @@
   </style>
 </head>
 <body>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 
 <div class="admin-bar" id="adminBar">
   🔐 ADMIN MODE <span>Full access enabled</span>
@@ -197,28 +202,28 @@
 
     <div class="page-header">
       <h1>📊 Dashboard</h1>
-      <span class="session-tag" id="sessionTag">—</span>
+      <span class="session-tag" id="sessionTag">Loading…</span>
     </div>
 
     <div class="stats-grid">
       <div class="stat-card blue">
         <div class="stat-label">Active Members</div>
-        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-value" id="statTotal">—</div>
         <div class="stat-sub">current members</div>
       </div>
       <div class="stat-card green">
         <div class="stat-label">Last Event</div>
-        <div class="stat-value" id="statLastEvent">0</div>
+        <div class="stat-value" id="statLastEvent">—</div>
         <div class="stat-sub" id="statLastEventName">no events yet</div>
       </div>
       <div class="stat-card orange">
         <div class="stat-label">Monthly Avg</div>
-        <div class="stat-value" id="statAvg">0</div>
+        <div class="stat-value" id="statAvg">—</div>
         <div class="stat-sub">attendance avg</div>
       </div>
       <div class="stat-card red clickable" id="lostCard" onclick="showLostModal()" style="display:none">
         <div class="stat-label">Lost Members</div>
-        <div class="stat-value" id="statLost">0</div>
+        <div class="stat-value" id="statLost">—</div>
         <div class="stat-sub">tap to view list</div>
       </div>
     </div>
@@ -247,14 +252,14 @@
     <div class="bottom-row">
       <div class="info-card">
         <div class="info-card-title">Fellowship Activeness</div>
-        <div class="activeness-pct" id="activenessPct">0%</div>
+        <div class="activeness-pct" id="activenessPct">—</div>
         <div class="activeness-label">members active this month</div>
         <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
       </div>
       <div class="info-card">
         <div class="info-card-title">🎂 Birthdays This Month</div>
         <div class="birthday-list" id="birthdayList">
-          <div class="empty-msg">No birthdays this month</div>
+          <div class="empty-msg">Loading…</div>
         </div>
       </div>
       <div class="info-card">
@@ -262,7 +267,7 @@
         <table class="activity-table">
           <thead><tr><th>Date</th><th>Type</th><th>Count</th></tr></thead>
           <tbody id="activityBody">
-            <tr><td colspan="3" class="empty-msg">No records yet</td></tr>
+            <tr><td colspan="3" class="empty-msg">Loading…</td></tr>
           </tbody>
         </table>
       </div>
@@ -301,94 +306,153 @@
   }
 
   const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function ordinal(n) { const s=['th','st','nd','rd'],v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
-  function getData(k,d) { try { return JSON.parse(localStorage.getItem(k))||d; } catch { return d; } }
-
-  const memo = getData('memoSettings', {});
-  const sessionTag = document.getElementById('sessionTag');
-  if (memo.session && memo.semester && memo.startDate) {
-    const start = new Date(memo.startDate);
-    const today = new Date();
-    const weekNum = Math.max(1, Math.ceil((today - start) / (7*24*60*60*1000)));
-    sessionTag.textContent = memo.semester + ' Semester  ·  Wk ' + weekNum;
-  } else {
-    sessionTag.textContent = 'No session set';
+  function fmtDate(ds) { const d=new Date(ds); return ordinal(d.getDate())+' '+MONTHS_SHORT[d.getMonth()]; }
+  function badgeClass(t) {
+    if (t==='Sunday Service') return 'badge-blue';
+    if (t==='Bible Study') return 'badge-green';
+    if (t==='Prayer Meeting') return 'badge-purple';
+    return 'badge-orange';
   }
 
-  const members    = getData('members', []);
-  const attendance = getData('attendance', []);
-  const events     = getData('events', []);
-  const now        = new Date();
-  const activeMembers = members.filter(m => m.position !== 'Associates');
+  const now = new Date();
+  let allMembers = [], allAttendance = [], allEvents = [], lostMembers = [];
 
-  document.getElementById('statTotal').textContent = activeMembers.length;
+  // Load everything in parallel
+  Promise.all([
+    db.collection('settings').doc('memo').get(),
+    db.collection('members').get(),
+    db.collection('attendance').orderBy('date','desc').get(),
+    db.collection('events').get()
+  ]).then(([memoSnap, membersSnap, attSnap, eventsSnap]) => {
 
-  const sortedAtt = [...attendance].sort((a,b) => new Date(b.date)-new Date(a.date));
-  if (sortedAtt.length) {
-    const last = sortedAtt[0];
-    document.getElementById('statLastEvent').textContent = (last.members||[]).length + (last.visitors||0);
-    document.getElementById('statLastEventName').textContent = last.type || 'last event';
-  }
+    // Session tag
+    if (memoSnap.exists) {
+      const m = memoSnap.data();
+      if (m.session && m.semester && m.startDate) {
+        const start = new Date(m.startDate);
+        const weekNum = Math.max(1, Math.ceil((now - start) / (7*24*60*60*1000)));
+        document.getElementById('sessionTag').textContent = m.semester + ' Semester · Wk ' + weekNum;
+      } else {
+        document.getElementById('sessionTag').textContent = m.session ? m.session : 'No session set';
+      }
+    } else {
+      document.getElementById('sessionTag').textContent = 'No session set';
+    }
 
-  const thisMonthAtt = attendance.filter(a => {
-    const d = new Date(a.date);
-    return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
-  });
-  const avg = thisMonthAtt.length
-    ? Math.round(thisMonthAtt.reduce((s,a)=>s+(a.members||[]).length+(a.visitors||0),0)/thisMonthAtt.length) : 0;
-  document.getElementById('statAvg').textContent = avg;
+    // Members
+    allMembers = membersSnap.docs.map(d => ({ id:d.id, ...d.data() }));
+    const activeMembers = allMembers.filter(m => m.position !== 'Associates');
+    document.getElementById('statTotal').textContent = activeMembers.length;
 
-  const eightWeeksAgo = new Date(now - 8*7*24*60*60*1000);
-  const recentAtt = attendance.filter(a => new Date(a.date) >= eightWeeksAgo);
-  const presentIds = new Set(recentAtt.flatMap(a => a.members||[]));
-  const lostMembers = activeMembers.filter(m => !presentIds.has(m.id));
-  document.getElementById('statLost').textContent = lostMembers.length;
+    // Attendance
+    allAttendance = attSnap.docs.map(d => ({ id:d.id, ...d.data() }));
+    const sortedAtt = [...allAttendance].sort((a,b) => new Date(b.date)-new Date(a.date));
 
-  const activeThisMonth = activeMembers.filter(m => thisMonthAtt.some(a=>(a.members||[]).includes(m.id)));
-  const pct = activeMembers.length ? Math.round(activeThisMonth.length/activeMembers.length*100) : 0;
-  document.getElementById('activenessPct').textContent = pct + '%';
-  document.getElementById('progressFill').style.width = pct + '%';
+    if (sortedAtt.length) {
+      const last = sortedAtt[0];
+      document.getElementById('statLastEvent').textContent = (last.members||[]).length + (last.visitors||0);
+      document.getElementById('statLastEventName').textContent = last.type || 'last event';
+    } else {
+      document.getElementById('statLastEvent').textContent = '0';
+    }
 
-  const bdays = activeMembers.filter(m => m.dob_month && parseInt(m.dob_month)===now.getMonth()+1);
-  const bdList = document.getElementById('birthdayList');
-  if (bdays.length) {
-    bdList.innerHTML = bdays.map(m => `
-      <div class="birthday-item">
-        <span class="birthday-icon">🎂</span>
-        <div>
-          <div class="birthday-name">${m.name}</div>
-          <div class="birthday-date">${ordinal(parseInt(m.dob_day||1))} ${MONTHS[now.getMonth()]}</div>
-        </div>
-      </div>`).join('');
-  }
-
-  const actBody = document.getElementById('activityBody');
-  if (sortedAtt.length) {
-    actBody.innerHTML = sortedAtt.slice(0,5).map(a => {
+    // Monthly avg
+    const thisMonthAtt = allAttendance.filter(a => {
       const d = new Date(a.date);
-      const ds = ordinal(d.getDate())+' '+MONTHS[d.getMonth()];
-      const total = (a.members||[]).length+(a.visitors||0);
-      const cls = a.type==='Sunday Service'?'badge-blue':a.type==='Bible Study'?'badge-green':'badge-orange';
-      return `<tr><td>${ds}</td><td><span class="badge ${cls}">${a.type||'Event'}</span></td><td><strong>${total}</strong></td></tr>`;
-    }).join('');
-  }
+      return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+    });
+    const avg = thisMonthAtt.length
+      ? Math.round(thisMonthAtt.reduce((s,a)=>s+(a.members||[]).length+(a.visitors||0),0)/thisMonthAtt.length) : 0;
+    document.getElementById('statAvg').textContent = avg;
 
-  const carouselBody = document.getElementById('carouselBody');
-  const carouselDots = document.getElementById('carouselDots');
-  if (events.length) {
+    // Lost members (0 attendance in 8 weeks)
+    const eightWeeksAgo = new Date(now - 8*7*24*60*60*1000);
+    const recentAtt = allAttendance.filter(a => new Date(a.date) >= eightWeeksAgo);
+    const presentIds = new Set(recentAtt.flatMap(a => a.members||[]));
+    lostMembers = activeMembers.filter(m => !presentIds.has(m.id));
+    document.getElementById('statLost').textContent = lostMembers.length;
+
+    // Activeness
+    const activeThisMonth = activeMembers.filter(m =>
+      thisMonthAtt.some(a => (a.members||[]).includes(m.id))
+    );
+    const pct = activeMembers.length ? Math.round(activeThisMonth.length/activeMembers.length*100) : 0;
+    document.getElementById('activenessPct').textContent = pct + '%';
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    // Birthdays this month
+    const bdays = activeMembers.filter(m => m.dob_month && parseInt(m.dob_month)===now.getMonth()+1);
+    const bdList = document.getElementById('birthdayList');
+    if (bdays.length) {
+      bdList.innerHTML = bdays.map(m => `
+        <div class="birthday-item">
+          <span class="birthday-icon">🎂</span>
+          <div>
+            <div class="birthday-name">${m.name}</div>
+            <div class="birthday-date">${ordinal(parseInt(m.dob_day||1))} ${MONTHS[now.getMonth()]}</div>
+          </div>
+        </div>`).join('');
+    } else {
+      bdList.innerHTML = '<div class="empty-msg">No birthdays this month</div>';
+    }
+
+    // Recent activity
+    const actBody = document.getElementById('activityBody');
+    if (sortedAtt.length) {
+      actBody.innerHTML = sortedAtt.slice(0,5).map(a => {
+        const total = (a.members||[]).length+(a.visitors||0);
+        return `<tr>
+          <td>${fmtDate(a.date)}</td>
+          <td><span class="badge ${badgeClass(a.type)}">${a.type||'Event'}</span></td>
+          <td><strong>${total}</strong></td>
+        </tr>`;
+      }).join('');
+    } else {
+      actBody.innerHTML = '<tr><td colspan="3" class="empty-msg">No records yet</td></tr>';
+    }
+
+    // Events carousel
+    allEvents = eventsSnap.docs.map(d => ({ id:d.id, ...d.data() }));
+    buildCarousel(allEvents);
+
+  }).catch(err => {
+    console.error(err);
+    document.getElementById('sessionTag').textContent = 'Error loading';
+  });
+
+  function buildCarousel(events) {
+    const carouselBody = document.getElementById('carouselBody');
+    const carouselDots = document.getElementById('carouselDots');
+    if (!events.length) return;
+
     const sorted = [...events].sort((a,b) => {
       const aUp=new Date(a.date)>=now, bUp=new Date(b.date)>=now;
       if (aUp&&!bUp) return -1; if (!aUp&&bUp) return 1;
       return new Date(a.date)-new Date(b.date);
     });
+
     carouselBody.innerHTML = sorted.map((ev,i) => {
       const d = new Date(ev.date);
       const ds = ordinal(d.getDate())+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();
       const up = d >= now;
-      const imgHtml = ev.image ? `<div class="slide-img"><img src="${ev.image}" alt=""></div>` : `<div class="slide-img">📅</div>`;
-      return `<div class="carousel-slide ${i===0?'active':''}">${imgHtml}<div class="slide-info"><span class="slide-status ${up?'upcoming':'past'}">${up?'Upcoming':'Past'}</span><div class="slide-title">${ev.title}</div><div class="slide-date">📅 ${ds}${ev.time?' · '+ev.time:''}</div></div></div>`;
+      const imgHtml = ev.image
+        ? `<div class="slide-img"><img src="${ev.image}" alt=""></div>`
+        : `<div class="slide-img">📅</div>`;
+      return `<div class="carousel-slide ${i===0?'active':''}">${imgHtml}
+        <div class="slide-info">
+          <span class="slide-status ${up?'upcoming':'past'}">${up?'Upcoming':'Past'}</span>
+          <div class="slide-title">${ev.title}</div>
+          <div class="slide-date">📅 ${ds}${ev.time?' · '+ev.time:''}</div>
+        </div>
+      </div>`;
     }).join('');
-    carouselDots.innerHTML = sorted.map((_,i)=>`<div class="dot ${i===0?'active':''}" data-i="${i}"></div>`).join('');
+
+    carouselDots.innerHTML = sorted.map((_,i) =>
+      `<div class="dot ${i===0?'active':''}" data-i="${i}"></div>`
+    ).join('');
+
     let cur = 0;
     function goTo(i) {
       document.querySelectorAll('.carousel-slide').forEach((s,j)=>s.classList.toggle('active',j===i));
@@ -414,15 +478,21 @@
     document.getElementById('lostModal').classList.add('show');
   }
   function closeLostModal() { document.getElementById('lostModal').classList.remove('show'); }
-  document.getElementById('lostModal').addEventListener('click', function(e){ if(e.target===this) closeLostModal(); });
+  document.getElementById('lostModal').addEventListener('click',function(e){ if(e.target===this) closeLostModal(); });
 
   function doLogout() { localStorage.removeItem('userRole'); window.location.href = 'auth.html'; }
 
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click', ()=>{ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
+  document.getElementById('hamburger').addEventListener('click',()=>{ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
   function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
 
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + type;
+    setTimeout(()=>t.className='toast', 2500);
+  }
 </script>
 </body>
 </html>
