@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GECC Uniport — Attendance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --blue:#0066cc; --green:#28a745; --red:#dc3545; --sidebar-w:240px; }
+    html, body { height:100%; font-family:'Open Sans',sans-serif; background:#f7f9fc; color:#1a1a1a; }
+
+    .admin-bar { display:none; position:fixed; top:0; left:0; right:0; height:28px; background:#0066cc; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; color:#fff; letter-spacing:.08em; text-transform:uppercase; z-index:200; }
+    .admin-bar.show { display:flex; }
+    .admin-bar span { opacity:.7; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
+
+    .sidebar { position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh; background:#fff; border-right:1px solid #dde3ec; display:flex; flex-direction:column; z-index:100; transition:transform .3s; }
+    .sidebar.admin-offset { top:28px; height:calc(100vh - 28px); }
+    .sidebar-brand { display:flex; align-items:center; gap:.7rem; padding:1rem 1.1rem; border-bottom:1px solid #dde3ec; cursor:pointer; }
+    .brand-logos { display:flex; align-items:center; gap:.3rem; }
+    .brand-logo { width:30px; height:30px; border-radius:50%; overflow:hidden; border:1px solid #dde3ec; }
+    .brand-logo img { width:100%; height:100%; object-fit:contain; }
+    .brand-text { display:flex; flex-direction:column; line-height:1.25; }
+    .brand-name { font-family:'Merriweather',serif; font-size:.75rem; font-weight:700; color:#0066cc; }
+    .brand-sub { font-size:.6rem; color:#999; letter-spacing:.06em; text-transform:uppercase; }
+    .nav-section { flex:1; overflow-y:auto; padding:.6rem 0; }
+    .nav-label { font-size:.6rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#aaa; padding:.6rem 1.1rem .25rem; }
+    .nav-item { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; color:#555; font-size:.85rem; font-weight:600; text-decoration:none; border-left:3px solid transparent; transition:color .2s,background .2s,border-color .2s; }
+    .nav-item:hover { color:#0066cc; background:#f0f5ff; }
+    .nav-item.active { color:#0066cc; background:#eef4ff; border-left-color:#0066cc; }
+    .nav-item .icon { width:18px; text-align:center; font-size:.95rem; }
+    .nav-bottom { border-top:1px solid #dde3ec; padding:.5rem 0; }
+    .btn-logout { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; width:100%; background:none; border:none; color:#dc3545; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; cursor:pointer; transition:background .2s; }
+    .btn-logout:hover { background:#fff5f5; }
+
+    .topbar { display:none; position:fixed; top:0; left:0; right:0; height:54px; background:#fff; border-bottom:1px solid #dde3ec; align-items:center; justify-content:space-between; padding:0 1rem; z-index:99; }
+    .topbar.admin-offset { top:28px; }
+    .topbar-brand { display:flex; align-items:center; gap:.5rem; font-family:'Merriweather',serif; font-size:.8rem; font-weight:700; color:#0066cc; cursor:pointer; }
+    .topbar-brand .brand-logo { width:26px; height:26px; }
+    .hamburger { background:none; border:none; cursor:pointer; color:#555; padding:.3rem; display:flex; flex-direction:column; gap:5px; }
+    .hamburger span { display:block; width:22px; height:2px; background:currentColor; border-radius:2px; }
+    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:98; }
+    .overlay.show { display:block; }
+
+    .main { margin-left:var(--sidebar-w); min-height:100vh; }
+    .main.admin-offset { margin-top:28px; }
+    .main-bar { height:4px; background:#0066cc; }
+    .content { padding:1.8rem; }
+
+    .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; flex-wrap:wrap; gap:.8rem; }
+    .page-header h1 { font-family:'Merriweather',serif; font-size:1.2rem; font-weight:700; }
+
+    /* TABS */
+    .tabs { display:flex; gap:0; margin-bottom:1.6rem; background:#fff; border:1px solid #dde3ec; border-radius:7px; overflow:hidden; width:fit-content; }
+    .tab { padding:.6rem 1.2rem; font-size:.82rem; font-weight:700; color:#555; cursor:pointer; border:none; background:none; font-family:'Open Sans',sans-serif; transition:background .2s,color .2s; border-right:1px solid #dde3ec; }
+    .tab:last-child { border-right:none; }
+    .tab.active { background:#0066cc; color:#fff; }
+    .tab:hover:not(.active) { background:#f0f5ff; color:#0066cc; }
+
+    /* MARK ATTENDANCE */
+    .form-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.6rem; box-shadow:0 1px 4px rgba(0,0,0,.04); max-width:640px; }
+    .form-card-title { font-size:.7rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#aaa; margin-bottom:1.2rem; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; margin-bottom:.9rem; }
+    .form-group { display:flex; flex-direction:column; gap:.35rem; }
+    .form-group.full { grid-column:1/-1; }
+    .form-group label { font-size:.72rem; font-weight:700; color:#444; letter-spacing:.04em; }
+    .form-group input, .form-group select {
+      padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px;
+      font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a;
+      background:#fff; outline:none; transition:border-color .2s; appearance:none;
+    }
+    .form-group input:focus, .form-group select:focus { border-color:#0066cc; }
+    .form-group input.invalid { border-color:#dc3545; }
+    .select-wrap { position:relative; }
+    .select-wrap::after { content:''; position:absolute; right:.85rem; top:50%; transform:translateY(-50%); border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid #888; pointer-events:none; }
+    .field-err { font-size:.7rem; color:#dc3545; display:none; }
+    .field-err.show { display:block; }
+
+    /* MEMBER CHECKBOXES */
+    .member-select-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.6rem; }
+    .member-select-header label { font-size:.72rem; font-weight:700; color:#444; }
+    .select-all-btn { font-size:.72rem; font-weight:700; color:#0066cc; background:none; border:none; cursor:pointer; padding:0; }
+    .member-checklist { max-height:220px; overflow-y:auto; border:1.5px solid #ccd4df; border-radius:5px; }
+    .member-check-item { display:flex; align-items:center; gap:.65rem; padding:.55rem .8rem; border-bottom:1px solid #f5f5f5; cursor:pointer; transition:background .15s; }
+    .member-check-item:last-child { border-bottom:none; }
+    .member-check-item:hover { background:#f7f9fc; }
+    .member-check-item input[type=checkbox] { width:15px; height:15px; accent-color:#0066cc; cursor:pointer; }
+    .member-check-name { font-size:.84rem; color:#1a1a1a; }
+    .member-check-info { font-size:.72rem; color:#aaa; margin-left:auto; }
+    .selected-count { font-size:.72rem; color:#0066cc; font-weight:700; margin-top:.4rem; }
+
+    .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.72rem 1.4rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.88rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; transition:background .2s; margin-top:1.2rem; }
+    .btn-primary:hover { background:#0052a3; }
+    .btn-outline { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:transparent; color:#0066cc; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #0066cc; border-radius:5px; cursor:pointer; transition:background .2s; }
+    .btn-outline:hover { background:#eef4ff; }
+
+    /* RECORDS TABLE */
+    .table-toolbar { display:flex; align-items:center; gap:.7rem; margin-bottom:1rem; flex-wrap:wrap; }
+    .search-wrap { position:relative; flex:1; min-width:180px; }
+    .search-wrap input { width:100%; padding:.6rem .9rem .6rem 2.1rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.85rem; color:#1a1a1a; outline:none; transition:border-color .2s; }
+    .search-wrap input:focus { border-color:#0066cc; }
+    .search-icon { position:absolute; left:.65rem; top:50%; transform:translateY(-50%); color:#aaa; font-size:.85rem; }
+    .filter-select { padding:.58rem .8rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.82rem; color:#444; background:#fff; outline:none; appearance:none; cursor:pointer; }
+
+    .table-wrap { background:#fff; border:1px solid #dde3ec; border-radius:8px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.04); overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:.82rem; }
+    thead th { text-align:left; font-size:.65rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#aaa; padding:.7rem 1rem; border-bottom:1px solid #edf0f4; white-space:nowrap; background:#fafbfc; }
+    tbody td { padding:.7rem 1rem; color:#444; border-bottom:1px solid #f5f5f5; }
+    tbody tr:last-child td { border-bottom:none; }
+    tbody tr:hover td { background:#f7f9fc; }
+    .badge { display:inline-block; font-size:.65rem; font-weight:700; padding:.18rem .55rem; border-radius:20px; white-space:nowrap; }
+    .badge-blue { background:#eef4ff; color:#0066cc; }
+    .badge-green { background:#eafaf0; color:#1e7e34; }
+    .badge-orange { background:#fff4e6; color:#c45f00; }
+    .badge-purple { background:#f0eeff; color:#5e35b1; }
+    .del-btn { background:none; border:none; color:#dc3545; cursor:pointer; font-size:.85rem; padding:.2rem .4rem; border-radius:3px; transition:background .2s; }
+    .del-btn:hover { background:#fff0f0; }
+
+    /* MEMBER SUMMARY */
+    .summary-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; }
+    .summary-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1rem; box-shadow:0 1px 4px rgba(0,0,0,.04); }
+    .summary-name { font-size:.88rem; font-weight:700; color:#1a1a1a; margin-bottom:.5rem; }
+    .summary-bar-wrap { height:7px; background:#edf0f4; border-radius:4px; overflow:hidden; margin-bottom:.3rem; }
+    .summary-bar { height:100%; border-radius:4px; background:#0066cc; transition:width .5s; }
+    .summary-pct { font-size:.75rem; color:#0066cc; font-weight:700; }
+    .summary-detail { font-size:.7rem; color:#aaa; margin-top:.1rem; }
+
+    .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; }
+    .empty-state .big { font-size:2rem; margin-bottom:.5rem; }
+
+    .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
+    .toast.show { opacity:1; transform:translateY(0); }
+    .toast.success { background:#28a745; }
+    .toast.error { background:#dc3545; }
+
+    @media(max-width:768px) {
+      .sidebar { transform:translateX(-100%); }
+      .sidebar.open { transform:translateX(0); }
+      .topbar { display:flex; }
+      .main { margin-left:0; padding-top:54px; }
+      .main.admin-offset { margin-top:28px; padding-top:54px; }
+      .topbar.admin-offset { top:28px; }
+      .content { padding:1rem .9rem 3rem; }
+      .form-row { grid-template-columns:1fr; }
+      .form-group.full { grid-column:1; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="admin-bar" id="adminBar">
+  🔐 ADMIN MODE <span>Full access enabled</span>
+</div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand" onclick="window.location.href='index.html'">
+    <div class="brand-logos">
+      <div class="brand-logo"><img src="gecc-logo.jpg" alt="GECC"/></div>
+      <div class="brand-logo"><img src="uniport-logo.jpg" alt="Uniport"/></div>
+    </div>
+    <div class="brand-text">
+      <span class="brand-name">GECC Uniport</span>
+      <span class="brand-sub">Member Portal</span>
+    </div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-label">Menu</div>
+    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="icon">⚙️</span> Memo</a>
+    <a class="nav-item" href="dashboard.html"><span class="icon">📊</span> Dashboard</a>
+    <a class="nav-item" href="members.html"><span class="icon">👥</span> Members</a>
+    <a class="nav-item" href="past-members.html"><span class="icon">📜</span> Past Members</a>
+    <a class="nav-item active" href="attendance.html"><span class="icon">✓</span> Attendance</a>
+    <a class="nav-item" href="events.html"><span class="icon">📅</span> Events</a>
+    <a class="nav-item" href="positions.html"><span class="icon">🎯</span> Positions</a>
+  </nav>
+  <div class="nav-bottom">
+    <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
+  </div>
+</aside>
+
+<div class="topbar" id="topbar">
+  <div class="topbar-brand" onclick="window.location.href='index.html'">
+    <div class="brand-logos">
+      <div class="brand-logo"><img src="gecc-logo.jpg" alt="GECC"/></div>
+      <div class="brand-logo"><img src="uniport-logo.jpg" alt="Uniport"/></div>
+    </div>
+    &nbsp;GECC Uniport
+  </div>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</div>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="main" id="mainWrap">
+  <div class="main-bar"></div>
+  <div class="content">
+
+    <div class="page-header">
+      <h1>✓ Attendance</h1>
+      <button class="btn-outline" id="btnExport" onclick="exportCSV()" style="display:none">⬇ Export CSV</button>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" id="tabMark" onclick="switchTab('mark')" style="display:none">Mark Attendance</button>
+      <button class="tab" id="tabRecords" onclick="switchTab('records')">Records</button>
+      <button class="tab" id="tabSummary" onclick="switchTab('summary')">Member Summary</button>
+    </div>
+
+    <!-- MARK ATTENDANCE (admin only) -->
+    <div id="panelMark" style="display:none">
+      <div class="form-card">
+        <div class="form-card-title">New Attendance Record</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Event Type *</label>
+            <div class="select-wrap">
+              <select id="aType">
+                <option value="">— Select —</option>
+                <option>Sunday Service</option>
+                <option>Bible Study</option>
+                <option>Prayer Meeting</option>
+                <option>Evangelism</option>
+                <option>Special Programme</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <span class="field-err" id="aTypeErr">Required</span>
+          </div>
+          <div class="form-group">
+            <label>Date *</label>
+            <input type="date" id="aDate" />
+            <span class="field-err" id="aDateErr">Required</span>
+          </div>
+          <div class="form-group">
+            <label>Visitors / First-timers</label>
+            <input type="number" id="aVisitors" placeholder="0" min="0" value="0" />
+          </div>
+          <div class="form-group">
+            <label>&nbsp;</label>
+          </div>
+        </div>
+
+        <div class="form-group full" style="margin-top:.4rem">
+          <div class="member-select-header">
+            <label>Members Present *</label>
+            <button class="select-all-btn" onclick="toggleSelectAll()">Select All</button>
+          </div>
+          <div class="member-checklist" id="memberChecklist"></div>
+          <div class="selected-count" id="selectedCount">0 members selected</div>
+          <span class="field-err" id="aMembersErr">Select at least one member</span>
+        </div>
+
+        <button class="btn-primary" onclick="saveAttendance()">✓ Save Record</button>
+      </div>
+    </div>
+
+    <!-- RECORDS TABLE -->
+    <div id="panelRecords">
+      <div class="table-toolbar">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="recSearch" placeholder="Search…" oninput="renderRecords()" />
+        </div>
+        <div class="select-wrap" style="width:160px">
+          <select id="recFilter" onchange="renderRecords()" class="filter-select">
+            <option value="">All Types</option>
+            <option>Sunday Service</option>
+            <option>Bible Study</option>
+            <option>Prayer Meeting</option>
+            <option>Evangelism</option>
+            <option>Special Programme</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Members</th>
+              <th>Visitors</th>
+              <th>Total</th>
+              <th id="delCol" style="display:none"></th>
+            </tr>
+          </thead>
+          <tbody id="recordsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MEMBER SUMMARY -->
+    <div id="panelSummary" style="display:none">
+      <div class="summary-grid" id="summaryGrid"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const role = localStorage.getItem('userRole');
+  if (!role) { window.location.href = 'auth.html'; }
+  const isAdmin = role === 'admin';
+
+  if (isAdmin) {
+    document.getElementById('adminBar').classList.add('show');
+    document.getElementById('sidebar').classList.add('admin-offset');
+    document.getElementById('topbar').classList.add('admin-offset');
+    document.getElementById('mainWrap').classList.add('admin-offset');
+    document.getElementById('navMemo').style.display = 'flex';
+    document.getElementById('btnExport').style.display = 'flex';
+    document.getElementById('tabMark').style.display = 'block';
+    document.getElementById('delCol').style.display = 'table-cell';
+    // Show mark panel for admin by default
+    document.getElementById('tabMark').classList.add('active');
+    document.getElementById('tabRecords').classList.remove('active');
+    document.getElementById('panelMark').style.display = 'block';
+    document.getElementById('panelRecords').style.display = 'none';
+  }
+
+  function getData(k,d) { try { return JSON.parse(localStorage.getItem(k))||d; } catch { return d; } }
+  function saveData(k,v) { localStorage.setItem(k, JSON.stringify(v)); }
+  function genId() { return 'a_' + Date.now() + '_' + Math.random().toString(36).slice(2,6); }
+
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function ordinal(n) { const s=['th','st','nd','rd'],v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
+  function fmtDate(dateStr) {
+    const d = new Date(dateStr);
+    return ordinal(d.getDate()) + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  function badgeClass(type) {
+    if (type==='Sunday Service') return 'badge-blue';
+    if (type==='Bible Study') return 'badge-green';
+    if (type==='Prayer Meeting') return 'badge-purple';
+    return 'badge-orange';
+  }
+
+  let currentTab = isAdmin ? 'mark' : 'records';
+
+  function switchTab(tab) {
+    currentTab = tab;
+    ['mark','records','summary'].forEach(t => {
+      const btn = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+      const panel = document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1));
+      if (btn) btn.classList.toggle('active', t===tab);
+      if (panel) panel.style.display = t===tab ? 'block' : 'none';
+    });
+    if (tab==='records') renderRecords();
+    if (tab==='summary') renderSummary();
+  }
+
+  // Build member checklist
+  function buildChecklist() {
+    const members = getData('members', []).filter(m=>m.position!=='Associates');
+    const list = document.getElementById('memberChecklist');
+    if (!members.length) {
+      list.innerHTML = '<div style="padding:.8rem;color:#aaa;font-size:.82rem">No members found. Add members first.</div>';
+      return;
+    }
+    list.innerHTML = members.map(m => `
+      <label class="member-check-item">
+        <input type="checkbox" value="${m.id}" onchange="updateCount()" />
+        <span class="member-check-name">${m.name}</span>
+        <span class="member-check-info">${m.level||''}</span>
+      </label>`).join('');
+  }
+
+  function updateCount() {
+    const checked = document.querySelectorAll('#memberChecklist input:checked').length;
+    document.getElementById('selectedCount').textContent = checked + ' member' + (checked!==1?'s':'') + ' selected';
+  }
+
+  let allSelected = false;
+  function toggleSelectAll() {
+    allSelected = !allSelected;
+    document.querySelectorAll('#memberChecklist input[type=checkbox]').forEach(cb => cb.checked = allSelected);
+    document.querySelector('.select-all-btn').textContent = allSelected ? 'Deselect All' : 'Select All';
+    updateCount();
+  }
+
+  function saveAttendance() {
+    let valid = true;
+    const type = document.getElementById('aType');
+    const date = document.getElementById('aDate');
+    [['aType','aTypeErr'],['aDate','aDateErr']].forEach(([fid,eid])=>{
+      document.getElementById(fid).classList.remove('invalid');
+      document.getElementById(eid).classList.remove('show');
+      if (!document.getElementById(fid).value) {
+        document.getElementById(fid).classList.add('invalid');
+        document.getElementById(eid).classList.add('show');
+        valid = false;
+      }
+    });
+
+    const checked = [...document.querySelectorAll('#memberChecklist input:checked')].map(cb=>cb.value);
+    document.getElementById('aMembersErr').classList.toggle('show', checked.length===0);
+    if (!checked.length) valid = false;
+    if (!valid) return;
+
+    const record = {
+      id: genId(),
+      type: type.value,
+      date: date.value,
+      members: checked,
+      visitors: parseInt(document.getElementById('aVisitors').value)||0
+    };
+
+    const attendance = getData('attendance', []);
+    attendance.push(record);
+    saveData('attendance', attendance);
+
+    // Reset form
+    type.value = ''; date.value = '';
+    document.getElementById('aVisitors').value = '0';
+    document.querySelectorAll('#memberChecklist input').forEach(cb=>cb.checked=false);
+    allSelected = false;
+    document.querySelector('.select-all-btn').textContent = 'Select All';
+    updateCount();
+
+    showToast('Attendance saved!', 'success');
+    renderRecords();
+  }
+
+  function renderRecords() {
+    const attendance = getData('attendance', []).sort((a,b)=>new Date(b.date)-new Date(a.date));
+    const members = getData('members', []);
+    const q = (document.getElementById('recSearch').value||'').toLowerCase();
+    const filterType = document.getElementById('recFilter').value;
+
+    const filtered = attendance.filter(a => {
+      const matchType = !filterType || a.type===filterType;
+      const matchQ = !q || a.type.toLowerCase().includes(q) || fmtDate(a.date).toLowerCase().includes(q);
+      return matchType && matchQ;
+    });
+
+    const body = document.getElementById('recordsBody');
+    if (!filtered.length) {
+      body.innerHTML = `<tr><td colspan="6" class="empty-state"><div class="big">📋</div><p>No records yet.</p></td></tr>`;
+      return;
+    }
+
+    body.innerHTML = filtered.map(a => {
+      const total = (a.members||[]).length + (a.visitors||0);
+      const delBtn = isAdmin ? `<td><button class="del-btn" onclick="deleteRecord('${a.id}')">🗑</button></td>` : '';
+      return `
+        <tr>
+          <td>${fmtDate(a.date)}</td>
+          <td><span class="badge ${badgeClass(a.type)}">${a.type}</span></td>
+          <td>${(a.members||[]).length}</td>
+          <td>${a.visitors||0}</td>
+          <td><strong>${total}</strong></td>
+          ${delBtn}
+        </tr>`;
+    }).join('');
+  }
+
+  function deleteRecord(id) {
+    if (!confirm('Delete this attendance record?')) return;
+    const attendance = getData('attendance', []).filter(a=>a.id!==id);
+    saveData('attendance', attendance);
+    renderRecords();
+    showToast('Record deleted.', 'success');
+  }
+
+  function renderSummary() {
+    const members = getData('members', []).filter(m=>m.position!=='Associates');
+    const attendance = getData('attendance', []);
+    const total = attendance.length;
+
+    const grid = document.getElementById('summaryGrid');
+    if (!members.length) {
+      grid.innerHTML = '<div class="empty-state"><div class="big">👥</div><p>No members yet.</p></div>';
+      return;
+    }
+
+    const summaries = members.map(m => {
+      const count = attendance.filter(a=>(a.members||[]).includes(m.id)).length;
+      const pct = total ? Math.round(count/total*100) : 0;
+      return { name:m.name, level:m.level, count, pct };
+    }).sort((a,b)=>b.pct-a.pct);
+
+    grid.innerHTML = summaries.map(s => `
+      <div class="summary-card">
+        <div class="summary-name">${s.name}</div>
+        <div class="summary-bar-wrap"><div class="summary-bar" style="width:${s.pct}%"></div></div>
+        <div class="summary-pct">${s.pct}%</div>
+        <div class="summary-detail">${s.count} of ${total} meetings · ${s.level||''}</div>
+      </div>`).join('');
+  }
+
+  function exportCSV() {
+    const attendance = getData('attendance', []).sort((a,b)=>new Date(b.date)-new Date(a.date));
+    const members = getData('members', []);
+    const headers = ['Date','Type','Members Present','Visitors','Total'];
+    const rows = attendance.map(a => {
+      const names = (a.members||[]).map(id=>{const m=members.find(x=>x.id===id); return m?m.name:'';}).filter(Boolean).join('; ');
+      const total = (a.members||[]).length+(a.visitors||0);
+      return [`"${fmtDate(a.date)}"`,`"${a.type}"`,`"${names}"`,a.visitors||0,total].join(',');
+    });
+    const csv = [headers.join(','),...rows].join('\n');
+    const a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = 'gecc-attendance.csv';
+    a.click();
+  }
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + type;
+    setTimeout(()=>t.className='toast', 2500);
+  }
+
+  function doLogout() { localStorage.removeItem('userRole'); window.location.href = 'auth.html'; }
+
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  document.getElementById('hamburger').addEventListener('click',()=>{ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
+  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+
+  // Init
+  if (isAdmin) buildChecklist();
+  renderRecords();
+</script>
+</body>
+</html>
