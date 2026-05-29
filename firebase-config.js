@@ -12,3 +12,4 @@ const firebaseConfig = {
 // Initialize Firebase (CDN version)
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+  
