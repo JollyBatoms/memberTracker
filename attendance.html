@@ -58,6 +58,7 @@
     .tab.active { background:#0066cc; color:#fff; }
     .tab:hover:not(.active) { background:#f0f5ff; color:#0066cc; }
 
+    /* FORM */
     .form-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.6rem; box-shadow:0 1px 4px rgba(0,0,0,.04); max-width:640px; }
     .form-card-title { font-size:.7rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#aaa; margin-bottom:1.2rem; }
     .form-row { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; margin-bottom:.9rem; }
@@ -71,9 +72,17 @@
     .field-err { font-size:.7rem; color:#dc3545; display:none; }
     .field-err.show { display:block; }
 
-    .member-select-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.6rem; }
+    /* SPECIAL FIELDS */
+    .extra-fields { background:#f7f9fc; border:1px solid #dde3ec; border-radius:6px; padding:1rem; margin-bottom:.9rem; display:none; }
+    .extra-fields.show { display:block; }
+    .extra-fields-title { font-size:.68rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#0066cc; margin-bottom:.8rem; }
+    .audience-info { font-size:.75rem; color:#666; background:#eef4ff; border:1px solid #c5d9f5; border-radius:5px; padding:.55rem .8rem; margin-top:.6rem; }
+
+    /* CHECKLIST */
+    .member-select-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.6rem; margin-top:.9rem; }
     .member-select-header label { font-size:.72rem; font-weight:700; color:#444; }
     .select-all-btn { font-size:.72rem; font-weight:700; color:#0066cc; background:none; border:none; cursor:pointer; padding:0; }
+    .checklist-label { font-size:.72rem; font-weight:700; color:#444; margin-bottom:.5rem; margin-top:.9rem; display:block; }
     .member-checklist { max-height:220px; overflow-y:auto; border:1.5px solid #ccd4df; border-radius:5px; }
     .member-check-item { display:flex; align-items:center; gap:.65rem; padding:.55rem .8rem; border-bottom:1px solid #f5f5f5; cursor:pointer; transition:background .15s; }
     .member-check-item:last-child { border-bottom:none; }
@@ -87,13 +96,13 @@
     .btn-primary:hover { background:#0052a3; }
     .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
 
+    /* RECORDS */
     .table-toolbar { display:flex; align-items:center; gap:.7rem; margin-bottom:1rem; flex-wrap:wrap; }
     .search-wrap { position:relative; flex:1; min-width:180px; }
     .search-wrap input { width:100%; padding:.6rem .9rem .6rem 2.1rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.85rem; color:#1a1a1a; outline:none; transition:border-color .2s; }
     .search-wrap input:focus { border-color:#0066cc; }
     .search-icon { position:absolute; left:.65rem; top:50%; transform:translateY(-50%); color:#aaa; font-size:.85rem; }
     .filter-select { padding:.58rem .8rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.82rem; color:#444; background:#fff; outline:none; appearance:none; cursor:pointer; }
-
     .table-wrap { background:#fff; border:1px solid #dde3ec; border-radius:8px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.04); overflow-x:auto; }
     table { width:100%; border-collapse:collapse; font-size:.82rem; }
     thead th { text-align:left; font-size:.65rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#aaa; padding:.7rem 1rem; border-bottom:1px solid #edf0f4; white-space:nowrap; background:#fafbfc; }
@@ -105,16 +114,23 @@
     .badge-green { background:#eafaf0; color:#1e7e34; }
     .badge-orange { background:#fff4e6; color:#c45f00; }
     .badge-purple { background:#f0eeff; color:#5e35b1; }
+    .badge-pink { background:#fff0f6; color:#c2185b; }
     .del-btn { background:none; border:none; color:#dc3545; cursor:pointer; font-size:.85rem; padding:.2rem .4rem; border-radius:3px; transition:background .2s; }
     .del-btn:hover { background:#fff0f0; }
 
-    .summary-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; }
+    /* SUMMARY */
+    .summary-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:1rem; }
     .summary-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1rem; box-shadow:0 1px 4px rgba(0,0,0,.04); }
-    .summary-name { font-size:.88rem; font-weight:700; color:#1a1a1a; margin-bottom:.5rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .summary-name { font-size:.88rem; font-weight:700; color:#1a1a1a; margin-bottom:.2rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .summary-meta { font-size:.68rem; color:#aaa; margin-bottom:.5rem; }
     .summary-bar-wrap { height:7px; background:#edf0f4; border-radius:4px; overflow:hidden; margin-bottom:.3rem; }
     .summary-bar { height:100%; border-radius:4px; background:#0066cc; }
-    .summary-pct { font-size:.75rem; color:#0066cc; font-weight:700; }
-    .summary-detail { font-size:.7rem; color:#aaa; margin-top:.1rem; }
+    .summary-bar.good { background:#28a745; }
+    .summary-bar.mid { background:#fd7e14; }
+    .summary-bar.low { background:#dc3545; }
+    .summary-pct { font-size:.82rem; font-weight:700; color:#0066cc; }
+    .summary-detail { font-size:.7rem; color:#aaa; margin-top:.15rem; }
+    .summary-na { font-size:.72rem; color:#bbb; font-style:italic; }
 
     .empty-state { text-align:center; padding:2.5rem 1rem; color:#bbb; }
     .empty-state .big { font-size:2rem; margin-bottom:.5rem; }
@@ -197,22 +213,23 @@
       <button class="tab" id="tabSummary" onclick="switchTab('summary')">Member Summary</button>
     </div>
 
-    <!-- MARK -->
+    <!-- ══════════ MARK ATTENDANCE ══════════ -->
     <div id="panelMark" style="display:none">
       <div class="form-card">
         <div class="form-card-title">New Attendance Record</div>
+
         <div class="form-row">
           <div class="form-group">
-            <label>Event Type *</label>
+            <label>Program Type *</label>
             <div class="select-wrap">
-              <select id="aType">
+              <select id="aType" onchange="onTypeChange()">
                 <option value="">— Select —</option>
-                <option>Sunday Service</option>
-                <option>Bible Study</option>
-                <option>Prayer Meeting</option>
-                <option>Evangelism</option>
-                <option>Special Programme</option>
-                <option>Other</option>
+                <option value="Sunday Service">Sunday Service</option>
+                <option value="Bible Study">Bible Study</option>
+                <option value="Prayer Meeting">Prayer Meeting</option>
+                <option value="Evangelism">Evangelism</option>
+                <option value="Special Program">Special Program</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             <span class="field-err" id="aTypeErr">Required</span>
@@ -222,19 +239,56 @@
             <input type="date" id="aDate"/>
             <span class="field-err" id="aDateErr">Required</span>
           </div>
+        </div>
+
+        <!-- CASE B: Special Program extra fields -->
+        <div class="extra-fields" id="extraSpecial">
+          <div class="extra-fields-title">Special Program Details</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Program Name *</label>
+              <input type="text" id="aProgramName" placeholder="e.g. Foundation Class"/>
+            </div>
+            <div class="form-group">
+              <label>Who Should Attend *</label>
+              <div class="select-wrap">
+                <select id="aAudience" onchange="onAudienceChange()">
+                  <option value="">— Select —</option>
+                  <option value="Executives">Executives</option>
+                  <option value="Sisters">Sisters</option>
+                  <option value="Brothers">Brothers</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="audience-info" id="audienceInfo" style="display:none"></div>
+        </div>
+
+        <!-- CASE C: Other extra field -->
+        <div class="extra-fields" id="extraOther">
+          <div class="extra-fields-title">Program Details</div>
+          <div class="form-group">
+            <label>Program Name *</label>
+            <input type="text" id="aOtherName" placeholder="e.g. Drama Night, Evangelism Outreach"/>
+          </div>
+        </div>
+
+        <!-- Visitors -->
+        <div class="form-row" style="margin-top:.4rem">
           <div class="form-group">
             <label>Visitors / First-timers</label>
             <input type="number" id="aVisitors" placeholder="0" min="0" value="0"/>
           </div>
         </div>
 
-        <div style="margin-top:.4rem">
+        <!-- Member checklist -->
+        <div id="checklistWrap">
           <div class="member-select-header">
-            <label>Members Present *</label>
+            <label id="checklistLabel">Members Present *</label>
             <button class="select-all-btn" id="selectAllBtn" onclick="toggleSelectAll()">Select All</button>
           </div>
           <div class="member-checklist" id="memberChecklist">
-            <div style="padding:.8rem;color:#aaa;font-size:.82rem">Loading members…</div>
+            <div style="padding:.8rem;color:#aaa;font-size:.82rem">Select a program type to load members…</div>
           </div>
           <div class="selected-count" id="selectedCount">0 members selected</div>
           <span class="field-err" id="aMembersErr">Select at least one member</span>
@@ -244,22 +298,22 @@
       </div>
     </div>
 
-    <!-- RECORDS -->
+    <!-- ══════════ RECORDS ══════════ -->
     <div id="panelRecords">
       <div class="table-toolbar">
         <div class="search-wrap">
           <span class="search-icon">🔍</span>
           <input type="text" id="recSearch" placeholder="Search…" oninput="renderRecords()"/>
         </div>
-        <div class="select-wrap" style="width:160px">
+        <div class="select-wrap" style="width:170px">
           <select id="recFilter" onchange="renderRecords()" class="filter-select">
             <option value="">All Types</option>
-            <option>Sunday Service</option>
-            <option>Bible Study</option>
-            <option>Prayer Meeting</option>
-            <option>Evangelism</option>
-            <option>Special Programme</option>
-            <option>Other</option>
+            <option value="Sunday Service">Sunday Service</option>
+            <option value="Bible Study">Bible Study</option>
+            <option value="Prayer Meeting">Prayer Meeting</option>
+            <option value="Evangelism">Evangelism</option>
+            <option value="Special Program">Special Program</option>
+            <option value="Other">Other</option>
           </select>
         </div>
       </div>
@@ -267,18 +321,24 @@
         <table>
           <thead>
             <tr>
-              <th>Date</th><th>Type</th><th>Members</th><th>Visitors</th><th>Total</th>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Program</th>
+              <th>Audience</th>
+              <th>Members</th>
+              <th>Visitors</th>
+              <th>Total</th>
               <th id="thDel" style="display:none"></th>
             </tr>
           </thead>
           <tbody id="recordsBody">
-            <tr><td colspan="6"><div class="empty-state"><div class="big">⏳</div><p>Loading…</p></div></td></tr>
+            <tr><td colspan="8"><div class="empty-state"><div class="big">⏳</div><p>Loading…</p></div></td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- SUMMARY -->
+    <!-- ══════════ MEMBER SUMMARY ══════════ -->
     <div id="panelSummary" style="display:none">
       <div class="summary-grid" id="summaryGrid">
         <div class="empty-state"><div class="big">⏳</div><p>Loading…</p></div>
@@ -291,6 +351,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
+  // ── Auth ──
   const role = localStorage.getItem('userRole');
   if (!role) { window.location.href = 'auth.html'; }
   const isAdmin = role === 'admin';
@@ -304,42 +365,64 @@
     document.getElementById('btnExport').style.display = 'flex';
     document.getElementById('tabMark').style.display = 'block';
     document.getElementById('thDel').style.display = 'table-cell';
-    // Admin starts on Mark tab
     switchTab('mark');
     document.getElementById('tabMark').classList.add('active');
     document.getElementById('tabRecords').classList.remove('active');
   }
 
+  // ── Helpers ──
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function ordinal(n) { const s=['th','st','nd','rd'],v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
   function fmtDate(ds) { const d=new Date(ds); return ordinal(d.getDate())+' '+MONTHS[d.getMonth()]+' '+d.getFullYear(); }
+
   function badgeClass(t) {
     if (t==='Sunday Service') return 'badge-blue';
     if (t==='Bible Study') return 'badge-green';
     if (t==='Prayer Meeting') return 'badge-purple';
+    if (t==='Special Program') return 'badge-pink';
     return 'badge-orange';
   }
 
+  const EXEC_POSITIONS = ['President','Vice President','General Secretary','Asst. General Secretary',
+    'Bible Study Secretary','Asst Bible Study Secretary','Evangelism Secretary','Follow up Secretary',
+    'Prayer Secretary','Asst Prayer Secretary','Media/Publicity Secretary','Asst Media/Publicity Secretary',
+    'Organizing Secretary','Asst Organizing Secretary','Welfare Secretary','Asst. Welfare Secretary',
+    'Academic/Magazine Secretary','Music Director','Financial Secretary','Treasurer'];
+
+  // targetAudience values: 'all' | 'Executives' | 'Sisters' | 'Brothers'
+  function getTargetAudience(type, audience) {
+    if (type === 'Special Program') return audience || 'all';
+    return 'all';
+  }
+
+  // Filter members by audience
+  function filterByAudience(members, audience) {
+    if (!audience || audience === 'all') return members;
+    if (audience === 'Executives') return members.filter(m => EXEC_POSITIONS.includes(m.position));
+    if (audience === 'Sisters') return members.filter(m => m.gender === 'Female');
+    if (audience === 'Brothers') return members.filter(m => m.gender === 'Male');
+    return members;
+  }
+
+  // ── State ──
   let allMembers = [];
   let allAttendance = [];
   let allSelected = false;
+  let currentAudience = 'all';
 
-  // Load members for checklist
+  // ── Firestore listeners ──
   db.collection('members').orderBy('name').onSnapshot(snap => {
-    allMembers = snap.docs
-      .map(d => ({ id:d.id, ...d.data() }))
-      .filter(m => m.position !== 'Associates');
-    buildChecklist();
+    allMembers = snap.docs.map(d => ({ id:d.id, ...d.data() })).filter(m => m.position !== 'Associates');
     if (document.getElementById('panelSummary').style.display !== 'none') renderSummary();
   });
 
-  // Load attendance
   db.collection('attendance').orderBy('date','desc').onSnapshot(snap => {
     allAttendance = snap.docs.map(d => ({ id:d.id, ...d.data() }));
     renderRecords();
     if (document.getElementById('panelSummary').style.display !== 'none') renderSummary();
   });
 
+  // ── Tab switching ──
   function switchTab(tab) {
     ['mark','records','summary'].forEach(t => {
       const btn = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
@@ -351,18 +434,74 @@
     if (tab==='records') renderRecords();
   }
 
-  function buildChecklist() {
+  // ── Program type change ──
+  function onTypeChange() {
+    const type = document.getElementById('aType').value;
+
+    // Show/hide extra fields
+    document.getElementById('extraSpecial').classList.toggle('show', type === 'Special Program');
+    document.getElementById('extraOther').classList.toggle('show', type === 'Other');
+
+    // Reset audience
+    if (type !== 'Special Program') {
+      currentAudience = 'all';
+      document.getElementById('audienceInfo').style.display = 'none';
+    }
+
+    // Build checklist based on type
+    if (type === 'Special Program') {
+      // Wait for audience selection
+      buildChecklist([]);
+      document.getElementById('memberChecklist').innerHTML =
+        '<div style="padding:.8rem;color:#aaa;font-size:.82rem">Select "Who Should Attend" to load members…</div>';
+    } else if (type === '') {
+      document.getElementById('memberChecklist').innerHTML =
+        '<div style="padding:.8rem;color:#aaa;font-size:.82rem">Select a program type to load members…</div>';
+    } else {
+      // Cases A & C: all members
+      currentAudience = 'all';
+      buildChecklist(allMembers);
+    }
+  }
+
+  // ── Audience change (Special Program only) ──
+  function onAudienceChange() {
+    const audience = document.getElementById('aAudience').value;
+    if (!audience) return;
+    currentAudience = audience;
+
+    const filtered = filterByAudience(allMembers, audience);
+    buildChecklist(filtered);
+
+    const info = document.getElementById('audienceInfo');
+    const desc = {
+      'Executives': `Showing ${filtered.length} executive${filtered.length!==1?'s':''} — members holding leadership positions.`,
+      'Sisters': `Showing ${filtered.length} sister${filtered.length!==1?'s':''} — female members only.`,
+      'Brothers': `Showing ${filtered.length} brother${filtered.length!==1?'s':''} — male members only.`
+    };
+    info.textContent = desc[audience] || '';
+    info.style.display = 'block';
+  }
+
+  // ── Build checklist ──
+  function buildChecklist(members) {
     const list = document.getElementById('memberChecklist');
-    if (!allMembers.length) {
-      list.innerHTML = '<div style="padding:.8rem;color:#aaa;font-size:.82rem">No members found.</div>';
+    allSelected = false;
+    document.getElementById('selectAllBtn').textContent = 'Select All';
+
+    if (!members || !members.length) {
+      list.innerHTML = '<div style="padding:.8rem;color:#aaa;font-size:.82rem">No members found for this selection.</div>';
+      updateCount();
       return;
     }
-    list.innerHTML = allMembers.map(m => `
+
+    list.innerHTML = members.map(m => `
       <label class="member-check-item">
         <input type="checkbox" value="${m.id}" onchange="updateCount()"/>
         <span class="member-check-name">${m.name}</span>
-        <span class="member-check-info">${m.level||''}</span>
+        <span class="member-check-info">${m.position||''} · ${m.level||''}</span>
       </label>`).join('');
+    updateCount();
   }
 
   function updateCount() {
@@ -377,40 +516,66 @@
     updateCount();
   }
 
+  // ── Save attendance ──
   function saveAttendance() {
     let valid = true;
-    [['aType','aTypeErr'],['aDate','aDateErr']].forEach(([fid,eid])=>{
-      document.getElementById(fid).classList.remove('invalid');
-      document.getElementById(eid).classList.remove('show');
-      if (!document.getElementById(fid).value) {
-        document.getElementById(fid).classList.add('invalid');
-        document.getElementById(eid).classList.add('show');
+    const type = document.getElementById('aType').value;
+    const date = document.getElementById('aDate').value;
+
+    // Clear errors
+    ['aType','aDate'].forEach(id => document.getElementById(id).classList.remove('invalid'));
+    ['aTypeErr','aDateErr','aMembersErr'].forEach(id => document.getElementById(id).classList.remove('show'));
+
+    if (!type) { document.getElementById('aType').classList.add('invalid'); document.getElementById('aTypeErr').classList.add('show'); valid=false; }
+    if (!date) { document.getElementById('aDate').classList.add('invalid'); document.getElementById('aDateErr').classList.add('show'); valid=false; }
+
+    // Extra validation for Special Program
+    let programName = '';
+    let targetAudience = 'all';
+    if (type === 'Special Program') {
+      programName = document.getElementById('aProgramName').value.trim();
+      const audience = document.getElementById('aAudience').value;
+      if (!programName || !audience) {
+        showToast('Enter program name and select who should attend.', 'error');
         valid = false;
+      } else {
+        targetAudience = audience;
       }
-    });
+    } else if (type === 'Other') {
+      programName = document.getElementById('aOtherName').value.trim();
+      targetAudience = 'all';
+    }
 
     const checked = [...document.querySelectorAll('#memberChecklist input:checked')].map(cb=>cb.value);
-    document.getElementById('aMembersErr').classList.toggle('show', !checked.length);
-    if (!checked.length) valid = false;
+    if (!checked.length) { document.getElementById('aMembersErr').classList.add('show'); valid=false; }
     if (!valid) return;
 
     const btn = document.getElementById('btnSaveAtt');
     btn.disabled = true; btn.textContent = 'Saving…';
 
     db.collection('attendance').add({
-      type:     document.getElementById('aType').value,
-      date:     document.getElementById('aDate').value,
-      members:  checked,
+      type,
+      programName,
+      targetAudience,
+      date,
+      members: checked,
       visitors: parseInt(document.getElementById('aVisitors').value)||0,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     }).then(() => {
-      // Reset
+      // Reset form
       document.getElementById('aType').value = '';
       document.getElementById('aDate').value = '';
       document.getElementById('aVisitors').value = '0';
-      document.querySelectorAll('#memberChecklist input').forEach(cb=>cb.checked=false);
+      document.getElementById('aProgramName').value = '';
+      document.getElementById('aOtherName').value = '';
+      document.getElementById('aAudience').value = '';
+      document.getElementById('audienceInfo').style.display = 'none';
+      document.getElementById('extraSpecial').classList.remove('show');
+      document.getElementById('extraOther').classList.remove('show');
+      document.getElementById('memberChecklist').innerHTML =
+        '<div style="padding:.8rem;color:#aaa;font-size:.82rem">Select a program type to load members…</div>';
       allSelected = false;
-      document.getElementById('selectAllBtn').textContent = 'Select All';
+      currentAudience = 'all';
       updateCount();
       showToast('Attendance saved!', 'success');
       btn.disabled = false; btn.textContent = '✓ Save Record';
@@ -420,30 +585,37 @@
     });
   }
 
+  // ── Render records ──
   function renderRecords() {
     const q = (document.getElementById('recSearch').value||'').toLowerCase();
     const filterType = document.getElementById('recFilter').value;
 
     const filtered = allAttendance.filter(a => {
       const matchType = !filterType || a.type===filterType;
-      const matchQ = !q || (a.type||'').toLowerCase().includes(q) || fmtDate(a.date).toLowerCase().includes(q);
+      const matchQ = !q ||
+        (a.type||'').toLowerCase().includes(q) ||
+        (a.programName||'').toLowerCase().includes(q) ||
+        fmtDate(a.date).toLowerCase().includes(q);
       return matchType && matchQ;
     });
 
     const body = document.getElementById('recordsBody');
     if (!filtered.length) {
-      body.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="big">📋</div><p>No records yet.</p></div></td></tr>`;
+      body.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="big">📋</div><p>No records yet.</p></div></td></tr>`;
       return;
     }
 
     body.innerHTML = filtered.map(a => {
       const total = (a.members||[]).length+(a.visitors||0);
-      const delCell = isAdmin
-        ? `<td><button class="del-btn" onclick="deleteRecord('${a.id}')">🗑</button></td>`
-        : '';
+      const delCell = isAdmin ? `<td><button class="del-btn" onclick="deleteRecord('${a.id}')">🗑</button></td>` : '';
+      const audienceBadge = a.targetAudience && a.targetAudience !== 'all'
+        ? `<span class="badge badge-pink">${a.targetAudience}</span>`
+        : '<span style="color:#bbb;font-size:.72rem">All</span>';
       return `<tr>
         <td>${fmtDate(a.date)}</td>
-        <td><span class="badge ${badgeClass(a.type)}">${a.type||'Event'}</span></td>
+        <td><span class="badge ${badgeClass(a.type)}">${a.type}</span></td>
+        <td>${a.programName||'—'}</td>
+        <td>${audienceBadge}</td>
         <td>${(a.members||[]).length}</td>
         <td>${a.visitors||0}</td>
         <td><strong>${total}</strong></td>
@@ -459,44 +631,79 @@
       .catch(err => showToast('Error: '+err.message, 'error'));
   }
 
+  // ── Member Summary (smart calculation) ──
   function renderSummary() {
-    const total = allAttendance.length;
     const grid = document.getElementById('summaryGrid');
-
     if (!allMembers.length) {
       grid.innerHTML = '<div class="empty-state"><div class="big">👥</div><p>No members yet.</p></div>';
       return;
     }
 
     const summaries = allMembers.map(m => {
-      const count = allAttendance.filter(a=>(a.members||[]).includes(m.id)).length;
-      const pct = total ? Math.round(count/total*100) : 0;
-      return { name:m.name, level:m.level||'', count, pct, total };
-    }).sort((a,b)=>b.pct-a.pct);
+      // Find records this member was REQUIRED to attend
+      const required = allAttendance.filter(a => {
+        const aud = a.targetAudience || 'all';
+        if (aud === 'all') return true;
+        if (aud === 'Executives') return EXEC_POSITIONS.includes(m.position);
+        if (aud === 'Sisters') return m.gender === 'Female';
+        if (aud === 'Brothers') return m.gender === 'Male';
+        return false;
+      });
 
-    grid.innerHTML = summaries.map(s=>`
-      <div class="summary-card">
+      const attended = required.filter(a => (a.members||[]).includes(m.id)).length;
+      const total = required.length;
+      const pct = total > 0 ? Math.round(attended / total * 100) : null;
+
+      return { name:m.name, position:m.position||'Member', level:m.level||'', attended, total, pct };
+    }).sort((a,b) => {
+      if (a.pct === null && b.pct === null) return 0;
+      if (a.pct === null) return 1;
+      if (b.pct === null) return -1;
+      return b.pct - a.pct;
+    });
+
+    grid.innerHTML = summaries.map(s => {
+      if (s.pct === null) {
+        return `<div class="summary-card">
+          <div class="summary-name">${s.name}</div>
+          <div class="summary-meta">${s.position} · ${s.level}</div>
+          <div class="summary-na">No meetings assigned yet</div>
+        </div>`;
+      }
+      const barClass = s.pct >= 75 ? 'good' : s.pct >= 50 ? 'mid' : 'low';
+      return `<div class="summary-card">
         <div class="summary-name">${s.name}</div>
-        <div class="summary-bar-wrap"><div class="summary-bar" style="width:${s.pct}%"></div></div>
+        <div class="summary-meta">${s.position} · ${s.level}</div>
+        <div class="summary-bar-wrap"><div class="summary-bar ${barClass}" style="width:${s.pct}%"></div></div>
         <div class="summary-pct">${s.pct}%</div>
-        <div class="summary-detail">${s.count} of ${s.total} meetings · ${s.level}</div>
-      </div>`).join('');
+        <div class="summary-detail">${s.attended} of ${s.total} required meetings</div>
+      </div>`;
+    }).join('');
   }
 
+  // ── Export CSV ──
   function exportCSV() {
-    const headers = ['Date','Type','Members Present','Visitors','Total'];
+    const headers = ['Date','Type','Program Name','Audience','Members Present','Visitors','Total'];
     const rows = allAttendance.map(a => {
-      const names = (a.members||[]).map(id=>{
+      const names = (a.members||[]).map(id => {
         const m = allMembers.find(x=>x.id===id);
         return m ? m.name : '';
       }).filter(Boolean).join('; ');
       const total = (a.members||[]).length+(a.visitors||0);
-      return [`"${fmtDate(a.date)}"`,`"${a.type}"`,`"${names}"`,a.visitors||0,total].join(',');
+      return [
+        `"${fmtDate(a.date)}"`,
+        `"${a.type}"`,
+        `"${a.programName||''}"`,
+        `"${a.targetAudience||'all'}"`,
+        `"${names}"`,
+        a.visitors||0,
+        total
+      ].join(',');
     });
     const csv = [headers.join(','),...rows].join('\n');
-    const a = document.createElement('a');
-    a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-    a.download = 'gecc-attendance.csv'; a.click();
+    const el = document.createElement('a');
+    el.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+    el.download = 'gecc-attendance.csv'; el.click();
   }
 
   function showToast(msg, type) {
