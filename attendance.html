@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GECC Uniport — Attendance</title>
+  <title>GECC Uniport — Members</title>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -49,84 +49,73 @@
 
     .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; flex-wrap:wrap; gap:.8rem; }
     .page-header h1 { font-family:'Merriweather',serif; font-size:1.2rem; font-weight:700; }
-
-    /* TABS */
-    .tabs { display:flex; gap:0; margin-bottom:1.6rem; background:#fff; border:1px solid #dde3ec; border-radius:7px; overflow:hidden; width:fit-content; }
-    .tab { padding:.6rem 1.2rem; font-size:.82rem; font-weight:700; color:#555; cursor:pointer; border:none; background:none; font-family:'Open Sans',sans-serif; transition:background .2s,color .2s; border-right:1px solid #dde3ec; }
-    .tab:last-child { border-right:none; }
-    .tab.active { background:#0066cc; color:#fff; }
-    .tab:hover:not(.active) { background:#f0f5ff; color:#0066cc; }
-
-    /* MARK ATTENDANCE */
-    .form-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.6rem; box-shadow:0 1px 4px rgba(0,0,0,.04); max-width:640px; }
-    .form-card-title { font-size:.7rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#aaa; margin-bottom:1.2rem; }
-    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; margin-bottom:.9rem; }
-    .form-group { display:flex; flex-direction:column; gap:.35rem; }
-    .form-group.full { grid-column:1/-1; }
-    .form-group label { font-size:.72rem; font-weight:700; color:#444; letter-spacing:.04em; }
-    .form-group input, .form-group select {
-      padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px;
-      font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a;
-      background:#fff; outline:none; transition:border-color .2s; appearance:none;
-    }
-    .form-group input:focus, .form-group select:focus { border-color:#0066cc; }
-    .form-group input.invalid { border-color:#dc3545; }
-    .select-wrap { position:relative; }
-    .select-wrap::after { content:''; position:absolute; right:.85rem; top:50%; transform:translateY(-50%); border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid #888; pointer-events:none; }
-    .field-err { font-size:.7rem; color:#dc3545; display:none; }
-    .field-err.show { display:block; }
-
-    /* MEMBER CHECKBOXES */
-    .member-select-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.6rem; }
-    .member-select-header label { font-size:.72rem; font-weight:700; color:#444; }
-    .select-all-btn { font-size:.72rem; font-weight:700; color:#0066cc; background:none; border:none; cursor:pointer; padding:0; }
-    .member-checklist { max-height:220px; overflow-y:auto; border:1.5px solid #ccd4df; border-radius:5px; }
-    .member-check-item { display:flex; align-items:center; gap:.65rem; padding:.55rem .8rem; border-bottom:1px solid #f5f5f5; cursor:pointer; transition:background .15s; }
-    .member-check-item:last-child { border-bottom:none; }
-    .member-check-item:hover { background:#f7f9fc; }
-    .member-check-item input[type=checkbox] { width:15px; height:15px; accent-color:#0066cc; cursor:pointer; }
-    .member-check-name { font-size:.84rem; color:#1a1a1a; }
-    .member-check-info { font-size:.72rem; color:#aaa; margin-left:auto; }
-    .selected-count { font-size:.72rem; color:#0066cc; font-weight:700; margin-top:.4rem; }
-
-    .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.72rem 1.4rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.88rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; transition:background .2s; margin-top:1.2rem; }
+    .header-actions { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
+    .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; text-decoration:none; transition:background .2s; }
     .btn-primary:hover { background:#0052a3; }
     .btn-outline { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:transparent; color:#0066cc; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #0066cc; border-radius:5px; cursor:pointer; transition:background .2s; }
     .btn-outline:hover { background:#eef4ff; }
 
-    /* RECORDS TABLE */
-    .table-toolbar { display:flex; align-items:center; gap:.7rem; margin-bottom:1rem; flex-wrap:wrap; }
-    .search-wrap { position:relative; flex:1; min-width:180px; }
-    .search-wrap input { width:100%; padding:.6rem .9rem .6rem 2.1rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.85rem; color:#1a1a1a; outline:none; transition:border-color .2s; }
+    .members-stats { display:flex; gap:1rem; margin-bottom:1.4rem; flex-wrap:wrap; }
+    .mstat { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:.8rem 1.1rem; flex:1; min-width:100px; box-shadow:0 1px 4px rgba(0,0,0,.04); }
+    .mstat-val { font-size:1.5rem; font-weight:700; color:#0066cc; line-height:1; }
+    .mstat-label { font-size:.68rem; color:#999; font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin-top:.2rem; }
+
+    .toolbar { display:flex; align-items:center; gap:.7rem; margin-bottom:1.2rem; flex-wrap:wrap; }
+    .search-wrap { position:relative; flex:1; min-width:200px; }
+    .search-wrap input { width:100%; padding:.65rem .9rem .65rem 2.2rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; outline:none; transition:border-color .2s; }
     .search-wrap input:focus { border-color:#0066cc; }
-    .search-icon { position:absolute; left:.65rem; top:50%; transform:translateY(-50%); color:#aaa; font-size:.85rem; }
-    .filter-select { padding:.58rem .8rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.82rem; color:#444; background:#fff; outline:none; appearance:none; cursor:pointer; }
+    .search-icon { position:absolute; left:.7rem; top:50%; transform:translateY(-50%); color:#aaa; }
+    .filter-btns { display:flex; gap:.4rem; }
+    .filter-btn { padding:.5rem .9rem; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; border:1.5px solid #dde3ec; border-radius:5px; background:#fff; color:#555; cursor:pointer; transition:border-color .2s,color .2s,background .2s; }
+    .filter-btn.active { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
 
-    .table-wrap { background:#fff; border:1px solid #dde3ec; border-radius:8px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.04); overflow-x:auto; }
-    table { width:100%; border-collapse:collapse; font-size:.82rem; }
-    thead th { text-align:left; font-size:.65rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#aaa; padding:.7rem 1rem; border-bottom:1px solid #edf0f4; white-space:nowrap; background:#fafbfc; }
-    tbody td { padding:.7rem 1rem; color:#444; border-bottom:1px solid #f5f5f5; }
-    tbody tr:last-child td { border-bottom:none; }
-    tbody tr:hover td { background:#f7f9fc; }
-    .badge { display:inline-block; font-size:.65rem; font-weight:700; padding:.18rem .55rem; border-radius:20px; white-space:nowrap; }
-    .badge-blue { background:#eef4ff; color:#0066cc; }
-    .badge-green { background:#eafaf0; color:#1e7e34; }
-    .badge-orange { background:#fff4e6; color:#c45f00; }
-    .badge-purple { background:#f0eeff; color:#5e35b1; }
-    .del-btn { background:none; border:none; color:#dc3545; cursor:pointer; font-size:.85rem; padding:.2rem .4rem; border-radius:3px; transition:background .2s; }
-    .del-btn:hover { background:#fff0f0; }
+    .members-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
+    .member-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.1rem; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.04); transition:box-shadow .2s,border-color .2s; }
+    .member-card:hover { box-shadow:0 4px 12px rgba(0,0,0,.1); border-color:#b0c8f0; }
+    .member-card-top { display:flex; align-items:center; gap:.75rem; margin-bottom:.75rem; }
+    .member-avatar { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:700; color:#fff; flex-shrink:0; }
+    .member-card-name { font-size:.9rem; font-weight:700; color:#1a1a1a; line-height:1.2; }
+    .member-card-pos { font-size:.72rem; font-weight:700; margin-top:.1rem; }
+    .member-card-info { display:flex; flex-direction:column; gap:.28rem; }
+    .member-card-row { display:flex; align-items:center; gap:.4rem; font-size:.76rem; color:#666; }
+    .member-card-row .lbl { color:#aaa; font-size:.68rem; font-weight:700; text-transform:uppercase; min-width:40px; }
+    .fyb-badge { display:inline-block; font-size:.6rem; font-weight:700; background:#fff3cd; color:#856404; border:1px solid #ffc107; border-radius:3px; padding:.1rem .35rem; margin-left:.35rem; }
 
-    /* MEMBER SUMMARY */
-    .summary-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; }
-    .summary-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1rem; box-shadow:0 1px 4px rgba(0,0,0,.04); }
-    .summary-name { font-size:.88rem; font-weight:700; color:#1a1a1a; margin-bottom:.5rem; }
-    .summary-bar-wrap { height:7px; background:#edf0f4; border-radius:4px; overflow:hidden; margin-bottom:.3rem; }
-    .summary-bar { height:100%; border-radius:4px; background:#0066cc; transition:width .5s; }
-    .summary-pct { font-size:.75rem; color:#0066cc; font-weight:700; }
-    .summary-detail { font-size:.7rem; color:#aaa; margin-top:.1rem; }
+    .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; grid-column:1/-1; }
+    .empty-state .big { font-size:2.5rem; margin-bottom:.6rem; }
 
-    .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; }
-    .empty-state .big { font-size:2rem; margin-bottom:.5rem; }
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; }
+    .modal-overlay.show { display:flex; }
+    .modal { background:#fff; border-radius:8px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); }
+    .modal-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 1.4rem; border-bottom:1px solid #edf0f4; }
+    .modal-title { font-family:'Merriweather',serif; font-size:1rem; font-weight:700; color:#0066cc; }
+    .modal-close { background:none; border:none; font-size:1.6rem; cursor:pointer; color:#888; line-height:1; }
+    .modal-body { padding:1.4rem; }
+    .detail-top { display:flex; align-items:center; gap:1rem; margin-bottom:1.4rem; }
+    .detail-avatar { width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:700; color:#fff; flex-shrink:0; }
+    .detail-name { font-size:1.1rem; font-weight:700; }
+    .detail-pos { font-size:.8rem; font-weight:700; margin-top:.2rem; }
+    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem .9rem; margin-bottom:1.2rem; }
+    .detail-field { display:flex; flex-direction:column; gap:.2rem; }
+    .detail-field .lbl { font-size:.65rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#aaa; }
+    .detail-field .val { font-size:.88rem; color:#1a1a1a; font-weight:600; }
+    .modal-footer { padding:1rem 1.4rem; border-top:1px solid #edf0f4; display:flex; justify-content:flex-end; gap:.6rem; }
+    .btn-danger { padding:.6rem 1.1rem; background:#dc3545; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; transition:background .2s; }
+    .btn-danger:hover { background:#b02a37; }
+    .btn-secondary { padding:.6rem 1.1rem; background:transparent; color:#555; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ccd4df; border-radius:5px; cursor:pointer; }
+
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
+    .form-group { display:flex; flex-direction:column; gap:.35rem; }
+    .form-group.full { grid-column:1/-1; }
+    .form-group label { font-size:.72rem; font-weight:700; color:#444; }
+    .form-group input, .form-group select { padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; background:#fff; outline:none; transition:border-color .2s; appearance:none; }
+    .form-group input:focus, .form-group select:focus { border-color:#0066cc; }
+    .form-group input.invalid, .form-group select.invalid { border-color:#dc3545; }
+    .select-wrap { position:relative; }
+    .select-wrap::after { content:''; position:absolute; right:.85rem; top:50%; transform:translateY(-50%); border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid #888; pointer-events:none; }
+    .field-err { font-size:.7rem; color:#dc3545; display:none; }
+    .field-err.show { display:block; }
+    .dob-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:.5rem; }
 
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
@@ -141,16 +130,21 @@
       .main.admin-offset { margin-top:28px; padding-top:54px; }
       .topbar.admin-offset { top:28px; }
       .content { padding:1rem .9rem 3rem; }
-      .form-row { grid-template-columns:1fr; }
+      .form-grid { grid-template-columns:1fr; }
       .form-group.full { grid-column:1; }
+      .detail-grid { grid-template-columns:1fr; }
+      .members-grid { grid-template-columns:1fr 1fr; }
     }
+    @media(max-width:420px) { .members-grid { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
 
-<div class="admin-bar" id="adminBar">
-  🔐 ADMIN MODE <span>Full access enabled</span>
-</div>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<div class="admin-bar" id="adminBar">🔐 ADMIN MODE <span>Full access enabled</span></div>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand" onclick="window.location.href='index.html'">
@@ -167,9 +161,9 @@
     <div class="nav-label">Menu</div>
     <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="icon">⚙️</span> Memo</a>
     <a class="nav-item" href="dashboard.html"><span class="icon">📊</span> Dashboard</a>
-    <a class="nav-item" href="members.html"><span class="icon">👥</span> Members</a>
+    <a class="nav-item active" href="members.html"><span class="icon">👥</span> Members</a>
     <a class="nav-item" href="past-members.html"><span class="icon">📜</span> Past Members</a>
-    <a class="nav-item active" href="attendance.html"><span class="icon">✓</span> Attendance</a>
+    <a class="nav-item" href="attendance.html"><span class="icon">✓</span> Attendance</a>
     <a class="nav-item" href="events.html"><span class="icon">📅</span> Events</a>
     <a class="nav-item" href="positions.html"><span class="icon">🎯</span> Positions</a>
   </nav>
@@ -195,106 +189,178 @@
   <div class="content">
 
     <div class="page-header">
-      <h1>✓ Attendance</h1>
-      <button class="btn-outline" id="btnExport" onclick="exportCSV()" style="display:none">⬇ Export CSV</button>
-    </div>
-
-    <!-- TABS -->
-    <div class="tabs">
-      <button class="tab active" id="tabMark" onclick="switchTab('mark')" style="display:none">Mark Attendance</button>
-      <button class="tab" id="tabRecords" onclick="switchTab('records')">Records</button>
-      <button class="tab" id="tabSummary" onclick="switchTab('summary')">Member Summary</button>
-    </div>
-
-    <!-- MARK ATTENDANCE (admin only) -->
-    <div id="panelMark" style="display:none">
-      <div class="form-card">
-        <div class="form-card-title">New Attendance Record</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Event Type *</label>
-            <div class="select-wrap">
-              <select id="aType">
-                <option value="">— Select —</option>
-                <option>Sunday Service</option>
-                <option>Bible Study</option>
-                <option>Prayer Meeting</option>
-                <option>Evangelism</option>
-                <option>Special Programme</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <span class="field-err" id="aTypeErr">Required</span>
-          </div>
-          <div class="form-group">
-            <label>Date *</label>
-            <input type="date" id="aDate" />
-            <span class="field-err" id="aDateErr">Required</span>
-          </div>
-          <div class="form-group">
-            <label>Visitors / First-timers</label>
-            <input type="number" id="aVisitors" placeholder="0" min="0" value="0" />
-          </div>
-          <div class="form-group">
-            <label>&nbsp;</label>
-          </div>
-        </div>
-
-        <div class="form-group full" style="margin-top:.4rem">
-          <div class="member-select-header">
-            <label>Members Present *</label>
-            <button class="select-all-btn" onclick="toggleSelectAll()">Select All</button>
-          </div>
-          <div class="member-checklist" id="memberChecklist"></div>
-          <div class="selected-count" id="selectedCount">0 members selected</div>
-          <span class="field-err" id="aMembersErr">Select at least one member</span>
-        </div>
-
-        <button class="btn-primary" onclick="saveAttendance()">✓ Save Record</button>
+      <h1>👥 Members</h1>
+      <div class="header-actions">
+        <button class="btn-outline" id="btnExport" onclick="exportCSV()" style="display:none">⬇ Export</button>
+        <button class="btn-primary" id="btnAdd" onclick="openAddModal()" style="display:none">+ Add Member</button>
       </div>
     </div>
 
-    <!-- RECORDS TABLE -->
-    <div id="panelRecords">
-      <div class="table-toolbar">
-        <div class="search-wrap">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="recSearch" placeholder="Search…" oninput="renderRecords()" />
-        </div>
-        <div class="select-wrap" style="width:160px">
-          <select id="recFilter" onchange="renderRecords()" class="filter-select">
-            <option value="">All Types</option>
-            <option>Sunday Service</option>
-            <option>Bible Study</option>
-            <option>Prayer Meeting</option>
-            <option>Evangelism</option>
-            <option>Special Programme</option>
-            <option>Other</option>
-          </select>
-        </div>
+    <div class="members-stats">
+      <div class="mstat"><div class="mstat-val" id="msTotal">—</div><div class="mstat-label">Total Active</div></div>
+      <div class="mstat"><div class="mstat-val" id="msFinal">—</div><div class="mstat-label">Final Year</div></div>
+      <div class="mstat"><div class="mstat-val" id="msLeaders">—</div><div class="mstat-label">Leaders</div></div>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search by name or department…" oninput="filterRender()" />
       </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Type</th>
-              <th>Members</th>
-              <th>Visitors</th>
-              <th>Total</th>
-              <th id="delCol" style="display:none"></th>
-            </tr>
-          </thead>
-          <tbody id="recordsBody"></tbody>
-        </table>
+      <div class="filter-btns">
+        <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">All</button>
+        <button class="filter-btn" data-filter="fyb" onclick="setFilter(this)">🎓 Final Year</button>
       </div>
     </div>
 
-    <!-- MEMBER SUMMARY -->
-    <div id="panelSummary" style="display:none">
-      <div class="summary-grid" id="summaryGrid"></div>
+    <div class="members-grid" id="membersGrid">
+      <div class="empty-state"><div class="big">⏳</div><p>Loading members…</p></div>
     </div>
 
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Member Details</div>
+      <button class="modal-close" onclick="closeDetail()">×</button>
+    </div>
+    <div class="modal-body" id="detailBody"></div>
+    <div class="modal-footer" id="detailFooter"></div>
+  </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add New Member</div>
+      <button class="modal-close" onclick="closeAdd()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Full Name *</label>
+          <input type="text" id="fName" placeholder="e.g. Chukwuemeka Eze"/>
+          <span class="field-err" id="fNameErr">Name is required</span>
+        </div>
+        <div class="form-group">
+          <label>Gender *</label>
+          <div class="select-wrap"><select id="fGender">
+            <option value="">— Select —</option>
+            <option>Male</option><option>Female</option>
+          </select></div>
+          <span class="field-err" id="fGenderErr">Required</span>
+        </div>
+        <div class="form-group">
+          <label>Level *</label>
+          <div class="select-wrap"><select id="fLevel">
+            <option value="">— Select —</option>
+            <option>100L</option><option>200L</option><option>300L</option>
+            <option>400L</option><option>500L</option><option>600L</option><option>700L</option>
+          </select></div>
+          <span class="field-err" id="fLevelErr">Required</span>
+        </div>
+        <div class="form-group">
+          <label>Department *</label>
+          <input type="text" id="fDept" placeholder="e.g. Computer Science"/>
+          <span class="field-err" id="fDeptErr">Required</span>
+        </div>
+        <div class="form-group">
+          <label>Faculty</label>
+          <div class="select-wrap"><select id="fFaculty">
+            <option value="">— Select —</option>
+            <option>Agriculture</option><option>Allied Health Sciences</option>
+            <option>Basic Medical Sciences</option><option>Clinical Sciences</option>
+            <option>Communication &amp; Media Studies</option><option>Computing</option>
+            <option>Dentistry</option><option>Education</option><option>Engineering</option>
+            <option>Humanities</option><option>Law</option><option>Management Sciences</option>
+            <option>Pharmaceutical Sciences</option><option>Science</option>
+            <option>SSLT</option><option>Social Sciences</option>
+          </select></div>
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" id="fPhone" placeholder="08012345678"/>
+        </div>
+        <div class="form-group">
+          <label>State of Origin</label>
+          <div class="select-wrap"><select id="fState">
+            <option value="">— Select —</option>
+            <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option>
+            <option>Anambra</option><option>Bauchi</option><option>Bayelsa</option>
+            <option>Benue</option><option>Borno</option><option>Cross River</option>
+            <option>Delta</option><option>Ebonyi</option><option>Edo</option>
+            <option>Ekiti</option><option>Enugu</option><option>FCT</option>
+            <option>Gombe</option><option>Imo</option><option>Jigawa</option>
+            <option>Kaduna</option><option>Kano</option><option>Katsina</option>
+            <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+            <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
+            <option>Ogun</option><option>Ondo</option><option>Osun</option>
+            <option>Oyo</option><option>Plateau</option><option>Rivers</option>
+            <option>Sokoto</option><option>Taraba</option><option>Yobe</option>
+            <option>Zamfara</option>
+          </select></div>
+        </div>
+        <div class="form-group">
+          <label>Position</label>
+          <div class="select-wrap"><select id="fPosition">
+            <option value="Member">Member</option>
+            <option>President</option><option>Vice President</option>
+            <option>General Secretary</option><option>Asst. General Secretary</option>
+            <option>Bible Study Secretary</option><option>Asst Bible Study Secretary</option>
+            <option>Evangelism Secretary</option><option>Follow up Secretary</option>
+            <option>Prayer Secretary</option><option>Asst Prayer Secretary</option>
+            <option>Media/Publicity Secretary</option><option>Asst Media/Publicity Secretary</option>
+            <option>Organizing Secretary</option><option>Asst Organizing Secretary</option>
+            <option>Welfare Secretary</option><option>Asst. Welfare Secretary</option>
+            <option>Academic/Magazine Secretary</option><option>Music Director</option>
+            <option>Financial Secretary</option><option>Treasurer</option>
+            <option>Ex-official</option><option>Associates</option>
+          </select></div>
+        </div>
+        <div class="form-group">
+          <label>Year Started *</label>
+          <input type="number" id="fYearStart" placeholder="e.g. 2023" min="2000" max="2099"/>
+          <span class="field-err" id="fYearStartErr">Required</span>
+        </div>
+        <div class="form-group">
+          <label>Year Leaving</label>
+          <input type="number" id="fYearLeave" placeholder="e.g. 2027" min="2000" max="2099"/>
+        </div>
+        <div class="form-group full">
+          <label>Date of Birth (optional)</label>
+          <div class="dob-row">
+            <div class="select-wrap"><select id="fDobDay">
+              <option value="">Day</option>
+              <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+              <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+              <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
+              <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
+              <option>21</option><option>22</option><option>23</option><option>24</option><option>25</option>
+              <option>26</option><option>27</option><option>28</option><option>29</option><option>30</option>
+              <option>31</option>
+            </select></div>
+            <div class="select-wrap"><select id="fDobMonth">
+              <option value="">Month</option>
+              <option value="1">January</option><option value="2">February</option>
+              <option value="3">March</option><option value="4">April</option>
+              <option value="5">May</option><option value="6">June</option>
+              <option value="7">July</option><option value="8">August</option>
+              <option value="9">September</option><option value="10">October</option>
+              <option value="11">November</option><option value="12">December</option>
+            </select></div>
+            <input type="number" id="fDobYear" placeholder="Year" min="1980" max="2010"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeAdd()">Cancel</button>
+      <button class="btn-primary" id="btnSave" onclick="saveMember()">Save Member</button>
+    </div>
   </div>
 </div>
 
@@ -311,206 +377,238 @@
     document.getElementById('topbar').classList.add('admin-offset');
     document.getElementById('mainWrap').classList.add('admin-offset');
     document.getElementById('navMemo').style.display = 'flex';
+    document.getElementById('btnAdd').style.display = 'flex';
     document.getElementById('btnExport').style.display = 'flex';
-    document.getElementById('tabMark').style.display = 'block';
-    document.getElementById('delCol').style.display = 'table-cell';
-    // Show mark panel for admin by default
-    document.getElementById('tabMark').classList.add('active');
-    document.getElementById('tabRecords').classList.remove('active');
-    document.getElementById('panelMark').style.display = 'block';
-    document.getElementById('panelRecords').style.display = 'none';
   }
 
-  function getData(k,d) { try { return JSON.parse(localStorage.getItem(k))||d; } catch { return d; } }
-  function saveData(k,v) { localStorage.setItem(k, JSON.stringify(v)); }
-  function genId() { return 'a_' + Date.now() + '_' + Math.random().toString(36).slice(2,6); }
+  const POSITION_COLORS = {
+    'Member':'#28a745','Associates':'#8B6F47','President':'#0066cc',
+    'Vice President':'#6c63ff','General Secretary':'#dc3545',
+    'Asst. General Secretary':'#fd7e14','Bible Study Secretary':'#20c997',
+    'Asst Bible Study Secretary':'#17a2b8','Evangelism Secretary':'#e83e8c',
+    'Follow up Secretary':'#6f42c1','Prayer Secretary':'#fd7e14',
+    'Asst Prayer Secretary':'#ffc107','Media/Publicity Secretary':'#28a745',
+    'Asst Media/Publicity Secretary':'#20c997','Organizing Secretary':'#0066cc',
+    'Asst Organizing Secretary':'#6c63ff','Ex-official':'#6c757d',
+    'Welfare Secretary':'#e83e8c','Asst. Welfare Secretary':'#d63384',
+    'Academic/Magazine Secretary':'#0d6efd','Music Director':'#fd7e14',
+    'Financial Secretary':'#198754','Treasurer':'#dc3545'
+  };
+
+  const LEADERS = ['President','Vice President','General Secretary','Asst. General Secretary',
+    'Bible Study Secretary','Asst Bible Study Secretary','Evangelism Secretary','Follow up Secretary',
+    'Prayer Secretary','Asst Prayer Secretary','Media/Publicity Secretary','Asst Media/Publicity Secretary',
+    'Organizing Secretary','Asst Organizing Secretary','Welfare Secretary','Asst. Welfare Secretary',
+    'Academic/Magazine Secretary','Music Director','Financial Secretary','Treasurer'];
 
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  function ordinal(n) { const s=['th','st','nd','rd'],v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
-  function fmtDate(dateStr) {
-    const d = new Date(dateStr);
-    return ordinal(d.getDate()) + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
-  }
-  function badgeClass(type) {
-    if (type==='Sunday Service') return 'badge-blue';
-    if (type==='Bible Study') return 'badge-green';
-    if (type==='Prayer Meeting') return 'badge-purple';
-    return 'badge-orange';
-  }
+  const currentYear = new Date().getFullYear();
+  let allMembers = [];
+  let currentFilter = 'all';
 
-  let currentTab = isAdmin ? 'mark' : 'records';
-
-  function switchTab(tab) {
-    currentTab = tab;
-    ['mark','records','summary'].forEach(t => {
-      const btn = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
-      const panel = document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1));
-      if (btn) btn.classList.toggle('active', t===tab);
-      if (panel) panel.style.display = t===tab ? 'block' : 'none';
-    });
-    if (tab==='records') renderRecords();
-    if (tab==='summary') renderSummary();
+  function avatarColor(name) {
+    const colors = ['#0066cc','#6c63ff','#28a745','#fd7e14','#e83e8c','#17a2b8','#dc3545','#6f42c1'];
+    let h = 0;
+    for (let i=0;i<name.length;i++) h = name.charCodeAt(i)+((h<<5)-h);
+    return colors[Math.abs(h)%colors.length];
   }
+  function initials(name) { return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+  function isFYB(m) { return m.yearLeaving && parseInt(m.yearLeaving)===currentYear+1; }
 
-  // Build member checklist
-  function buildChecklist() {
-    const members = getData('members', []).filter(m=>m.position!=='Associates');
-    const list = document.getElementById('memberChecklist');
-    if (!members.length) {
-      list.innerHTML = '<div style="padding:.8rem;color:#aaa;font-size:.82rem">No members found. Add members first.</div>';
-      return;
-    }
-    list.innerHTML = members.map(m => `
-      <label class="member-check-item">
-        <input type="checkbox" value="${m.id}" onchange="updateCount()" />
-        <span class="member-check-name">${m.name}</span>
-        <span class="member-check-info">${m.level||''}</span>
-      </label>`).join('');
-  }
+  // Load members from Firestore (real-time)
+  db.collection('members').onSnapshot(snap => {
+    allMembers = snap.docs.map(d => ({ id:d.id, ...d.data() }));
 
-  function updateCount() {
-    const checked = document.querySelectorAll('#memberChecklist input:checked').length;
-    document.getElementById('selectedCount').textContent = checked + ' member' + (checked!==1?'s':'') + ' selected';
-  }
-
-  let allSelected = false;
-  function toggleSelectAll() {
-    allSelected = !allSelected;
-    document.querySelectorAll('#memberChecklist input[type=checkbox]').forEach(cb => cb.checked = allSelected);
-    document.querySelector('.select-all-btn').textContent = allSelected ? 'Deselect All' : 'Select All';
-    updateCount();
-  }
-
-  function saveAttendance() {
-    let valid = true;
-    const type = document.getElementById('aType');
-    const date = document.getElementById('aDate');
-    [['aType','aTypeErr'],['aDate','aDateErr']].forEach(([fid,eid])=>{
-      document.getElementById(fid).classList.remove('invalid');
-      document.getElementById(eid).classList.remove('show');
-      if (!document.getElementById(fid).value) {
-        document.getElementById(fid).classList.add('invalid');
-        document.getElementById(eid).classList.add('show');
-        valid = false;
+    // Auto-transfer check
+    allMembers.forEach(m => {
+      if (m.yearLeaving && parseInt(m.yearLeaving) <= currentYear && m.position !== 'Associates') {
+        db.collection('members').doc(m.id).update({ position: 'Associates' });
+        m.position = 'Associates';
       }
     });
 
-    const checked = [...document.querySelectorAll('#memberChecklist input:checked')].map(cb=>cb.value);
-    document.getElementById('aMembersErr').classList.toggle('show', checked.length===0);
-    if (!checked.length) valid = false;
-    if (!valid) return;
+    filterRender();
+  });
 
-    const record = {
-      id: genId(),
-      type: type.value,
-      date: date.value,
-      members: checked,
-      visitors: parseInt(document.getElementById('aVisitors').value)||0
-    };
+  function filterRender() {
+    const active = allMembers.filter(m => m.position !== 'Associates');
+    const q = document.getElementById('searchInput').value.toLowerCase();
 
-    const attendance = getData('attendance', []);
-    attendance.push(record);
-    saveData('attendance', attendance);
-
-    // Reset form
-    type.value = ''; date.value = '';
-    document.getElementById('aVisitors').value = '0';
-    document.querySelectorAll('#memberChecklist input').forEach(cb=>cb.checked=false);
-    allSelected = false;
-    document.querySelector('.select-all-btn').textContent = 'Select All';
-    updateCount();
-
-    showToast('Attendance saved!', 'success');
-    renderRecords();
-  }
-
-  function renderRecords() {
-    const attendance = getData('attendance', []).sort((a,b)=>new Date(b.date)-new Date(a.date));
-    const members = getData('members', []);
-    const q = (document.getElementById('recSearch').value||'').toLowerCase();
-    const filterType = document.getElementById('recFilter').value;
-
-    const filtered = attendance.filter(a => {
-      const matchType = !filterType || a.type===filterType;
-      const matchQ = !q || a.type.toLowerCase().includes(q) || fmtDate(a.date).toLowerCase().includes(q);
-      return matchType && matchQ;
+    let filtered = active.filter(m => {
+      const matchQ = !q || m.name.toLowerCase().includes(q) || (m.department||'').toLowerCase().includes(q);
+      const matchF = currentFilter==='all' || (currentFilter==='fyb' && isFYB(m));
+      return matchQ && matchF;
     });
 
-    const body = document.getElementById('recordsBody');
+    document.getElementById('msTotal').textContent = active.length;
+    document.getElementById('msFinal').textContent = active.filter(isFYB).length;
+    document.getElementById('msLeaders').textContent = active.filter(m=>LEADERS.includes(m.position)).length;
+
+    const grid = document.getElementById('membersGrid');
     if (!filtered.length) {
-      body.innerHTML = `<tr><td colspan="6" class="empty-state"><div class="big">📋</div><p>No records yet.</p></td></tr>`;
+      grid.innerHTML = `<div class="empty-state"><div class="big">👥</div><p>${q||currentFilter!=='all'?'No members match your search.':'No members yet.'}</p></div>`;
       return;
     }
 
-    body.innerHTML = filtered.map(a => {
-      const total = (a.members||[]).length + (a.visitors||0);
-      const delBtn = isAdmin ? `<td><button class="del-btn" onclick="deleteRecord('${a.id}')">🗑</button></td>` : '';
-      return `
-        <tr>
-          <td>${fmtDate(a.date)}</td>
-          <td><span class="badge ${badgeClass(a.type)}">${a.type}</span></td>
-          <td>${(a.members||[]).length}</td>
-          <td>${a.visitors||0}</td>
-          <td><strong>${total}</strong></td>
-          ${delBtn}
-        </tr>`;
+    grid.innerHTML = filtered.map(m => {
+      const color = POSITION_COLORS[m.position]||'#0066cc';
+      const fyb = isFYB(m) ? '<span class="fyb-badge">🎓 FYB</span>' : '';
+      return `<div class="member-card" onclick="openDetail('${m.id}')">
+        <div class="member-card-top">
+          <div class="member-avatar" style="background:${avatarColor(m.name)}">${initials(m.name)}</div>
+          <div>
+            <div class="member-card-name">${m.name}${fyb}</div>
+            <div class="member-card-pos" style="color:${color}">${m.position||'Member'}</div>
+          </div>
+        </div>
+        <div class="member-card-info">
+          <div class="member-card-row"><span class="lbl">Level</span>${m.level||'—'}</div>
+          <div class="member-card-row"><span class="lbl">Dept</span>${m.department||'—'}</div>
+          <div class="member-card-row"><span class="lbl">State</span>${m.state||'—'}</div>
+        </div>
+      </div>`;
     }).join('');
   }
 
-  function deleteRecord(id) {
-    if (!confirm('Delete this attendance record?')) return;
-    const attendance = getData('attendance', []).filter(a=>a.id!==id);
-    saveData('attendance', attendance);
-    renderRecords();
-    showToast('Record deleted.', 'success');
+  function setFilter(btn) {
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    filterRender();
   }
 
-  function renderSummary() {
-    const members = getData('members', []).filter(m=>m.position!=='Associates');
-    const attendance = getData('attendance', []);
-    const total = attendance.length;
+  function openDetail(id) {
+    const m = allMembers.find(x=>x.id===id);
+    if (!m) return;
+    const color = POSITION_COLORS[m.position]||'#0066cc';
+    const fyb = isFYB(m) ? '<span class="fyb-badge">🎓 Final Year</span>' : '';
+    const dobStr = m.dob_day && m.dob_month
+      ? `${m.dob_day} ${MONTHS[parseInt(m.dob_month)-1]}${m.dob_year?' '+m.dob_year:''}`
+      : '—';
 
-    const grid = document.getElementById('summaryGrid');
-    if (!members.length) {
-      grid.innerHTML = '<div class="empty-state"><div class="big">👥</div><p>No members yet.</p></div>';
-      return;
-    }
+    document.getElementById('detailBody').innerHTML = `
+      <div class="detail-top">
+        <div class="detail-avatar" style="background:${avatarColor(m.name)}">${initials(m.name)}</div>
+        <div>
+          <div class="detail-name">${m.name} ${fyb}</div>
+          <div class="detail-pos" style="color:${color}">${m.position||'Member'}</div>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-field"><span class="lbl">Gender</span><span class="val">${m.gender||'—'}</span></div>
+        <div class="detail-field"><span class="lbl">Level</span><span class="val">${m.level||'—'}</span></div>
+        <div class="detail-field"><span class="lbl">Department</span><span class="val">${m.department||'—'}</span></div>
+        <div class="detail-field"><span class="lbl">Faculty</span><span class="val">${m.faculty||'—'}</span></div>
+        <div class="detail-field"><span class="lbl">Phone</span><span class="val">${m.phone||'—'}</span></div>
+        <div class="detail-field"><span class="lbl">State</span><span class="val">${m.state||'—'}</span></div>
+        <div class="detail-field"><span class="lbl">Date of Birth</span><span class="val">${dobStr}</span></div>
+        <div class="detail-field"><span class="lbl">Year Started</span><span class="val">${m.yearStarted||'—'}</span></div>
+        <div class="detail-field"><span class="lbl">Year Leaving</span><span class="val">${m.yearLeaving||'—'}</span></div>
+        <div class="detail-field"><span class="lbl">Position</span><span class="val" style="color:${color}">${m.position||'Member'}</span></div>
+      </div>`;
 
-    const summaries = members.map(m => {
-      const count = attendance.filter(a=>(a.members||[]).includes(m.id)).length;
-      const pct = total ? Math.round(count/total*100) : 0;
-      return { name:m.name, level:m.level, count, pct };
-    }).sort((a,b)=>b.pct-a.pct);
+    document.getElementById('detailFooter').innerHTML = isAdmin
+      ? `<button class="btn-secondary" onclick="closeDetail()">Close</button>
+         <button class="btn-danger" onclick="deleteMember('${m.id}')">🗑 Delete</button>`
+      : `<button class="btn-secondary" onclick="closeDetail()">Close</button>`;
 
-    grid.innerHTML = summaries.map(s => `
-      <div class="summary-card">
-        <div class="summary-name">${s.name}</div>
-        <div class="summary-bar-wrap"><div class="summary-bar" style="width:${s.pct}%"></div></div>
-        <div class="summary-pct">${s.pct}%</div>
-        <div class="summary-detail">${s.count} of ${total} meetings · ${s.level||''}</div>
-      </div>`).join('');
+    document.getElementById('detailModal').classList.add('show');
+  }
+
+  function closeDetail() { document.getElementById('detailModal').classList.remove('show'); }
+
+  function deleteMember(id) {
+    if (!confirm('Delete this member? This cannot be undone.')) return;
+    db.collection('members').doc(id).delete()
+      .then(() => { closeDetail(); showToast('Member deleted.', 'success'); })
+      .catch(err => showToast('Error: ' + err.message, 'error'));
+  }
+
+  function openAddModal() { document.getElementById('addModal').classList.add('show'); }
+  function closeAdd() {
+    document.getElementById('addModal').classList.remove('show');
+    ['fName','fPhone','fYearStart','fYearLeave','fDobYear'].forEach(id=>document.getElementById(id).value='');
+    ['fGender','fLevel','fFaculty','fState','fDobDay','fDobMonth'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('fPosition').value='Member';
+    document.getElementById('fDept').value='';
+    document.querySelectorAll('.field-err').forEach(e=>e.classList.remove('show'));
+    document.querySelectorAll('.invalid').forEach(e=>e.classList.remove('invalid'));
+  }
+
+  function saveMember() {
+    let valid = true;
+    [['fName','fNameErr'],['fGender','fGenderErr'],['fLevel','fLevelErr'],
+     ['fDept','fDeptErr'],['fYearStart','fYearStartErr']].forEach(([fid,eid])=>{
+      const el = document.getElementById(fid);
+      const err = document.getElementById(eid);
+      el.classList.remove('invalid'); err.classList.remove('show');
+      if (!el.value.trim()) { el.classList.add('invalid'); err.classList.add('show'); valid=false; }
+    });
+    if (!valid) return;
+
+    const pos = document.getElementById('fPosition').value;
+    const nonUnique = ['Member','Associates','Ex-official'];
+
+    const btn = document.getElementById('btnSave');
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+
+    // Check position uniqueness in Firestore
+    const checkPos = nonUnique.includes(pos)
+      ? Promise.resolve(null)
+      : db.collection('members').where('position','==',pos).get();
+
+    checkPos.then(snap => {
+      if (snap && !snap.empty) {
+        const holder = snap.docs[0].data().name;
+        showToast(`${pos} is already held by ${holder}. Transfer first.`, 'error');
+        btn.disabled = false; btn.textContent = 'Save Member';
+        return;
+      }
+
+      const member = {
+        name:        document.getElementById('fName').value.trim(),
+        gender:      document.getElementById('fGender').value,
+        level:       document.getElementById('fLevel').value,
+        department:  document.getElementById('fDept').value.trim(),
+        faculty:     document.getElementById('fFaculty').value,
+        phone:       document.getElementById('fPhone').value.trim(),
+        state:       document.getElementById('fState').value,
+        position:    pos,
+        yearStarted: document.getElementById('fYearStart').value,
+        yearLeaving: document.getElementById('fYearLeave').value,
+        dob_day:     document.getElementById('fDobDay').value,
+        dob_month:   document.getElementById('fDobMonth').value,
+        dob_year:    document.getElementById('fDobYear').value,
+        createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      db.collection('members').add(member)
+        .then(() => {
+          closeAdd();
+          showToast(member.name + ' added!', 'success');
+          btn.disabled = false; btn.textContent = 'Save Member';
+        })
+        .catch(err => {
+          showToast('Error: ' + err.message, 'error');
+          btn.disabled = false; btn.textContent = 'Save Member';
+        });
+    });
   }
 
   function exportCSV() {
-    const attendance = getData('attendance', []).sort((a,b)=>new Date(b.date)-new Date(a.date));
-    const members = getData('members', []);
-    const headers = ['Date','Type','Members Present','Visitors','Total'];
-    const rows = attendance.map(a => {
-      const names = (a.members||[]).map(id=>{const m=members.find(x=>x.id===id); return m?m.name:'';}).filter(Boolean).join('; ');
-      const total = (a.members||[]).length+(a.visitors||0);
-      return [`"${fmtDate(a.date)}"`,`"${a.type}"`,`"${names}"`,a.visitors||0,total].join(',');
-    });
+    const active = allMembers.filter(m=>m.position!=='Associates');
+    const headers = ['Name','Gender','Level','Department','Faculty','Phone','State','Position','Year Started','Year Leaving'];
+    const rows = active.map(m=>[m.name,m.gender,m.level,m.department,m.faculty,m.phone,m.state,m.position,m.yearStarted,m.yearLeaving].map(v=>`"${v||''}"`).join(','));
     const csv = [headers.join(','),...rows].join('\n');
     const a = document.createElement('a');
-    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-    a.download = 'gecc-attendance.csv';
-    a.click();
+    a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+    a.download = 'gecc-members.csv'; a.click();
   }
 
   function showToast(msg, type) {
     const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast show ' + type;
+    t.textContent = msg; t.className = 'toast show '+type;
     setTimeout(()=>t.className='toast', 2500);
   }
 
@@ -520,11 +618,8 @@
   const overlay = document.getElementById('overlay');
   document.getElementById('hamburger').addEventListener('click',()=>{ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
   function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
-
-  // Init
-  if (isAdmin) buildChecklist();
-  renderRecords();
-
+  document.getElementById('detailModal').addEventListener('click',function(e){ if(e.target===this) closeDetail(); });
+  document.getElementById('addModal').addEventListener('click',function(e){ if(e.target===this) closeAdd(); });
 </script>
 </body>
-</html>
+  </html>
