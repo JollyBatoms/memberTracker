@@ -117,6 +117,17 @@
     .field-err.show { display:block; }
     .dob-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:.5rem; }
 
+    /* Associate history styles */
+    .assoc-section { margin-top:1rem; border-top:1px solid #edf0f4; padding-top:1rem; }
+    .assoc-section-title { font-size:.72rem; font-weight:700; color:#444; margin-bottom:.5rem; text-transform:uppercase; letter-spacing:.06em; }
+    .assoc-entry { display:grid; grid-template-columns:1fr 1fr auto; gap:.5rem; align-items:center; margin-bottom:.5rem; }
+    .assoc-entry select, .assoc-entry input { padding:.55rem .7rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.82rem; color:#1a1a1a; background:#fff; outline:none; appearance:none; }
+    .assoc-entry select:focus, .assoc-entry input:focus { border-color:#0066cc; }
+    .btn-remove-assoc { background:#fff0f0; color:#dc3545; border:1px solid #f5c0c5; border-radius:4px; padding:.4rem .6rem; font-size:.8rem; cursor:pointer; }
+    .btn-add-assoc { display:inline-flex; align-items:center; gap:.3rem; padding:.5rem .9rem; background:#eef4ff; color:#0066cc; border:1.5px solid #c5d9f5; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; cursor:pointer; margin-top:.3rem; }
+    .btn-add-assoc:hover { background:#d6e8ff; }
+    .assoc-note { font-size:.72rem; color:#888; margin-top:.4rem; font-style:italic; }
+
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
     .toast.success { background:#28a745; }
@@ -134,6 +145,7 @@
       .form-group.full { grid-column:1; }
       .detail-grid { grid-template-columns:1fr; }
       .members-grid { grid-template-columns:1fr 1fr; }
+      .assoc-entry { grid-template-columns:1fr 1fr auto; }
     }
     @media(max-width:420px) { .members-grid { grid-template-columns:1fr; } }
   </style>
@@ -305,6 +317,13 @@
           </select></div>
         </div>
         <div class="form-group">
+          <label>Member Type *</label>
+          <div class="select-wrap"><select id="fMemberType" onchange="handleMemberTypeChange()">
+            <option value="active">Active Member</option>
+            <option value="associate">Associate (Past Member)</option>
+          </select></div>
+        </div>
+        <div class="form-group">
           <label>Position</label>
           <div class="select-wrap"><select id="fPosition">
             <option value="Member">Member</option>
@@ -318,7 +337,7 @@
             <option>Welfare Secretary</option><option>Asst. Welfare Secretary</option>
             <option>Academic/Magazine Secretary</option><option>Music Director</option>
             <option>Financial Secretary</option><option>Treasurer</option>
-            <option>Ex-official</option><option>Associates</option>
+            <option>Ex-official</option>
           </select></div>
         </div>
         <div class="form-group">
@@ -326,7 +345,7 @@
           <input type="number" id="fYearStart" placeholder="e.g. 2023" min="2000" max="2099"/>
           <span class="field-err" id="fYearStartErr">Required</span>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="yearLeaveGroup">
           <label>Year Leaving</label>
           <input type="number" id="fYearLeave" placeholder="e.g. 2027" min="2000" max="2099"/>
         </div>
@@ -355,6 +374,17 @@
             <input type="number" id="fDobYear" placeholder="Year" min="1980" max="2010"/>
           </div>
         </div>
+
+        <!-- Associate history section — shown only when Associate is selected -->
+        <div class="form-group full" id="assocSection" style="display:none;">
+          <div class="assoc-section">
+            <div class="assoc-section-title">📋 Positions &amp; Years Served</div>
+            <div id="assocEntries"></div>
+            <button class="btn-add-assoc" onclick="addAssocEntry()">+ Add Position</button>
+            <div class="assoc-note">This person will be saved directly to Past Members.</div>
+          </div>
+        </div>
+
       </div>
     </div>
     <div class="modal-footer">
@@ -395,6 +425,14 @@
     'Financial Secretary':'#198754','Treasurer':'#dc3545'
   };
 
+  const ALL_POSITIONS = [
+    'Member','President','Vice President','General Secretary','Asst. General Secretary',
+    'Bible Study Secretary','Asst Bible Study Secretary','Evangelism Secretary','Follow up Secretary',
+    'Prayer Secretary','Asst Prayer Secretary','Media/Publicity Secretary','Asst Media/Publicity Secretary',
+    'Organizing Secretary','Asst Organizing Secretary','Welfare Secretary','Asst. Welfare Secretary',
+    'Academic/Magazine Secretary','Music Director','Financial Secretary','Treasurer','Ex-official'
+  ];
+
   const LEADERS = ['President','Vice President','General Secretary','Asst. General Secretary',
     'Bible Study Secretary','Asst Bible Study Secretary','Evangelism Secretary','Follow up Secretary',
     'Prayer Secretary','Asst Prayer Secretary','Media/Publicity Secretary','Asst Media/Publicity Secretary',
@@ -413,17 +451,27 @@
     return colors[Math.abs(h)%colors.length];
   }
   function initials(name) { return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
-  function isFYB(m) { return m.yearLeaving && parseInt(m.yearLeaving)===currentYear+1; }
+  function isFYB(m) { return m.yearLeaving && parseInt(m.yearLeaving) === currentYear + 1; }
 
-  // Load members from Firestore (real-time)
+  // Load members (real-time) — auto-move to associates when year expires
   db.collection('members').onSnapshot(snap => {
     allMembers = snap.docs.map(d => ({ id:d.id, ...d.data() }));
 
-    // Auto-transfer check
+    // Auto-transfer: if yearLeaving <= currentYear and not already associate, move them
     allMembers.forEach(m => {
       if (m.yearLeaving && parseInt(m.yearLeaving) <= currentYear && m.position !== 'Associates') {
-        db.collection('members').doc(m.id).update({ position: 'Associates' });
-        m.position = 'Associates';
+        const history = m.associateHistory || [];
+        if (!history.length) {
+          history.push({ position: m.position || 'Member', yearServed: m.yearStarted ? m.yearStarted + '–' + m.yearLeaving : '' });
+        }
+        db.collection('past-members').add({
+          ...m,
+          position: 'Associates',
+          associateHistory: history,
+          movedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+          db.collection('members').doc(m.id).delete();
+        });
       }
     });
 
@@ -524,16 +572,73 @@
       .catch(err => showToast('Error: ' + err.message, 'error'));
   }
 
-  function openAddModal() { document.getElementById('addModal').classList.add('show'); }
+  // ── ASSOCIATE ENTRY BUILDER ──────────────────────────────────
+
+  function handleMemberTypeChange() {
+    const type = document.getElementById('fMemberType').value;
+    const assocSection = document.getElementById('assocSection');
+    const posGroup = document.getElementById('fPosition').closest('.form-group');
+    const yearLeaveGroup = document.getElementById('yearLeaveGroup');
+
+    if (type === 'associate') {
+      assocSection.style.display = 'block';
+      posGroup.style.display = 'none';
+      yearLeaveGroup.style.display = 'none';
+      if (document.getElementById('assocEntries').children.length === 0) {
+        addAssocEntry();
+      }
+    } else {
+      assocSection.style.display = 'none';
+      posGroup.style.display = 'flex';
+      yearLeaveGroup.style.display = 'flex';
+    }
+  }
+
+  function addAssocEntry() {
+    const container = document.getElementById('assocEntries');
+    const idx = container.children.length;
+    const posOptions = ALL_POSITIONS.map(p => `<option value="${p}">${p}</option>`).join('');
+    const div = document.createElement('div');
+    div.className = 'assoc-entry';
+    div.innerHTML = `
+      <div class="select-wrap" style="position:relative;">
+        <select class="assoc-pos">
+          ${posOptions}
+        </select>
+      </div>
+      <input type="text" class="assoc-year" placeholder="e.g. 2021–2023"/>
+      <button class="btn-remove-assoc" onclick="removeAssocEntry(this)">✕</button>
+    `;
+    container.appendChild(div);
+  }
+
+  function removeAssocEntry(btn) {
+    const entry = btn.closest('.assoc-entry');
+    entry.remove();
+  }
+
+  // ── OPEN / CLOSE ADD MODAL ───────────────────────────────────
+
+  function openAddModal() {
+    document.getElementById('addModal').classList.add('show');
+  }
+
   function closeAdd() {
     document.getElementById('addModal').classList.remove('show');
     ['fName','fPhone','fYearStart','fYearLeave','fDobYear'].forEach(id=>document.getElementById(id).value='');
     ['fGender','fLevel','fFaculty','fState','fDobDay','fDobMonth'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('fPosition').value='Member';
-    document.getElementById('fDept').value='';
+    document.getElementById('fPosition').value = 'Member';
+    document.getElementById('fMemberType').value = 'active';
+    document.getElementById('fDept').value = '';
+    document.getElementById('assocSection').style.display = 'none';
+    document.getElementById('assocEntries').innerHTML = '';
+    document.getElementById('fPosition').closest('.form-group').style.display = 'flex';
+    document.getElementById('yearLeaveGroup').style.display = 'flex';
     document.querySelectorAll('.field-err').forEach(e=>e.classList.remove('show'));
     document.querySelectorAll('.invalid').forEach(e=>e.classList.remove('invalid'));
   }
+
+  // ── SAVE MEMBER ──────────────────────────────────────────────
 
   function saveMember() {
     let valid = true;
@@ -546,54 +651,86 @@
     });
     if (!valid) return;
 
-    const pos = document.getElementById('fPosition').value;
-    const nonUnique = ['Member','Associates','Ex-official'];
-
+    const memberType = document.getElementById('fMemberType').value;
     const btn = document.getElementById('btnSave');
     btn.disabled = true;
     btn.textContent = 'Saving…';
 
-    // Check position uniqueness in Firestore
-    const checkPos = nonUnique.includes(pos)
-      ? Promise.resolve(null)
-      : db.collection('members').where('position','==',pos).get();
+    const baseData = {
+      name:        document.getElementById('fName').value.trim(),
+      gender:      document.getElementById('fGender').value,
+      level:       document.getElementById('fLevel').value,
+      department:  document.getElementById('fDept').value.trim(),
+      faculty:     document.getElementById('fFaculty').value,
+      phone:       document.getElementById('fPhone').value.trim(),
+      state:       document.getElementById('fState').value,
+      yearStarted: document.getElementById('fYearStart').value,
+      dob_day:     document.getElementById('fDobDay').value,
+      dob_month:   document.getElementById('fDobMonth').value,
+      dob_year:    document.getElementById('fDobYear').value,
+      createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+    };
 
-    checkPos.then(snap => {
-      if (snap && !snap.empty) {
-        const holder = snap.docs[0].data().name;
-        showToast(`${pos} is already held by ${holder}. Transfer first.`, 'error');
-        btn.disabled = false; btn.textContent = 'Save Member';
-        return;
-      }
+    if (memberType === 'associate') {
+      // Collect associate history entries
+      const entries = Array.from(document.querySelectorAll('.assoc-entry')).map(row => ({
+        position:   row.querySelector('.assoc-pos').value,
+        yearServed: row.querySelector('.assoc-year').value.trim()
+      }));
 
       const member = {
-        name:        document.getElementById('fName').value.trim(),
-        gender:      document.getElementById('fGender').value,
-        level:       document.getElementById('fLevel').value,
-        department:  document.getElementById('fDept').value.trim(),
-        faculty:     document.getElementById('fFaculty').value,
-        phone:       document.getElementById('fPhone').value.trim(),
-        state:       document.getElementById('fState').value,
-        position:    pos,
-        yearStarted: document.getElementById('fYearStart').value,
-        yearLeaving: document.getElementById('fYearLeave').value,
-        dob_day:     document.getElementById('fDobDay').value,
-        dob_month:   document.getElementById('fDobMonth').value,
-        dob_year:    document.getElementById('fDobYear').value,
-        createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+        ...baseData,
+        position: 'Associates',
+        associateHistory: entries
       };
 
-      db.collection('members').add(member)
+      // Save directly to past-members collection
+      db.collection('past-members').add(member)
         .then(() => {
           closeAdd();
-          showToast(member.name + ' added!', 'success');
+          showToast(member.name + ' added to Past Members!', 'success');
           btn.disabled = false; btn.textContent = 'Save Member';
         })
         .catch(err => {
           showToast('Error: ' + err.message, 'error');
           btn.disabled = false; btn.textContent = 'Save Member';
         });
-    });
+
+    } else {
+      // Active member — normal flow with position uniqueness check
+      const pos = document.getElementById('fPosition').value;
+      const nonUnique = ['Member','Ex-official'];
+
+      const checkPos = nonUnique.includes(pos)
+        ? Promise.resolve(null)
+        : db.collection('members').where('position','==',pos).get();
+
+      checkPos.then(snap => {
+        if (snap && !snap.empty) {
+          const holder = snap.docs[0].data().name;
+          showToast(`${pos} is already held by ${holder}. Transfer first.`, 'error');
+          btn.disabled = false; btn.textContent = 'Save Member';
+          return;
+        }
+
+        const member = {
+          ...baseData,
+          position:    pos,
+          yearLeaving: document.getElementById('fYearLeave').value
+        };
+
+        db.collection('members').add(member)
+          .then(() => {
+            closeAdd();
+            showToast(member.name + ' added!', 'success');
+            btn.disabled = false; btn.textContent = 'Save Member';
+          })
+          .catch(err => {
+            showToast('Error: ' + err.message, 'error');
+            btn.disabled = false; btn.textContent = 'Save Member';
+          });
+      });
+    }
   }
 
   function exportCSV() {
@@ -622,4 +759,4 @@
   document.getElementById('addModal').addEventListener('click',function(e){ if(e.target===this) closeAdd(); });
 </script>
 </body>
-              </html>
+</html>
