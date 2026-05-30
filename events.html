@@ -84,14 +84,12 @@
     .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; grid-column:1/-1; }
     .empty-state .big { font-size:2.5rem; margin-bottom:.6rem; }
 
-    /* GRADIENTS for placeholder */
     .grad-0 { background:linear-gradient(135deg,#0066cc,#6c63ff); }
     .grad-1 { background:linear-gradient(135deg,#28a745,#17a2b8); }
     .grad-2 { background:linear-gradient(135deg,#fd7e14,#dc3545); }
     .grad-3 { background:linear-gradient(135deg,#6f42c1,#e83e8c); }
     .grad-4 { background:linear-gradient(135deg,#20c997,#0066cc); }
 
-    /* MODAL */
     .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; }
     .modal-overlay.show { display:flex; }
     .modal { background:#fff; border-radius:8px; width:100%; max-width:500px; max-height:90vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); }
@@ -112,7 +110,13 @@
     .field-err.show { display:block; }
     .form-row { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
 
-    .img-preview { margin-top:.5rem; max-height:120px; border-radius:5px; display:none; }
+    .img-upload-area { border:2px dashed #ccd4df; border-radius:8px; padding:1.5rem; text-align:center; cursor:pointer; position:relative; transition:border-color .2s,background .2s; }
+    .img-upload-area:hover { border-color:#0066cc; background:#f5f9ff; }
+    .img-upload-area input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    .img-preview-wrap { display:none; position:relative; margin-top:.5rem; }
+    .img-preview-wrap img { width:100%; max-height:150px; object-fit:cover; border-radius:6px; border:1px solid #dde3ec; display:block; }
+    .img-delete-btn { position:absolute; top:.4rem; right:.4rem; background:#dc3545; color:#fff; border:none; border-radius:50%; width:26px; height:26px; font-size:.9rem; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0,0,0,.2); }
+    .img-delete-btn:hover { background:#b02a37; }
 
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
@@ -136,6 +140,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script src="firebase-config.js"></script>
 
 <div class="admin-bar" id="adminBar">🔐 ADMIN MODE <span>Full access enabled</span></div>
@@ -234,9 +239,17 @@
         <textarea id="fDesc" placeholder="Brief description of the event…"></textarea>
       </div>
       <div class="form-group">
-        <label>Image URL (optional)</label>
-        <input type="url" id="fImage" placeholder="https://…" oninput="previewImg()"/>
-        <img id="imgPreview" class="img-preview" alt="preview"/>
+        <label>Event Image (optional)</label>
+        <div class="img-upload-area" id="imgUploadArea">
+          <input type="file" id="fImageFile" accept="image/*" onchange="handleImageSelect(event)"/>
+          <div style="font-size:2rem;margin-bottom:.4rem;">🖼️</div>
+          <div style="font-size:.78rem;color:#888;">Tap to upload image<br><strong style="color:#0066cc;">JPG, PNG, GIF</strong> supported</div>
+        </div>
+        <div class="img-preview-wrap" id="imgPreviewWrap">
+          <img id="imgPreview" alt="preview"/>
+          <button class="img-delete-btn" onclick="removeImage()">✕</button>
+        </div>
+        <div id="imgUploading" style="display:none;font-size:.75rem;color:#0066cc;font-weight:600;margin-top:.4rem;">⏳ Uploading image…</div>
       </div>
     </div>
     <div class="modal-footer">
@@ -281,8 +294,45 @@
   let allEvents = [];
   let currentFilter = 'all';
   let editingId = null;
+  let selectedImageFile = null;
+  let currentImageUrl = '';
 
-  // Real-time listener
+  function handleImageSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    selectedImageFile = file;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      document.getElementById('imgPreview').src = ev.target.result;
+      document.getElementById('imgPreviewWrap').style.display = 'block';
+      document.getElementById('imgUploadArea').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removeImage() {
+    selectedImageFile = null;
+    currentImageUrl = '';
+    document.getElementById('fImageFile').value = '';
+    document.getElementById('imgPreview').src = '';
+    document.getElementById('imgPreviewWrap').style.display = 'none';
+    document.getElementById('imgUploadArea').style.display = 'block';
+  }
+
+  async function uploadImageToStorage(file) {
+    if (typeof firebase !== 'undefined' && firebase.storage) {
+      const ref = firebase.storage().ref('events/' + Date.now() + '_' + file.name.replace(/\s+/g,'_'));
+      const snap = await ref.put(file);
+      return await snap.ref.getDownloadURL();
+    }
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = e => res(e.target.result);
+      r.onerror = rej;
+      r.readAsDataURL(file);
+    });
+  }
+
   db.collection('events').orderBy('date','asc').onSnapshot(snap => {
     allEvents = snap.docs.map(d => ({ id:d.id, ...d.data() }));
     renderEvents();
@@ -297,15 +347,12 @@
 
   function renderEvents() {
     const grid = document.getElementById('eventsGrid');
-
     let filtered = allEvents.filter(ev => {
       const d = new Date(ev.date);
       if (currentFilter === 'upcoming') return d >= now;
       if (currentFilter === 'past') return d < now;
       return true;
     });
-
-    // Sort: upcoming first (soonest), then past (most recent)
     filtered.sort((a,b) => {
       const aUp = new Date(a.date) >= now;
       const bUp = new Date(b.date) >= now;
@@ -314,12 +361,10 @@
       if (aUp && bUp) return new Date(a.date) - new Date(b.date);
       return new Date(b.date) - new Date(a.date);
     });
-
     if (!filtered.length) {
       grid.innerHTML = `<div class="empty-state"><div class="big">📅</div><p>${currentFilter!=='all'?'No '+currentFilter+' events.':'No events yet.'}</p></div>`;
       return;
     }
-
     grid.innerHTML = filtered.map((ev, i) => {
       const isUpcoming = new Date(ev.date) >= now;
       const grad = GRADS[i % GRADS.length];
@@ -330,7 +375,6 @@
       const adminBtns = isAdmin ? `
         <button class="btn-sm btn-sm-edit" onclick="openEditModal('${ev.id}')">✏ Edit</button>
         <button class="btn-sm btn-sm-del" onclick="deleteEvent('${ev.id}')">🗑 Delete</button>` : '';
-
       return `
         <div class="event-card">
           <div class="event-img">
@@ -365,8 +409,16 @@
     document.getElementById('fDate').value  = ev.date||'';
     document.getElementById('fTime').value  = ev.time||'';
     document.getElementById('fDesc').value  = ev.description||'';
-    document.getElementById('fImage').value = ev.image||'';
-    previewImg();
+    selectedImageFile = null;
+    currentImageUrl = ev.image || '';
+    if (currentImageUrl) {
+      document.getElementById('imgPreview').src = currentImageUrl;
+      document.getElementById('imgPreviewWrap').style.display = 'block';
+      document.getElementById('imgUploadArea').style.display = 'none';
+    } else {
+      document.getElementById('imgPreviewWrap').style.display = 'none';
+      document.getElementById('imgUploadArea').style.display = 'block';
+    }
     document.getElementById('eventModal').classList.add('show');
   }
 
@@ -377,20 +429,19 @@
   }
 
   function clearForm() {
-    ['fTitle','fDate','fTime','fDesc','fImage'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('imgPreview').style.display = 'none';
+    ['fTitle','fDate','fTime','fDesc'].forEach(id=>document.getElementById(id).value='');
     document.querySelectorAll('.field-err').forEach(e=>e.classList.remove('show'));
     document.querySelectorAll('.invalid').forEach(e=>e.classList.remove('invalid'));
+    selectedImageFile = null;
+    currentImageUrl = '';
+    document.getElementById('fImageFile').value = '';
+    document.getElementById('imgPreview').src = '';
+    document.getElementById('imgPreviewWrap').style.display = 'none';
+    document.getElementById('imgUploadArea').style.display = 'block';
+    document.getElementById('imgUploading').style.display = 'none';
   }
 
-  function previewImg() {
-    const url = document.getElementById('fImage').value.trim();
-    const prev = document.getElementById('imgPreview');
-    if (url) { prev.src = url; prev.style.display = 'block'; }
-    else { prev.style.display = 'none'; }
-  }
-
-  function saveEvent() {
+  async function saveEvent() {
     let valid = true;
     [['fTitle','fTitleErr'],['fDate','fDateErr']].forEach(([fid,eid])=>{
       document.getElementById(fid).classList.remove('invalid');
@@ -406,12 +457,27 @@
     const btn = document.getElementById('btnSaveEvent');
     btn.disabled = true; btn.textContent = 'Saving…';
 
+    let finalImageUrl = currentImageUrl;
+    if (selectedImageFile) {
+      try {
+        document.getElementById('imgUploading').style.display = 'block';
+        finalImageUrl = await uploadImageToStorage(selectedImageFile);
+        document.getElementById('imgUploading').style.display = 'none';
+      } catch(err) {
+        document.getElementById('imgUploading').style.display = 'none';
+        showToast('Image upload failed: ' + err.message, 'error');
+        btn.disabled = false;
+        btn.textContent = editingId ? 'Update Event' : 'Save Event';
+        return;
+      }
+    }
+
     const data = {
       title:       document.getElementById('fTitle').value.trim(),
       date:        document.getElementById('fDate').value,
       time:        document.getElementById('fTime').value,
       description: document.getElementById('fDesc').value.trim(),
-      image:       document.getElementById('fImage').value.trim(),
+      image:       finalImageUrl,
       updatedAt:   firebase.firestore.FieldValue.serverTimestamp()
     };
 
@@ -467,4 +533,4 @@
   document.getElementById('eventModal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
 </script>
 </body>
-  </html>
+</html>
