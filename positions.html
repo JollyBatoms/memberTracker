@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GECC Uniport — Positions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --blue:#0066cc; --green:#28a745; --red:#dc3545; --sidebar-w:240px; }
+    html, body { height:100%; font-family:'Open Sans',sans-serif; background:#f7f9fc; color:#1a1a1a; }
+
+    .admin-bar { display:none; position:fixed; top:0; left:0; right:0; height:28px; background:#0066cc; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; color:#fff; letter-spacing:.08em; text-transform:uppercase; z-index:200; }
+    .admin-bar.show { display:flex; }
+    .admin-bar span { opacity:.7; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
+
+    .sidebar { position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh; background:#fff; border-right:1px solid #dde3ec; display:flex; flex-direction:column; z-index:100; transition:transform .3s; }
+    .sidebar.admin-offset { top:28px; height:calc(100vh - 28px); }
+    .sidebar-brand { display:flex; align-items:center; gap:.7rem; padding:1rem 1.1rem; border-bottom:1px solid #dde3ec; cursor:pointer; }
+    .brand-logos { display:flex; align-items:center; gap:.3rem; }
+    .brand-logo { width:30px; height:30px; border-radius:50%; overflow:hidden; border:1px solid #dde3ec; }
+    .brand-logo img { width:100%; height:100%; object-fit:contain; }
+    .brand-text { display:flex; flex-direction:column; line-height:1.25; }
+    .brand-name { font-family:'Merriweather',serif; font-size:.75rem; font-weight:700; color:#0066cc; }
+    .brand-sub { font-size:.6rem; color:#999; letter-spacing:.06em; text-transform:uppercase; }
+    .nav-section { flex:1; overflow-y:auto; padding:.6rem 0; }
+    .nav-label { font-size:.6rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#aaa; padding:.6rem 1.1rem .25rem; }
+    .nav-item { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; color:#555; font-size:.85rem; font-weight:600; text-decoration:none; border-left:3px solid transparent; transition:color .2s,background .2s,border-color .2s; }
+    .nav-item:hover { color:#0066cc; background:#f0f5ff; }
+    .nav-item.active { color:#0066cc; background:#eef4ff; border-left-color:#0066cc; }
+    .nav-item .icon { width:18px; text-align:center; font-size:.95rem; }
+    .nav-bottom { border-top:1px solid #dde3ec; padding:.5rem 0; }
+    .btn-logout { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; width:100%; background:none; border:none; color:#dc3545; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; cursor:pointer; transition:background .2s; }
+    .btn-logout:hover { background:#fff5f5; }
+
+    .topbar { display:none; position:fixed; top:0; left:0; right:0; height:54px; background:#fff; border-bottom:1px solid #dde3ec; align-items:center; justify-content:space-between; padding:0 1rem; z-index:99; }
+    .topbar.admin-offset { top:28px; }
+    .topbar-brand { display:flex; align-items:center; gap:.5rem; font-family:'Merriweather',serif; font-size:.8rem; font-weight:700; color:#0066cc; cursor:pointer; }
+    .topbar-brand .brand-logo { width:26px; height:26px; }
+    .hamburger { background:none; border:none; cursor:pointer; color:#555; padding:.3rem; display:flex; flex-direction:column; gap:5px; }
+    .hamburger span { display:block; width:22px; height:2px; background:currentColor; border-radius:2px; }
+    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:98; }
+    .overlay.show { display:block; }
+
+    .main { margin-left:var(--sidebar-w); min-height:100vh; }
+    .main.admin-offset { margin-top:28px; }
+    .main-bar { height:4px; background:#0066cc; }
+    .content { padding:1.8rem; }
+
+    .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; flex-wrap:wrap; gap:.8rem; }
+    .page-header h1 { font-family:'Merriweather',serif; font-size:1.2rem; font-weight:700; }
+    .toolbar { display:flex; gap:.4rem; margin-bottom:1.4rem; flex-wrap:wrap; }
+    .filter-btn { padding:.5rem .9rem; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; border:1.5px solid #dde3ec; border-radius:5px; background:#fff; color:#555; cursor:pointer; transition:border-color .2s,color .2s,background .2s; }
+    .filter-btn.active { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
+
+    .positions-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1rem; }
+
+    .pos-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.1rem; box-shadow:0 1px 4px rgba(0,0,0,.04); transition:box-shadow .2s; }
+    .pos-card:hover { box-shadow:0 3px 10px rgba(0,0,0,.09); }
+    .pos-card-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:.7rem; }
+    .pos-name { font-size:.88rem; font-weight:700; color:#1a1a1a; }
+    .pos-badge { font-size:.6rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:.18rem .5rem; border-radius:20px; }
+    .pos-badge.leader { background:#fff8e1; color:#f59f00; border:1px solid #ffe08a; }
+    .pos-badge.regular { background:#f5f5f5; color:#888; border:1px solid #e0e0e0; }
+
+    .pos-holder { display:flex; align-items:center; gap:.65rem; margin-bottom:.8rem; }
+    .pos-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.82rem; font-weight:700; color:#fff; flex-shrink:0; }
+    .pos-holder-name { font-size:.85rem; font-weight:700; color:#1a1a1a; }
+    .pos-holder-info { font-size:.72rem; color:#888; margin-top:.05rem; }
+    .pos-vacant { display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem; padding:.5rem .7rem; background:#f7f9fc; border-radius:5px; border:1px dashed #ccd4df; }
+    .pos-vacant-text { font-size:.82rem; color:#aaa; font-weight:600; }
+
+    .pos-actions { display:flex; gap:.5rem; }
+    .btn-sm { padding:.38rem .75rem; font-family:'Open Sans',sans-serif; font-size:.74rem; font-weight:700; border-radius:4px; cursor:pointer; transition:background .2s; }
+    .btn-sm-transfer { background:#eef4ff; color:#0066cc; border:1px solid #c5d9f5; }
+    .btn-sm-transfer:hover { background:#d6e8ff; }
+    .btn-sm-history { background:#f5f5f5; color:#555; border:1px solid #dde3ec; }
+    .btn-sm-history:hover { background:#e8e8e8; }
+
+    /* MODALS */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; }
+    .modal-overlay.show { display:flex; }
+    .modal { background:#fff; border-radius:8px; width:100%; max-width:460px; max-height:90vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); }
+    .modal-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 1.4rem; border-bottom:1px solid #edf0f4; }
+    .modal-title { font-family:'Merriweather',serif; font-size:1rem; font-weight:700; color:#0066cc; }
+    .modal-close { background:none; border:none; font-size:1.6rem; cursor:pointer; color:#888; line-height:1; }
+    .modal-body { padding:1.4rem; }
+    .modal-footer { padding:1rem 1.4rem; border-top:1px solid #edf0f4; display:flex; justify-content:flex-end; gap:.6rem; }
+    .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.65rem 1.2rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; transition:background .2s; }
+    .btn-primary:hover { background:#0052a3; }
+    .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
+    .btn-secondary { padding:.65rem 1.2rem; background:transparent; color:#555; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; border:1.5px solid #ccd4df; border-radius:5px; cursor:pointer; }
+
+    .form-group { display:flex; flex-direction:column; gap:.35rem; margin-bottom:.9rem; }
+    .form-group label { font-size:.72rem; font-weight:700; color:#444; }
+    .form-group input, .form-group select { padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; background:#fff; outline:none; transition:border-color .2s; appearance:none; }
+    .form-group input:focus, .form-group select:focus { border-color:#0066cc; }
+    .select-wrap { position:relative; }
+    .select-wrap::after { content:''; position:absolute; right:.85rem; top:50%; transform:translateY(-50%); border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid #888; pointer-events:none; }
+    .field-err { font-size:.7rem; color:#dc3545; display:none; }
+    .field-err.show { display:block; }
+
+    .transfer-info { background:#fff8e1; border:1px solid #ffe08a; border-radius:6px; padding:.8rem 1rem; margin-bottom:1rem; font-size:.82rem; color:#856404; }
+
+    /* HISTORY */
+    .history-item { display:flex; align-items:flex-start; gap:.75rem; padding:.65rem 0; border-bottom:1px solid #f5f5f5; }
+    .history-item:last-child { border-bottom:none; }
+    .history-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:.25rem; }
+    .history-dot.current { background:#28a745; }
+    .history-dot.past { background:#aaa; }
+    .history-name { font-size:.85rem; font-weight:700; color:#1a1a1a; }
+    .history-years { font-size:.75rem; color:#888; margin-top:.1rem; }
+    .history-current-tag { font-size:.65rem; font-weight:700; background:#eafaf0; color:#1e7e34; border:1px solid #b2ddbf; border-radius:3px; padding:.1rem .4rem; margin-left:.4rem; }
+    .history-empty { text-align:center; color:#bbb; font-size:.85rem; padding:1.2rem 0; }
+
+    .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; grid-column:1/-1; }
+    .empty-state .big { font-size:2.5rem; margin-bottom:.6rem; }
+
+    .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
+    .toast.show { opacity:1; transform:translateY(0); }
+    .toast.success { background:#28a745; }
+    .toast.error { background:#dc3545; }
+
+    @media(max-width:768px) {
+      .sidebar { transform:translateX(-100%); }
+      .sidebar.open { transform:translateX(0); }
+      .topbar { display:flex; }
+      .main { margin-left:0; padding-top:54px; }
+      .main.admin-offset { margin-top:28px; padding-top:54px; }
+      .topbar.admin-offset { top:28px; }
+      .content { padding:1rem .9rem 3rem; }
+      .positions-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<div class="admin-bar" id="adminBar">🔐 ADMIN MODE <span>Full access enabled</span></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand" onclick="window.location.href='index.html'">
+    <div class="brand-logos">
+      <div class="brand-logo"><img src="gecc-logo.jpg" alt="GECC"/></div>
+      <div class="brand-logo"><img src="uniport-logo.jpg" alt="Uniport"/></div>
+    </div>
+    <div class="brand-text">
+      <span class="brand-name">GECC Uniport</span>
+      <span class="brand-sub">Member Portal</span>
+    </div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-label">Menu</div>
+    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="icon">⚙️</span> Memo</a>
+    <a class="nav-item" href="dashboard.html"><span class="icon">📊</span> Dashboard</a>
+    <a class="nav-item" href="members.html"><span class="icon">👥</span> Members</a>
+    <a class="nav-item" href="past-members.html"><span class="icon">📜</span> Past Members</a>
+    <a class="nav-item" href="attendance.html"><span class="icon">✓</span> Attendance</a>
+    <a class="nav-item" href="events.html"><span class="icon">📅</span> Events</a>
+    <a class="nav-item active" href="positions.html"><span class="icon">🎯</span> Positions</a>
+  </nav>
+  <div class="nav-bottom">
+    <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
+  </div>
+</aside>
+
+<div class="topbar" id="topbar">
+  <div class="topbar-brand" onclick="window.location.href='index.html'">
+    <div class="brand-logos">
+      <div class="brand-logo"><img src="gecc-logo.jpg" alt="GECC"/></div>
+      <div class="brand-logo"><img src="uniport-logo.jpg" alt="Uniport"/></div>
+    </div>
+    &nbsp;GECC Uniport
+  </div>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</div>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="main" id="mainWrap">
+  <div class="main-bar"></div>
+  <div class="content">
+
+    <div class="page-header">
+      <h1>🎯 Positions</h1>
+    </div>
+
+    <div class="toolbar">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">All Positions</button>
+      <button class="filter-btn" data-filter="vacant" onclick="setFilter(this)">Vacant Only</button>
+      <button class="filter-btn" data-filter="filled" onclick="setFilter(this)">Filled Only</button>
+    </div>
+
+    <div class="positions-grid" id="positionsGrid">
+      <div class="empty-state"><div class="big">⏳</div><p>Loading…</p></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Transfer Modal -->
+<div class="modal-overlay" id="transferModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Transfer Position</div>
+      <button class="modal-close" onclick="closeTransfer()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="transfer-info" id="transferInfo"></div>
+      <div class="form-group">
+        <label>Select New Member *</label>
+        <div class="select-wrap">
+          <select id="tMember">
+            <option value="">— Select member —</option>
+          </select>
+        </div>
+        <span class="field-err" id="tMemberErr">Please select a member</span>
+      </div>
+      <div class="form-group">
+        <label>Year Started in Position *</label>
+        <input type="number" id="tYear" placeholder="e.g. 2025" min="2000" max="2099"/>
+        <span class="field-err" id="tYearErr">Year is required</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeTransfer()">Cancel</button>
+      <button class="btn-primary" id="btnTransfer" onclick="doTransfer()">Transfer</button>
+    </div>
+  </div>
+</div>
+
+<!-- History Modal -->
+<div class="modal-overlay" id="historyModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="historyTitle">Position History</div>
+      <button class="modal-close" onclick="closeHistory()">×</button>
+    </div>
+    <div class="modal-body" id="historyBody"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeHistory()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const role = localStorage.getItem('userRole');
+  if (!role) { window.location.href = 'auth.html'; }
+  const isAdmin = role === 'admin';
+
+  if (isAdmin) {
+    document.getElementById('adminBar').classList.add('show');
+    document.getElementById('sidebar').classList.add('admin-offset');
+    document.getElementById('topbar').classList.add('admin-offset');
+    document.getElementById('mainWrap').classList.add('admin-offset');
+    document.getElementById('navMemo').style.display = 'flex';
+  }
+
+  const ALL_POSITIONS = [
+    { name:'President', color:'#0066cc', leader:true },
+    { name:'Vice President', color:'#6c63ff', leader:true },
+    { name:'General Secretary', color:'#dc3545', leader:true },
+    { name:'Asst. General Secretary', color:'#fd7e14', leader:true },
+    { name:'Bible Study Secretary', color:'#20c997', leader:true },
+    { name:'Asst Bible Study Secretary', color:'#17a2b8', leader:true },
+    { name:'Evangelism Secretary', color:'#e83e8c', leader:true },
+    { name:'Follow up Secretary', color:'#6f42c1', leader:true },
+    { name:'Prayer Secretary', color:'#fd7e14', leader:true },
+    { name:'Asst Prayer Secretary', color:'#ffc107', leader:true },
+    { name:'Media/Publicity Secretary', color:'#28a745', leader:true },
+    { name:'Asst Media/Publicity Secretary', color:'#20c997', leader:true },
+    { name:'Organizing Secretary', color:'#0066cc', leader:true },
+    { name:'Asst Organizing Secretary', color:'#6c63ff', leader:true },
+    { name:'Welfare Secretary', color:'#e83e8c', leader:true },
+    { name:'Asst. Welfare Secretary', color:'#d63384', leader:true },
+    { name:'Academic/Magazine Secretary', color:'#0d6efd', leader:true },
+    { name:'Music Director', color:'#fd7e14', leader:true },
+    { name:'Financial Secretary', color:'#198754', leader:true },
+    { name:'Treasurer', color:'#dc3545', leader:true },
+    { name:'Ex-official', color:'#6c757d', leader:false },
+  ];
+
+  function avatarColor(name) {
+    const colors = ['#0066cc','#6c63ff','#28a745','#fd7e14','#e83e8c','#17a2b8','#dc3545','#6f42c1'];
+    let h = 0;
+    for (let i=0;i<name.length;i++) h = name.charCodeAt(i)+((h<<5)-h);
+    return colors[Math.abs(h)%colors.length];
+  }
+  function initials(name) { return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+
+  let allMembers = [];
+  let currentFilter = 'all';
+  let transferPos = null;
+
+  // Load members real-time
+  db.collection('members').orderBy('name').onSnapshot(snap => {
+    allMembers = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+    renderPositions();
+  });
+
+  function setFilter(btn) {
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderPositions();
+  }
+
+  function renderPositions() {
+    const grid = document.getElementById('positionsGrid');
+
+    let positions = ALL_POSITIONS;
+    if (currentFilter === 'vacant') {
+      positions = positions.filter(p => !allMembers.find(m=>m.position===p.name));
+    } else if (currentFilter === 'filled') {
+      positions = positions.filter(p => allMembers.find(m=>m.position===p.name));
+    }
+
+    if (!positions.length) {
+      grid.innerHTML = `<div class="empty-state"><div class="big">🎯</div><p>No positions match filter.</p></div>`;
+      return;
+    }
+
+    grid.innerHTML = positions.map(p => {
+      const holder = allMembers.find(m => m.position === p.name);
+      const holderHtml = holder
+        ? `<div class="pos-holder">
+            <div class="pos-avatar" style="background:${avatarColor(holder.name)}">${initials(holder.name)}</div>
+            <div>
+              <div class="pos-holder-name">${holder.name}</div>
+              <div class="pos-holder-info">${holder.level||''}${holder.level&&holder.department?' · ':''}${holder.department||''}</div>
+            </div>
+           </div>`
+        : `<div class="pos-vacant">
+            <span style="color:#bbb;font-size:1.1rem">👤</span>
+            <span class="pos-vacant-text">POSITION VACANT</span>
+           </div>`;
+
+      const transferBtn = isAdmin
+        ? `<button class="btn-sm btn-sm-transfer" onclick="openTransfer('${p.name}')">⇄ Transfer</button>`
+        : '';
+
+      return `
+        <div class="pos-card">
+          <div class="pos-card-top">
+            <div class="pos-name" style="color:${p.color}">${p.name}</div>
+            <span class="pos-badge ${p.leader?'leader':'regular'}">${p.leader?'⭐ Leadership':'◦ Regular'}</span>
+          </div>
+          ${holderHtml}
+          <div class="pos-actions">
+            ${transferBtn}
+            <button class="btn-sm btn-sm-history" onclick="openHistory('${p.name}')">📋 History</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // TRANSFER
+  function openTransfer(posName) {
+    transferPos = posName;
+    const holder = allMembers.find(m=>m.position===posName);
+    document.getElementById('transferInfo').innerHTML = holder
+      ? `Transferring <strong>${posName}</strong> from <strong>${holder.name}</strong>. The current holder will become a regular Member.`
+      : `Assigning <strong>${posName}</strong> — currently vacant.`;
+
+    // Populate member dropdown (exclude current holder and associates)
+    const eligible = allMembers.filter(m =>
+      m.position !== posName &&
+      m.position !== 'Associates'
+    );
+    document.getElementById('tMember').innerHTML =
+      '<option value="">— Select member —</option>' +
+      eligible.map(m=>`<option value="${m.id}">${m.name} (${m.level||''}${m.department?' · '+m.department:''})</option>`).join('');
+
+    document.getElementById('tYear').value = new Date().getFullYear();
+    document.getElementById('tMemberErr').classList.remove('show');
+    document.getElementById('tYearErr').classList.remove('show');
+    document.getElementById('transferModal').classList.add('show');
+  }
+
+  function closeTransfer() {
+    document.getElementById('transferModal').classList.remove('show');
+    transferPos = null;
+  }
+
+  function doTransfer() {
+    const memberId = document.getElementById('tMember').value;
+    const year = document.getElementById('tYear').value;
+    let valid = true;
+
+    document.getElementById('tMemberErr').classList.remove('show');
+    document.getElementById('tYearErr').classList.remove('show');
+
+    if (!memberId) { document.getElementById('tMemberErr').classList.add('show'); valid=false; }
+    if (!year) { document.getElementById('tYearErr').classList.add('show'); valid=false; }
+    if (!valid) return;
+
+    const btn = document.getElementById('btnTransfer');
+    btn.disabled = true; btn.textContent = 'Transferring…';
+
+    const newHolder = allMembers.find(m=>m.id===memberId);
+    const oldHolder = allMembers.find(m=>m.position===transferPos);
+    const batch = db.batch();
+
+    // Set new holder's position
+    batch.update(db.collection('members').doc(memberId), {
+      position: transferPos,
+      yearStarted: year
+    });
+
+    // Demote old holder to Member
+    if (oldHolder) {
+      batch.update(db.collection('members').doc(oldHolder.id), { position: 'Member' });
+    }
+
+    // Save history record
+    const histRef = db.collection('positionHistory').doc();
+    batch.set(histRef, {
+      position: transferPos,
+      memberId: memberId,
+      memberName: newHolder.name,
+      from: year,
+      to: null,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    // Close old history record if exists
+    if (oldHolder) {
+      db.collection('positionHistory')
+        .where('position','==',transferPos)
+        .where('to','==',null)
+        .where('memberId','==',oldHolder.id)
+        .get().then(snap => {
+          snap.forEach(doc => doc.ref.update({ to: year }));
+        });
+    }
+
+    batch.commit().then(() => {
+      closeTransfer();
+      showToast(`${transferPos} transferred to ${newHolder.name}!`, 'success');
+      btn.disabled = false; btn.textContent = 'Transfer';
+    }).catch(err => {
+      showToast('Error: '+err.message, 'error');
+      btn.disabled = false; btn.textContent = 'Transfer';
+    });
+  }
+
+  // HISTORY
+  function openHistory(posName) {
+    document.getElementById('historyTitle').textContent = posName + ' — History';
+    document.getElementById('historyBody').innerHTML = '<p style="color:#aaa;font-size:.85rem">Loading…</p>';
+    document.getElementById('historyModal').classList.add('show');
+
+    db.collection('positionHistory')
+      .where('position','==',posName)
+      .orderBy('createdAt','desc')
+      .get().then(snap => {
+        const body = document.getElementById('historyBody');
+        if (snap.empty) {
+          // Check if anyone currently holds it
+          const current = allMembers.find(m=>m.position===posName);
+          if (current) {
+            body.innerHTML = `
+              <div class="history-item">
+                <div class="history-dot current"></div>
+                <div>
+                  <div class="history-name">${current.name} <span class="history-current-tag">Current</span></div>
+                  <div class="history-years">Since ${current.yearStarted||'unknown'}</div>
+                </div>
+              </div>`;
+          } else {
+            body.innerHTML = '<div class="history-empty">No history recorded yet.</div>';
+          }
+          return;
+        }
+
+        body.innerHTML = snap.docs.map(doc => {
+          const h = doc.data();
+          const isCurrent = !h.to;
+          return `
+            <div class="history-item">
+              <div class="history-dot ${isCurrent?'current':'past'}"></div>
+              <div>
+                <div class="history-name">${h.memberName}${isCurrent?'<span class="history-current-tag">Current</span>':''}</div>
+                <div class="history-years">${h.from||'?'} — ${h.to||'Present'}</div>
+              </div>
+            </div>`;
+        }).join('');
+      }).catch(() => {
+        document.getElementById('historyBody').innerHTML = '<div class="history-empty">Could not load history.</div>';
+      });
+  }
+
+  function closeHistory() { document.getElementById('historyModal').classList.remove('show'); }
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast show '+type;
+    setTimeout(()=>t.className='toast', 2500);
+  }
+
+  function doLogout() { localStorage.removeItem('userRole'); window.location.href = 'auth.html'; }
+
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  document.getElementById('hamburger').addEventListener('click',()=>{ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
+  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+  document.getElementById('transferModal').addEventListener('click',function(e){ if(e.target===this) closeTransfer(); });
+  document.getElementById('historyModal').addEventListener('click',function(e){ if(e.target===this) closeHistory(); });
+</script>
+</body>
+</html>
