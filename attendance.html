@@ -212,91 +212,575 @@
       <button class="tab active" id="tabRecords" onclick="switchTab('records')">Records</button>
       <button class="tab" id="tabSummary" onclick="switchTab('summary')">Member Summary</button>
     </div>
+const role = localStorage.getItem('userRole');
+if (!role) { window.location.href = 'auth.html'; }
+const isAdmin = role === 'admin';
 
-    <!-- ══════════ MARK ATTENDANCE ══════════ -->
-    <div id="panelMark" style="display:none">
-      <div class="form-card">
-        <div class="form-card-title">New Attendance Record</div>
+if (isAdmin) {
+  document.getElementById('adminBar').classList.add('show');
+  document.getElementById('sidebar').classList.add('admin-offset');
+  document.getElementById('topbar').classList.add('admin-offset');
+  document.getElementById('mainWrap').classList.add('admin-offset');
+  document.getElementById('navMemo').style.display = 'flex';
+  document.getElementById('btnExport').style.display = 'flex';
+  document.getElementById('tabMark').style.display = 'block';
+  document.getElementById('thDel').style.display = 'table-cell';
+  switchTab('mark');
+  document.getElementById('tabMark').classList.add('active');
+  document.getElementById('tabRecords').classList.remove('active');
+}
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Program Type *</label>
-            <div class="select-wrap">
-              <select id="aType" onchange="onTypeChange()">
-                <option value="">— Select —</option>
-                <option value="Sunday Service">Sunday Service</option>
-                <option value="Bible Study">Bible Study</option>
-                <option value="Prayer Meeting">Prayer Meeting</option>
-                <option value="Evangelism">Evangelism</option>
-                <option value="Special Program">Special Program</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <span class="field-err" id="aTypeErr">Required</span>
-          </div>
-          <div class="form-group">
-            <label>Date *</label>
-            <input type="date" id="aDate"/>
-            <span class="field-err" id="aDateErr">Required</span>
-          </div>
-        </div>
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function ordinal(n) { const s=['th','st','nd','rd'],v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
+function fmtDate(ds) { const d=new Date(ds); return ordinal(d.getDate())+' '+MONTHS[d.getMonth()]+' '+d.getFullYear(); }
+function badgeClass(t) {
+  if (t==='Sunday Service') return 'badge-blue';
+  if (t==='Bible Study') return 'badge-green';
+  if (t==='Prayer Meeting') return 'badge-purple';
+  if (t==='Special Program') return 'badge-pink';
+  return 'badge-orange';
+}
 
-        <!-- CASE B: Special Program extra fields -->
-        <div class="extra-fields" id="extraSpecial">
-          <div class="extra-fields-title">Special Program Details</div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Program Name *</label>
-              <input type="text" id="aProgramName" placeholder="e.g. Foundation Class"/>
-            </div>
-            <div class="form-group">
-              <label>Who Should Attend *</label>
-              <div class="select-wrap">
-                <select id="aAudience" onchange="onAudienceChange()">
-                  <option value="">— Select —</option>
-                  <option value="Executives">Executives</option>
-                  <option value="Sisters">Sisters</option>
-                  <option value="Brothers">Brothers</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="audience-info" id="audienceInfo" style="display:none"></div>
-        </div>
+let allMembers = [];
+let allAttendance = [];
+let allSelected = false;
 
-        <!-- CASE C: Other extra field -->
-        <div class="extra-fields" id="extraOther">
-          <div class="extra-fields-title">Program Details</div>
-          <div class="form-group">
-            <label>Program Name *</label>
-            <input type="text" id="aOtherName" placeholder="e.g. Drama Night, Evangelism Outreach"/>
-          </div>
-        </div>
+// Firestore listeners
+db.collection('members').orderBy('name').onSnapshot(snap => {
+  allMembers = snap.docs
+    .map(d => ({ id:d.id, ...d.data() }))
+    .filter(m => m.position !== 'Associates');
+  // Rebuild checklist if a type is already selected
+  const type = document.getElementById('aType') ? document.getElementById('aType').value : '';
+  if (type) buildChecklist();
+  if (document.getElementById('panelSummary').style.display !== 'none') renderSummary();
+});
 
-        <!-- Visitors -->
-        <div class="form-row" style="margin-top:.4rem">
-          <div class="form-group">
-            <label>Visitors / First-timers</label>
-            <input type="number" id="aVisitors" placeholder="0" min="0" value="0"/>
-          </div>
-        </div>
+db.collection('attendance').orderBy('date','desc').onSnapshot(snap => {
+  allAttendance = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+  renderRecords();
+  if (document.getElementById('panelSummary').style.display !== 'none') renderSummary();
+});
 
-        <!-- Member checklist -->
-        <div id="checklistWrap">
-          <div class="member-select-header">
-            <label id="checklistLabel">Members Present *</label>
-            <button class="select-all-btn" id="selectAllBtn" onclick="toggleSelectAll()">Select All</button>
-          </div>
-          <div class="member-checklist" id="memberChecklist">
-            <div style="padding:.8rem;color:#aaa;font-size:.82rem">Select a program type to load members…</div>
-          </div>
-          <div class="selected-count" id="selectedCount">0 members selected</div>
-          <span class="field-err" id="aMembersErr">Select at least one member</span>
-        </div>
+function switchTab(tab) {
+  ['mark','records','summary'].forEach(t => {
+    const btn   = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+    const panel = document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1));
+    if (btn)   btn.classList.toggle('active', t===tab);
+    if (panel) panel.style.display = t===tab ? 'block' : 'none';
+  });
+  if (tab==='summary') renderSummary();
+  if (tab==='records') renderRecords();
+}
 
-        <button class="btn-primary" id="btnSaveAtt" onclick="saveAttendance()">✓ Save Record</button>
-      </div>
-    </div>
+// When program type changes
+function onTypeChange() {
+  const type = document.getElementById('aType').value;
+  const nameWrap = document.getElementById('programNameWrap');
+
+  // Show program name field only for Special Program & Other
+  if (type === 'Special Program' || type === 'Other') {
+    nameWrap.style.display = 'block';
+    document.getElementById('programNameLabel').textContent =
+      type === 'Special Program' ? 'Program Name *' : 'Program Name (optional)';
+  } else {
+    nameWrap.style.display = 'none';
+    document.getElementById('aProgramName').value = '';
+  }
+
+  // Build checklist for all types
+  if (type) {
+    buildChecklist();
+  } else {
+    document.getElementById('memberChecklist').innerHTML =
+      '<div style="padding:.8rem;color:#aaa;font-size:.82rem">Select a program type to load members…</div>';
+    updateCount();
+  }
+}
+
+// Build alphabetical checklist — all active members
+function buildChecklist() {
+  const list = document.getElementById('memberChecklist');
+  allSelected = false;
+  document.getElementById('selectAllBtn').textContent = 'Select All';
+
+  const sorted = [...allMembers].sort((a,b) => a.name.localeCompare(b.name));
+
+  if (!sorted.length) {
+    list.innerHTML = '<div style="padding:.8rem;color:#aaa;font-size:.82rem">No members found. Add members first.</div>';
+    updateCount();
+    return;
+  }
+
+  list.innerHTML = sorted.map(m => `
+    <label class="member-check-item">
+      <input type="checkbox" value="${m.id}" onchange="updateCount()"/>
+      <span class="member-check-name">${m.name}</span>
+      <span class="member-check-info">${m.level||''}${m.level&&m.department?' · ':''}${m.department||''}</span>
+    </label>`).join('');
+  updateCount();
+}
+
+function updateCount() {
+  const n = document.querySelectorAll('#memberChecklist input:checked').length;
+  document.getElementById('selectedCount').textContent = n + ' member'+(n!==1?'s':'')+' selected';
+}
+
+function toggleSelectAll() {
+  allSelected = !allSelected;
+  document.querySelectorAll('#memberChecklist input[type=checkbox]').forEach(cb=>cb.checked=allSelected);
+  document.getElementById('selectAllBtn').textContent = allSelected ? 'Deselect All' : 'Select All';
+  updateCount();
+}
+
+function saveAttendance() {
+  let valid = true;
+  ['aType','aDate'].forEach(id => document.getElementById(id).classList.remove('invalid'));
+  ['aTypeErr','aDateErr','aMembersErr'].forEach(id => document.getElementById(id).classList.remove('show'));
+
+  const type = document.getElementById('aType').value;
+  const date = document.getElementById('aDate').value;
+
+  if (!type) { document.getElementById('aType').classList.add('invalid'); document.getElementById('aTypeErr').classList.add('show'); valid=false; }
+  if (!date) { document.getElementById('aDate').classList.add('invalid'); document.getElementById('aDateErr').classList.add('show'); valid=false; }
+
+  let programName = '';
+  if (type === 'Special Program') {
+    programName = document.getElementById('aProgramName').value.trim();
+    if (!programName) {
+      showToast('Enter a program name for Special Program.', 'error');
+      valid = false;
+    }
+  } else if (type === 'Other') {
+    programName = document.getElementById('aProgramName').value.trim();
+  }
+
+  const checked = [...document.querySelectorAll('#memberChecklist input:checked')].map(cb=>cb.value);
+  if (!checked.length) { document.getElementById('aMembersErr').classList.add('show'); valid=false; }
+  if (!valid) return;
+
+  const btn = document.getElementById('btnSaveAtt');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  db.collection('attendance').add({
+    type,
+    programName,
+    targetAudience: 'all',
+    date,
+    members: checked,
+    visitors: parseInt(document.getElementById('aVisitors').value)||0,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    document.getElementById('aType').value = '';
+    document.getElementById('aDate').value = '';
+    document.getElementById('aVisitors').value = '0';
+    document.getElementById('aProgramName').value = '';
+    document.getElementById('programNameWrap').style.display = 'none';
+    document.getElementById('memberChecklist').innerHTML =
+      '<div style="padding:.8rem;color:#aaa;font-size:.82rem">Select a program type to load members…</div>';
+    allSelected = false;
+    updateCount();
+    showToast('Attendance saved!', 'success');
+    btn.disabled = false; btn.textContent = '✓ Save Record';
+  }).catch(err => {
+    showToast('Error: '+err.message, 'error');
+    btn.disabled = false; btn.textContent = '✓ Save Record';
+  });
+}
+
+function renderRecords() {
+  const q = (document.getElementById('recSearch').value||'').toLowerCase();
+  const filterType = document.getElementById('recFilter').value;
+
+  const filtered = allAttendance.filter(a => {
+    const matchType = !filterType || a.type===filterType;
+    const matchQ = !q ||
+      (a.type||'').toLowerCase().includes(q) ||
+      (a.programName||'').toLowerCase().includes(q) ||
+      fmtDate(a.date).toLowerCase().includes(q);
+    return matchType && matchQ;
+  });
+
+  const body = document.getElementById('recordsBody');
+  if (!filtered.length) {
+    body.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="big">📋</div><p>No records yet.</p></div></td></tr>`;
+    return;
+  }
+
+  body.innerHTML = filtered.map(a => {
+    const total = (a.members||[]).length+(a.visitors||0);
+    const delCell = isAdmin ? `<td><button class="del-btn" onclick="deleteRecord('${a.id}')">🗑</button></td>` : '';
+    return `<tr>
+      <td>${fmtDate(a.date)}</td>
+      <td><span class="badge ${badgeClass(a.type)}">${a.type}</span></td>
+      <td>${a.programName||'—'}</td>
+      <td>All</td>
+      <td>${(a.members||[]).length}</td>
+      <td>${a.visitors||0}</td>
+      <td><strong>${total}</strong></td>
+      ${delCell}
+    </tr>`;
+  }).join('');
+}
+
+function deleteRecord(id) {
+  if (!confirm('Delete this attendance record?')) return;
+  db.collection('attendance').doc(id).delete()
+    .then(() => showToast('Record deleted.', 'success'))
+    .catch(err => showToast('Error: '+err.message, 'error'));
+}
+
+function renderSummary() {
+  const grid = document.getElementById('summaryGrid');
+  if (!allMembers.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="big">👥</div><p>No members yet.</p></div>';
+    return;
+  }
+
+  const total = allAttendance.length;
+
+  const summaries = allMembers.map(m => {
+    const attended = allAttendance.filter(a => (a.members||[]).includes(m.id)).length;
+    const pct = total > 0 ? Math.round(attended / total * 100) : null;
+    return { name:m.name, position:m.position||'Member', level:m.level||'', attended, total, pct };
+  }).sort((a,b) => {
+    if (a.pct===null && b.pct===null) return 0;
+    if (a.pct===null) return 1;
+    if (b.pct===null) return -1;
+    return b.pct - a.pct;
+  });
+
+  grid.innerHTML = summaries.map(s => {
+    if (s.pct === null) {
+      return `<div class="summary-card">
+        <div class="summary-name">${s.name}</div>
+        <div class="summary-meta">${s.position} · ${s.level}</div>
+        <div class="summary-na">No records yet</div>
+      </div>`;
+    }
+    const barClass = s.pct >= 75 ? 'good' : s.pct >= 50 ? 'mid' : 'low';
+    return `<div class="summary-card">
+      <div class="summary-name">${s.name}</div>
+      <div class="summary-meta">${s.position} · ${s.level}</div>
+      <div class="summary-bar-wrap"><div class="summary-bar ${barClass}" style="width:${s.pct}%"></div></div>
+      <div class="summary-pct">${s.pct}%</div>
+      <div class="summary-detail">${s.attended} of ${s.total} meetings attended</div>
+    </div>`;
+  }).join('');
+}
+
+function exportCSV() {
+  const headers = ['Date','Type','Program Name','Members Present','Visitors','Total'];
+  const rows = allAttendance.map(a => {
+    const names = (a.members||[]).map(id => {
+      const m = allMembers.find(x=>x.id===id);
+      return m ? m.name : '';
+    }).filter(Boolean).join('; ');
+    const total = (a.members||[]).length+(a.visitors||0);
+    return [`"${fmtDate(a.date)}"`,`"${a.type}"`,`"${a.programName||''}"`,`"${names}"`,a.visitors||0,total].join(',');
+  });
+  const csv = [headers.join(','),...rows].join('\n');
+  const el = document.createElement('a');
+  el.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  el.download = 'gecc-attendance.csv'; el.click();
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show '+type;
+  setTimeout(()=>t.className='toast', 2500);
+}
+
+function doLogout() { localStorage.removeItem('userRole'); window.location.href = 'auth.html'; }
+
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+document.getElementById('hamburger').addEventListener('click',()=>{ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
+function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }const role = localStorage.getItem('userRole');
+if (!role) { window.location.href = 'auth.html'; }
+const isAdmin = role === 'admin';
+
+if (isAdmin) {
+  document.getElementById('adminBar').classList.add('show');
+  document.getElementById('sidebar').classList.add('admin-offset');
+  document.getElementById('topbar').classList.add('admin-offset');
+  document.getElementById('mainWrap').classList.add('admin-offset');
+  document.getElementById('navMemo').style.display = 'flex';
+  document.getElementById('btnExport').style.display = 'flex';
+  document.getElementById('tabMark').style.display = 'block';
+  document.getElementById('thDel').style.display = 'table-cell';
+  switchTab('mark');
+  document.getElementById('tabMark').classList.add('active');
+  document.getElementById('tabRecords').classList.remove('active');
+}
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function ordinal(n) { const s=['th','st','nd','rd'],v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
+function fmtDate(ds) { const d=new Date(ds); return ordinal(d.getDate())+' '+MONTHS[d.getMonth()]+' '+d.getFullYear(); }
+function badgeClass(t) {
+  if (t==='Sunday Service') return 'badge-blue';
+  if (t==='Bible Study') return 'badge-green';
+  if (t==='Prayer Meeting') return 'badge-purple';
+  if (t==='Special Program') return 'badge-pink';
+  return 'badge-orange';
+}
+
+let allMembers = [];
+let allAttendance = [];
+let allSelected = false;
+
+// Firestore listeners
+db.collection('members').orderBy('name').onSnapshot(snap => {
+  allMembers = snap.docs
+    .map(d => ({ id:d.id, ...d.data() }))
+    .filter(m => m.position !== 'Associates');
+  // Rebuild checklist if a type is already selected
+  const type = document.getElementById('aType') ? document.getElementById('aType').value : '';
+  if (type) buildChecklist();
+  if (document.getElementById('panelSummary').style.display !== 'none') renderSummary();
+});
+
+db.collection('attendance').orderBy('date','desc').onSnapshot(snap => {
+  allAttendance = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+  renderRecords();
+  if (document.getElementById('panelSummary').style.display !== 'none') renderSummary();
+});
+
+function switchTab(tab) {
+  ['mark','records','summary'].forEach(t => {
+    const btn   = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+    const panel = document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1));
+    if (btn)   btn.classList.toggle('active', t===tab);
+    if (panel) panel.style.display = t===tab ? 'block' : 'none';
+  });
+  if (tab==='summary') renderSummary();
+  if (tab==='records') renderRecords();
+}
+
+// When program type changes
+function onTypeChange() {
+  const type = document.getElementById('aType').value;
+  const nameWrap = document.getElementById('programNameWrap');
+
+  // Show program name field only for Special Program & Other
+  if (type === 'Special Program' || type === 'Other') {
+    nameWrap.style.display = 'block';
+    document.getElementById('programNameLabel').textContent =
+      type === 'Special Program' ? 'Program Name *' : 'Program Name (optional)';
+  } else {
+    nameWrap.style.display = 'none';
+    document.getElementById('aProgramName').value = '';
+  }
+
+  // Build checklist for all types
+  if (type) {
+    buildChecklist();
+  } else {
+    document.getElementById('memberChecklist').innerHTML =
+      '<div style="padding:.8rem;color:#aaa;font-size:.82rem">Select a program type to load members…</div>';
+    updateCount();
+  }
+}
+
+// Build alphabetical checklist — all active members
+function buildChecklist() {
+  const list = document.getElementById('memberChecklist');
+  allSelected = false;
+  document.getElementById('selectAllBtn').textContent = 'Select All';
+
+  const sorted = [...allMembers].sort((a,b) => a.name.localeCompare(b.name));
+
+  if (!sorted.length) {
+    list.innerHTML = '<div style="padding:.8rem;color:#aaa;font-size:.82rem">No members found. Add members first.</div>';
+    updateCount();
+    return;
+  }
+
+  list.innerHTML = sorted.map(m => `
+    <label class="member-check-item">
+      <input type="checkbox" value="${m.id}" onchange="updateCount()"/>
+      <span class="member-check-name">${m.name}</span>
+      <span class="member-check-info">${m.level||''}${m.level&&m.department?' · ':''}${m.department||''}</span>
+    </label>`).join('');
+  updateCount();
+}
+
+function updateCount() {
+  const n = document.querySelectorAll('#memberChecklist input:checked').length;
+  document.getElementById('selectedCount').textContent = n + ' member'+(n!==1?'s':'')+' selected';
+}
+
+function toggleSelectAll() {
+  allSelected = !allSelected;
+  document.querySelectorAll('#memberChecklist input[type=checkbox]').forEach(cb=>cb.checked=allSelected);
+  document.getElementById('selectAllBtn').textContent = allSelected ? 'Deselect All' : 'Select All';
+  updateCount();
+}
+
+function saveAttendance() {
+  let valid = true;
+  ['aType','aDate'].forEach(id => document.getElementById(id).classList.remove('invalid'));
+  ['aTypeErr','aDateErr','aMembersErr'].forEach(id => document.getElementById(id).classList.remove('show'));
+
+  const type = document.getElementById('aType').value;
+  const date = document.getElementById('aDate').value;
+
+  if (!type) { document.getElementById('aType').classList.add('invalid'); document.getElementById('aTypeErr').classList.add('show'); valid=false; }
+  if (!date) { document.getElementById('aDate').classList.add('invalid'); document.getElementById('aDateErr').classList.add('show'); valid=false; }
+
+  let programName = '';
+  if (type === 'Special Program') {
+    programName = document.getElementById('aProgramName').value.trim();
+    if (!programName) {
+      showToast('Enter a program name for Special Program.', 'error');
+      valid = false;
+    }
+  } else if (type === 'Other') {
+    programName = document.getElementById('aProgramName').value.trim();
+  }
+
+  const checked = [...document.querySelectorAll('#memberChecklist input:checked')].map(cb=>cb.value);
+  if (!checked.length) { document.getElementById('aMembersErr').classList.add('show'); valid=false; }
+  if (!valid) return;
+
+  const btn = document.getElementById('btnSaveAtt');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  db.collection('attendance').add({
+    type,
+    programName,
+    targetAudience: 'all',
+    date,
+    members: checked,
+    visitors: parseInt(document.getElementById('aVisitors').value)||0,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    document.getElementById('aType').value = '';
+    document.getElementById('aDate').value = '';
+    document.getElementById('aVisitors').value = '0';
+    document.getElementById('aProgramName').value = '';
+    document.getElementById('programNameWrap').style.display = 'none';
+    document.getElementById('memberChecklist').innerHTML =
+      '<div style="padding:.8rem;color:#aaa;font-size:.82rem">Select a program type to load members…</div>';
+    allSelected = false;
+    updateCount();
+    showToast('Attendance saved!', 'success');
+    btn.disabled = false; btn.textContent = '✓ Save Record';
+  }).catch(err => {
+    showToast('Error: '+err.message, 'error');
+    btn.disabled = false; btn.textContent = '✓ Save Record';
+  });
+}
+
+function renderRecords() {
+  const q = (document.getElementById('recSearch').value||'').toLowerCase();
+  const filterType = document.getElementById('recFilter').value;
+
+  const filtered = allAttendance.filter(a => {
+    const matchType = !filterType || a.type===filterType;
+    const matchQ = !q ||
+      (a.type||'').toLowerCase().includes(q) ||
+      (a.programName||'').toLowerCase().includes(q) ||
+      fmtDate(a.date).toLowerCase().includes(q);
+    return matchType && matchQ;
+  });
+
+  const body = document.getElementById('recordsBody');
+  if (!filtered.length) {
+    body.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="big">📋</div><p>No records yet.</p></div></td></tr>`;
+    return;
+  }
+
+  body.innerHTML = filtered.map(a => {
+    const total = (a.members||[]).length+(a.visitors||0);
+    const delCell = isAdmin ? `<td><button class="del-btn" onclick="deleteRecord('${a.id}')">🗑</button></td>` : '';
+    return `<tr>
+      <td>${fmtDate(a.date)}</td>
+      <td><span class="badge ${badgeClass(a.type)}">${a.type}</span></td>
+      <td>${a.programName||'—'}</td>
+      <td>All</td>
+      <td>${(a.members||[]).length}</td>
+      <td>${a.visitors||0}</td>
+      <td><strong>${total}</strong></td>
+      ${delCell}
+    </tr>`;
+  }).join('');
+}
+
+function deleteRecord(id) {
+  if (!confirm('Delete this attendance record?')) return;
+  db.collection('attendance').doc(id).delete()
+    .then(() => showToast('Record deleted.', 'success'))
+    .catch(err => showToast('Error: '+err.message, 'error'));
+}
+
+function renderSummary() {
+  const grid = document.getElementById('summaryGrid');
+  if (!allMembers.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="big">👥</div><p>No members yet.</p></div>';
+    return;
+  }
+
+  const total = allAttendance.length;
+
+  const summaries = allMembers.map(m => {
+    const attended = allAttendance.filter(a => (a.members||[]).includes(m.id)).length;
+    const pct = total > 0 ? Math.round(attended / total * 100) : null;
+    return { name:m.name, position:m.position||'Member', level:m.level||'', attended, total, pct };
+  }).sort((a,b) => {
+    if (a.pct===null && b.pct===null) return 0;
+    if (a.pct===null) return 1;
+    if (b.pct===null) return -1;
+    return b.pct - a.pct;
+  });
+
+  grid.innerHTML = summaries.map(s => {
+    if (s.pct === null) {
+      return `<div class="summary-card">
+        <div class="summary-name">${s.name}</div>
+        <div class="summary-meta">${s.position} · ${s.level}</div>
+        <div class="summary-na">No records yet</div>
+      </div>`;
+    }
+    const barClass = s.pct >= 75 ? 'good' : s.pct >= 50 ? 'mid' : 'low';
+    return `<div class="summary-card">
+      <div class="summary-name">${s.name}</div>
+      <div class="summary-meta">${s.position} · ${s.level}</div>
+      <div class="summary-bar-wrap"><div class="summary-bar ${barClass}" style="width:${s.pct}%"></div></div>
+      <div class="summary-pct">${s.pct}%</div>
+      <div class="summary-detail">${s.attended} of ${s.total} meetings attended</div>
+    </div>`;
+  }).join('');
+}
+
+function exportCSV() {
+  const headers = ['Date','Type','Program Name','Members Present','Visitors','Total'];
+  const rows = allAttendance.map(a => {
+    const names = (a.members||[]).map(id => {
+      const m = allMembers.find(x=>x.id===id);
+      return m ? m.name : '';
+    }).filter(Boolean).join('; ');
+    const total = (a.members||[]).length+(a.visitors||0);
+    return [`"${fmtDate(a.date)}"`,`"${a.type}"`,`"${a.programName||''}"`,`"${names}"`,a.visitors||0,total].join(',');
+  });
+  const csv = [headers.join(','),...rows].join('\n');
+  const el = document.createElement('a');
+  el.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  el.download = 'gecc-attendance.csv'; el.click();
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show '+type;
+  setTimeout(()=>t.className='toast', 2500);
+}
+
+function doLogout() { localStorage.removeItem('userRole'); window.location.href = 'auth.html'; }
+
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+document.getElementById('hamburger').addEventListener('click',()=>{ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
+function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
 
     <!-- ══════════ RECORDS ══════════ -->
     <div id="panelRecords">
