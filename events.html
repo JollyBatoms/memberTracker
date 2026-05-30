@@ -320,11 +320,6 @@
   }
 
   async function uploadImageToStorage(file) {
-    if (typeof firebase !== 'undefined' && firebase.storage) {
-      const ref = firebase.storage().ref('events/' + Date.now() + '_' + file.name.replace(/\s+/g,'_'));
-      const snap = await ref.put(file);
-      return await snap.ref.getDownloadURL();
-    }
     return new Promise((res, rej) => {
       const r = new FileReader();
       r.onload = e => res(e.target.result);
