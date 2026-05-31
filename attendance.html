@@ -68,50 +68,71 @@
     .form-group input.invalid, .form-group select.invalid { border-color:#dc3545; }
     .select-wrap { position:relative; }
     .select-wrap::after { content:''; position:absolute; right:.85rem; top:50%; transform:translateY(-50%); border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid #888; pointer-events:none; }
-    .field-err { font-size:.7rem; color:#dc3545; display:none; margin-top:.2rem; }
+    .field-err { font-size:.7rem; color:#dc3545; display:none; margin-top:.1rem; }
     .field-err.show { display:block; }
 
-    /* Extra fields box */
-    .extra-box { background:#f0f5ff; border:1px solid #c5d9f5; border-radius:6px; padding:1rem; margin-bottom:.9rem; display:none; }
-    .extra-box.show { display:block; }
-    .extra-box-title { font-size:.68rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#0066cc; margin-bottom:.8rem; }
+    .extra-fields { background:#f0f5ff; border:1px solid #c5d9f5; border-radius:6px; padding:1rem; margin-bottom:.9rem; display:none; }
+    .extra-fields.show { display:block; }
+    .extra-fields-title { font-size:.68rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#0066cc; margin-bottom:.8rem; }
 
-    /* Audience quick-select buttons */
-    .audience-btns { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.4rem; }
-    .aud-btn { padding:.42rem .9rem; font-size:.75rem; font-weight:700; border:1.5px solid #c5d9f5; border-radius:20px; background:#fff; color:#0066cc; cursor:pointer; transition:background .2s,border-color .2s; font-family:'Open Sans',sans-serif; }
-    .aud-btn:hover { background:#dceeff; }
-    .aud-btn.active { background:#0066cc; color:#fff; border-color:#0066cc; }
-    .aud-hint { font-size:.72rem; color:#888; margin-top:.3rem; }
+    .audience-info { font-size:.75rem; color:#555; background:#fff; border:1px solid #dde3ec; border-radius:5px; padding:.55rem .8rem; margin-top:.5rem; display:none; }
 
-    /* Checklist */
+    /* Selected members chips */
+    .selected-audience-wrap { margin-top:.6rem; display:none; }
+    .selected-audience-label { font-size:.68rem; font-weight:700; color:#0066cc; letter-spacing:.06em; text-transform:uppercase; margin-bottom:.4rem; }
+    .chips { display:flex; flex-wrap:wrap; gap:.35rem; }
+    .chip { display:inline-flex; align-items:center; gap:.3rem; background:#eef4ff; border:1px solid #c5d9f5; border-radius:20px; padding:.22rem .6rem; font-size:.72rem; font-weight:700; color:#0066cc; }
+    .chip-remove { cursor:pointer; color:#888; font-size:.8rem; line-height:1; background:none; border:none; padding:0; }
+    .chip-remove:hover { color:#dc3545; }
+
+    /* Attendance checklist */
+    .checklist-section { margin-top:.4rem; }
     .checklist-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.5rem; }
     .checklist-header label { font-size:.72rem; font-weight:700; color:#444; }
-    .checklist-actions { display:flex; gap:.5rem; }
+    .checklist-actions { display:flex; gap:.7rem; }
     .ck-btn { font-size:.72rem; font-weight:700; color:#0066cc; background:none; border:none; cursor:pointer; padding:0; }
-    .ck-btn.red { color:#dc3545; }
-
+    .ck-btn.danger { color:#dc3545; }
     .member-checklist { max-height:260px; overflow-y:auto; border:1.5px solid #ccd4df; border-radius:5px; }
-    .member-check-item { display:flex; align-items:center; gap:.65rem; padding:.55rem .8rem; border-bottom:1px solid #f5f5f5; cursor:pointer; transition:background .15s; }
+    .member-check-item { display:flex; align-items:center; gap:.65rem; padding:.6rem .8rem; border-bottom:1px solid #f5f5f5; cursor:pointer; transition:background .15s; }
     .member-check-item:last-child { border-bottom:none; }
     .member-check-item:hover { background:#f7f9fc; }
-    .member-check-item.suggested { background:#f0f7ff; }
     .member-check-item input[type=checkbox] { width:15px; height:15px; accent-color:#0066cc; cursor:pointer; flex-shrink:0; }
     .member-check-name { font-size:.84rem; color:#1a1a1a; flex:1; }
     .member-check-meta { font-size:.7rem; color:#aaa; }
-    .member-check-tag { font-size:.6rem; font-weight:700; background:#eef4ff; color:#0066cc; border-radius:3px; padding:.1rem .35rem; margin-left:.3rem; }
-
     .selected-count { font-size:.72rem; color:#0066cc; font-weight:700; margin-top:.4rem; }
 
     .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.72rem 1.4rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.88rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; transition:background .2s; margin-top:1rem; }
     .btn-primary:hover { background:#0052a3; }
     .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
 
+    /* ── SELECT MEMBERS MODAL ── */
+    .sm-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:600; align-items:flex-end; justify-content:center; }
+    .sm-overlay.show { display:flex; }
+    .sm-sheet { background:#fff; width:100%; max-width:520px; border-radius:14px 14px 0 0; max-height:85vh; display:flex; flex-direction:column; }
+    .sm-header { padding:1rem 1.2rem .8rem; border-bottom:1px solid #edf0f4; display:flex; align-items:center; justify-content:space-between; }
+    .sm-title { font-family:'Merriweather',serif; font-size:.95rem; font-weight:700; color:#0066cc; }
+    .sm-close { background:none; border:none; font-size:1.5rem; cursor:pointer; color:#888; line-height:1; }
+    .sm-search { padding:.7rem 1.2rem; border-bottom:1px solid #edf0f4; }
+    .sm-search input { width:100%; padding:.6rem .85rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; outline:none; }
+    .sm-search input:focus { border-color:#0066cc; }
+    .sm-list { flex:1; overflow-y:auto; }
+    .sm-item { display:flex; align-items:center; gap:.7rem; padding:.65rem 1.2rem; border-bottom:1px solid #f5f5f5; cursor:pointer; transition:background .15s; }
+    .sm-item:hover { background:#f7f9fc; }
+    .sm-item.selected { background:#eef4ff; }
+    .sm-item input[type=checkbox] { width:16px; height:16px; accent-color:#0066cc; flex-shrink:0; cursor:pointer; }
+    .sm-item-name { font-size:.88rem; color:#1a1a1a; font-weight:600; flex:1; }
+    .sm-item-meta { font-size:.72rem; color:#aaa; }
+    .sm-footer { padding:.9rem 1.2rem; border-top:1px solid #edf0f4; display:flex; align-items:center; justify-content:space-between; gap:.8rem; }
+    .sm-count { font-size:.78rem; color:#0066cc; font-weight:700; }
+    .sm-ok { padding:.7rem 1.6rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.88rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; }
+    .sm-ok:hover { background:#0052a3; }
+
     /* Records */
     .table-toolbar { display:flex; align-items:center; gap:.7rem; margin-bottom:1rem; flex-wrap:wrap; }
     .search-wrap { position:relative; flex:1; min-width:180px; }
     .search-wrap input { width:100%; padding:.6rem .9rem .6rem 2.1rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.85rem; color:#1a1a1a; outline:none; transition:border-color .2s; }
     .search-wrap input:focus { border-color:#0066cc; }
-    .search-icon { position:absolute; left:.65rem; top:50%; transform:translateY(-50%); color:#aaa; font-size:.85rem; }
+    .search-icon { position:absolute; left:.65rem; top:50%; transform:translateY(-50%); color:#aaa; }
     .filter-select { padding:.58rem .8rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.82rem; color:#444; background:#fff; outline:none; appearance:none; cursor:pointer; }
     .table-wrap { background:#fff; border:1px solid #dde3ec; border-radius:8px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.04); overflow-x:auto; }
     table { width:100%; border-collapse:collapse; font-size:.82rem; }
@@ -120,11 +141,11 @@
     tbody tr:last-child td { border-bottom:none; }
     tbody tr:hover td { background:#f7f9fc; }
     .badge { display:inline-block; font-size:.65rem; font-weight:700; padding:.18rem .55rem; border-radius:20px; white-space:nowrap; }
-    .badge-blue { background:#eef4ff; color:#0066cc; }
-    .badge-green { background:#eafaf0; color:#1e7e34; }
+    .badge-blue   { background:#eef4ff; color:#0066cc; }
+    .badge-green  { background:#eafaf0; color:#1e7e34; }
     .badge-orange { background:#fff4e6; color:#c45f00; }
     .badge-purple { background:#f0eeff; color:#5e35b1; }
-    .badge-pink { background:#fff0f6; color:#c2185b; }
+    .badge-pink   { background:#fff0f6; color:#c2185b; }
     .del-btn { background:none; border:none; color:#dc3545; cursor:pointer; font-size:.85rem; padding:.2rem .4rem; border-radius:3px; transition:background .2s; }
     .del-btn:hover { background:#fff0f0; }
 
@@ -136,12 +157,12 @@
     .summary-bar-wrap { height:7px; background:#edf0f4; border-radius:4px; overflow:hidden; margin-bottom:.3rem; }
     .summary-bar { height:100%; border-radius:4px; }
     .summary-bar.good { background:#28a745; }
-    .summary-bar.mid { background:#fd7e14; }
-    .summary-bar.low { background:#dc3545; }
+    .summary-bar.mid  { background:#fd7e14; }
+    .summary-bar.low  { background:#dc3545; }
     .summary-pct { font-size:.82rem; font-weight:700; }
     .summary-pct.good { color:#28a745; }
-    .summary-pct.mid { color:#fd7e14; }
-    .summary-pct.low { color:#dc3545; }
+    .summary-pct.mid  { color:#fd7e14; }
+    .summary-pct.low  { color:#dc3545; }
     .summary-detail { font-size:.7rem; color:#aaa; margin-top:.15rem; }
     .summary-na { font-size:.72rem; color:#bbb; font-style:italic; margin-top:.3rem; }
 
@@ -151,7 +172,7 @@
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
     .toast.success { background:#28a745; }
-    .toast.error { background:#dc3545; }
+    .toast.error   { background:#dc3545; }
 
     @media(max-width:768px) {
       .sidebar { transform:translateX(-100%); }
@@ -162,6 +183,7 @@
       .topbar.admin-offset { top:28px; }
       .content { padding:1rem .9rem 3rem; }
       .form-row { grid-template-columns:1fr; }
+      .sm-sheet { max-height:90vh; border-radius:14px 14px 0 0; }
     }
   </style>
 </head>
@@ -254,28 +276,37 @@
           </div>
         </div>
 
-        <!-- Special Program extra box -->
-        <div class="extra-box" id="extraSpecial">
-          <div class="extra-box-title">Special Program Details</div>
+        <!-- Special Program box -->
+        <div class="extra-fields" id="extraSpecial">
+          <div class="extra-fields-title">Special Program Details</div>
           <div class="form-group" style="margin-bottom:.7rem">
             <label>Program Name *</label>
             <input type="text" id="aProgramName" placeholder="e.g. Foundation Class, Sisters Conference"/>
           </div>
           <div class="form-group" style="margin-bottom:.4rem">
-            <label>Quick-select group (optional)</label>
-            <div class="audience-btns">
-              <button class="aud-btn" data-group="all" onclick="quickSelect(this)">All Members</button>
-              <button class="aud-btn" data-group="executives" onclick="quickSelect(this)">Executives</button>
-              <button class="aud-btn" data-group="sisters" onclick="quickSelect(this)">Sisters</button>
-              <button class="aud-btn" data-group="brothers" onclick="quickSelect(this)">Brothers</button>
+            <label>Who Should Attend *</label>
+            <div class="select-wrap">
+              <select id="aAudience" onchange="onAudienceChange()">
+                <option value="">— Select —</option>
+                <option value="Executives">Executives</option>
+                <option value="Sisters">Sisters</option>
+                <option value="Brothers">Brothers</option>
+                <option value="SelectMembers">Select Members…</option>
+              </select>
             </div>
-            <div class="aud-hint">Tap a group to pre-tick their names. You can still manually adjust below.</div>
+          </div>
+          <!-- Info line after auto-group selected -->
+          <div class="audience-info" id="audienceInfo"></div>
+          <!-- Chips for manually selected members -->
+          <div class="selected-audience-wrap" id="selectedAudienceWrap">
+            <div class="selected-audience-label">Selected to attend:</div>
+            <div class="chips" id="audienceChips"></div>
           </div>
         </div>
 
-        <!-- Other extra box -->
-        <div class="extra-box" id="extraOther">
-          <div class="extra-box-title">Program Details</div>
+        <!-- Other box -->
+        <div class="extra-fields" id="extraOther">
+          <div class="extra-fields-title">Program Details</div>
           <div class="form-group" style="margin-bottom:0">
             <label>Program Name (optional)</label>
             <input type="text" id="aOtherName" placeholder="e.g. Drama Night, Evangelism Outreach"/>
@@ -288,17 +319,17 @@
           <input type="number" id="aVisitors" placeholder="0" min="0" value="0"/>
         </div>
 
-        <!-- Member checklist -->
-        <div id="checklistWrap">
+        <!-- Attendance checklist (who actually attended) -->
+        <div class="checklist-section" id="checklistSection">
           <div class="checklist-header">
-            <label>Members Present * <span id="checklistSubLabel" style="color:#888;font-weight:400;font-size:.68rem"></span></label>
+            <label>Who Attended? * <span id="checklistSub" style="color:#888;font-weight:400;font-size:.68rem"></span></label>
             <div class="checklist-actions">
-              <button class="ck-btn" onclick="selectAllMembers()">Select All</button>
-              <button class="ck-btn red" onclick="clearAllMembers()">Clear</button>
+              <button class="ck-btn" onclick="selectAllAtt()">All</button>
+              <button class="ck-btn danger" onclick="clearAllAtt()">Clear</button>
             </div>
           </div>
           <div class="member-checklist" id="memberChecklist">
-            <div style="padding:.8rem;color:#aaa;font-size:.82rem">Select a program type above to load members…</div>
+            <div style="padding:.8rem;color:#aaa;font-size:.82rem">Select program type to load members…</div>
           </div>
           <div class="selected-count" id="selectedCount">0 members selected</div>
           <span class="field-err" id="aMembersErr">Select at least one member</span>
@@ -331,13 +362,8 @@
         <table>
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Type</th>
-              <th>Program</th>
-              <th>Target</th>
-              <th>Present</th>
-              <th>Visitors</th>
-              <th>Total</th>
+              <th>Date</th><th>Type</th><th>Program</th><th>Audience</th>
+              <th>Present</th><th>Visitors</th><th>Total</th>
               <th id="thDel" style="display:none"></th>
             </tr>
           </thead>
@@ -348,13 +374,31 @@
       </div>
     </div>
 
-    <!-- ══════════ MEMBER SUMMARY ══════════ -->
+    <!-- ══════════ SUMMARY ══════════ -->
     <div id="panelSummary" style="display:none">
       <div class="summary-grid" id="summaryGrid">
         <div class="empty-state"><div class="big">⏳</div><p>Loading…</p></div>
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- ══ SELECT MEMBERS BOTTOM SHEET ══ -->
+<div class="sm-overlay" id="smOverlay">
+  <div class="sm-sheet">
+    <div class="sm-header">
+      <div class="sm-title">Select Members to Attend</div>
+      <button class="sm-close" onclick="closeSmModal()">×</button>
+    </div>
+    <div class="sm-search">
+      <input type="text" id="smSearch" placeholder="Search members…" oninput="filterSmList()"/>
+    </div>
+    <div class="sm-list" id="smList"></div>
+    <div class="sm-footer">
+      <div class="sm-count" id="smCount">0 selected</div>
+      <button class="sm-ok" onclick="confirmSmSelection()">OK — Confirm</button>
+    </div>
   </div>
 </div>
 
@@ -385,9 +429,9 @@
   function ordinal(n) { const s=['th','st','nd','rd'],v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
   function fmtDate(ds) { const d=new Date(ds); return ordinal(d.getDate())+' '+MONTHS[d.getMonth()]+' '+d.getFullYear(); }
   function badgeClass(t) {
-    if (t==='Sunday Service') return 'badge-blue';
-    if (t==='Bible Study') return 'badge-green';
-    if (t==='Prayer Meeting') return 'badge-purple';
+    if (t==='Sunday Service')  return 'badge-blue';
+    if (t==='Bible Study')     return 'badge-green';
+    if (t==='Prayer Meeting')  return 'badge-purple';
     if (t==='Special Program') return 'badge-pink';
     return 'badge-orange';
   }
@@ -403,31 +447,36 @@
   ];
 
   // ── State ──
-  let allMembers = [];
+  let allMembers    = [];
   let allAttendance = [];
+  // targetPool = members who SHOULD attend (for checklist)
+  let targetPool    = [];
+  // targetAudience string saved to Firestore
   let currentTargetAudience = 'all';
+  // For "Select Members" manual picks (their IDs)
+  let manualSelected = [];
 
-  // ── Firestore listeners ──
+  // ── Firestore ──
   db.collection('members').orderBy('name').onSnapshot(snap => {
     allMembers = snap.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.position!=='Associates');
     const type = document.getElementById('aType').value;
-    if (type) buildChecklist();
-    if (document.getElementById('panelSummary').style.display !== 'none') renderSummary();
+    if (type && type !== 'Special Program') buildAttChecklist(allMembers);
+    if (document.getElementById('panelSummary').style.display!=='none') renderSummary();
   });
 
   db.collection('attendance').orderBy('date','desc').onSnapshot(snap => {
     allAttendance = snap.docs.map(d=>({id:d.id,...d.data()}));
     renderRecords();
-    if (document.getElementById('panelSummary').style.display !== 'none') renderSummary();
+    if (document.getElementById('panelSummary').style.display!=='none') renderSummary();
   });
 
-  // ── Tab switch ──
+  // ── Tabs ──
   function switchTab(tab) {
     ['mark','records','summary'].forEach(t => {
       const btn   = document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1));
       const panel = document.getElementById('panel'+t.charAt(0).toUpperCase()+t.slice(1));
       if (btn)   btn.classList.toggle('active', t===tab);
-      if (panel) panel.style.display = t===tab ? 'block' : 'none';
+      if (panel) panel.style.display = t===tab?'block':'none';
     });
     if (tab==='summary') renderSummary();
     if (tab==='records') renderRecords();
@@ -437,88 +486,192 @@
   function onTypeChange() {
     const type = document.getElementById('aType').value;
     document.getElementById('extraSpecial').classList.toggle('show', type==='Special Program');
-    document.getElementById('extraOther').classList.toggle('show', type==='Other');
+    document.getElementById('extraOther').classList.toggle('show',   type==='Other');
 
-    // Reset audience selection
+    // Reset audience state
     currentTargetAudience = 'all';
-    document.querySelectorAll('.aud-btn').forEach(b=>b.classList.remove('active'));
+    manualSelected = [];
+    document.getElementById('audienceInfo').style.display = 'none';
+    document.getElementById('selectedAudienceWrap').style.display = 'none';
+    document.getElementById('audienceChips').innerHTML = '';
+    if (document.getElementById('aAudience')) document.getElementById('aAudience').value = '';
 
-    if (type) {
-      buildChecklist();
+    if (type && type !== 'Special Program') {
+      // Cases A, C — all members
+      buildAttChecklist(allMembers);
     } else {
       document.getElementById('memberChecklist').innerHTML =
-        '<div style="padding:.8rem;color:#aaa;font-size:.82rem">Select a program type above to load members…</div>';
-      updateCount();
+        '<div style="padding:.8rem;color:#aaa;font-size:.82rem">Select "Who Should Attend" above to load the list…</div>';
+      updateAttCount();
     }
   }
 
-  // ── Quick-select group (pre-ticks, still manually adjustable) ──
-  function quickSelect(btn) {
-    const group = btn.dataset.group;
-    currentTargetAudience = group;
+  // ── Audience dropdown change (Special Program) ──
+  function onAudienceChange() {
+    const aud = document.getElementById('aAudience').value;
+    manualSelected = [];
+    document.getElementById('audienceChips').innerHTML = '';
+    document.getElementById('selectedAudienceWrap').style.display = 'none';
 
-    // Toggle active state
-    document.querySelectorAll('.aud-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
+    if (aud === 'SelectMembers') {
+      // Open the bottom sheet
+      openSmModal();
+      return;
+    }
 
-    // Re-build checklist with pre-ticked group
-    buildChecklist(group);
+    let pool = [];
+    let infoText = '';
+
+    if (aud === 'Executives') {
+      pool = allMembers.filter(m => EXEC_POSITIONS.includes(m.position));
+      infoText = `${pool.length} executive${pool.length!==1?'s':''} loaded. Tick who attended.`;
+      currentTargetAudience = 'executives';
+    } else if (aud === 'Sisters') {
+      pool = allMembers.filter(m => m.gender === 'Female');
+      infoText = `${pool.length} sister${pool.length!==1?'s':''} loaded. Tick who attended.`;
+      currentTargetAudience = 'sisters';
+    } else if (aud === 'Brothers') {
+      pool = allMembers.filter(m => m.gender === 'Male');
+      infoText = `${pool.length} brother${pool.length!==1?'s':''} loaded. Tick who attended.`;
+      currentTargetAudience = 'brothers';
+    } else {
+      return;
+    }
+
+    const info = document.getElementById('audienceInfo');
+    info.textContent = infoText;
+    info.style.display = 'block';
+    targetPool = pool;
+    buildAttChecklist(pool);
   }
 
-  // ── Build checklist ──
-  // members sorted A-Z, group members pre-ticked at top, rest below
-  function buildChecklist(group) {
+  // ── Build attendance checklist ──
+  function buildAttChecklist(members) {
     const list = document.getElementById('memberChecklist');
-    const sorted = [...allMembers].sort((a,b)=>a.name.localeCompare(b.name));
+    const sorted = [...members].sort((a,b)=>a.name.localeCompare(b.name));
 
     if (!sorted.length) {
-      list.innerHTML = '<div style="padding:.8rem;color:#aaa;font-size:.82rem">No members found. Add members first.</div>';
-      updateCount(); return;
+      list.innerHTML = '<div style="padding:.8rem;color:#aaa;font-size:.82rem">No members found.</div>';
+      updateAttCount(); return;
     }
 
-    // Determine which members are in the suggested group
-    function inGroup(m) {
-      if (!group || group==='all') return false;
-      if (group==='executives') return EXEC_POSITIONS.includes(m.position);
-      if (group==='sisters')    return m.gender === 'Female';
-      if (group==='brothers')   return m.gender === 'Male';
-      return false;
-    }
-
-    list.innerHTML = sorted.map(m => {
-      const suggested = group && group !== 'all' ? inGroup(m) : false;
-      const tag = suggested ? '<span class="member-check-tag">✓ Expected</span>' : '';
-      return `<label class="member-check-item ${suggested?'suggested':''}">
-        <input type="checkbox" value="${m.id}" ${suggested?'checked':''} onchange="updateCount()"/>
-        <span class="member-check-name">${m.name}${tag}</span>
+    list.innerHTML = sorted.map(m => `
+      <label class="member-check-item">
+        <input type="checkbox" value="${m.id}" onchange="updateAttCount()"/>
+        <span class="member-check-name">${m.name}</span>
         <span class="member-check-meta">${m.position||'Member'} · ${m.level||''}</span>
-      </label>`;
-    }).join('');
-
-    // Update sublabel
-    const subLabels = {
-      executives: '(Executives pre-selected)',
-      sisters:    '(Sisters pre-selected)',
-      brothers:   '(Brothers pre-selected)',
-      all:        '(All pre-selected)'
-    };
-    document.getElementById('checklistSubLabel').textContent = group ? (subLabels[group]||'') : '';
-    updateCount();
+      </label>`).join('');
+    updateAttCount();
   }
 
-  function updateCount() {
+  function updateAttCount() {
     const n = document.querySelectorAll('#memberChecklist input:checked').length;
     document.getElementById('selectedCount').textContent = n+' member'+(n!==1?'s':'')+' selected';
   }
 
-  function selectAllMembers() {
+  function selectAllAtt() {
     document.querySelectorAll('#memberChecklist input[type=checkbox]').forEach(cb=>cb.checked=true);
-    updateCount();
+    updateAttCount();
+  }
+  function clearAllAtt() {
+    document.querySelectorAll('#memberChecklist input[type=checkbox]').forEach(cb=>cb.checked=false);
+    updateAttCount();
   }
 
-  function clearAllMembers() {
-    document.querySelectorAll('#memberChecklist input[type=checkbox]').forEach(cb=>cb.checked=false);
-    updateCount();
+  // ════════════════════════════════
+  // SELECT MEMBERS MODAL
+  // ════════════════════════════════
+  function openSmModal() {
+    document.getElementById('smSearch').value = '';
+    renderSmList(allMembers);
+    document.getElementById('smOverlay').classList.add('show');
+  }
+
+  function closeSmModal() {
+    document.getElementById('smOverlay').classList.remove('show');
+    // If nothing was confirmed, reset audience dropdown
+    if (!manualSelected.length) {
+      document.getElementById('aAudience').value = '';
+    }
+  }
+
+  function renderSmList(members) {
+    const sorted = [...members].sort((a,b)=>a.name.localeCompare(b.name));
+    const list = document.getElementById('smList');
+    list.innerHTML = sorted.map(m => `
+      <label class="sm-item ${manualSelected.includes(m.id)?'selected':''}">
+        <input type="checkbox" value="${m.id}"
+          ${manualSelected.includes(m.id)?'checked':''}
+          onchange="toggleSmItem(this,'${m.id}','${m.name.replace(/'/g,"\\'")}')"/>
+        <span class="sm-item-name">${m.name}</span>
+        <span class="sm-item-meta">${m.position||'Member'} · ${m.level||''}</span>
+      </label>`).join('');
+    updateSmCount();
+  }
+
+  function filterSmList() {
+    const q = document.getElementById('smSearch').value.toLowerCase();
+    const filtered = q ? allMembers.filter(m=>m.name.toLowerCase().includes(q)) : allMembers;
+    renderSmList(filtered);
+  }
+
+  function toggleSmItem(cb, id, name) {
+    if (cb.checked) {
+      if (!manualSelected.includes(id)) manualSelected.push(id);
+      cb.closest('label').classList.add('selected');
+    } else {
+      manualSelected = manualSelected.filter(x=>x!==id);
+      cb.closest('label').classList.remove('selected');
+    }
+    updateSmCount();
+  }
+
+  function updateSmCount() {
+    document.getElementById('smCount').textContent = manualSelected.length + ' selected';
+  }
+
+  function confirmSmSelection() {
+    if (!manualSelected.length) {
+      showToast('Select at least one member.','error'); return;
+    }
+
+    currentTargetAudience = 'custom';
+    // Build pool from selected IDs
+    targetPool = allMembers.filter(m=>manualSelected.includes(m.id));
+
+    // Show chips
+    const chipsEl = document.getElementById('audienceChips');
+    chipsEl.innerHTML = targetPool.map(m=>
+      `<span class="chip">${m.name}
+        <button class="chip-remove" onclick="removeChip('${m.id}')">×</button>
+      </span>`
+    ).join('');
+    document.getElementById('selectedAudienceWrap').style.display = 'block';
+
+    // Build attendance checklist from pool
+    buildAttChecklist(targetPool);
+
+    closeSmModal();
+    document.getElementById('smOverlay').classList.remove('show');
+    showToast(targetPool.length+' members loaded into the list.','success');
+  }
+
+  function removeChip(id) {
+    manualSelected = manualSelected.filter(x=>x!==id);
+    targetPool     = targetPool.filter(m=>m.id!==id);
+    // Re-render chips
+    const chipsEl = document.getElementById('audienceChips');
+    chipsEl.innerHTML = targetPool.map(m=>
+      `<span class="chip">${m.name}
+        <button class="chip-remove" onclick="removeChip('${m.id}')">×</button>
+      </span>`
+    ).join('');
+    if (!targetPool.length) {
+      document.getElementById('selectedAudienceWrap').style.display = 'none';
+      document.getElementById('aAudience').value = '';
+      currentTargetAudience = 'all';
+    }
+    buildAttChecklist(targetPool);
   }
 
   // ── Save attendance ──
@@ -536,7 +689,9 @@
     let programName = '';
     if (type==='Special Program') {
       programName = document.getElementById('aProgramName').value.trim();
+      const aud   = document.getElementById('aAudience').value;
       if (!programName) { showToast('Enter a program name.','error'); valid=false; }
+      if (!aud)          { showToast('Select who should attend.','error'); valid=false; }
     } else if (type==='Other') {
       programName = document.getElementById('aOtherName').value.trim();
     }
@@ -545,6 +700,9 @@
     if (!checked.length) { document.getElementById('aMembersErr').classList.add('show'); valid=false; }
     if (!valid) return;
 
+    // Save targetMemberIds for 'custom' audience (used in summary calculation)
+    const targetMemberIds = currentTargetAudience==='custom' ? manualSelected : [];
+
     const btn = document.getElementById('btnSaveAtt');
     btn.disabled=true; btn.textContent='Saving…';
 
@@ -552,25 +710,13 @@
       type,
       programName,
       targetAudience: currentTargetAudience,
+      targetMemberIds,          // only used when targetAudience='custom'
       date,
       members: checked,
       visitors: parseInt(document.getElementById('aVisitors').value)||0,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     }).then(()=>{
-      // Reset form
-      document.getElementById('aType').value='';
-      document.getElementById('aDate').value='';
-      document.getElementById('aVisitors').value='0';
-      document.getElementById('aProgramName').value='';
-      document.getElementById('aOtherName').value='';
-      document.getElementById('extraSpecial').classList.remove('show');
-      document.getElementById('extraOther').classList.remove('show');
-      document.querySelectorAll('.aud-btn').forEach(b=>b.classList.remove('active'));
-      document.getElementById('checklistSubLabel').textContent='';
-      currentTargetAudience='all';
-      document.getElementById('memberChecklist').innerHTML=
-        '<div style="padding:.8rem;color:#aaa;font-size:.82rem">Select a program type above to load members…</div>';
-      updateCount();
+      resetForm();
       showToast('Attendance saved!','success');
       btn.disabled=false; btn.textContent='✓ Save Record';
     }).catch(err=>{
@@ -579,18 +725,34 @@
     });
   }
 
-  // ── Render records ──
+  function resetForm() {
+    document.getElementById('aType').value     = '';
+    document.getElementById('aDate').value     = '';
+    document.getElementById('aVisitors').value = '0';
+    document.getElementById('aProgramName').value = '';
+    document.getElementById('aOtherName').value   = '';
+    document.getElementById('aAudience').value    = '';
+    document.getElementById('extraSpecial').classList.remove('show');
+    document.getElementById('extraOther').classList.remove('show');
+    document.getElementById('audienceInfo').style.display = 'none';
+    document.getElementById('selectedAudienceWrap').style.display = 'none';
+    document.getElementById('audienceChips').innerHTML = '';
+    document.getElementById('memberChecklist').innerHTML =
+      '<div style="padding:.8rem;color:#aaa;font-size:.82rem">Select program type to load members…</div>';
+    manualSelected = []; targetPool = []; currentTargetAudience = 'all';
+    updateAttCount();
+  }
+
+  // ── Records ──
   function renderRecords() {
     const q = (document.getElementById('recSearch').value||'').toLowerCase();
-    const filterType = document.getElementById('recFilter').value;
-
+    const ft = document.getElementById('recFilter').value;
     const filtered = allAttendance.filter(a=>{
-      const matchType = !filterType || a.type===filterType;
-      const matchQ = !q ||
-        (a.type||'').toLowerCase().includes(q)||
-        (a.programName||'').toLowerCase().includes(q)||
-        fmtDate(a.date).toLowerCase().includes(q);
-      return matchType && matchQ;
+      const mT = !ft || a.type===ft;
+      const mQ = !q || (a.type||'').toLowerCase().includes(q) ||
+                       (a.programName||'').toLowerCase().includes(q) ||
+                       fmtDate(a.date).toLowerCase().includes(q);
+      return mT && mQ;
     });
 
     const body = document.getElementById('recordsBody');
@@ -599,12 +761,11 @@
       return;
     }
 
-    const audLabel = { all:'All', executives:'Executives', sisters:'Sisters', brothers:'Brothers' };
-
+    const audLabel = { all:'All', executives:'Executives', sisters:'Sisters', brothers:'Brothers', custom:'Custom' };
     body.innerHTML = filtered.map(a=>{
       const total = (a.members||[]).length+(a.visitors||0);
-      const delCell = isAdmin ? `<td><button class="del-btn" onclick="deleteRecord('${a.id}')">🗑</button></td>` : '';
-      const aud = audLabel[a.targetAudience||'all'] || 'All';
+      const del   = isAdmin ? `<td><button class="del-btn" onclick="deleteRecord('${a.id}')">🗑</button></td>` : '';
+      const aud   = audLabel[a.targetAudience||'all']||'All';
       return `<tr>
         <td>${fmtDate(a.date)}</td>
         <td><span class="badge ${badgeClass(a.type)}">${a.type}</span></td>
@@ -613,19 +774,19 @@
         <td>${(a.members||[]).length}</td>
         <td>${a.visitors||0}</td>
         <td><strong>${total}</strong></td>
-        ${delCell}
+        ${del}
       </tr>`;
     }).join('');
   }
 
   function deleteRecord(id) {
-    if (!confirm('Delete this attendance record?')) return;
+    if (!confirm('Delete this record?')) return;
     db.collection('attendance').doc(id).delete()
-      .then(()=>showToast('Record deleted.','success'))
+      .then(()=>showToast('Deleted.','success'))
       .catch(err=>showToast('Error: '+err.message,'error'));
   }
 
-  // ── Member Summary (smart %) ──
+  // ── Member Summary ──
   function renderSummary() {
     const grid = document.getElementById('summaryGrid');
     if (!allMembers.length) {
@@ -634,23 +795,21 @@
     }
 
     const summaries = allMembers.map(m=>{
-      // Required = meetings where this member was in the target audience
       const required = allAttendance.filter(a=>{
         const aud = a.targetAudience||'all';
-        if (aud==='all') return true;
+        if (aud==='all')        return true;
         if (aud==='executives') return EXEC_POSITIONS.includes(m.position);
         if (aud==='sisters')    return m.gender==='Female';
         if (aud==='brothers')   return m.gender==='Male';
+        if (aud==='custom')     return (a.targetMemberIds||[]).includes(m.id);
         return true;
       });
-
       const attended = required.filter(a=>(a.members||[]).includes(m.id)).length;
       const total    = required.length;
       const pct      = total>0 ? Math.round(attended/total*100) : null;
-
       return { name:m.name, position:m.position||'Member', level:m.level||'', attended, total, pct };
     }).sort((a,b)=>{
-      if (a.pct===null && b.pct===null) return 0;
+      if (a.pct===null&&b.pct===null) return 0;
       if (a.pct===null) return 1;
       if (b.pct===null) return -1;
       return b.pct-a.pct;
@@ -675,9 +834,9 @@
     }).join('');
   }
 
-  // ── Export CSV ──
+  // ── Export ──
   function exportCSV() {
-    const headers=['Date','Type','Program Name','Target','Members Present','Visitors','Total'];
+    const headers=['Date','Type','Program','Audience','Present','Visitors','Total'];
     const rows=allAttendance.map(a=>{
       const names=(a.members||[]).map(id=>{const m=allMembers.find(x=>x.id===id);return m?m.name:'';}).filter(Boolean).join('; ');
       const total=(a.members||[]).length+(a.visitors||0);
@@ -703,4 +862,4 @@
   function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show');}
 </script>
 </body>
-</html>
+  </html>
