@@ -52,6 +52,7 @@
     .header-actions { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
     .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; text-decoration:none; transition:background .2s; }
     .btn-primary:hover { background:#0052a3; }
+    .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
     .btn-outline { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:transparent; color:#0066cc; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #0066cc; border-radius:5px; cursor:pointer; transition:background .2s; }
     .btn-outline:hover { background:#eef4ff; }
 
@@ -84,6 +85,7 @@
     .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; grid-column:1/-1; }
     .empty-state .big { font-size:2.5rem; margin-bottom:.6rem; }
 
+    /* MODALS */
     .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; }
     .modal-overlay.show { display:flex; }
     .modal { background:#fff; border-radius:8px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); }
@@ -91,19 +93,24 @@
     .modal-title { font-family:'Merriweather',serif; font-size:1rem; font-weight:700; color:#0066cc; }
     .modal-close { background:none; border:none; font-size:1.6rem; cursor:pointer; color:#888; line-height:1; }
     .modal-body { padding:1.4rem; }
+    .modal-footer { padding:1rem 1.4rem; border-top:1px solid #edf0f4; display:flex; justify-content:flex-end; gap:.6rem; flex-wrap:wrap; }
+
     .detail-top { display:flex; align-items:center; gap:1rem; margin-bottom:1.4rem; }
     .detail-avatar { width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:700; color:#fff; flex-shrink:0; }
     .detail-name { font-size:1.1rem; font-weight:700; }
     .detail-pos { font-size:.8rem; font-weight:700; margin-top:.2rem; }
-    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem .9rem; margin-bottom:1.2rem; }
+    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem .9rem; }
     .detail-field { display:flex; flex-direction:column; gap:.2rem; }
     .detail-field .lbl { font-size:.65rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#aaa; }
     .detail-field .val { font-size:.88rem; color:#1a1a1a; font-weight:600; }
-    .modal-footer { padding:1rem 1.4rem; border-top:1px solid #edf0f4; display:flex; justify-content:flex-end; gap:.6rem; }
+
     .btn-danger { padding:.6rem 1.1rem; background:#dc3545; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; transition:background .2s; }
     .btn-danger:hover { background:#b02a37; }
     .btn-secondary { padding:.6rem 1.1rem; background:transparent; color:#555; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ccd4df; border-radius:5px; cursor:pointer; }
+    .btn-edit { padding:.6rem 1.1rem; background:#fff8e1; color:#856404; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ffc107; border-radius:5px; cursor:pointer; transition:background .2s; }
+    .btn-edit:hover { background:#fff3cd; }
 
+    /* FORM */
     .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
     .form-group { display:flex; flex-direction:column; gap:.35rem; }
     .form-group.full { grid-column:1/-1; }
@@ -117,16 +124,17 @@
     .field-err.show { display:block; }
     .dob-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:.5rem; }
 
-    /* Associate history styles */
-    .assoc-section { margin-top:1rem; border-top:1px solid #edf0f4; padding-top:1rem; }
-    .assoc-section-title { font-size:.72rem; font-weight:700; color:#444; margin-bottom:.5rem; text-transform:uppercase; letter-spacing:.06em; }
-    .assoc-entry { display:grid; grid-template-columns:1fr 1fr auto; gap:.5rem; align-items:center; margin-bottom:.5rem; }
+    /* Associate section */
+    .assoc-section { margin-top:.5rem; }
+    .assoc-section-title { font-size:.72rem; font-weight:700; color:#444; margin-bottom:.6rem; text-transform:uppercase; letter-spacing:.06em; }
+    .assoc-entry { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:.5rem; align-items:center; margin-bottom:.5rem; }
     .assoc-entry select, .assoc-entry input { padding:.55rem .7rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.82rem; color:#1a1a1a; background:#fff; outline:none; appearance:none; }
     .assoc-entry select:focus, .assoc-entry input:focus { border-color:#0066cc; }
-    .btn-remove-assoc { background:#fff0f0; color:#dc3545; border:1px solid #f5c0c5; border-radius:4px; padding:.4rem .6rem; font-size:.8rem; cursor:pointer; }
+    .btn-remove-assoc { background:#fff0f0; color:#dc3545; border:1px solid #f5c0c5; border-radius:4px; padding:.4rem .6rem; font-size:.8rem; cursor:pointer; white-space:nowrap; }
     .btn-add-assoc { display:inline-flex; align-items:center; gap:.3rem; padding:.5rem .9rem; background:#eef4ff; color:#0066cc; border:1.5px solid #c5d9f5; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; cursor:pointer; margin-top:.3rem; }
-    .btn-add-assoc:hover { background:#d6e8ff; }
-    .assoc-note { font-size:.72rem; color:#888; margin-top:.4rem; font-style:italic; }
+    .assoc-note { font-size:.72rem; color:#888; margin-top:.5rem; font-style:italic; }
+    .assoc-header { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:.5rem; margin-bottom:.3rem; }
+    .assoc-header span { font-size:.65rem; font-weight:700; color:#aaa; letter-spacing:.06em; text-transform:uppercase; }
 
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
@@ -145,7 +153,9 @@
       .form-group.full { grid-column:1; }
       .detail-grid { grid-template-columns:1fr; }
       .members-grid { grid-template-columns:1fr 1fr; }
-      .assoc-entry { grid-template-columns:1fr 1fr auto; }
+      .assoc-entry { grid-template-columns:1fr 1fr; }
+      .assoc-entry input[placeholder="Year Left"] { grid-column:1; }
+      .assoc-header { display:none; }
     }
     @media(max-width:420px) { .members-grid { grid-template-columns:1fr; } }
   </style>
@@ -244,20 +254,22 @@
   </div>
 </div>
 
-<!-- Add Modal -->
+<!-- Add / Edit Modal -->
 <div class="modal-overlay" id="addModal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">Add New Member</div>
+      <div class="modal-title" id="addModalTitle">Add New Member</div>
       <button class="modal-close" onclick="closeAdd()">×</button>
     </div>
     <div class="modal-body">
       <div class="form-grid">
+
         <div class="form-group full">
           <label>Full Name *</label>
           <input type="text" id="fName" placeholder="e.g. Chukwuemeka Eze"/>
           <span class="field-err" id="fNameErr">Name is required</span>
         </div>
+
         <div class="form-group">
           <label>Gender *</label>
           <div class="select-wrap"><select id="fGender">
@@ -266,6 +278,7 @@
           </select></div>
           <span class="field-err" id="fGenderErr">Required</span>
         </div>
+
         <div class="form-group">
           <label>Level *</label>
           <div class="select-wrap"><select id="fLevel">
@@ -275,11 +288,13 @@
           </select></div>
           <span class="field-err" id="fLevelErr">Required</span>
         </div>
+
         <div class="form-group">
           <label>Department *</label>
           <input type="text" id="fDept" placeholder="e.g. Computer Science"/>
           <span class="field-err" id="fDeptErr">Required</span>
         </div>
+
         <div class="form-group">
           <label>Faculty</label>
           <div class="select-wrap"><select id="fFaculty">
@@ -293,10 +308,12 @@
             <option>SSLT</option><option>Social Sciences</option>
           </select></div>
         </div>
+
         <div class="form-group">
           <label>Phone</label>
           <input type="tel" id="fPhone" placeholder="08012345678"/>
         </div>
+
         <div class="form-group">
           <label>State of Origin</label>
           <div class="select-wrap"><select id="fState">
@@ -316,14 +333,18 @@
             <option>Zamfara</option>
           </select></div>
         </div>
-        <div class="form-group">
+
+        <!-- Member Type — hidden when editing -->
+        <div class="form-group" id="memberTypeGroup">
           <label>Member Type *</label>
           <div class="select-wrap"><select id="fMemberType" onchange="handleMemberTypeChange()">
             <option value="active">Active Member</option>
             <option value="associate">Associate (Past Member)</option>
           </select></div>
         </div>
-        <div class="form-group">
+
+        <!-- Position — active members only -->
+        <div class="form-group" id="positionGroup">
           <label>Position</label>
           <div class="select-wrap"><select id="fPosition">
             <option value="Member">Member</option>
@@ -340,15 +361,18 @@
             <option>Ex-official</option>
           </select></div>
         </div>
+
         <div class="form-group">
           <label>Year Started *</label>
           <input type="number" id="fYearStart" placeholder="e.g. 2023" min="2000" max="2099"/>
           <span class="field-err" id="fYearStartErr">Required</span>
         </div>
+
         <div class="form-group" id="yearLeaveGroup">
           <label>Year Leaving</label>
           <input type="number" id="fYearLeave" placeholder="e.g. 2027" min="2000" max="2099"/>
         </div>
+
         <div class="form-group full">
           <label>Date of Birth (optional)</label>
           <div class="dob-row">
@@ -375,12 +399,18 @@
           </div>
         </div>
 
-        <!-- Associate history section — shown only when Associate is selected -->
-        <div class="form-group full" id="assocSection" style="display:none;">
+        <!-- Associate history section -->
+        <div class="form-group full" id="assocSection" style="display:none">
           <div class="assoc-section">
             <div class="assoc-section-title">📋 Positions &amp; Years Served</div>
+            <div class="assoc-header">
+              <span>Position</span>
+              <span>Year Started</span>
+              <span>Year Left</span>
+              <span></span>
+            </div>
             <div id="assocEntries"></div>
-            <button class="btn-add-assoc" onclick="addAssocEntry()">+ Add Position</button>
+            <button class="btn-add-assoc" type="button" onclick="addAssocEntry()">+ Add Position</button>
             <div class="assoc-note">This person will be saved directly to Past Members.</div>
           </div>
         </div>
@@ -443,6 +473,7 @@
   const currentYear = new Date().getFullYear();
   let allMembers = [];
   let currentFilter = 'all';
+  let editingId = null;
 
   function avatarColor(name) {
     const colors = ['#0066cc','#6c63ff','#28a745','#fd7e14','#e83e8c','#17a2b8','#dc3545','#6f42c1'];
@@ -451,27 +482,31 @@
     return colors[Math.abs(h)%colors.length];
   }
   function initials(name) { return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
-  function isFYB(m) { return m.yearLeaving && parseInt(m.yearLeaving) === currentYear + 1; }
 
-  // Load members (real-time) — auto-move to associates when year expires
+  // ── FYB: show badge when yearLeaving === currentYear (they ARE in their leaving year)
+  function isFYB(m) {
+    return m.yearLeaving && parseInt(m.yearLeaving) === currentYear;
+  }
+
+  // ── Auto-graduate: yearLeaving < currentYear means they've already left
+  function shouldGraduate(m) {
+    return m.yearLeaving && parseInt(m.yearLeaving) < currentYear && m.position !== 'Associates';
+  }
+
+  // ── Firestore real-time ──
   db.collection('members').onSnapshot(snap => {
     allMembers = snap.docs.map(d => ({ id:d.id, ...d.data() }));
 
-    // Auto-transfer: if yearLeaving <= currentYear and not already associate, move them
+    // Auto-graduate past members
     allMembers.forEach(m => {
-      if (m.yearLeaving && parseInt(m.yearLeaving) <= currentYear && m.position !== 'Associates') {
-        const history = m.associateHistory || [];
-        if (!history.length) {
-          history.push({ position: m.position || 'Member', yearServed: m.yearStarted ? m.yearStarted + '–' + m.yearLeaving : '' });
-        }
+      if (shouldGraduate(m)) {
+        const history = m.associateHistory || [{ position: m.position||'Member', yearStarted: m.yearStarted||'', yearLeft: m.yearLeaving||'' }];
         db.collection('past-members').add({
           ...m,
           position: 'Associates',
           associateHistory: history,
           movedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
-          db.collection('members').doc(m.id).delete();
-        });
+        }).then(() => db.collection('members').doc(m.id).delete());
       }
     });
 
@@ -479,17 +514,21 @@
   });
 
   function filterRender() {
-    const active = allMembers.filter(m => m.position !== 'Associates');
-    const q = document.getElementById('searchInput').value.toLowerCase();
+    // Only active (non-associates, non-graduated)
+    const active = allMembers.filter(m => m.position !== 'Associates' && !shouldGraduate(m));
 
+    // Sort alphabetically A–Z
+    active.sort((a,b) => a.name.localeCompare(b.name));
+
+    const q = document.getElementById('searchInput').value.toLowerCase();
     let filtered = active.filter(m => {
       const matchQ = !q || m.name.toLowerCase().includes(q) || (m.department||'').toLowerCase().includes(q);
       const matchF = currentFilter==='all' || (currentFilter==='fyb' && isFYB(m));
       return matchQ && matchF;
     });
 
-    document.getElementById('msTotal').textContent = active.length;
-    document.getElementById('msFinal').textContent = active.filter(isFYB).length;
+    document.getElementById('msTotal').textContent   = active.length;
+    document.getElementById('msFinal').textContent   = active.filter(isFYB).length;
     document.getElementById('msLeaders').textContent = active.filter(m=>LEADERS.includes(m.position)).length;
 
     const grid = document.getElementById('membersGrid');
@@ -525,6 +564,7 @@
     filterRender();
   }
 
+  // ── Detail Modal ──
   function openDetail(id) {
     const m = allMembers.find(x=>x.id===id);
     if (!m) return;
@@ -555,10 +595,15 @@
         <div class="detail-field"><span class="lbl">Position</span><span class="val" style="color:${color}">${m.position||'Member'}</span></div>
       </div>`;
 
-    document.getElementById('detailFooter').innerHTML = isAdmin
-      ? `<button class="btn-secondary" onclick="closeDetail()">Close</button>
-         <button class="btn-danger" onclick="deleteMember('${m.id}')">🗑 Delete</button>`
-      : `<button class="btn-secondary" onclick="closeDetail()">Close</button>`;
+    const footer = document.getElementById('detailFooter');
+    if (isAdmin) {
+      footer.innerHTML = `
+        <button class="btn-secondary" onclick="closeDetail()">Close</button>
+        <button class="btn-edit" onclick="openEditModal('${m.id}')">✏ Edit</button>
+        <button class="btn-danger" onclick="deleteMember('${m.id}')">🗑 Delete</button>`;
+    } else {
+      footer.innerHTML = `<button class="btn-secondary" onclick="closeDetail()">Close</button>`;
+    }
 
     document.getElementById('detailModal').classList.add('show');
   }
@@ -572,89 +617,119 @@
       .catch(err => showToast('Error: ' + err.message, 'error'));
   }
 
-  // ── ASSOCIATE ENTRY BUILDER ──────────────────────────────────
+  // ── Edit Modal ──
+  function openEditModal(id) {
+    const m = allMembers.find(x=>x.id===id);
+    if (!m) return;
+    editingId = id;
+    closeDetail();
 
-  function handleMemberTypeChange() {
-    const type = document.getElementById('fMemberType').value;
-    const assocSection = document.getElementById('assocSection');
-    const posGroup = document.getElementById('fPosition').closest('.form-group');
-    const yearLeaveGroup = document.getElementById('yearLeaveGroup');
+    document.getElementById('addModalTitle').textContent = 'Edit Member';
+    document.getElementById('btnSave').textContent = 'Update Member';
 
-    if (type === 'associate') {
-      assocSection.style.display = 'block';
-      posGroup.style.display = 'none';
-      yearLeaveGroup.style.display = 'none';
-      if (document.getElementById('assocEntries').children.length === 0) {
-        addAssocEntry();
-      }
-    } else {
-      assocSection.style.display = 'none';
-      posGroup.style.display = 'flex';
-      yearLeaveGroup.style.display = 'flex';
-    }
+    // Hide member type (can't change type when editing)
+    document.getElementById('memberTypeGroup').style.display = 'none';
+    document.getElementById('assocSection').style.display = 'none';
+    document.getElementById('positionGroup').style.display = 'flex';
+    document.getElementById('yearLeaveGroup').style.display = 'flex';
+
+    // Populate fields
+    document.getElementById('fName').value      = m.name||'';
+    document.getElementById('fGender').value    = m.gender||'';
+    document.getElementById('fLevel').value     = m.level||'';
+    document.getElementById('fDept').value      = m.department||'';
+    document.getElementById('fFaculty').value   = m.faculty||'';
+    document.getElementById('fPhone').value     = m.phone||'';
+    document.getElementById('fState').value     = m.state||'';
+    document.getElementById('fPosition').value  = m.position||'Member';
+    document.getElementById('fYearStart').value = m.yearStarted||'';
+    document.getElementById('fYearLeave').value = m.yearLeaving||'';
+    document.getElementById('fDobDay').value    = m.dob_day||'';
+    document.getElementById('fDobMonth').value  = m.dob_month||'';
+    document.getElementById('fDobYear').value   = m.dob_year||'';
+
+    document.getElementById('addModal').classList.add('show');
   }
 
-  function addAssocEntry() {
-    const container = document.getElementById('assocEntries');
-    const idx = container.children.length;
-    const posOptions = ALL_POSITIONS.map(p => `<option value="${p}">${p}</option>`).join('');
-    const div = document.createElement('div');
-    div.className = 'assoc-entry';
-    div.innerHTML = `
-      <div class="select-wrap" style="position:relative;">
-        <select class="assoc-pos">
-          ${posOptions}
-        </select>
-      </div>
-      <input type="text" class="assoc-year" placeholder="e.g. 2021–2023"/>
-      <button class="btn-remove-assoc" onclick="removeAssocEntry(this)">✕</button>
-    `;
-    container.appendChild(div);
-  }
-
-  function removeAssocEntry(btn) {
-    const entry = btn.closest('.assoc-entry');
-    entry.remove();
-  }
-
-  // ── OPEN / CLOSE ADD MODAL ───────────────────────────────────
-
+  // ── Add Modal ──
   function openAddModal() {
+    editingId = null;
+    document.getElementById('addModalTitle').textContent = 'Add New Member';
+    document.getElementById('btnSave').textContent = 'Save Member';
+    document.getElementById('memberTypeGroup').style.display = 'flex';
+    document.getElementById('positionGroup').style.display = 'flex';
+    document.getElementById('yearLeaveGroup').style.display = 'flex';
+    document.getElementById('assocSection').style.display = 'none';
+    document.getElementById('assocEntries').innerHTML = '';
+    document.getElementById('fMemberType').value = 'active';
     document.getElementById('addModal').classList.add('show');
   }
 
   function closeAdd() {
     document.getElementById('addModal').classList.remove('show');
+    editingId = null;
+    // Reset all fields
     ['fName','fPhone','fYearStart','fYearLeave','fDobYear'].forEach(id=>document.getElementById(id).value='');
     ['fGender','fLevel','fFaculty','fState','fDobDay','fDobMonth'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('fDept').value = '';
     document.getElementById('fPosition').value = 'Member';
     document.getElementById('fMemberType').value = 'active';
-    document.getElementById('fDept').value = '';
     document.getElementById('assocSection').style.display = 'none';
     document.getElementById('assocEntries').innerHTML = '';
-    document.getElementById('fPosition').closest('.form-group').style.display = 'flex';
+    document.getElementById('memberTypeGroup').style.display = 'flex';
+    document.getElementById('positionGroup').style.display = 'flex';
     document.getElementById('yearLeaveGroup').style.display = 'flex';
     document.querySelectorAll('.field-err').forEach(e=>e.classList.remove('show'));
     document.querySelectorAll('.invalid').forEach(e=>e.classList.remove('invalid'));
+    document.getElementById('btnSave').textContent = 'Save Member';
+    document.getElementById('btnSave').disabled = false;
   }
 
-  // ── SAVE MEMBER ──────────────────────────────────────────────
+  // ── Member Type toggle ──
+  function handleMemberTypeChange() {
+    const type = document.getElementById('fMemberType').value;
+    if (type === 'associate') {
+      document.getElementById('assocSection').style.display = 'block';
+      document.getElementById('positionGroup').style.display = 'none';
+      document.getElementById('yearLeaveGroup').style.display = 'none';
+      if (!document.getElementById('assocEntries').children.length) addAssocEntry();
+    } else {
+      document.getElementById('assocSection').style.display = 'none';
+      document.getElementById('positionGroup').style.display = 'flex';
+      document.getElementById('yearLeaveGroup').style.display = 'flex';
+    }
+  }
 
+  // ── Associate entries ──
+  function addAssocEntry() {
+    const container = document.getElementById('assocEntries');
+    const posOptions = ALL_POSITIONS.map(p=>`<option value="${p}">${p}</option>`).join('');
+    const div = document.createElement('div');
+    div.className = 'assoc-entry';
+    div.innerHTML = `
+      <div class="select-wrap" style="position:relative">
+        <select class="assoc-pos">${posOptions}</select>
+      </div>
+      <input type="number" class="assoc-year-start" placeholder="Year Started" min="2000" max="2099"/>
+      <input type="number" class="assoc-year-left"  placeholder="Year Left"    min="2000" max="2099"/>
+      <button class="btn-remove-assoc" type="button" onclick="this.closest('.assoc-entry').remove()">✕</button>`;
+    container.appendChild(div);
+  }
+
+  // ── Save / Update ──
   function saveMember() {
     let valid = true;
     [['fName','fNameErr'],['fGender','fGenderErr'],['fLevel','fLevelErr'],
      ['fDept','fDeptErr'],['fYearStart','fYearStartErr']].forEach(([fid,eid])=>{
-      const el = document.getElementById(fid);
+      const el  = document.getElementById(fid);
       const err = document.getElementById(eid);
       el.classList.remove('invalid'); err.classList.remove('show');
       if (!el.value.trim()) { el.classList.add('invalid'); err.classList.add('show'); valid=false; }
     });
     if (!valid) return;
 
-    const memberType = document.getElementById('fMemberType').value;
     const btn = document.getElementById('btnSave');
-    btn.disabled = true;
-    btn.textContent = 'Saving…';
+    btn.disabled = true; btn.textContent = 'Saving…';
 
     const baseData = {
       name:        document.getElementById('fName').value.trim(),
@@ -668,67 +743,64 @@
       dob_day:     document.getElementById('fDobDay').value,
       dob_month:   document.getElementById('fDobMonth').value,
       dob_year:    document.getElementById('fDobYear').value,
-      createdAt:   firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    if (memberType === 'associate') {
-      // Collect associate history entries
-      const entries = Array.from(document.querySelectorAll('.assoc-entry')).map(row => ({
-        position:   row.querySelector('.assoc-pos').value,
-        yearServed: row.querySelector('.assoc-year').value.trim()
-      }));
-
-      const member = {
-        ...baseData,
-        position: 'Associates',
-        associateHistory: entries
-      };
-
-      // Save directly to past-members collection
-      db.collection('past-members').add(member)
-        .then(() => {
-          closeAdd();
-          showToast(member.name + ' added to Past Members!', 'success');
-          btn.disabled = false; btn.textContent = 'Save Member';
-        })
-        .catch(err => {
-          showToast('Error: ' + err.message, 'error');
-          btn.disabled = false; btn.textContent = 'Save Member';
-        });
-
-    } else {
-      // Active member — normal flow with position uniqueness check
+    // EDIT MODE
+    if (editingId) {
       const pos = document.getElementById('fPosition').value;
       const nonUnique = ['Member','Ex-official'];
+      const checkPos = nonUnique.includes(pos)
+        ? Promise.resolve(null)
+        : db.collection('members').where('position','==',pos).get();
 
+      checkPos.then(snap => {
+        if (snap && !snap.empty && snap.docs[0].id !== editingId) {
+          showToast(`${pos} is held by ${snap.docs[0].data().name}. Transfer first.`,'error');
+          btn.disabled=false; btn.textContent='Update Member'; return;
+        }
+        const updated = { ...baseData, position: pos, yearLeaving: document.getElementById('fYearLeave').value };
+        db.collection('members').doc(editingId).update(updated)
+          .then(()=>{ closeAdd(); showToast('Member updated!','success'); btn.disabled=false; btn.textContent='Update Member'; })
+          .catch(err=>{ showToast('Error: '+err.message,'error'); btn.disabled=false; btn.textContent='Update Member'; });
+      });
+      return;
+    }
+
+    // ADD MODE
+    const memberType = document.getElementById('fMemberType').value;
+
+    if (memberType === 'associate') {
+      const entries = Array.from(document.querySelectorAll('.assoc-entry')).map(row=>({
+        position:    row.querySelector('.assoc-pos').value,
+        yearStarted: row.querySelector('.assoc-year-start').value.trim(),
+        yearLeft:    row.querySelector('.assoc-year-left').value.trim()
+      }));
+      db.collection('past-members').add({
+        ...baseData,
+        position: 'Associates',
+        associateHistory: entries,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(()=>{ closeAdd(); showToast(baseData.name+' added to Past Members!','success'); btn.disabled=false; btn.textContent='Save Member'; })
+        .catch(err=>{ showToast('Error: '+err.message,'error'); btn.disabled=false; btn.textContent='Save Member'; });
+    } else {
+      const pos = document.getElementById('fPosition').value;
+      const nonUnique = ['Member','Ex-official'];
       const checkPos = nonUnique.includes(pos)
         ? Promise.resolve(null)
         : db.collection('members').where('position','==',pos).get();
 
       checkPos.then(snap => {
         if (snap && !snap.empty) {
-          const holder = snap.docs[0].data().name;
-          showToast(`${pos} is already held by ${holder}. Transfer first.`, 'error');
-          btn.disabled = false; btn.textContent = 'Save Member';
-          return;
+          showToast(`${pos} is held by ${snap.docs[0].data().name}. Transfer first.`,'error');
+          btn.disabled=false; btn.textContent='Save Member'; return;
         }
-
-        const member = {
+        db.collection('members').add({
           ...baseData,
           position:    pos,
-          yearLeaving: document.getElementById('fYearLeave').value
-        };
-
-        db.collection('members').add(member)
-          .then(() => {
-            closeAdd();
-            showToast(member.name + ' added!', 'success');
-            btn.disabled = false; btn.textContent = 'Save Member';
-          })
-          .catch(err => {
-            showToast('Error: ' + err.message, 'error');
-            btn.disabled = false; btn.textContent = 'Save Member';
-          });
+          yearLeaving: document.getElementById('fYearLeave').value,
+          createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+        }).then(()=>{ closeAdd(); showToast(baseData.name+' added!','success'); btn.disabled=false; btn.textContent='Save Member'; })
+          .catch(err=>{ showToast('Error: '+err.message,'error'); btn.disabled=false; btn.textContent='Save Member'; });
       });
     }
   }
@@ -743,20 +815,20 @@
     a.download = 'gecc-members.csv'; a.click();
   }
 
-  function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.className = 'toast show '+type;
-    setTimeout(()=>t.className='toast', 2500);
+  function showToast(msg,type) {
+    const t=document.getElementById('toast');
+    t.textContent=msg; t.className='toast show '+type;
+    setTimeout(()=>t.className='toast',2500);
   }
 
-  function doLogout() { localStorage.removeItem('userRole'); window.location.href = 'auth.html'; }
+  function doLogout() { localStorage.removeItem('userRole'); window.location.href='auth.html'; }
 
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click',()=>{ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
-  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
-  document.getElementById('detailModal').addEventListener('click',function(e){ if(e.target===this) closeDetail(); });
-  document.getElementById('addModal').addEventListener('click',function(e){ if(e.target===this) closeAdd(); });
+  const sidebar=document.getElementById('sidebar');
+  const overlay=document.getElementById('overlay');
+  document.getElementById('hamburger').addEventListener('click',()=>{sidebar.classList.toggle('open');overlay.classList.toggle('show');});
+  function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show');}
+  document.getElementById('detailModal').addEventListener('click',function(e){if(e.target===this)closeDetail();});
+  document.getElementById('addModal').addEventListener('click',function(e){if(e.target===this)closeAdd();});
 </script>
 </body>
 </html>
