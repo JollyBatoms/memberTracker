@@ -331,11 +331,11 @@
     loginBtn.textContent = 'Signing in…';
 
     setTimeout(() => {
-      if (val === 'admin123') {
+      if (val === '@admin123!') {
         localStorage.setItem('userRole', 'admin');
         showFeedback('✓ Logged in as Admin. Redirecting…', 'success');
         setTimeout(() => window.location.href = 'dashboard.html', 900);
-      } else if (val === 'member123') {
+      } else if (val === '@member123!') {
         localStorage.setItem('userRole', 'member');
         showFeedback('✓ Logged in as Member. Redirecting…', 'success');
         setTimeout(() => window.location.href = 'dashboard.html', 900);
