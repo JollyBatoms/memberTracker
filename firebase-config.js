@@ -13,3 +13,21 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
   
+
+
+
+
+
+function deleteAssociate(id) {
+  if (!confirm('Delete this associate? This cannot be undone.')) return;
+  db.collection('past-members').doc(id).delete()
+    .then(() => {
+      console.log('Deleted:', id);
+      closeDetail();
+      showToast('Associate deleted.', 'success');
+    })
+    .catch(err => {
+      console.error('Delete failed:', err);
+      showToast('Error: ' + err.message, 'error');
+    });
+}
