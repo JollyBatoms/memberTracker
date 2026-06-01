@@ -311,8 +311,11 @@
   }
 
   function doLogout() {
+  auth.signOut().then(() => {
     localStorage.removeItem('userRole');
+    localStorage.removeItem('userEmail');
     window.location.href = 'auth.html';
+  });
   }
 
   const sidebar   = document.getElementById('sidebar');
