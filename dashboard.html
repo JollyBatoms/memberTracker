@@ -151,8 +151,6 @@
 <body>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 
@@ -482,13 +480,7 @@
   function closeLostModal() { document.getElementById('lostModal').classList.remove('show'); }
   document.getElementById('lostModal').addEventListener('click',function(e){ if(e.target===this) closeLostModal(); });
 
-  function doLogout() {
-  auth.signOut().then(() => {
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userEmail');
-    window.location.href = 'auth.html';
-  });
-  }
+  function doLogout() { localStorage.removeItem('userRole'); window.location.href = 'auth.html'; }
 
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('overlay');
@@ -501,6 +493,7 @@
     t.className = 'toast show ' + type;
     setTimeout(()=>t.className='toast', 2500);
   }
-  
+</script>
 </body>
 </html>
+
