@@ -57,7 +57,7 @@
     .btn-outline:hover { background:#eef4ff; }
 
     .members-stats { display:flex; gap:1rem; margin-bottom:1.4rem; flex-wrap:wrap; }
-    .mstat { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:.8rem 1.1rem; flex:1; min-width:100px; box-shadow:0 1px 4px rgba(0,0,0,.04); }
+    .mstat { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:.8rem 1.1rem; flex:1; min-width:100px; box-sizing:border-box; box-shadow:0 1px 4px rgba(0,0,0,.04); }
     .mstat-val { font-size:1.5rem; font-weight:700; color:#0066cc; line-height:1; }
     .mstat-label { font-size:.68rem; color:#999; font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin-top:.2rem; }
 
@@ -85,7 +85,6 @@
     .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; grid-column:1/-1; }
     .empty-state .big { font-size:2.5rem; margin-bottom:.6rem; }
 
-    /* MODALS */
     .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; }
     .modal-overlay.show { display:flex; }
     .modal { background:#fff; border-radius:8px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); }
@@ -110,7 +109,6 @@
     .btn-edit { padding:.6rem 1.1rem; background:#fff8e1; color:#856404; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ffc107; border-radius:5px; cursor:pointer; transition:background .2s; }
     .btn-edit:hover { background:#fff3cd; }
 
-    /* FORM */
     .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
     .form-group { display:flex; flex-direction:column; gap:.35rem; }
     .form-group.full { grid-column:1/-1; }
@@ -124,7 +122,6 @@
     .field-err.show { display:block; }
     .dob-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:.5rem; }
 
-    /* Associate section */
     .assoc-section { margin-top:.5rem; }
     .assoc-section-title { font-size:.72rem; font-weight:700; color:#444; margin-bottom:.6rem; text-transform:uppercase; letter-spacing:.06em; }
     .assoc-entry { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:.5rem; align-items:center; margin-bottom:.5rem; }
@@ -154,7 +151,6 @@
       .detail-grid { grid-template-columns:1fr; }
       .members-grid { grid-template-columns:1fr 1fr; }
       .assoc-entry { grid-template-columns:1fr 1fr; }
-      .assoc-entry input[placeholder="Year Left"] { grid-column:1; }
       .assoc-header { display:none; }
     }
     @media(max-width:420px) { .members-grid { grid-template-columns:1fr; } }
@@ -311,7 +307,7 @@
 
         <div class="form-group">
           <label>Phone</label>
-          <input type="tel" id="fPhone" placeholder="08012345678"   max="11 digits"/>
+          <input type="tel" id="fPhone" placeholder="08012345678"/>
         </div>
 
         <div class="form-group">
@@ -334,7 +330,6 @@
           </select></div>
         </div>
 
-        <!-- Member Type — hidden when editing -->
         <div class="form-group" id="memberTypeGroup">
           <label>Member Type *</label>
           <div class="select-wrap"><select id="fMemberType" onchange="handleMemberTypeChange()">
@@ -343,7 +338,6 @@
           </select></div>
         </div>
 
-        <!-- Position — active members only -->
         <div class="form-group" id="positionGroup">
           <label>Position</label>
           <div class="select-wrap"><select id="fPosition">
@@ -366,13 +360,6 @@
           <label>Year Started *</label>
           <input type="number" id="fYearStart" placeholder="e.g. 2023" min="2000" max="2099"/>
           <span class="field-err" id="fYearStartErr">Required</span>
-        </div>
-
-
-        <div class="form-group">
-          <label>Year Left *</label>
-          <input type="number" id="fYearleft" placeholder="e.g. 2023" min="2000" max="2099"/>
-          <span class="field-err" id="fYearleftErr">Required</span>
         </div>
 
         <div class="form-group" id="yearLeaveGroup">
@@ -406,15 +393,11 @@
           </div>
         </div>
 
-        <!-- Associate history section -->
         <div class="form-group full" id="assocSection" style="display:none">
           <div class="assoc-section">
             <div class="assoc-section-title">📋 Positions &amp; Years Served</div>
             <div class="assoc-header">
-              <span>Position</span>
-              <span>Year Started</span>
-              <span>Year Left</span>
-              <span></span>
+              <span>Position</span><span>Year Started</span><span>Year Left</span><span></span>
             </div>
             <div id="assocEntries"></div>
             <button class="btn-add-assoc" type="button" onclick="addAssocEntry()">+ Add Position</button>
@@ -481,6 +464,7 @@
   let allMembers = [];
   let currentFilter = 'all';
   let editingId = null;
+  let memoData = {};
 
   function avatarColor(name) {
     const colors = ['#0066cc','#6c63ff','#28a745','#fd7e14','#e83e8c','#17a2b8','#dc3545','#6f42c1'];
@@ -490,41 +474,60 @@
   }
   function initials(name) { return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
 
-  // ── FYB: show badge when yearLeaving === currentYear (they ARE in their leaving year)
+  // FYB: member is in the year they are leaving
   function isFYB(m) {
     return m.yearLeaving && parseInt(m.yearLeaving) === currentYear;
   }
 
-  // ── Auto-graduate: yearLeaving < currentYear means they've already left
+  // Graduate ONLY after 2nd semester end date has passed
   function shouldGraduate(m) {
-    return m.yearLeaving && parseInt(m.yearLeaving) < currentYear && m.position !== 'Associates';
+    if (!m.yearLeaving || m.position === 'Associates') return false;
+    const leavingYear = parseInt(m.yearLeaving);
+
+    // Already past their leaving year — graduate
+    if (leavingYear < currentYear) return true;
+
+    // Leaving this year — only graduate if 2nd semester has ended
+    if (leavingYear === currentYear) {
+      if (!memoData || memoData.semester !== '2nd' || !memoData.endDate) return false;
+      const semEnd = new Date(memoData.endDate);
+      return new Date() > semEnd;
+    }
+
+    return false;
   }
 
-  // ── Firestore real-time ──
-  db.collection('members').onSnapshot(snap => {
-    allMembers = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+  // Load memo settings first, then load members
+  db.collection('settings').doc('memo').get().then(snap => {
+    memoData = snap.exists ? snap.data() : {};
 
-    // Auto-graduate past members
-    allMembers.forEach(m => {
-      if (shouldGraduate(m)) {
-        const history = m.associateHistory || [{ position: m.position||'Member', yearStarted: m.yearStarted||'', yearLeft: m.yearLeaving||'' }];
-        db.collection('past-members').add({
-          ...m,
-          position: 'Associates',
-          associateHistory: history,
-          movedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => db.collection('members').doc(m.id).delete());
-      }
+    db.collection('members').onSnapshot(snap => {
+      allMembers = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+
+      // Auto-graduate: move to past-members collection
+      allMembers.forEach(m => {
+        if (shouldGraduate(m)) {
+          const history = m.associateHistory || [{
+            position:    m.position || 'Member',
+            yearStarted: m.yearStarted || '',
+            yearLeft:    m.yearLeaving || ''
+          }];
+          db.collection('past-members').add({
+            ...m,
+            position: 'Associates',
+            associateHistory: history,
+            movedAt: firebase.firestore.FieldValue.serverTimestamp()
+          }).then(() => db.collection('members').doc(m.id).delete())
+            .catch(err => console.error('Graduate error:', err));
+        }
+      });
+
+      filterRender();
     });
-
-    filterRender();
   });
 
   function filterRender() {
-    // Only active (non-associates, non-graduated)
     const active = allMembers.filter(m => m.position !== 'Associates' && !shouldGraduate(m));
-
-    // Sort alphabetically A–Z
     active.sort((a,b) => a.name.localeCompare(b.name));
 
     const q = document.getElementById('searchInput').value.toLowerCase();
@@ -571,7 +574,6 @@
     filterRender();
   }
 
-  // ── Detail Modal ──
   function openDetail(id) {
     const m = allMembers.find(x=>x.id===id);
     if (!m) return;
@@ -602,15 +604,11 @@
         <div class="detail-field"><span class="lbl">Position</span><span class="val" style="color:${color}">${m.position||'Member'}</span></div>
       </div>`;
 
-    const footer = document.getElementById('detailFooter');
-    if (isAdmin) {
-      footer.innerHTML = `
-        <button class="btn-secondary" onclick="closeDetail()">Close</button>
-        <button class="btn-edit" onclick="openEditModal('${m.id}')">✏ Edit</button>
-        <button class="btn-danger" onclick="deleteMember('${m.id}')">🗑 Delete</button>`;
-    } else {
-      footer.innerHTML = `<button class="btn-secondary" onclick="closeDetail()">Close</button>`;
-    }
+    document.getElementById('detailFooter').innerHTML = isAdmin
+      ? `<button class="btn-secondary" onclick="closeDetail()">Close</button>
+         <button class="btn-edit" onclick="openEditModal('${m.id}')">✏ Edit</button>
+         <button class="btn-danger" onclick="deleteMember('${m.id}')">🗑 Delete</button>`
+      : `<button class="btn-secondary" onclick="closeDetail()">Close</button>`;
 
     document.getElementById('detailModal').classList.add('show');
   }
@@ -624,23 +622,17 @@
       .catch(err => showToast('Error: ' + err.message, 'error'));
   }
 
-  // ── Edit Modal ──
   function openEditModal(id) {
     const m = allMembers.find(x=>x.id===id);
     if (!m) return;
     editingId = id;
     closeDetail();
-
     document.getElementById('addModalTitle').textContent = 'Edit Member';
     document.getElementById('btnSave').textContent = 'Update Member';
-
-    // Hide member type (can't change type when editing)
     document.getElementById('memberTypeGroup').style.display = 'none';
     document.getElementById('assocSection').style.display = 'none';
     document.getElementById('positionGroup').style.display = 'flex';
     document.getElementById('yearLeaveGroup').style.display = 'flex';
-
-    // Populate fields
     document.getElementById('fName').value      = m.name||'';
     document.getElementById('fGender').value    = m.gender||'';
     document.getElementById('fLevel').value     = m.level||'';
@@ -654,11 +646,9 @@
     document.getElementById('fDobDay').value    = m.dob_day||'';
     document.getElementById('fDobMonth').value  = m.dob_month||'';
     document.getElementById('fDobYear').value   = m.dob_year||'';
-
     document.getElementById('addModal').classList.add('show');
   }
 
-  // ── Add Modal ──
   function openAddModal() {
     editingId = null;
     document.getElementById('addModalTitle').textContent = 'Add New Member';
@@ -675,7 +665,6 @@
   function closeAdd() {
     document.getElementById('addModal').classList.remove('show');
     editingId = null;
-    // Reset all fields
     ['fName','fPhone','fYearStart','fYearLeave','fDobYear'].forEach(id=>document.getElementById(id).value='');
     ['fGender','fLevel','fFaculty','fState','fDobDay','fDobMonth'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('fDept').value = '';
@@ -692,7 +681,6 @@
     document.getElementById('btnSave').disabled = false;
   }
 
-  // ── Member Type toggle ──
   function handleMemberTypeChange() {
     const type = document.getElementById('fMemberType').value;
     if (type === 'associate') {
@@ -707,7 +695,6 @@
     }
   }
 
-  // ── Associate entries ──
   function addAssocEntry() {
     const container = document.getElementById('assocEntries');
     const posOptions = ALL_POSITIONS.map(p=>`<option value="${p}">${p}</option>`).join('');
@@ -718,18 +705,16 @@
         <select class="assoc-pos">${posOptions}</select>
       </div>
       <input type="number" class="assoc-year-start" placeholder="Year Started" min="2000" max="2099"/>
-      <input type="number" class="assoc-year-left"  placeholder="Year Left"    min="2000" max="2099"/>
+      <input type="number" class="assoc-year-left" placeholder="Year Left" min="2000" max="2099"/>
       <button class="btn-remove-assoc" type="button" onclick="this.closest('.assoc-entry').remove()">✕</button>`;
     container.appendChild(div);
   }
 
-  // ── Save / Update ──
   function saveMember() {
     let valid = true;
     [['fName','fNameErr'],['fGender','fGenderErr'],['fLevel','fLevelErr'],
      ['fDept','fDeptErr'],['fYearStart','fYearStartErr']].forEach(([fid,eid])=>{
-      const el  = document.getElementById(fid);
-      const err = document.getElementById(eid);
+      const el=document.getElementById(fid), err=document.getElementById(eid);
       el.classList.remove('invalid'); err.classList.remove('show');
       if (!el.value.trim()) { el.classList.add('invalid'); err.classList.add('show'); valid=false; }
     });
@@ -752,7 +737,6 @@
       dob_year:    document.getElementById('fDobYear').value,
     };
 
-    // EDIT MODE
     if (editingId) {
       const pos = document.getElementById('fPosition').value;
       const nonUnique = ['Member','Ex-official'];
@@ -765,15 +749,15 @@
           showToast(`${pos} is held by ${snap.docs[0].data().name}. Transfer first.`,'error');
           btn.disabled=false; btn.textContent='Update Member'; return;
         }
-        const updated = { ...baseData, position: pos, yearLeaving: document.getElementById('fYearLeave').value };
-        db.collection('members').doc(editingId).update(updated)
-          .then(()=>{ closeAdd(); showToast('Member updated!','success'); btn.disabled=false; btn.textContent='Update Member'; })
+        db.collection('members').doc(editingId).update({
+          ...baseData, position: pos,
+          yearLeaving: document.getElementById('fYearLeave').value
+        }).then(()=>{ closeAdd(); showToast('Member updated!','success'); btn.disabled=false; btn.textContent='Update Member'; })
           .catch(err=>{ showToast('Error: '+err.message,'error'); btn.disabled=false; btn.textContent='Update Member'; });
       });
       return;
     }
 
-    // ADD MODE
     const memberType = document.getElementById('fMemberType').value;
 
     if (memberType === 'associate') {
@@ -783,8 +767,7 @@
         yearLeft:    row.querySelector('.assoc-year-left').value.trim()
       }));
       db.collection('past-members').add({
-        ...baseData,
-        position: 'Associates',
+        ...baseData, position:'Associates',
         associateHistory: entries,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       }).then(()=>{ closeAdd(); showToast(baseData.name+' added to Past Members!','success'); btn.disabled=false; btn.textContent='Save Member'; })
@@ -802,10 +785,9 @@
           btn.disabled=false; btn.textContent='Save Member'; return;
         }
         db.collection('members').add({
-          ...baseData,
-          position:    pos,
+          ...baseData, position: pos,
           yearLeaving: document.getElementById('fYearLeave').value,
-          createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
         }).then(()=>{ closeAdd(); showToast(baseData.name+' added!','success'); btn.disabled=false; btn.textContent='Save Member'; })
           .catch(err=>{ showToast('Error: '+err.message,'error'); btn.disabled=false; btn.textContent='Save Member'; });
       });
@@ -827,15 +809,12 @@
     t.textContent=msg; t.className='toast show '+type;
     setTimeout(()=>t.className='toast',2500);
   }
-
   function doLogout() { localStorage.removeItem('userRole'); window.location.href='auth.html'; }
-
-  const sidebar=document.getElementById('sidebar');
-  const overlay=document.getElementById('overlay');
+  const sidebar=document.getElementById('sidebar'), overlay=document.getElementById('overlay');
   document.getElementById('hamburger').addEventListener('click',()=>{sidebar.classList.toggle('open');overlay.classList.toggle('show');});
   function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show');}
   document.getElementById('detailModal').addEventListener('click',function(e){if(e.target===this)closeDetail();});
   document.getElementById('addModal').addEventListener('click',function(e){if(e.target===this)closeAdd();});
 </script>
 </body>
-</html>
+  </html>
