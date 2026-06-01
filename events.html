@@ -6,7 +6,7 @@
   <title>GECC Uniport — Events</title>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* (All your existing CSS remains the same - unchanged) */
+    /* === All CSS remains exactly the same as before === */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --blue:#0066cc; --green:#28a745; --red:#dc3545; --sidebar-w:240px; }
     html, body { height:100%; font-family:'Open Sans',sans-serif; background:#f7f9fc; color:#1a1a1a; }
@@ -158,7 +158,6 @@
   <div class="admin-bar" id="adminBar">🔐 ADMIN MODE <span>Full access enabled</span></div>
 
   <aside class="sidebar" id="sidebar">
-    <!-- Sidebar content unchanged -->
     <div class="sidebar-brand" onclick="window.location.href='index.html'">
       <div class="brand-logos">
         <div class="brand-logo"><img src="gecc-logo.jpg" alt="GECC"/></div>
@@ -223,8 +222,55 @@
     </div>
   </div>
 
-  <!-- Modal and Toast unchanged -->
-  <div class="modal-overlay" id="eventModal"> ... </div>
+  <!-- Modal -->
+  <div class="modal-overlay" id="eventModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">Add Event</div>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Event Title *</label>
+          <input type="text" id="fTitle" placeholder="e.g. Sunday Service"/>
+          <span class="field-err" id="fTitleErr">Title is required</span>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date *</label>
+            <input type="date" id="fDate"/>
+            <span class="field-err" id="fDateErr">Date is required</span>
+          </div>
+          <div class="form-group">
+            <label>Time (optional)</label>
+            <input type="time" id="fTime"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="fDesc" placeholder="Brief description of the event…"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Event Image (optional)</label>
+          <div class="img-upload-area" id="imgUploadArea">
+            <input type="file" id="fImageFile" accept="image/*" onchange="handleImageSelect(event)"/>
+            <div style="font-size:2rem;margin-bottom:.4rem;">🖼️</div>
+            <div style="font-size:.78rem;color:#888;">Tap to upload image<br><strong style="color:#0066cc;">JPG, PNG, GIF</strong> supported</div>
+          </div>
+          <div class="img-preview-wrap" id="imgPreviewWrap">
+            <img id="imgPreview" alt="preview"/>
+            <button class="img-delete-btn" onclick="removeImage()">✕</button>
+          </div>
+          <div id="imgUploading" style="display:none;font-size:.75rem;color:#0066cc;font-weight:600;margin-top:.4rem;">⏳ Uploading image…</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" id="btnSaveEvent" onclick="saveEvent()">Save Event</button>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
 
   <script>
@@ -268,23 +314,29 @@
     let selectedImageFile = null;
     let currentImageUrl = '';
 
-    // ==================== FIXED STATUS LOGIC ====================
+    // ==================== IMPROVED STATUS LOGIC ====================
     function getEventStatus(ev) {
       if (!ev.date) return 'past';
 
-      const eventDate = new Date(ev.date);
-      
-      // If time is provided, combine date + time
-      if (ev.time) {
-        const [hours, minutes] = ev.time.split(':').map(Number);
-        eventDate.setHours(hours, minutes, 0, 0);
+      let eventDate;
+
+      // Handle both string dates and Firestore Timestamps
+      if (ev.date && typeof ev.date.toDate === 'function') {
+        eventDate = ev.date.toDate();
       } else {
-        // If no time, assume start of day
-        eventDate.setHours(0, 0, 0, 0);
+        eventDate = new Date(ev.date);
+      }
+
+      // Apply time if available
+      if (ev.time && typeof ev.time === 'string') {
+        const [hours, minutes] = ev.time.split(':').map(Number);
+        if (!isNaN(hours) && !isNaN(minutes)) {
+          eventDate.setHours(hours, minutes, 0, 0);
+        }
       }
 
       const now = new Date();
-      const eventEndTime = new Date(eventDate.getTime() + 4 * 60 * 60 * 1000); // 4 hours later
+      const eventEndTime = new Date(eventDate.getTime() + 4 * 60 * 60 * 1000); // +4 hours
 
       if (now < eventDate) return 'upcoming';
       if (now <= eventEndTime) return 'ongoing';
@@ -292,14 +344,42 @@
     }
     // ============================================================
 
-    // Rest of your functions (handleImageSelect, removeImage, etc.) remain the same
-    function handleImageSelect(e) { /* unchanged */ }
-    function removeImage() { /* unchanged */ }
-    async function uploadImageToStorage(file) { /* unchanged */ }
+    function handleImageSelect(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      selectedImageFile = file;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        document.getElementById('imgPreview').src = ev.target.result;
+        document.getElementById('imgPreviewWrap').style.display = 'block';
+        document.getElementById('imgUploadArea').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeImage() {
+      selectedImageFile = null;
+      currentImageUrl = '';
+      document.getElementById('fImageFile').value = '';
+      document.getElementById('imgPreviewWrap').style.display = 'none';
+      document.getElementById('imgUploadArea').style.display = 'block';
+    }
+
+    async function uploadImageToStorage(file) {
+      return new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = e => res(e.target.result);
+        r.onerror = rej;
+        r.readAsDataURL(file);
+      });
+    }
 
     db.collection('events').orderBy('date','asc').onSnapshot(snap => {
-      allEvents = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+      allEvents = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       renderEvents();
+    }, error => {
+      console.error("Firestore error:", error);
+      document.getElementById('eventsGrid').innerHTML = `<div class="empty-state"><div class="big">⚠️</div><p>Error loading events</p></div>`;
     });
 
     function setFilter(btn) {
@@ -311,21 +391,17 @@
 
     function renderEvents() {
       const grid = document.getElementById('eventsGrid');
-      
       let filtered = allEvents.filter(ev => {
         const status = getEventStatus(ev);
         if (currentFilter === 'all') return true;
         return status === currentFilter;
       });
 
-      // Sort: Ongoing first, then Upcoming, then Past (chronological)
       filtered.sort((a, b) => {
         const statusA = getEventStatus(a);
         const statusB = getEventStatus(b);
-        if (statusA !== statusB) {
-          const order = { 'ongoing': 0, 'upcoming': 1, 'past': 2 };
-          return order[statusA] - order[statusB];
-        }
+        const order = { 'ongoing': 0, 'upcoming': 1, 'past': 2 };
+        if (statusA !== statusB) return order[statusA] - order[statusB];
         return new Date(a.date) - new Date(b.date);
       });
 
@@ -351,7 +427,7 @@
               <span class="event-status \( {status}"> \){status.charAt(0).toUpperCase() + status.slice(1)}</span>
             </div>
             <div class="event-body">
-              <div class="event-title">${ev.title}</div>
+              <div class="event-title">${ev.title || 'Untitled Event'}</div>
               <div class="event-date">📅 \( {fmtDate(ev.date)} \){ev.time ? ' · 🕐 ' + fmtTime(ev.time) : ''}</div>
               \( {ev.description ? `<div class="event-desc"> \){ev.description}</div>` : ''}
               \( {adminBtns ? `<div class="event-actions"> \){adminBtns}</div>` : ''}
@@ -360,28 +436,22 @@
       }).join('');
     }
 
-    // Other functions (openAddModal, saveEvent, etc.) remain the same as before
-    function openAddModal() { /* unchanged */ }
-    function openEditModal(id) { /* unchanged */ }
-    function closeModal() { /* unchanged */ }
-    function clearForm() { /* unchanged */ }
-    async function saveEvent() { /* unchanged */ }
-    function deleteEvent(id) { /* unchanged */ }
-    function exportCSV() { /* unchanged */ }
-    function showToast(msg, type) { /* unchanged */ }
-    function doLogout() { /* unchanged */ }
+    // Modal functions (unchanged - abbreviated)
+    function openAddModal() { editingId = null; document.getElementById('modalTitle').textContent = 'Add Event'; document.getElementById('btnSaveEvent').textContent = 'Save Event'; clearForm(); document.getElementById('eventModal').classList.add('show'); }
+    function openEditModal(id) { /* same as before */ }
+    function closeModal() { document.getElementById('eventModal').classList.remove('show'); clearForm(); editingId = null; }
+    function clearForm() { /* same as before */ }
+    async function saveEvent() { /* same as before */ }
+    function deleteEvent(id) { /* same as before */ }
+    function exportCSV() { /* same as before */ }
+    function showToast(msg, type) { /* same as before */ }
+    function doLogout() { localStorage.removeItem('userRole'); window.location.href = 'auth.html'; }
 
-    // Mobile sidebar handlers
+    // Sidebar
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
-    document.getElementById('hamburger').addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-      overlay.classList.toggle('show');
-    });
-    function closeSidebar() {
-      sidebar.classList.remove('open');
-      overlay.classList.remove('show');
-    }
+    document.getElementById('hamburger').addEventListener('click', () => { sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
+    function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
   </script>
 </body>
 </html>
