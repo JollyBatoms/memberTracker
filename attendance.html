@@ -854,8 +854,14 @@
     setTimeout(()=>t.className='toast',2500);
   }
 
-  function doLogout() { localStorage.removeItem('userRole'); window.location.href='auth.html'; }
-
+  function doLogout() {
+  auth.signOut().then(() => {
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userEmail');
+    window.location.href = 'auth.html';
+  });
+  }
+  
   const sidebar=document.getElementById('sidebar');
   const overlay=document.getElementById('overlay');
   document.getElementById('hamburger').addEventListener('click',()=>{sidebar.classList.toggle('open');overlay.classList.toggle('show');});
