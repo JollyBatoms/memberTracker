@@ -480,7 +480,13 @@
   function closeLostModal() { document.getElementById('lostModal').classList.remove('show'); }
   document.getElementById('lostModal').addEventListener('click',function(e){ if(e.target===this) closeLostModal(); });
 
-  function doLogout() { localStorage.removeItem('userRole'); window.location.href = 'auth.html'; }
+  function doLogout() {
+  auth.signOut().then(() => {
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userEmail');
+    window.location.href = 'auth.html';
+  });
+  }
 
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('overlay');
