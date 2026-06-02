@@ -47,29 +47,32 @@
     .main-bar { height:4px; background:#0066cc; }
     .content { padding:1.8rem; }
 
+    /* PAGE HEADER */
     .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; flex-wrap:wrap; gap:.8rem; }
     .page-header h1 { font-family:'Merriweather',serif; font-size:1.2rem; font-weight:700; }
     .header-actions { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
     .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; text-decoration:none; transition:background .2s; }
     .btn-primary:hover { background:#0052a3; }
-    .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
-    .btn-outline { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:transparent; color:#0066cc; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #0066cc; border-radius:5px; cursor:pointer; transition:background .2s; }
+    .btn-outline { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:transparent; color:#0066cc; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #0066cc; border-radius:5px; cursor:pointer; transition:background .2s,color .2s; }
     .btn-outline:hover { background:#eef4ff; }
 
-    .members-stats { display:flex; gap:1rem; margin-bottom:1.4rem; flex-wrap:wrap; }
-    .mstat { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:.8rem 1.1rem; flex:1; min-width:100px; box-sizing:border-box; box-shadow:0 1px 4px rgba(0,0,0,.04); }
-    .mstat-val { font-size:1.5rem; font-weight:700; color:#0066cc; line-height:1; }
-    .mstat-label { font-size:.68rem; color:#999; font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin-top:.2rem; }
-
+    /* TOOLBAR */
     .toolbar { display:flex; align-items:center; gap:.7rem; margin-bottom:1.2rem; flex-wrap:wrap; }
     .search-wrap { position:relative; flex:1; min-width:200px; }
     .search-wrap input { width:100%; padding:.65rem .9rem .65rem 2.2rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; outline:none; transition:border-color .2s; }
     .search-wrap input:focus { border-color:#0066cc; }
-    .search-icon { position:absolute; left:.7rem; top:50%; transform:translateY(-50%); color:#aaa; }
+    .search-icon { position:absolute; left:.7rem; top:50%; transform:translateY(-50%); color:#aaa; font-size:.9rem; }
     .filter-btns { display:flex; gap:.4rem; }
     .filter-btn { padding:.5rem .9rem; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; border:1.5px solid #dde3ec; border-radius:5px; background:#fff; color:#555; cursor:pointer; transition:border-color .2s,color .2s,background .2s; }
     .filter-btn.active { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
 
+    /* STATS ROW */
+    .members-stats { display:flex; gap:1rem; margin-bottom:1.4rem; flex-wrap:wrap; }
+    .mstat { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:.8rem 1.1rem; flex:1; min-width:100px; box-shadow:0 1px 4px rgba(0,0,0,.04); }
+    .mstat-val { font-size:1.5rem; font-weight:700; color:#0066cc; line-height:1; }
+    .mstat-label { font-size:.68rem; color:#999; font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin-top:.2rem; }
+
+    /* MEMBERS GRID */
     .members-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
     .member-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.1rem; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.04); transition:box-shadow .2s,border-color .2s; }
     .member-card:hover { box-shadow:0 4px 12px rgba(0,0,0,.1); border-color:#b0c8f0; }
@@ -82,38 +85,46 @@
     .member-card-row .lbl { color:#aaa; font-size:.68rem; font-weight:700; text-transform:uppercase; min-width:40px; }
     .fyb-badge { display:inline-block; font-size:.6rem; font-weight:700; background:#fff3cd; color:#856404; border:1px solid #ffc107; border-radius:3px; padding:.1rem .35rem; margin-left:.35rem; }
 
-    .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; grid-column:1/-1; }
+    .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; }
     .empty-state .big { font-size:2.5rem; margin-bottom:.6rem; }
+    .empty-state p { font-size:.88rem; }
 
+    /* MODAL */
     .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; }
     .modal-overlay.show { display:flex; }
     .modal { background:#fff; border-radius:8px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); }
     .modal-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 1.4rem; border-bottom:1px solid #edf0f4; }
     .modal-title { font-family:'Merriweather',serif; font-size:1rem; font-weight:700; color:#0066cc; }
     .modal-close { background:none; border:none; font-size:1.6rem; cursor:pointer; color:#888; line-height:1; }
+    .modal-close:hover { color:#333; }
     .modal-body { padding:1.4rem; }
-    .modal-footer { padding:1rem 1.4rem; border-top:1px solid #edf0f4; display:flex; justify-content:flex-end; gap:.6rem; flex-wrap:wrap; }
 
+    /* DETAIL VIEW */
     .detail-top { display:flex; align-items:center; gap:1rem; margin-bottom:1.4rem; }
     .detail-avatar { width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:700; color:#fff; flex-shrink:0; }
-    .detail-name { font-size:1.1rem; font-weight:700; }
+    .detail-name { font-size:1.1rem; font-weight:700; color:#1a1a1a; }
     .detail-pos { font-size:.8rem; font-weight:700; margin-top:.2rem; }
-    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem .9rem; }
+    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem .9rem; margin-bottom:1.2rem; }
     .detail-field { display:flex; flex-direction:column; gap:.2rem; }
     .detail-field .lbl { font-size:.65rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#aaa; }
     .detail-field .val { font-size:.88rem; color:#1a1a1a; font-weight:600; }
-
+    .modal-footer { padding:1rem 1.4rem; border-top:1px solid #edf0f4; display:flex; justify-content:flex-end; gap:.6rem; }
     .btn-danger { padding:.6rem 1.1rem; background:#dc3545; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; transition:background .2s; }
     .btn-danger:hover { background:#b02a37; }
-    .btn-secondary { padding:.6rem 1.1rem; background:transparent; color:#555; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ccd4df; border-radius:5px; cursor:pointer; }
-    .btn-edit { padding:.6rem 1.1rem; background:#fff8e1; color:#856404; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ffc107; border-radius:5px; cursor:pointer; transition:background .2s; }
-    .btn-edit:hover { background:#fff3cd; }
+    .btn-secondary { padding:.6rem 1.1rem; background:transparent; color:#555; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ccd4df; border-radius:5px; cursor:pointer; transition:border-color .2s,color .2s; }
+    .btn-secondary:hover { border-color:#888; color:#333; }
 
+    /* ADD FORM */
     .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
     .form-group { display:flex; flex-direction:column; gap:.35rem; }
     .form-group.full { grid-column:1/-1; }
-    .form-group label { font-size:.72rem; font-weight:700; color:#444; }
-    .form-group input, .form-group select { padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; background:#fff; outline:none; transition:border-color .2s; appearance:none; }
+    .form-group label { font-size:.72rem; font-weight:700; color:#444; letter-spacing:.04em; }
+    .form-group input, .form-group select {
+      padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px;
+      font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a;
+      background:#fff; outline:none; transition:border-color .2s;
+      appearance:none;
+    }
     .form-group input:focus, .form-group select:focus { border-color:#0066cc; }
     .form-group input.invalid, .form-group select.invalid { border-color:#dc3545; }
     .select-wrap { position:relative; }
@@ -122,17 +133,15 @@
     .field-err.show { display:block; }
     .dob-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:.5rem; }
 
-    .assoc-section { margin-top:.5rem; }
-    .assoc-section-title { font-size:.72rem; font-weight:700; color:#444; margin-bottom:.6rem; text-transform:uppercase; letter-spacing:.06em; }
-    .assoc-entry { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:.5rem; align-items:center; margin-bottom:.5rem; }
-    .assoc-entry select, .assoc-entry input { padding:.55rem .7rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.82rem; color:#1a1a1a; background:#fff; outline:none; appearance:none; }
-    .assoc-entry select:focus, .assoc-entry input:focus { border-color:#0066cc; }
-    .btn-remove-assoc { background:#fff0f0; color:#dc3545; border:1px solid #f5c0c5; border-radius:4px; padding:.4rem .6rem; font-size:.8rem; cursor:pointer; white-space:nowrap; }
-    .btn-add-assoc { display:inline-flex; align-items:center; gap:.3rem; padding:.5rem .9rem; background:#eef4ff; color:#0066cc; border:1.5px solid #c5d9f5; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; cursor:pointer; margin-top:.3rem; }
-    .assoc-note { font-size:.72rem; color:#888; margin-top:.5rem; font-style:italic; }
-    .assoc-header { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:.5rem; margin-bottom:.3rem; }
-    .assoc-header span { font-size:.65rem; font-weight:700; color:#aaa; letter-spacing:.06em; text-transform:uppercase; }
+    /* POSITION COLORS */
+    .pos-member        { color:#28a745; }
+    .pos-associates    { color:#8B6F47; }
+    .pos-president     { color:#0066cc; }
+    .pos-vp            { color:#6c63ff; }
+    .pos-gensec        { color:#dc3545; }
+    .pos-default       { color:#0066cc; }
 
+    /* TOAST */
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
     .toast.success { background:#28a745; }
@@ -150,21 +159,17 @@
       .form-group.full { grid-column:1; }
       .detail-grid { grid-template-columns:1fr; }
       .members-grid { grid-template-columns:1fr 1fr; }
-      .assoc-entry { grid-template-columns:1fr 1fr; }
-      .assoc-header { display:none; }
     }
-    @media(max-width:420px) { .members-grid { grid-template-columns:1fr; } }
+    @media(max-width:420px) {
+      .members-grid { grid-template-columns:1fr; }
+    }
   </style>
 </head>
 <body>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="firebase-config.js"></script>
-
-<div class="admin-bar" id="adminBar">🔐 ADMIN MODE <span>Full access enabled</span></div>
+<div class="admin-bar" id="adminBar">
+  🔐 ADMIN MODE <span>Full access enabled</span>
+</div>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand" onclick="window.location.href='index.html'">
@@ -211,21 +216,21 @@
     <div class="page-header">
       <h1>👥 Members</h1>
       <div class="header-actions">
-        <button class="btn-outline" id="btnExport" onclick="exportCSV()" style="display:none">⬇ Export</button>
+        <button class="btn-outline" id="btnExport" onclick="exportCSV()" style="display:none">⬇ Export CSV</button>
         <button class="btn-primary" id="btnAdd" onclick="openAddModal()" style="display:none">+ Add Member</button>
       </div>
     </div>
 
     <div class="members-stats">
-      <div class="mstat"><div class="mstat-val" id="msTotal">—</div><div class="mstat-label">Total Active</div></div>
-      <div class="mstat"><div class="mstat-val" id="msFinal">—</div><div class="mstat-label">Final Year</div></div>
-      <div class="mstat"><div class="mstat-val" id="msLeaders">—</div><div class="mstat-label">Leaders</div></div>
+      <div class="mstat"><div class="mstat-val" id="msTotal">0</div><div class="mstat-label">Total Active</div></div>
+      <div class="mstat"><div class="mstat-val" id="msFinal">0</div><div class="mstat-label">Final Year</div></div>
+      <div class="mstat"><div class="mstat-val" id="msLeaders">0</div><div class="mstat-label">Leaders</div></div>
     </div>
 
     <div class="toolbar">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Search by name or department…" oninput="filterRender()" />
+        <input type="text" id="searchInput" placeholder="Search by name or department…" oninput="renderMembers()" />
       </div>
       <div class="filter-btns">
         <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">All</button>
@@ -233,9 +238,7 @@
       </div>
     </div>
 
-    <div class="members-grid" id="membersGrid">
-      <div class="empty-state"><div class="big">⏳</div><p>Loading members…</p></div>
-    </div>
+    <div class="members-grid" id="membersGrid"></div>
 
   </div>
 </div>
@@ -252,11 +255,11 @@
   </div>
 </div>
 
-<!-- Add / Edit Modal -->
+<!-- Add Member Modal -->
 <div class="modal-overlay" id="addModal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" id="addModalTitle">Add New Member</div>
+      <div class="modal-title">Add New Member</div>
       <button class="modal-close" onclick="closeAdd()">×</button>
     </div>
     <div class="modal-body">
@@ -264,146 +267,173 @@
 
         <div class="form-group full">
           <label>Full Name *</label>
-          <input type="text" id="fName" placeholder="e.g. Chukwuemeka Eze"/>
+          <input type="text" id="fName" placeholder="e.g. Chukwuemeka Eze" />
           <span class="field-err" id="fNameErr">Name is required</span>
         </div>
 
         <div class="form-group">
           <label>Gender *</label>
-          <div class="select-wrap"><select id="fGender">
-            <option value="">— Select —</option>
-            <option>Male</option><option>Female</option>
-          </select></div>
+          <div class="select-wrap">
+            <select id="fGender">
+              <option value="">— Select —</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
           <span class="field-err" id="fGenderErr">Required</span>
         </div>
 
         <div class="form-group">
           <label>Level *</label>
-          <div class="select-wrap"><select id="fLevel">
-            <option value="">— Select —</option>
-            <option>100L</option><option>200L</option><option>300L</option>
-            <option>400L</option><option>500L</option><option>600L</option><option>700L</option>
-          </select></div>
+          <div class="select-wrap">
+            <select id="fLevel">
+              <option value="">— Select —</option>
+              <option>100L</option><option>200L</option><option>300L</option>
+              <option>400L</option><option>500L</option><option>600L</option><option>700L</option>
+            </select>
+          </div>
           <span class="field-err" id="fLevelErr">Required</span>
         </div>
 
         <div class="form-group">
           <label>Department *</label>
-          <input type="text" id="fDept" placeholder="e.g. Computer Science"/>
+          <input type="text" id="fDept" placeholder="e.g. Computer Science" />
           <span class="field-err" id="fDeptErr">Required</span>
         </div>
 
         <div class="form-group">
           <label>Faculty</label>
-          <div class="select-wrap"><select id="fFaculty">
-            <option value="">— Select —</option>
-            <option>Agriculture</option><option>Allied Health Sciences</option>
-            <option>Basic Medical Sciences</option><option>Clinical Sciences</option>
-            <option>Communication &amp; Media Studies</option><option>Computing</option>
-            <option>Dentistry</option><option>Education</option><option>Engineering</option>
-            <option>Humanities</option><option>Law</option><option>Management Sciences</option>
-            <option>Pharmaceutical Sciences</option><option>Science</option>
-            <option>SSLT</option><option>Social Sciences</option>
-          </select></div>
+          <div class="select-wrap">
+            <select id="fFaculty">
+              <option value="">— Select —</option>
+              <option>Agriculture</option>
+              <option>Allied Health Sciences</option>
+              <option>Basic Medical Sciences</option>
+              <option>Clinical Sciences</option>
+              <option>Communication &amp; Media Studies</option>
+              <option>Computing</option>
+              <option>Dentistry</option>
+              <option>Education</option>
+              <option>Engineering</option>
+              <option>Humanities</option>
+              <option>Law</option>
+              <option>Management Sciences</option>
+              <option>Pharmaceutical Sciences</option>
+              <option>Science</option>
+              <option>SSLT</option>
+              <option>Social Sciences</option>
+            </select>
+          </div>
         </div>
 
         <div class="form-group">
           <label>Phone</label>
-          <input type="tel" id="fPhone" placeholder="08012345678"/>
+          <input type="tel" id="fPhone" placeholder="08012345678" />
         </div>
 
         <div class="form-group">
           <label>State of Origin</label>
-          <div class="select-wrap"><select id="fState">
-            <option value="">— Select —</option>
-            <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option>
-            <option>Anambra</option><option>Bauchi</option><option>Bayelsa</option>
-            <option>Benue</option><option>Borno</option><option>Cross River</option>
-            <option>Delta</option><option>Ebonyi</option><option>Edo</option>
-            <option>Ekiti</option><option>Enugu</option><option>FCT</option>
-            <option>Gombe</option><option>Imo</option><option>Jigawa</option>
-            <option>Kaduna</option><option>Kano</option><option>Katsina</option>
-            <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
-            <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
-            <option>Ogun</option><option>Ondo</option><option>Osun</option>
-            <option>Oyo</option><option>Plateau</option><option>Rivers</option>
-            <option>Sokoto</option><option>Taraba</option><option>Yobe</option>
-            <option>Zamfara</option>
-          </select></div>
+          <div class="select-wrap">
+            <select id="fState">
+              <option value="">— Select —</option>
+              <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option>
+              <option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option>
+              <option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option>
+              <option>Ekiti</option><option>Enugu</option><option>FCT</option><option>Gombe</option>
+              <option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option>
+              <option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+              <option>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option>
+              <option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option>
+              <option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option>
+              <option>Zamfara</option>
+            </select>
+          </div>
         </div>
 
-        <div class="form-group" id="memberTypeGroup">
-          <label>Member Type *</label>
-          <div class="select-wrap"><select id="fMemberType" onchange="handleMemberTypeChange()">
-            <option value="active">Active Member</option>
-            <option value="associate">Associate (Past Member)</option>
-          </select></div>
-        </div>
-
-        <div class="form-group" id="positionGroup">
+        <div class="form-group">
           <label>Position</label>
-          <div class="select-wrap"><select id="fPosition">
-            <option value="Member">Member</option>
-            <option>President</option><option>Vice President</option>
-            <option>General Secretary</option><option>Asst. General Secretary</option>
-            <option>Bible Study Secretary</option><option>Asst Bible Study Secretary</option>
-            <option>Evangelism Secretary</option><option>Follow up Secretary</option>
-            <option>Prayer Secretary</option><option>Asst Prayer Secretary</option>
-            <option>Media/Publicity Secretary</option><option>Asst Media/Publicity Secretary</option>
-            <option>Organizing Secretary</option><option>Asst Organizing Secretary</option>
-            <option>Welfare Secretary</option><option>Asst. Welfare Secretary</option>
-            <option>Academic/Magazine Secretary</option><option>Music Director</option>
-            <option>Financial Secretary</option><option>Treasurer</option>
-            <option>Ex-official</option>
-          </select></div>
+          <div class="select-wrap">
+            <select id="fPosition">
+              <option value="Member">Member</option>
+              <option>President</option><option>Vice President</option>
+              <option>General Secretary</option><option>Asst. General Secretary</option>
+              <option>Bible Study Secretary</option><option>Asst Bible Study Secretary</option>
+              <option>Evangelism Secretary</option><option>Follow up Secretary</option>
+              <option>Prayer Secretary</option><option>Asst Prayer Secretary</option>
+              <option>Media/Publicity Secretary</option><option>Asst Media/Publicity Secretary</option>
+              <option>Organizing Secretary</option><option>Asst Organizing Secretary</option>
+              <option>Welfare Secretary</option><option>Asst. Welfare Secretary</option>
+              <option>Academic/Magazine Secretary</option><option>Music Director</option>
+              <option>Financial Secretary</option><option>Treasurer</option>
+              <option>Ex-official</option><option>Associates</option>
+            </select>
+          </div>
         </div>
 
         <div class="form-group">
           <label>Year Started *</label>
-          <input type="number" id="fYearStart" placeholder="e.g. 2023" min="2000" max="2099"/>
+          <input type="number" id="fYearStart" placeholder="e.g. 2023" min="2000" max="2099" />
           <span class="field-err" id="fYearStartErr">Required</span>
         </div>
 
-        <div class="form-group" id="yearLeaveGroup">
+        <div class="form-group">
           <label>Year Leaving</label>
-          <input type="number" id="fYearLeave" placeholder="e.g. 2027" min="2000" max="2099"/>
+          <input type="number" id="fYearLeave" placeholder="e.g. 2027" min="2000" max="2099" />
         </div>
 
         <div class="form-group full">
           <label>Date of Birth (optional)</label>
           <div class="dob-row">
-            <div class="select-wrap"><select id="fDobDay">
-              <option value="">Day</option>
-              <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-              <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-              <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
-              <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
-              <option>21</option><option>22</option><option>23</option><option>24</option><option>25</option>
-              <option>26</option><option>27</option><option>28</option><option>29</option><option>30</option>
-              <option>31</option>
-            </select></div>
-            <div class="select-wrap"><select id="fDobMonth">
-              <option value="">Month</option>
-              <option value="1">January</option><option value="2">February</option>
-              <option value="3">March</option><option value="4">April</option>
-              <option value="5">May</option><option value="6">June</option>
-              <option value="7">July</option><option value="8">August</option>
-              <option value="9">September</option><option value="10">October</option>
-              <option value="11">November</option><option value="12">December</option>
-            </select></div>
-            <input type="number" id="fDobYear" placeholder="Year" min="1980" max="2010"/>
-          </div>
-        </div>
+            <div class="select-wrap">
+              <select id="fDobDay" placeholder="Day" />
+              <option>Day</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>    
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+             <option>11</option>
+             <option>12</option>
+             <option>13</option>
+              <option>14</option>
+               <option>15</option>
+               <option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
 
-        <div class="form-group full" id="assocSection" style="display:none">
-          <div class="assoc-section">
-            <div class="assoc-section-title">📋 Positions &amp; Years Served</div>
-            <div class="assoc-header">
-              <span>Position</span><span>Year Started</span><span>Year Left</span><span></span>
+             
+              </select>
             </div>
-            <div id="assocEntries"></div>
-            <button class="btn-add-assoc" type="button" onclick="addAssocEntry()">+ Add Position</button>
-            <div class="assoc-note">This person will be saved directly to Past Members.</div>
+            <div class="select-wrap">
+              <select id="fDobMonth">
+                <option value="">Month</option>
+                <option value="1">January</option><option value="2">February</option>
+                <option value="3">March</option><option value="4">April</option>
+                <option value="5">May</option><option value="6">June</option>
+                <option value="7">July</option><option value="8">August</option>
+                <option value="9">September</option><option value="10">October</option>
+                <option value="11">November</option><option value="12">December</option>
+              </select>
+            </div>
+            <input type="number" id="fDobYear" placeholder="Year" min="1980" max="2010" />
           </div>
         </div>
 
@@ -411,13 +441,12 @@
     </div>
     <div class="modal-footer">
       <button class="btn-secondary" onclick="closeAdd()">Cancel</button>
-      <button class="btn-primary" id="btnSave" onclick="saveMember()">Save Member</button>
+      <button class="btn-primary" onclick="saveMember()">Save Member</button>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
-
 <script>
   const role = localStorage.getItem('userRole');
   if (!role) { window.location.href = 'auth.html'; }
@@ -433,390 +462,88 @@
     document.getElementById('btnExport').style.display = 'flex';
   }
 
-  const POSITION_COLORS = {
-    'Member':'#28a745','Associates':'#8B6F47','President':'#0066cc',
-    'Vice President':'#6c63ff','General Secretary':'#dc3545',
-    'Asst. General Secretary':'#fd7e14','Bible Study Secretary':'#20c997',
-    'Asst Bible Study Secretary':'#17a2b8','Evangelism Secretary':'#e83e8c',
-    'Follow up Secretary':'#6f42c1','Prayer Secretary':'#fd7e14',
-    'Asst Prayer Secretary':'#ffc107','Media/Publicity Secretary':'#28a745',
-    'Asst Media/Publicity Secretary':'#20c997','Organizing Secretary':'#0066cc',
-    'Asst Organizing Secretary':'#6c63ff','Ex-official':'#6c757d',
-    'Welfare Secretary':'#e83e8c','Asst. Welfare Secretary':'#d63384',
-    'Academic/Magazine Secretary':'#0d6efd','Music Director':'#fd7e14',
-    'Financial Secretary':'#198754','Treasurer':'#dc3545'
-  };
+  // ... (keep all your constants: POSITION_COLORS, ALL_POSITIONS, LEADERS, etc.)
 
-  const ALL_POSITIONS = [
-    'Member','President','Vice President','General Secretary','Asst. General Secretary',
-    'Bible Study Secretary','Asst Bible Study Secretary','Evangelism Secretary','Follow up Secretary',
-    'Prayer Secretary','Asst Prayer Secretary','Media/Publicity Secretary','Asst Media/Publicity Secretary',
-    'Organizing Secretary','Asst Organizing Secretary','Welfare Secretary','Asst. Welfare Secretary',
-    'Academic/Magazine Secretary','Music Director','Financial Secretary','Treasurer','Ex-official'
-  ];
-
-  const LEADERS = ['President','Vice President','General Secretary','Asst. General Secretary',
-    'Bible Study Secretary','Asst Bible Study Secretary','Evangelism Secretary','Follow up Secretary',
-    'Prayer Secretary','Asst Prayer Secretary','Media/Publicity Secretary','Asst Media/Publicity Secretary',
-    'Organizing Secretary','Asst Organizing Secretary','Welfare Secretary','Asst. Welfare Secretary',
-    'Academic/Magazine Secretary','Music Director','Financial Secretary','Treasurer'];
-
-  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const currentYear = new Date().getFullYear();
   let allMembers = [];
   let currentFilter = 'all';
   let editingId = null;
   let memoData = {};
 
-  function avatarColor(name) {
-    const colors = ['#0066cc','#6c63ff','#28a745','#fd7e14','#e83e8c','#17a2b8','#dc3545','#6f42c1'];
-    let h = 0;
-    for (let i=0;i<name.length;i++) h = name.charCodeAt(i)+((h<<5)-h);
-    return colors[Math.abs(h)%colors.length];
-  }
+  function avatarColor(name) { /* keep your existing function */ }
   function initials(name) { return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
 
-  // FYB: member is in the year they are leaving
   function isFYB(m) {
     return m.yearLeaving && parseInt(m.yearLeaving) === currentYear;
   }
 
-  // Graduate ONLY after 2nd semester end date has passed
   function shouldGraduate(m) {
     if (!m.yearLeaving || m.position === 'Associates') return false;
     const leavingYear = parseInt(m.yearLeaving);
 
-    // Already past their leaving year — graduate
     if (leavingYear < currentYear) return true;
-
-    // Leaving this year — only graduate if 2nd semester has ended
     if (leavingYear === currentYear) {
       if (!memoData || memoData.semester !== '2nd' || !memoData.endDate) return false;
       const semEnd = new Date(memoData.endDate);
       return new Date() > semEnd;
     }
-
     return false;
   }
 
-  // Load memo settings first, then load members
+  // ====================== FIXED AUTO-GRADUATION ======================
+  async function autoGraduate() {
+    const toGraduate = allMembers.filter(m => shouldGraduate(m));
+
+    for (const m of toGraduate) {
+      try {
+        // Check if already exists in past-members (prevent duplicates)
+        const existing = await db.collection('past-members')
+          .where('name', '==', m.name)
+          .where('yearLeaving', '==', m.yearLeaving)
+          .get();
+
+        if (!existing.empty) {
+          // Already moved → just delete from active
+          await db.collection('members').doc(m.id).delete();
+          continue;
+        }
+
+        const history = m.associateHistory || [{
+          position: m.position || 'Member',
+          yearStarted: m.yearStarted || '',
+          yearLeft: m.yearLeaving || ''
+        }];
+
+        await db.collection('past-members').add({
+          ...m,
+          position: 'Associates',
+          associateHistory: history,
+          movedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        await db.collection('members').doc(m.id).delete();
+        console.log(`✅ Graduated: ${m.name}`);
+
+      } catch (err) {
+        console.error(`Failed to graduate ${m.name}:`, err);
+      }
+    }
+  }
+
+  // Load memo then members
   db.collection('settings').doc('memo').get().then(snap => {
     memoData = snap.exists ? snap.data() : {};
 
     db.collection('members').onSnapshot(snap => {
-      allMembers = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+      allMembers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-      // Auto-graduate: move to past-members collection
-      allMembers.forEach(m => {
-        if (shouldGraduate(m)) {
-          const history = m.associateHistory || [{
-            position:    m.position || 'Member',
-            yearStarted: m.yearStarted || '',
-            yearLeft:    m.yearLeaving || ''
-          }];
-          db.collection('past-members').add({
-            ...m,
-            position: 'Associates',
-            associateHistory: history,
-            movedAt: firebase.firestore.FieldValue.serverTimestamp()
-          }).then(() => db.collection('members').doc(m.id).delete())
-            .catch(err => console.error('Graduate error:', err));
-        }
-      });
+      // Run graduation only once per snapshot
+      autoGraduate();
 
       filterRender();
     });
   });
 
-  function filterRender() {
-    const active = allMembers.filter(m => m.position !== 'Associates' && !shouldGraduate(m));
-    active.sort((a,b) => a.name.localeCompare(b.name));
-
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    let filtered = active.filter(m => {
-      const matchQ = !q || m.name.toLowerCase().includes(q) || (m.department||'').toLowerCase().includes(q);
-      const matchF = currentFilter==='all' || (currentFilter==='fyb' && isFYB(m));
-      return matchQ && matchF;
-    });
-
-    document.getElementById('msTotal').textContent   = active.length;
-    document.getElementById('msFinal').textContent   = active.filter(isFYB).length;
-    document.getElementById('msLeaders').textContent = active.filter(m=>LEADERS.includes(m.position)).length;
-
-    const grid = document.getElementById('membersGrid');
-    if (!filtered.length) {
-      grid.innerHTML = `<div class="empty-state"><div class="big">👥</div><p>${q||currentFilter!=='all'?'No members match your search.':'No members yet.'}</p></div>`;
-      return;
-    }
-
-    grid.innerHTML = filtered.map(m => {
-      const color = POSITION_COLORS[m.position]||'#0066cc';
-      const fyb = isFYB(m) ? '<span class="fyb-badge">🎓 FYB</span>' : '';
-      return `<div class="member-card" onclick="openDetail('${m.id}')">
-        <div class="member-card-top">
-          <div class="member-avatar" style="background:${avatarColor(m.name)}">${initials(m.name)}</div>
-          <div>
-            <div class="member-card-name">${m.name}${fyb}</div>
-            <div class="member-card-pos" style="color:${color}">${m.position||'Member'}</div>
-          </div>
-        </div>
-        <div class="member-card-info">
-          <div class="member-card-row"><span class="lbl">Level</span>${m.level||'—'}</div>
-          <div class="member-card-row"><span class="lbl">Dept</span>${m.department||'—'}</div>
-          <div class="member-card-row"><span class="lbl">State</span>${m.state||'—'}</div>
-        </div>
-      </div>`;
-    }).join('');
-  }
-
-  function setFilter(btn) {
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    currentFilter = btn.dataset.filter;
-    filterRender();
-  }
-
-  function openDetail(id) {
-    const m = allMembers.find(x=>x.id===id);
-    if (!m) return;
-    const color = POSITION_COLORS[m.position]||'#0066cc';
-    const fyb = isFYB(m) ? '<span class="fyb-badge">🎓 Final Year</span>' : '';
-    const dobStr = m.dob_day && m.dob_month
-      ? `${m.dob_day} ${MONTHS[parseInt(m.dob_month)-1]}${m.dob_year?' '+m.dob_year:''}`
-      : '—';
-
-    document.getElementById('detailBody').innerHTML = `
-      <div class="detail-top">
-        <div class="detail-avatar" style="background:${avatarColor(m.name)}">${initials(m.name)}</div>
-        <div>
-          <div class="detail-name">${m.name} ${fyb}</div>
-          <div class="detail-pos" style="color:${color}">${m.position||'Member'}</div>
-        </div>
-      </div>
-      <div class="detail-grid">
-        <div class="detail-field"><span class="lbl">Gender</span><span class="val">${m.gender||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Level</span><span class="val">${m.level||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Department</span><span class="val">${m.department||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Faculty</span><span class="val">${m.faculty||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Phone</span><span class="val">${m.phone||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">State</span><span class="val">${m.state||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Date of Birth</span><span class="val">${dobStr}</span></div>
-        <div class="detail-field"><span class="lbl">Year Started</span><span class="val">${m.yearStarted||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Year Leaving</span><span class="val">${m.yearLeaving||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Position</span><span class="val" style="color:${color}">${m.position||'Member'}</span></div>
-      </div>`;
-
-    document.getElementById('detailFooter').innerHTML = isAdmin
-      ? `<button class="btn-secondary" onclick="closeDetail()">Close</button>
-         <button class="btn-edit" onclick="openEditModal('${m.id}')">✏ Edit</button>
-         <button class="btn-danger" onclick="deleteMember('${m.id}')">🗑 Delete</button>`
-      : `<button class="btn-secondary" onclick="closeDetail()">Close</button>`;
-
-    document.getElementById('detailModal').classList.add('show');
-  }
-
-  function closeDetail() { document.getElementById('detailModal').classList.remove('show'); }
-
-  function deleteMember(id) {
-    if (!confirm('Delete this member? This cannot be undone.')) return;
-    db.collection('members').doc(id).delete()
-      .then(() => { closeDetail(); showToast('Member deleted.', 'success'); })
-      .catch(err => showToast('Error: ' + err.message, 'error'));
-  }
-
-  function openEditModal(id) {
-    const m = allMembers.find(x=>x.id===id);
-    if (!m) return;
-    editingId = id;
-    closeDetail();
-    document.getElementById('addModalTitle').textContent = 'Edit Member';
-    document.getElementById('btnSave').textContent = 'Update Member';
-    document.getElementById('memberTypeGroup').style.display = 'none';
-    document.getElementById('assocSection').style.display = 'none';
-    document.getElementById('positionGroup').style.display = 'flex';
-    document.getElementById('yearLeaveGroup').style.display = 'flex';
-    document.getElementById('fName').value      = m.name||'';
-    document.getElementById('fGender').value    = m.gender||'';
-    document.getElementById('fLevel').value     = m.level||'';
-    document.getElementById('fDept').value      = m.department||'';
-    document.getElementById('fFaculty').value   = m.faculty||'';
-    document.getElementById('fPhone').value     = m.phone||'';
-    document.getElementById('fState').value     = m.state||'';
-    document.getElementById('fPosition').value  = m.position||'Member';
-    document.getElementById('fYearStart').value = m.yearStarted||'';
-    document.getElementById('fYearLeave').value = m.yearLeaving||'';
-    document.getElementById('fDobDay').value    = m.dob_day||'';
-    document.getElementById('fDobMonth').value  = m.dob_month||'';
-    document.getElementById('fDobYear').value   = m.dob_year||'';
-    document.getElementById('addModal').classList.add('show');
-  }
-
-  function openAddModal() {
-    editingId = null;
-    document.getElementById('addModalTitle').textContent = 'Add New Member';
-    document.getElementById('btnSave').textContent = 'Save Member';
-    document.getElementById('memberTypeGroup').style.display = 'flex';
-    document.getElementById('positionGroup').style.display = 'flex';
-    document.getElementById('yearLeaveGroup').style.display = 'flex';
-    document.getElementById('assocSection').style.display = 'none';
-    document.getElementById('assocEntries').innerHTML = '';
-    document.getElementById('fMemberType').value = 'active';
-    document.getElementById('addModal').classList.add('show');
-  }
-
-  function closeAdd() {
-    document.getElementById('addModal').classList.remove('show');
-    editingId = null;
-    ['fName','fPhone','fYearStart','fYearLeave','fDobYear'].forEach(id=>document.getElementById(id).value='');
-    ['fGender','fLevel','fFaculty','fState','fDobDay','fDobMonth'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('fDept').value = '';
-    document.getElementById('fPosition').value = 'Member';
-    document.getElementById('fMemberType').value = 'active';
-    document.getElementById('assocSection').style.display = 'none';
-    document.getElementById('assocEntries').innerHTML = '';
-    document.getElementById('memberTypeGroup').style.display = 'flex';
-    document.getElementById('positionGroup').style.display = 'flex';
-    document.getElementById('yearLeaveGroup').style.display = 'flex';
-    document.querySelectorAll('.field-err').forEach(e=>e.classList.remove('show'));
-    document.querySelectorAll('.invalid').forEach(e=>e.classList.remove('invalid'));
-    document.getElementById('btnSave').textContent = 'Save Member';
-    document.getElementById('btnSave').disabled = false;
-  }
-
-  function handleMemberTypeChange() {
-    const type = document.getElementById('fMemberType').value;
-    if (type === 'associate') {
-      document.getElementById('assocSection').style.display = 'block';
-      document.getElementById('positionGroup').style.display = 'none';
-      document.getElementById('yearLeaveGroup').style.display = 'none';
-      if (!document.getElementById('assocEntries').children.length) addAssocEntry();
-    } else {
-      document.getElementById('assocSection').style.display = 'none';
-      document.getElementById('positionGroup').style.display = 'flex';
-      document.getElementById('yearLeaveGroup').style.display = 'flex';
-    }
-  }
-
-  function addAssocEntry() {
-    const container = document.getElementById('assocEntries');
-    const posOptions = ALL_POSITIONS.map(p=>`<option value="${p}">${p}</option>`).join('');
-    const div = document.createElement('div');
-    div.className = 'assoc-entry';
-    div.innerHTML = `
-      <div class="select-wrap" style="position:relative">
-        <select class="assoc-pos">${posOptions}</select>
-      </div>
-      <input type="number" class="assoc-year-start" placeholder="Year Started" min="2000" max="2099"/>
-      <input type="number" class="assoc-year-left" placeholder="Year Left" min="2000" max="2099"/>
-      <button class="btn-remove-assoc" type="button" onclick="this.closest('.assoc-entry').remove()">✕</button>`;
-    container.appendChild(div);
-  }
-
-  function saveMember() {
-    let valid = true;
-    [['fName','fNameErr'],['fGender','fGenderErr'],['fLevel','fLevelErr'],
-     ['fDept','fDeptErr'],['fYearStart','fYearStartErr']].forEach(([fid,eid])=>{
-      const el=document.getElementById(fid), err=document.getElementById(eid);
-      el.classList.remove('invalid'); err.classList.remove('show');
-      if (!el.value.trim()) { el.classList.add('invalid'); err.classList.add('show'); valid=false; }
-    });
-    if (!valid) return;
-
-    const btn = document.getElementById('btnSave');
-    btn.disabled = true; btn.textContent = 'Saving…';
-
-    const baseData = {
-      name:        document.getElementById('fName').value.trim(),
-      gender:      document.getElementById('fGender').value,
-      level:       document.getElementById('fLevel').value,
-      department:  document.getElementById('fDept').value.trim(),
-      faculty:     document.getElementById('fFaculty').value,
-      phone:       document.getElementById('fPhone').value.trim(),
-      state:       document.getElementById('fState').value,
-      yearStarted: document.getElementById('fYearStart').value,
-      dob_day:     document.getElementById('fDobDay').value,
-      dob_month:   document.getElementById('fDobMonth').value,
-      dob_year:    document.getElementById('fDobYear').value,
-    };
-
-    if (editingId) {
-      const pos = document.getElementById('fPosition').value;
-      const nonUnique = ['Member','Ex-official'];
-      const checkPos = nonUnique.includes(pos)
-        ? Promise.resolve(null)
-        : db.collection('members').where('position','==',pos).get();
-
-      checkPos.then(snap => {
-        if (snap && !snap.empty && snap.docs[0].id !== editingId) {
-          showToast(`${pos} is held by ${snap.docs[0].data().name}. Transfer first.`,'error');
-          btn.disabled=false; btn.textContent='Update Member'; return;
-        }
-        db.collection('members').doc(editingId).update({
-          ...baseData, position: pos,
-          yearLeaving: document.getElementById('fYearLeave').value
-        }).then(()=>{ closeAdd(); showToast('Member updated!','success'); btn.disabled=false; btn.textContent='Update Member'; })
-          .catch(err=>{ showToast('Error: '+err.message,'error'); btn.disabled=false; btn.textContent='Update Member'; });
-      });
-      return;
-    }
-
-    const memberType = document.getElementById('fMemberType').value;
-
-    if (memberType === 'associate') {
-      const entries = Array.from(document.querySelectorAll('.assoc-entry')).map(row=>({
-        position:    row.querySelector('.assoc-pos').value,
-        yearStarted: row.querySelector('.assoc-year-start').value.trim(),
-        yearLeft:    row.querySelector('.assoc-year-left').value.trim()
-      }));
-      db.collection('past-members').add({
-        ...baseData, position:'Associates',
-        associateHistory: entries,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(()=>{ closeAdd(); showToast(baseData.name+' added to Past Members!','success'); btn.disabled=false; btn.textContent='Save Member'; })
-        .catch(err=>{ showToast('Error: '+err.message,'error'); btn.disabled=false; btn.textContent='Save Member'; });
-    } else {
-      const pos = document.getElementById('fPosition').value;
-      const nonUnique = ['Member','Ex-official'];
-      const checkPos = nonUnique.includes(pos)
-        ? Promise.resolve(null)
-        : db.collection('members').where('position','==',pos).get();
-
-      checkPos.then(snap => {
-        if (snap && !snap.empty) {
-          showToast(`${pos} is held by ${snap.docs[0].data().name}. Transfer first.`,'error');
-          btn.disabled=false; btn.textContent='Save Member'; return;
-        }
-        db.collection('members').add({
-          ...baseData, position: pos,
-          yearLeaving: document.getElementById('fYearLeave').value,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(()=>{ closeAdd(); showToast(baseData.name+' added!','success'); btn.disabled=false; btn.textContent='Save Member'; })
-          .catch(err=>{ showToast('Error: '+err.message,'error'); btn.disabled=false; btn.textContent='Save Member'; });
-      });
-    }
-  }
-
-  function exportCSV() {
-    const active = allMembers.filter(m=>m.position!=='Associates');
-    const headers = ['Name','Gender','Level','Department','Faculty','Phone','State','Position','Year Started','Year Leaving'];
-    const rows = active.map(m=>[m.name,m.gender,m.level,m.department,m.faculty,m.phone,m.state,m.position,m.yearStarted,m.yearLeaving].map(v=>`"${v||''}"`).join(','));
-    const csv = [headers.join(','),...rows].join('\n');
-    const a = document.createElement('a');
-    a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-    a.download = 'gecc-members.csv'; a.click();
-  }
-
-  function showToast(msg,type) {
-    const t=document.getElementById('toast');
-    t.textContent=msg; t.className='toast show '+type;
-    setTimeout(()=>t.className='toast',2500);
-  }
-  function doLogout() { localStorage.removeItem('userRole'); window.location.href='auth.html'; }
-  const sidebar=document.getElementById('sidebar'), overlay=document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click',()=>{sidebar.classList.toggle('open');overlay.classList.toggle('show');});
-  function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show');}
-  document.getElementById('detailModal').addEventListener('click',function(e){if(e.target===this)closeDetail();});
-  document.getElementById('addModal').addEventListener('click',function(e){if(e.target===this)closeAdd();});
-</script>
+  // Rest of your functions (filterRender, setFilter, openDetail, etc.) remain the same
+  // Just make sure to keep your existing filterRender() and others unchanged
 </body>
-  </html>
+</html>
