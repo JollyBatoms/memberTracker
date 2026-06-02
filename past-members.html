@@ -57,7 +57,7 @@
     .pstat-val { font-size:1.5rem; font-weight:700; color:#8B6F47; line-height:1; }
     .pstat-label { font-size:.68rem; color:#999; font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin-top:.2rem; }
 
-    .toolbar { display:flex; align-items:center; gap:.7rem; margin-bottom:1.2rem; flex-wrap:wrap; }
+    .toolbar { display:flex; align-items:center; gap:.7rem; margin-bottom:1.2rem; }
     .search-wrap { position:relative; flex:1; min-width:200px; }
     .search-wrap input { width:100%; padding:.65rem .9rem .65rem 2.2rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; outline:none; transition:border-color .2s; }
     .search-wrap input:focus { border-color:#8B6F47; }
@@ -83,21 +83,21 @@
     .modal-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 1.4rem; border-bottom:1px solid #edf0f4; }
     .modal-title { font-family:'Merriweather',serif; font-size:1rem; font-weight:700; color:#8B6F47; }
     .modal-close { background:none; border:none; font-size:1.6rem; cursor:pointer; color:#888; line-height:1; }
-    .modal-close:hover { color:#333; }
     .modal-body { padding:1.4rem; }
     .modal-footer { padding:1rem 1.4rem; border-top:1px solid #edf0f4; display:flex; justify-content:flex-end; gap:.6rem; }
     .btn-secondary { padding:.6rem 1.1rem; background:transparent; color:#555; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ccd4df; border-radius:5px; cursor:pointer; }
-    .btn-danger { padding:.6rem 1.1rem; background:#dc3545; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; }
+    .btn-danger { padding:.6rem 1.1rem; background:#dc3545; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; transition:background .2s; }
     .btn-danger:hover { background:#b02a37; }
 
     .detail-top { display:flex; align-items:center; gap:1rem; margin-bottom:1.4rem; }
     .detail-avatar { width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:700; color:#fff; background:#8B6F47; flex-shrink:0; }
-    .detail-name { font-size:1.1rem; font-weight:700; color:#1a1a1a; }
+    .detail-name { font-size:1.1rem; font-weight:700; }
     .detail-pos { font-size:.8rem; font-weight:700; color:#8B6F47; margin-top:.2rem; }
-    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem .9rem; margin-bottom:1.2rem; }
+    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem .9rem; margin-bottom:1rem; }
     .detail-field { display:flex; flex-direction:column; gap:.2rem; }
     .detail-field .lbl { font-size:.65rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#aaa; }
     .detail-field .val { font-size:.88rem; color:#1a1a1a; font-weight:600; }
+    .service-badge { display:inline-block; background:#f5f0ea; color:#8B6F47; border:1px solid #c4a882; border-radius:20px; font-size:.72rem; font-weight:700; padding:.25rem .7rem; margin-top:.5rem; }
 
     .timeline { margin-top:1rem; padding-top:1rem; border-top:1px solid #edf0f4; }
     .timeline-title { font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#aaa; margin-bottom:.8rem; }
@@ -106,8 +106,6 @@
     .timeline-dot { width:10px; height:10px; border-radius:50%; background:#8B6F47; flex-shrink:0; margin-top:.25rem; }
     .timeline-label { font-size:.82rem; font-weight:700; color:#1a1a1a; }
     .timeline-years { font-size:.75rem; color:#888; margin-top:.1rem; }
-
-    .service-badge { display:inline-block; background:#f5f0ea; color:#8B6F47; border:1px solid #c4a882; border-radius:20px; font-size:.72rem; font-weight:700; padding:.25rem .7rem; margin-top:.6rem; }
 
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
@@ -239,37 +237,43 @@
     'Organizing Secretary','Asst Organizing Secretary','Welfare Secretary','Asst. Welfare Secretary',
     'Academic/Magazine Secretary','Music Director','Financial Secretary','Treasurer'];
 
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
   function initials(name) { return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
 
   let allAssociates = [];
 
-  // Load from Firestore past-members collection
-  db.collection('past-members').onSnapshot(snap => {
-    allAssociates = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  // Load from past-members Firestore collection — real-time
+  db.collection('past-members').orderBy('name').onSnapshot(snap => {
+    allAssociates = snap.docs.map(d => ({ id:d.id, ...d.data() }));
     renderMembers();
+  }, err => {
+    // orderBy may fail if no index — fallback without ordering
+    db.collection('past-members').onSnapshot(snap => {
+      allAssociates = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+      allAssociates.sort((a,b) => (a.name||'').localeCompare(b.name||''));
+      renderMembers();
+    });
   });
 
   function renderMembers() {
     const q = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = allAssociates.filter(m =>
-      !q || m.name.toLowerCase().includes(q) || (m.department||'').toLowerCase().includes(q)
-    );
+    const filtered = allAssociates
+      .filter(m => !q || m.name.toLowerCase().includes(q) || (m.department||'').toLowerCase().includes(q));
 
     // Stats
     document.getElementById('psTotal').textContent = allAssociates.length;
 
-    // Held leadership = any entry in associateHistory with a leadership position
-    const heldLeadership = allAssociates.filter(m => {
+    const heldLeadershipCount = allAssociates.filter(m => {
       const history = m.associateHistory || [];
       return history.some(h => LEADERS.includes(h.position));
-    });
-    document.getElementById('psLeaders').textContent = heldLeadership.length;
+    }).length;
+    document.getElementById('psLeaders').textContent = heldLeadershipCount;
 
     const avgYears = allAssociates.length
-      ? (allAssociates.reduce((s, m) => {
+      ? (allAssociates.reduce((s,m) => {
           const yrs = m.yearLeaving && m.yearStarted
-            ? Math.max(0, parseInt(m.yearLeaving) - parseInt(m.yearStarted))
-            : 0;
+            ? Math.max(0, parseInt(m.yearLeaving) - parseInt(m.yearStarted)) : 0;
           return s + yrs;
         }, 0) / allAssociates.length).toFixed(1)
       : 0;
@@ -277,48 +281,41 @@
 
     const grid = document.getElementById('membersGrid');
     if (!filtered.length) {
-      grid.innerHTML = `<div class="empty-state"><div class="big">📜</div><p>${q ? 'No associates match your search.' : 'No past members yet.'}</p></div>`;
+      grid.innerHTML = `<div class="empty-state"><div class="big">📜</div><p>${q?'No associates match your search.':'No past members yet.'}</p></div>`;
       return;
     }
 
     grid.innerHTML = filtered.map(m => {
       const history = m.associateHistory || [];
       const heldLeader = history.some(h => LEADERS.includes(h.position));
-
-      // Show last/most recent position from history on the card
-      const lastPos = history.length ? history[history.length - 1].position : 'Member';
-
       return `
         <div class="member-card" onclick="openDetail('${m.id}')">
           <div class="member-card-top">
             <div class="member-avatar">${initials(m.name)}</div>
             <div>
               <div class="member-card-name">${m.name}</div>
-              <div class="member-card-pos">Associate${heldLeader ? ' · ⭐' : ''}</div>
+              <div class="member-card-pos">Associate${heldLeader?' · ⭐':''}</div>
             </div>
           </div>
           <div class="member-card-info">
             <div class="member-card-row"><span class="lbl">Dept</span>${m.department||'—'}</div>
             <div class="member-card-row"><span class="lbl">Served</span>${m.yearStarted||'?'} – ${m.yearLeaving||'?'}</div>
-            ${history.length ? `<div class="member-card-row"><span class="lbl">Roles</span>${history.length} position${history.length !== 1 ? 's' : ''}</div>` : ''}
+            ${history.length ? `<div class="member-card-row"><span class="lbl">Roles</span>${history.length} position${history.length!==1?'s':''}</div>` : ''}
           </div>
         </div>`;
     }).join('');
   }
 
   function openDetail(id) {
-    const m = allAssociates.find(x => x.id === id);
+    const m = allAssociates.find(x=>x.id===id);
     if (!m) return;
 
     const history = m.associateHistory || [];
     const heldLeader = history.some(h => LEADERS.includes(h.position));
-
     const yrs = m.yearLeaving && m.yearStarted
-      ? Math.max(0, parseInt(m.yearLeaving) - parseInt(m.yearStarted))
-      : null;
-
+      ? Math.max(0, parseInt(m.yearLeaving) - parseInt(m.yearStarted)) : null;
     const dobStr = m.dob_day && m.dob_month
-      ? `${m.dob_day} / ${m.dob_month}${m.dob_year ? ' / ' + m.dob_year : ''}`
+      ? `${m.dob_day} ${MONTHS[parseInt(m.dob_month)-1]}${m.dob_year?' '+m.dob_year:''}`
       : '—';
 
     const timelineHtml = history.length
@@ -327,7 +324,7 @@
             <div class="timeline-dot"></div>
             <div>
               <div class="timeline-label">${h.position}</div>
-              <div class="timeline-years">${h.yearServed || '—'}</div>
+              <div class="timeline-years">${h.yearStarted||'?'} – ${h.yearLeft||'?'}</div>
             </div>
           </div>`).join('')
       : `<div class="timeline-item">
@@ -344,7 +341,7 @@
         <div>
           <div class="detail-name">${m.name}</div>
           <div class="detail-pos">Associate Member</div>
-          ${yrs !== null ? `<div class="service-badge">⏱ ${yrs} year${yrs!==1?'s':''} of service</div>` : ''}
+          ${yrs!==null?`<div class="service-badge">⏱ ${yrs} year${yrs!==1?'s':''} of service</div>`:''}
         </div>
       </div>
       <div class="detail-grid">
@@ -356,7 +353,7 @@
         <div class="detail-field"><span class="lbl">Date of Birth</span><span class="val">${dobStr}</span></div>
         <div class="detail-field"><span class="lbl">Year Started</span><span class="val">${m.yearStarted||'—'}</span></div>
         <div class="detail-field"><span class="lbl">Year Left</span><span class="val">${m.yearLeaving||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Leadership</span><span class="val">${heldLeader ? '⭐ Yes' : 'No'}</span></div>
+        <div class="detail-field"><span class="lbl">Leadership</span><span class="val">${heldLeader?'⭐ Yes':'No'}</span></div>
         <div class="detail-field"><span class="lbl">Roles</span><span class="val">${history.length} position${history.length!==1?'s':''}</span></div>
       </div>
       <div class="timeline">
@@ -364,7 +361,6 @@
         ${timelineHtml}
       </div>`;
 
-    // Footer — admin gets delete button
     document.getElementById('detailFooter').innerHTML = isAdmin
       ? `<button class="btn-secondary" onclick="closeDetail()">Close</button>
          <button class="btn-danger" onclick="deleteAssociate('${m.id}')">🗑 Delete</button>`
@@ -376,42 +372,36 @@
   function closeDetail() { document.getElementById('detailModal').classList.remove('show'); }
 
   function deleteAssociate(id) {
-    if (!confirm('Delete this associate? This cannot be undone.')) return;
+    if (!confirm('Permanently delete this past member? This cannot be undone.')) return;
     db.collection('past-members').doc(id).delete()
-      .then(() => { closeDetail(); showToast('Associate deleted.', 'success'); })
-      .catch(err => showToast('Error: ' + err.message, 'error'));
+      .then(()=>{ closeDetail(); showToast('Past member deleted.','success'); })
+      .catch(err=>showToast('Error: '+err.message,'error'));
   }
 
   function exportCSV() {
-    const headers = ['Name','Gender','Department','Faculty','State','Phone','Year Started','Year Leaving','Positions Held'];
+    const headers = ['Name','Gender','Department','Faculty','State','Phone','Year Started','Year Left','Positions Held'];
     const rows = allAssociates.map(m => {
       const history = m.associateHistory || [];
-      const positions = history.map(h => h.position + (h.yearServed ? ' (' + h.yearServed + ')' : '')).join(' | ');
+      const positions = history.map(h=>h.position+(h.yearStarted?' ('+h.yearStarted+'–'+(h.yearLeft||'?')+')':'')).join(' | ');
       return [m.name,m.gender,m.department,m.faculty,m.state,m.phone,m.yearStarted,m.yearLeaving,positions]
-        .map(v => `"${v||''}"`).join(',');
+        .map(v=>`"${v||''}"`).join(',');
     });
-    const csv = [headers.join(','), ...rows].join('\n');
+    const csv = [headers.join(','),...rows].join('\n');
     const a = document.createElement('a');
-    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-    a.download = 'gecc-associates.csv';
-    a.click();
+    a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+    a.download = 'gecc-associates.csv'; a.click();
   }
 
-  function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast show ' + type;
-    setTimeout(()=>t.className='toast', 2500);
+  function showToast(msg,type) {
+    const t=document.getElementById('toast');
+    t.textContent=msg; t.className='toast show '+type;
+    setTimeout(()=>t.className='toast',2500);
   }
-
-  function doLogout() { localStorage.removeItem('userRole'); window.location.href = 'auth.html'; }
-
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click',()=>{ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
-  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
-  document.getElementById('detailModal').addEventListener('click',function(e){ if(e.target===this) closeDetail(); });
+  function doLogout() { localStorage.removeItem('userRole'); window.location.href='auth.html'; }
+  const sidebar=document.getElementById('sidebar'), overlay=document.getElementById('overlay');
+  document.getElementById('hamburger').addEventListener('click',()=>{sidebar.classList.toggle('open');overlay.classList.toggle('show');});
+  function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show');}
+  document.getElementById('detailModal').addEventListener('click',function(e){if(e.target===this)closeDetail();});
 </script>
 </body>
 </html>
-
