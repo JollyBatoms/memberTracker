@@ -411,6 +411,38 @@
   document.getElementById('hamburger').addEventListener('click',()=>{ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
   function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
   document.getElementById('detailModal').addEventListener('click',function(e){ if(e.target===this) closeDetail(); });
+
+
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// Your firebaseConfig object here...
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Function to permanently delete from past_members
+async function deletePastMember(memberId) {
+  try {
+    // Point specifically to the "past_members" collection
+    const memberDocRef = doc(db, "past_members", memberId);
+    
+    await deleteDoc(memberDocRef);
+    
+    console.log(`Past member ${memberId} deleted.`);
+    alert("Past member permanently removed.");
+    
+    // Remove the element from your past-members.html UI
+    document.getElementById(memberId)?.remove();
+  } catch (error) {
+    console.error("Error deleting past member: ", error);
+  }
+}
+
+window.deletePastMember = deletePastMember;
+
+
+  
 </script>
 </body>
 </html>
