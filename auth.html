@@ -109,13 +109,19 @@
 </div>
 
 <script>
-  // If already signed in, go straight to dashboard
+  // If already logged in, fetch real role then redirect
   auth.onAuthStateChanged(user => {
     if (user) {
-      const role = user.email === ADMIN_EMAIL ? 'admin' : 'member';
-      localStorage.setItem('userRole', role);
-      localStorage.setItem('userEmail', user.email);
-      window.location.href = 'dashboard.html';
+      getUserRoleFromDB(user.uid).then(role => {
+        if (role) {
+          localStorage.setItem('userRole', role);
+          localStorage.setItem('userEmail', user.email);
+          window.location.href = 'dashboard.html';
+        } else {
+          auth.signOut();
+          showFeedback('Your account is not set up yet. Contact the admin.', 'error');
+        }
+      });
     }
   });
 
@@ -126,12 +132,10 @@
   const eyeBtn   = document.getElementById('eyeBtn');
   const eyeIcon  = document.getElementById('eyeIcon');
 
-  // Enter key triggers login
   [fEmail, fPass].forEach(el => {
     el.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   });
 
-  // Show/hide password
   let visible = false;
   eyeBtn.addEventListener('click', () => {
     visible = !visible;
@@ -162,18 +166,26 @@
 
     auth.signInWithEmailAndPassword(email, pass)
       .then(cred => {
-        const role = cred.user.email === ADMIN_EMAIL ? 'admin' : 'member';
-        localStorage.setItem('userRole', role);
-        localStorage.setItem('userEmail', cred.user.email);
-        showFeedback('✓ Logged in as ' + (role === 'admin' ? 'Admin' : 'Member') + '. Redirecting…', 'success');
-        setTimeout(() => window.location.href = 'dashboard.html', 900);
+        return getUserRoleFromDB(cred.user.uid).then(role => {
+          if (!role) {
+            return auth.signOut().then(() => {
+              showFeedback('Your account has no role assigned. Contact the admin.', 'error');
+              loginBtn.disabled = false;
+              loginBtn.textContent = 'Sign In';
+            });
+          }
+          localStorage.setItem('userRole', role);
+          localStorage.setItem('userEmail', cred.user.email);
+          showFeedback('✓ Logged in as ' + (role === 'admin' ? 'Admin' : 'Member') + '. Redirecting…', 'success');
+          setTimeout(() => window.location.href = 'dashboard.html', 900);
+        });
       })
       .catch(err => {
         let msg = 'Incorrect email or password.';
-        if (err.code === 'auth/user-not-found')    msg = 'No account found with this email.';
-        if (err.code === 'auth/wrong-password')    msg = 'Incorrect password. Try again.';
-        if (err.code === 'auth/invalid-email')     msg = 'Invalid email address.';
-        if (err.code === 'auth/too-many-requests') msg = 'Too many attempts. Try again later.';
+        if (err.code === 'auth/user-not-found')     msg = 'No account found with this email.';
+        if (err.code === 'auth/wrong-password')     msg = 'Incorrect password. Try again.';
+        if (err.code === 'auth/invalid-email')      msg = 'Invalid email address.';
+        if (err.code === 'auth/too-many-requests')  msg = 'Too many attempts. Try again later.';
         if (err.code === 'auth/invalid-credential') msg = 'Incorrect email or password.';
         showFeedback(msg, 'error');
         loginBtn.disabled = false;
