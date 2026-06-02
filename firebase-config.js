@@ -1,5 +1,3 @@
-// Firebase configuration — shared across all pages
-
 const firebaseConfig = {
   apiKey: "AIzaSyCgtZvZzWdWQEJna0bJz_YhATLnnNoJRfA",
   authDomain: "gecc-uniport.firebaseapp.com",
@@ -9,6 +7,5 @@ const firebaseConfig = {
   appId: "1:565729305146:web:2973acd0293903725acb03"
 };
 
-// Initialize Firebase (CDN version)
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
