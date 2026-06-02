@@ -1,5 +1,6 @@
+// 1. Your Firebase Configuration Keys
 const firebaseConfig = {
-  apiKey: "AIzaSyCgtZvZzWdWQEJna0bJz_YhATLnnNoJRfA",
+  apiKey: "AIzaSyCgtZvZzWdwQEJna0bJz_YhATlnnNoJRfA",
   authDomain: "gecc-uniport.firebaseapp.com",
   projectId: "gecc-uniport",
   storageBucket: "gecc-uniport.firebasestorage.app",
@@ -7,27 +8,23 @@ const firebaseConfig = {
   appId: "1:565729305146:web:2973acd0293903725acb03"
 };
 
+// 2. Initialize Firebase (v8 Web Style)
 firebase.initializeApp(firebaseConfig);
-const db   = firebase.firestore();
+const db = firebase.firestore();
 const auth = firebase.auth();
 
-// Admin email — must match exactly what you set in Firebase Console
+// 3. Helper Global Admin Email String
 const ADMIN_EMAIL = 'admin@geccuniport.org';
 
-
-import { getAuth, onIdTokenChanged, signOut } from "firebase/auth";
-
-const auth = getAuth();
-
-// This monitors the user's token state continuously
-onIdTokenChanged(auth, (user) => {
+// 4. Token Monitor (Instantly kicks out disabled users)
+auth.onIdTokenChanged((user) => {
   if (user) {
-    // Force a token refresh check. If disabled, this throws an error and logs them out.
+    // Forces a token refresh check behind the scenes
     user.getIdToken(true)
       .catch((error) => {
         console.log("Account disabled or session invalid. Logging out...", error);
-        signOut(auth).then(() => {
-          window.location.href = "auth.html"; // Send them straight back to login
+        auth.signOut().then(() => {
+          window.location.href = "auth.html"; // Redirect to login page instantly
         });
       });
   }
