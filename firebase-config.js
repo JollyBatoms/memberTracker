@@ -1,4 +1,4 @@
-// 1. Your Firebase Configuration Keys
+// 1. Your Exact Firebase Configuration Keys
 const firebaseConfig = {
   apiKey: "AIzaSyCgtZvZzWdwQEJna0bJz_YhATlnnNoJRfA",
   authDomain: "gecc-uniport.firebaseapp.com",
@@ -19,12 +19,11 @@ const ADMIN_EMAIL = 'admin@geccuniport.org';
 // 4. Token Monitor (Instantly kicks out disabled users)
 auth.onIdTokenChanged((user) => {
   if (user) {
-    // Forces a token refresh check behind the scenes
     user.getIdToken(true)
       .catch((error) => {
-        console.log("Account disabled or session invalid. Logging out...", error);
+        console.log("Session invalid. Logging out...", error);
         auth.signOut().then(() => {
-          window.location.href = "auth.html"; // Redirect to login page instantly
+          window.location.href = "auth.html";
         });
       });
   }
