@@ -129,6 +129,7 @@
 <body>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 
@@ -231,35 +232,37 @@
     document.getElementById('btnExport').style.display = 'flex';
   }
 
-  const LEADERS = ['President','Vice President','General Secretary','Asst. General Secretary',
+  const LEADERS = [
+    'President','Vice President','General Secretary','Asst. General Secretary',
     'Bible Study Secretary','Asst Bible Study Secretary','Evangelism Secretary','Follow up Secretary',
     'Prayer Secretary','Asst Prayer Secretary','Media/Publicity Secretary','Asst Media/Publicity Secretary',
     'Organizing Secretary','Asst Organizing Secretary','Welfare Secretary','Asst. Welfare Secretary',
-    'Academic/Magazine Secretary','Music Director','Financial Secretary','Treasurer'];
+    'Academic/Magazine Secretary','Music Director','Financial Secretary','Treasurer'
+  ];
 
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-  function initials(name) { return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+  function initials(name) {
+    return name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  }
 
   let allAssociates = [];
 
-  // Load from past-members Firestore collection — real-time
-  db.collection('past-members').orderBy('name').onSnapshot(snap => {
-    allAssociates = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+  db.collection('past-members').onSnapshot(snap => {
+    allAssociates = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    // Always alphabetical
+    allAssociates.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
     renderMembers();
   }, err => {
-    // orderBy may fail if no index — fallback without ordering
-    db.collection('past-members').onSnapshot(snap => {
-      allAssociates = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-      allAssociates.sort((a,b) => (a.name||'').localeCompare(b.name||''));
-      renderMembers();
-    });
+    console.error('Snapshot error:', err);
+    showToast('Error loading past members.', 'error');
   });
 
   function renderMembers() {
     const q = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = allAssociates
-      .filter(m => !q || m.name.toLowerCase().includes(q) || (m.department||'').toLowerCase().includes(q));
+    const filtered = allAssociates.filter(m =>
+      !q || m.name.toLowerCase().includes(q) || (m.department || '').toLowerCase().includes(q)
+    );
 
     // Stats
     document.getElementById('psTotal').textContent = allAssociates.length;
@@ -271,9 +274,10 @@
     document.getElementById('psLeaders').textContent = heldLeadershipCount;
 
     const avgYears = allAssociates.length
-      ? (allAssociates.reduce((s,m) => {
-          const yrs = m.yearLeaving && m.yearStarted
-            ? Math.max(0, parseInt(m.yearLeaving) - parseInt(m.yearStarted)) : 0;
+      ? (allAssociates.reduce((s, m) => {
+          const leftYear  = parseInt(m.yearLeftSchool || m.yearLeaving || 0);
+          const startYear = parseInt(m.yearStarted || 0);
+          const yrs = leftYear && startYear ? Math.max(0, leftYear - startYear) : 0;
           return s + yrs;
         }, 0) / allAssociates.length).toFixed(1)
       : 0;
@@ -281,41 +285,43 @@
 
     const grid = document.getElementById('membersGrid');
     if (!filtered.length) {
-      grid.innerHTML = `<div class="empty-state"><div class="big">📜</div><p>${q?'No associates match your search.':'No past members yet.'}</p></div>`;
+      grid.innerHTML = `<div class="empty-state"><div class="big">📜</div><p>${q ? 'No associates match your search.' : 'No past members yet.'}</p></div>`;
       return;
     }
 
     grid.innerHTML = filtered.map(m => {
       const history = m.associateHistory || [];
       const heldLeader = history.some(h => LEADERS.includes(h.position));
+      const leftSchool = m.yearLeftSchool || m.yearLeaving || '?';
       return `
         <div class="member-card" onclick="openDetail('${m.id}')">
           <div class="member-card-top">
             <div class="member-avatar">${initials(m.name)}</div>
             <div>
               <div class="member-card-name">${m.name}</div>
-              <div class="member-card-pos">Associate${heldLeader?' · ⭐':''}</div>
+              <div class="member-card-pos">Associate${heldLeader ? ' · ⭐' : ''}</div>
             </div>
           </div>
           <div class="member-card-info">
-            <div class="member-card-row"><span class="lbl">Dept</span>${m.department||'—'}</div>
-            <div class="member-card-row"><span class="lbl">Served</span>${m.yearStarted||'?'} – ${m.yearLeaving||'?'}</div>
-            ${history.length ? `<div class="member-card-row"><span class="lbl">Roles</span>${history.length} position${history.length!==1?'s':''}</div>` : ''}
+            <div class="member-card-row"><span class="lbl">Dept</span>${m.department || '—'}</div>
+            <div class="member-card-row"><span class="lbl">Served</span>${m.yearStarted || '?'} – ${leftSchool}</div>
+            ${history.length ? `<div class="member-card-row"><span class="lbl">Roles</span>${history.length} position${history.length !== 1 ? 's' : ''}</div>` : ''}
           </div>
         </div>`;
     }).join('');
   }
 
   function openDetail(id) {
-    const m = allAssociates.find(x=>x.id===id);
+    const m = allAssociates.find(x => x.id === id);
     if (!m) return;
 
     const history = m.associateHistory || [];
     const heldLeader = history.some(h => LEADERS.includes(h.position));
-    const yrs = m.yearLeaving && m.yearStarted
-      ? Math.max(0, parseInt(m.yearLeaving) - parseInt(m.yearStarted)) : null;
+    const leftSchool = m.yearLeftSchool || m.yearLeaving || null;
+    const yrs = leftSchool && m.yearStarted
+      ? Math.max(0, parseInt(leftSchool) - parseInt(m.yearStarted)) : null;
     const dobStr = m.dob_day && m.dob_month
-      ? `${m.dob_day} ${MONTHS[parseInt(m.dob_month)-1]}${m.dob_year?' '+m.dob_year:''}`
+      ? `${m.dob_day} ${MONTHS[parseInt(m.dob_month) - 1]}${m.dob_year ? ' ' + m.dob_year : ''}`
       : '—';
 
     const timelineHtml = history.length
@@ -324,14 +330,14 @@
             <div class="timeline-dot"></div>
             <div>
               <div class="timeline-label">${h.position}</div>
-              <div class="timeline-years">${h.yearStarted||'?'} – ${h.yearLeft||'?'}</div>
+              <div class="timeline-years">${h.yearStarted || '?'} – ${h.yearLeft || '?'}</div>
             </div>
           </div>`).join('')
       : `<div class="timeline-item">
            <div class="timeline-dot"></div>
            <div>
              <div class="timeline-label">Member</div>
-             <div class="timeline-years">${m.yearStarted||'?'} – ${m.yearLeaving||'?'}</div>
+             <div class="timeline-years">${m.yearStarted || '?'} – ${leftSchool || '?'}</div>
            </div>
          </div>`;
 
@@ -341,20 +347,20 @@
         <div>
           <div class="detail-name">${m.name}</div>
           <div class="detail-pos">Associate Member</div>
-          ${yrs!==null?`<div class="service-badge">⏱ ${yrs} year${yrs!==1?'s':''} of service</div>`:''}
+          ${yrs !== null ? `<div class="service-badge">⏱ ${yrs} year${yrs !== 1 ? 's' : ''} of service</div>` : ''}
         </div>
       </div>
       <div class="detail-grid">
-        <div class="detail-field"><span class="lbl">Gender</span><span class="val">${m.gender||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Department</span><span class="val">${m.department||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Faculty</span><span class="val">${m.faculty||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">State</span><span class="val">${m.state||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Phone</span><span class="val">${m.phone||'—'}</span></div>
+        <div class="detail-field"><span class="lbl">Gender</span><span class="val">${m.gender || '—'}</span></div>
+        <div class="detail-field"><span class="lbl">Department</span><span class="val">${m.department || '—'}</span></div>
+        <div class="detail-field"><span class="lbl">Faculty</span><span class="val">${m.faculty || '—'}</span></div>
+        <div class="detail-field"><span class="lbl">State</span><span class="val">${m.state || '—'}</span></div>
+        <div class="detail-field"><span class="lbl">Phone</span><span class="val">${m.phone || '—'}</span></div>
         <div class="detail-field"><span class="lbl">Date of Birth</span><span class="val">${dobStr}</span></div>
-        <div class="detail-field"><span class="lbl">Year Started</span><span class="val">${m.yearStarted||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Year Left</span><span class="val">${m.yearLeaving||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Leadership</span><span class="val">${heldLeader?'⭐ Yes':'No'}</span></div>
-        <div class="detail-field"><span class="lbl">Roles</span><span class="val">${history.length} position${history.length!==1?'s':''}</span></div>
+        <div class="detail-field"><span class="lbl">Year Started</span><span class="val">${m.yearStarted || '—'}</span></div>
+        <div class="detail-field"><span class="lbl">Year Left School</span><span class="val">${leftSchool || '—'}</span></div>
+        <div class="detail-field"><span class="lbl">Leadership</span><span class="val">${heldLeader ? '⭐ Yes' : 'No'}</span></div>
+        <div class="detail-field"><span class="lbl">Roles</span><span class="val">${history.length} position${history.length !== 1 ? 's' : ''}</span></div>
       </div>
       <div class="timeline">
         <div class="timeline-title">📋 Positions &amp; Years Served</div>
@@ -374,34 +380,55 @@
   function deleteAssociate(id) {
     if (!confirm('Permanently delete this past member? This cannot be undone.')) return;
     db.collection('past-members').doc(id).delete()
-      .then(()=>{ closeDetail(); showToast('Past member deleted.','success'); })
-      .catch(err=>showToast('Error: '+err.message,'error'));
+      .then(() => { closeDetail(); showToast('Past member deleted.', 'success'); })
+      .catch(err => showToast('Error: ' + err.message, 'error'));
   }
 
   function exportCSV() {
-    const headers = ['Name','Gender','Department','Faculty','State','Phone','Year Started','Year Left','Positions Held'];
+    const headers = ['Name','Gender','Department','Faculty','State','Phone','Year Started','Year Left School','Positions Held'];
     const rows = allAssociates.map(m => {
       const history = m.associateHistory || [];
-      const positions = history.map(h=>h.position+(h.yearStarted?' ('+h.yearStarted+'–'+(h.yearLeft||'?')+')':'')).join(' | ');
-      return [m.name,m.gender,m.department,m.faculty,m.state,m.phone,m.yearStarted,m.yearLeaving,positions]
-        .map(v=>`"${v||''}"`).join(',');
+      const positions = history.map(h =>
+        h.position + (h.yearStarted ? ' (' + h.yearStarted + '–' + (h.yearLeft || '?') + ')' : '')
+      ).join(' | ');
+      const leftSchool = m.yearLeftSchool || m.yearLeaving || '';
+      return [
+        m.name, m.gender, m.department, m.faculty, m.state,
+        m.phone, m.yearStarted, leftSchool, positions
+      ].map(v => `"${v || ''}"`).join(',');
     });
-    const csv = [headers.join(','),...rows].join('\n');
+    const csv = [headers.join(','), ...rows].join('\n');
     const a = document.createElement('a');
-    a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-    a.download = 'gecc-associates.csv'; a.click();
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = 'gecc-associates.csv';
+    a.click();
   }
 
-  function showToast(msg,type) {
-    const t=document.getElementById('toast');
-    t.textContent=msg; t.className='toast show '+type;
-    setTimeout(()=>t.className='toast',2500);
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast show ' + type;
+    setTimeout(() => t.className = 'toast', 2500);
   }
-  function doLogout() { localStorage.removeItem('userRole'); window.location.href='auth.html'; }
-  const sidebar=document.getElementById('sidebar'), overlay=document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click',()=>{sidebar.classList.toggle('open');overlay.classList.toggle('show');});
-  function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show');}
-  document.getElementById('detailModal').addEventListener('click',function(e){if(e.target===this)closeDetail();});
+
+  function doLogout() {
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userEmail');
+    window.location.href = 'auth.html';
+  }
+
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  document.getElementById('hamburger').addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('show');
+  });
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
+  }
+  document.getElementById('detailModal').addEventListener('click', function(e) {
+    if (e.target === this) closeDetail();
+  });
 </script>
 </body>
 </html>
