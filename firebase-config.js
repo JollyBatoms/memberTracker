@@ -8,4 +8,24 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+/**
+ * Fetches the role ('admin' or 'member') for a given uid
+ * from the /users/{uid} Firestore document.
+ * Returns null if the document doesn't exist or has no role.
+ */
+async function getUserRoleFromDB(uid) {
+  try {
+    const snap = await db.collection('users').doc(uid).get();
+    if (snap.exists && snap.data().role) {
+      return snap.data().role;
+    }
+    return null;
+  } catch (err) {
+    console.error('getUserRoleFromDB error:', err);
+    return null;
+  }
+}
