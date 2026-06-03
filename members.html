@@ -124,13 +124,13 @@
 
     .assoc-section { margin-top:.5rem; }
     .assoc-section-title { font-size:.72rem; font-weight:700; color:#444; margin-bottom:.6rem; text-transform:uppercase; letter-spacing:.06em; }
-    .assoc-entry { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:.5rem; align-items:center; margin-bottom:.5rem; }
+    .assoc-entry { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr auto; gap:.5rem; align-items:center; margin-bottom:.5rem; }
     .assoc-entry select, .assoc-entry input { padding:.55rem .7rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.82rem; color:#1a1a1a; background:#fff; outline:none; appearance:none; }
     .assoc-entry select:focus, .assoc-entry input:focus { border-color:#0066cc; }
     .btn-remove-assoc { background:#fff0f0; color:#dc3545; border:1px solid #f5c0c5; border-radius:4px; padding:.4rem .6rem; font-size:.8rem; cursor:pointer; white-space:nowrap; }
     .btn-add-assoc { display:inline-flex; align-items:center; gap:.3rem; padding:.5rem .9rem; background:#eef4ff; color:#0066cc; border:1.5px solid #c5d9f5; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; cursor:pointer; margin-top:.3rem; }
     .assoc-note { font-size:.72rem; color:#888; margin-top:.5rem; font-style:italic; }
-    .assoc-header { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:.5rem; margin-bottom:.3rem; }
+    .assoc-header { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr auto; gap:.5rem; margin-bottom:.3rem; }
     .assoc-header span { font-size:.65rem; font-weight:700; color:#aaa; letter-spacing:.06em; text-transform:uppercase; }
 
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
@@ -159,8 +159,7 @@
 <body>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 
@@ -399,7 +398,11 @@
           <div class="assoc-section">
             <div class="assoc-section-title">📋 Positions &amp; Years Served</div>
             <div class="assoc-header">
-              <span>Position</span><span>Year Started</span><span>Year Left</span><span></span>
+              <span>Position</span>
+              <span>Yr Started</span>
+              <span>Yr Left Role</span>
+              <span>Yr Left School</span>
+              <span></span>
             </div>
             <div id="assocEntries"></div>
             <button class="btn-add-assoc" type="button" onclick="addAssocEntry()">+ Add Position</button>
@@ -455,11 +458,13 @@
     'Academic/Magazine Secretary','Music Director','Financial Secretary','Treasurer','Ex-official'
   ];
 
-  const LEADERS = ['President','Vice President','General Secretary','Asst. General Secretary',
+  const LEADERS = [
+    'President','Vice President','General Secretary','Asst. General Secretary',
     'Bible Study Secretary','Asst Bible Study Secretary','Evangelism Secretary','Follow up Secretary',
     'Prayer Secretary','Asst Prayer Secretary','Media/Publicity Secretary','Asst Media/Publicity Secretary',
     'Organizing Secretary','Asst Organizing Secretary','Welfare Secretary','Asst. Welfare Secretary',
-    'Academic/Magazine Secretary','Music Director','Financial Secretary','Treasurer'];
+    'Academic/Magazine Secretary','Music Director','Financial Secretary','Treasurer'
+  ];
 
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const currentYear = new Date().getFullYear();
@@ -468,35 +473,73 @@
   let editingId = null;
   let memoData = {};
 
+  // Prevents duplicate graduation attempts within the same session
+  const graduatingIds = new Set();
+
   function avatarColor(name) {
     const colors = ['#0066cc','#6c63ff','#28a745','#fd7e14','#e83e8c','#17a2b8','#dc3545','#6f42c1'];
     let h = 0;
-    for (let i=0;i<name.length;i++) h = name.charCodeAt(i)+((h<<5)-h);
-    return colors[Math.abs(h)%colors.length];
+    for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
+    return colors[Math.abs(h) % colors.length];
   }
-  function initials(name) { return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
 
-  // FYB: member is in the year they are leaving
+  function initials(name) {
+    return name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  }
+
   function isFYB(m) {
     return m.yearLeaving && parseInt(m.yearLeaving) === currentYear;
   }
 
-  // Graduate ONLY after 2nd semester end date has passed
   function shouldGraduate(m) {
     if (!m.yearLeaving || m.position === 'Associates') return false;
     const leavingYear = parseInt(m.yearLeaving);
-
-    // Already past their leaving year — graduate
     if (leavingYear < currentYear) return true;
-
-    // Leaving this year — only graduate if 2nd semester has ended
     if (leavingYear === currentYear) {
       if (!memoData || memoData.semester !== '2nd' || !memoData.endDate) return false;
-      const semEnd = new Date(memoData.endDate);
-      return new Date() > semEnd;
+      return new Date() > new Date(memoData.endDate);
     }
-
     return false;
+  }
+
+  async function graduateMember(m) {
+    // Skip if already being processed in this session
+    if (graduatingIds.has(m.id)) return;
+    graduatingIds.add(m.id);
+
+    try {
+      // Check if already exists in past-members to prevent duplicates
+      const existing = await db.collection('past-members')
+        .where('originalMemberId', '==', m.id)
+        .get();
+
+      if (!existing.empty) {
+        // Already moved — just clean up the members collection
+        await db.collection('members').doc(m.id).delete();
+        return;
+      }
+
+      const history = m.associateHistory || [{
+        position:    m.position || 'Member',
+        yearStarted: m.yearStarted || '',
+        yearLeft:    m.yearLeaving || ''
+      }];
+
+      await db.collection('past-members').add({
+        ...m,
+        originalMemberId: m.id,
+        position:         'Associates',
+        associateHistory: history,
+        yearLeftSchool:   m.yearLeaving || '',
+        movedAt:          firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      await db.collection('members').doc(m.id).delete();
+
+    } catch (err) {
+      console.error('Graduate error:', err);
+      graduatingIds.delete(m.id); // Allow retry on genuine error
+    }
   }
 
   // Load memo settings first, then load members
@@ -504,24 +547,14 @@
     memoData = snap.exists ? snap.data() : {};
 
     db.collection('members').onSnapshot(snap => {
-      allMembers = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+      allMembers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-      // Auto-graduate: move to past-members collection
+      // Alphabetical sort
+      allMembers.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+      // Auto-graduate eligible members (with duplicate protection)
       allMembers.forEach(m => {
-        if (shouldGraduate(m)) {
-          const history = m.associateHistory || [{
-            position:    m.position || 'Member',
-            yearStarted: m.yearStarted || '',
-            yearLeft:    m.yearLeaving || ''
-          }];
-          db.collection('past-members').add({
-            ...m,
-            position: 'Associates',
-            associateHistory: history,
-            movedAt: firebase.firestore.FieldValue.serverTimestamp()
-          }).then(() => db.collection('members').doc(m.id).delete())
-            .catch(err => console.error('Graduate error:', err));
-        }
+        if (shouldGraduate(m)) graduateMember(m);
       });
 
       filterRender();
@@ -529,60 +562,61 @@
   });
 
   function filterRender() {
-    const active = allMembers.filter(m => m.position !== 'Associates' && !shouldGraduate(m));
-    active.sort((a,b) => a.name.localeCompare(b.name));
+    const active = allMembers
+      .filter(m => m.position !== 'Associates' && !shouldGraduate(m))
+      .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
     const q = document.getElementById('searchInput').value.toLowerCase();
-    let filtered = active.filter(m => {
-      const matchQ = !q || m.name.toLowerCase().includes(q) || (m.department||'').toLowerCase().includes(q);
-      const matchF = currentFilter==='all' || (currentFilter==='fyb' && isFYB(m));
+    const filtered = active.filter(m => {
+      const matchQ = !q || m.name.toLowerCase().includes(q) || (m.department || '').toLowerCase().includes(q);
+      const matchF = currentFilter === 'all' || (currentFilter === 'fyb' && isFYB(m));
       return matchQ && matchF;
     });
 
     document.getElementById('msTotal').textContent   = active.length;
     document.getElementById('msFinal').textContent   = active.filter(isFYB).length;
-    document.getElementById('msLeaders').textContent = active.filter(m=>LEADERS.includes(m.position)).length;
+    document.getElementById('msLeaders').textContent = active.filter(m => LEADERS.includes(m.position)).length;
 
     const grid = document.getElementById('membersGrid');
     if (!filtered.length) {
-      grid.innerHTML = `<div class="empty-state"><div class="big">👥</div><p>${q||currentFilter!=='all'?'No members match your search.':'No members yet.'}</p></div>`;
+      grid.innerHTML = `<div class="empty-state"><div class="big">👥</div><p>${q || currentFilter !== 'all' ? 'No members match your search.' : 'No members yet.'}</p></div>`;
       return;
     }
 
     grid.innerHTML = filtered.map(m => {
-      const color = POSITION_COLORS[m.position]||'#0066cc';
+      const color = POSITION_COLORS[m.position] || '#0066cc';
       const fyb = isFYB(m) ? '<span class="fyb-badge">🎓 FYB</span>' : '';
       return `<div class="member-card" onclick="openDetail('${m.id}')">
         <div class="member-card-top">
           <div class="member-avatar" style="background:${avatarColor(m.name)}">${initials(m.name)}</div>
           <div>
             <div class="member-card-name">${m.name}${fyb}</div>
-            <div class="member-card-pos" style="color:${color}">${m.position||'Member'}</div>
+            <div class="member-card-pos" style="color:${color}">${m.position || 'Member'}</div>
           </div>
         </div>
         <div class="member-card-info">
-          <div class="member-card-row"><span class="lbl">Level</span>${m.level||'—'}</div>
-          <div class="member-card-row"><span class="lbl">Dept</span>${m.department||'—'}</div>
-          <div class="member-card-row"><span class="lbl">State</span>${m.state||'—'}</div>
+          <div class="member-card-row"><span class="lbl">Level</span>${m.level || '—'}</div>
+          <div class="member-card-row"><span class="lbl">Dept</span>${m.department || '—'}</div>
+          <div class="member-card-row"><span class="lbl">State</span>${m.state || '—'}</div>
         </div>
       </div>`;
     }).join('');
   }
 
   function setFilter(btn) {
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentFilter = btn.dataset.filter;
     filterRender();
   }
 
   function openDetail(id) {
-    const m = allMembers.find(x=>x.id===id);
+    const m = allMembers.find(x => x.id === id);
     if (!m) return;
-    const color = POSITION_COLORS[m.position]||'#0066cc';
+    const color = POSITION_COLORS[m.position] || '#0066cc';
     const fyb = isFYB(m) ? '<span class="fyb-badge">🎓 Final Year</span>' : '';
     const dobStr = m.dob_day && m.dob_month
-      ? `${m.dob_day} ${MONTHS[parseInt(m.dob_month)-1]}${m.dob_year?' '+m.dob_year:''}`
+      ? `${m.dob_day} ${MONTHS[parseInt(m.dob_month) - 1]}${m.dob_year ? ' ' + m.dob_year : ''}`
       : '—';
 
     document.getElementById('detailBody').innerHTML = `
@@ -590,20 +624,20 @@
         <div class="detail-avatar" style="background:${avatarColor(m.name)}">${initials(m.name)}</div>
         <div>
           <div class="detail-name">${m.name} ${fyb}</div>
-          <div class="detail-pos" style="color:${color}">${m.position||'Member'}</div>
+          <div class="detail-pos" style="color:${color}">${m.position || 'Member'}</div>
         </div>
       </div>
       <div class="detail-grid">
-        <div class="detail-field"><span class="lbl">Gender</span><span class="val">${m.gender||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Level</span><span class="val">${m.level||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Department</span><span class="val">${m.department||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Faculty</span><span class="val">${m.faculty||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Phone</span><span class="val">${m.phone||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">State</span><span class="val">${m.state||'—'}</span></div>
+        <div class="detail-field"><span class="lbl">Gender</span><span class="val">${m.gender || '—'}</span></div>
+        <div class="detail-field"><span class="lbl">Level</span><span class="val">${m.level || '—'}</span></div>
+        <div class="detail-field"><span class="lbl">Department</span><span class="val">${m.department || '—'}</span></div>
+        <div class="detail-field"><span class="lbl">Faculty</span><span class="val">${m.faculty || '—'}</span></div>
+        <div class="detail-field"><span class="lbl">Phone</span><span class="val">${m.phone || '—'}</span></div>
+        <div class="detail-field"><span class="lbl">State</span><span class="val">${m.state || '—'}</span></div>
         <div class="detail-field"><span class="lbl">Date of Birth</span><span class="val">${dobStr}</span></div>
-        <div class="detail-field"><span class="lbl">Year Started</span><span class="val">${m.yearStarted||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Year Leaving</span><span class="val">${m.yearLeaving||'—'}</span></div>
-        <div class="detail-field"><span class="lbl">Position</span><span class="val" style="color:${color}">${m.position||'Member'}</span></div>
+        <div class="detail-field"><span class="lbl">Year Started</span><span class="val">${m.yearStarted || '—'}</span></div>
+        <div class="detail-field"><span class="lbl">Year Leaving</span><span class="val">${m.yearLeaving || '—'}</span></div>
+        <div class="detail-field"><span class="lbl">Position</span><span class="val" style="color:${color}">${m.position || 'Member'}</span></div>
       </div>`;
 
     document.getElementById('detailFooter').innerHTML = isAdmin
@@ -625,7 +659,7 @@
   }
 
   function openEditModal(id) {
-    const m = allMembers.find(x=>x.id===id);
+    const m = allMembers.find(x => x.id === id);
     if (!m) return;
     editingId = id;
     closeDetail();
@@ -635,19 +669,19 @@
     document.getElementById('assocSection').style.display = 'none';
     document.getElementById('positionGroup').style.display = 'flex';
     document.getElementById('yearLeaveGroup').style.display = 'flex';
-    document.getElementById('fName').value      = m.name||'';
-    document.getElementById('fGender').value    = m.gender||'';
-    document.getElementById('fLevel').value     = m.level||'';
-    document.getElementById('fDept').value      = m.department||'';
-    document.getElementById('fFaculty').value   = m.faculty||'';
-    document.getElementById('fPhone').value     = m.phone||'';
-    document.getElementById('fState').value     = m.state||'';
-    document.getElementById('fPosition').value  = m.position||'Member';
-    document.getElementById('fYearStart').value = m.yearStarted||'';
-    document.getElementById('fYearLeave').value = m.yearLeaving||'';
-    document.getElementById('fDobDay').value    = m.dob_day||'';
-    document.getElementById('fDobMonth').value  = m.dob_month||'';
-    document.getElementById('fDobYear').value   = m.dob_year||'';
+    document.getElementById('fName').value      = m.name || '';
+    document.getElementById('fGender').value    = m.gender || '';
+    document.getElementById('fLevel').value     = m.level || '';
+    document.getElementById('fDept').value      = m.department || '';
+    document.getElementById('fFaculty').value   = m.faculty || '';
+    document.getElementById('fPhone').value     = m.phone || '';
+    document.getElementById('fState').value     = m.state || '';
+    document.getElementById('fPosition').value  = m.position || 'Member';
+    document.getElementById('fYearStart').value = m.yearStarted || '';
+    document.getElementById('fYearLeave').value = m.yearLeaving || '';
+    document.getElementById('fDobDay').value    = m.dob_day || '';
+    document.getElementById('fDobMonth').value  = m.dob_month || '';
+    document.getElementById('fDobYear').value   = m.dob_year || '';
     document.getElementById('addModal').classList.add('show');
   }
 
@@ -667,8 +701,8 @@
   function closeAdd() {
     document.getElementById('addModal').classList.remove('show');
     editingId = null;
-    ['fName','fPhone','fYearStart','fYearLeave','fDobYear'].forEach(id=>document.getElementById(id).value='');
-    ['fGender','fLevel','fFaculty','fState','fDobDay','fDobMonth'].forEach(id=>document.getElementById(id).value='');
+    ['fName','fPhone','fYearStart','fYearLeave','fDobYear'].forEach(id => document.getElementById(id).value = '');
+    ['fGender','fLevel','fFaculty','fState','fDobDay','fDobMonth'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('fDept').value = '';
     document.getElementById('fPosition').value = 'Member';
     document.getElementById('fMemberType').value = 'active';
@@ -677,8 +711,8 @@
     document.getElementById('memberTypeGroup').style.display = 'flex';
     document.getElementById('positionGroup').style.display = 'flex';
     document.getElementById('yearLeaveGroup').style.display = 'flex';
-    document.querySelectorAll('.field-err').forEach(e=>e.classList.remove('show'));
-    document.querySelectorAll('.invalid').forEach(e=>e.classList.remove('invalid'));
+    document.querySelectorAll('.field-err').forEach(e => e.classList.remove('show'));
+    document.querySelectorAll('.invalid').forEach(e => e.classList.remove('invalid'));
     document.getElementById('btnSave').textContent = 'Save Member';
     document.getElementById('btnSave').disabled = false;
   }
@@ -699,15 +733,16 @@
 
   function addAssocEntry() {
     const container = document.getElementById('assocEntries');
-    const posOptions = ALL_POSITIONS.map(p=>`<option value="${p}">${p}</option>`).join('');
+    const posOptions = ALL_POSITIONS.map(p => `<option value="${p}">${p}</option>`).join('');
     const div = document.createElement('div');
     div.className = 'assoc-entry';
     div.innerHTML = `
       <div class="select-wrap" style="position:relative">
         <select class="assoc-pos">${posOptions}</select>
       </div>
-      <input type="number" class="assoc-year-start" placeholder="Year Started" min="2000" max="2099"/>
-      <input type="number" class="assoc-year-left" placeholder="Year Left" min="2000" max="2099"/>
+      <input type="number" class="assoc-year-start" placeholder="Yr Started" min="2000" max="2099"/>
+      <input type="number" class="assoc-year-left" placeholder="Yr Left Role" min="2000" max="2099"/>
+      <input type="number" class="assoc-year-school" placeholder="Yr Left School" min="2000" max="2099"/>
       <button class="btn-remove-assoc" type="button" onclick="this.closest('.assoc-entry').remove()">✕</button>`;
     container.appendChild(div);
   }
@@ -715,10 +750,10 @@
   function saveMember() {
     let valid = true;
     [['fName','fNameErr'],['fGender','fGenderErr'],['fLevel','fLevelErr'],
-     ['fDept','fDeptErr'],['fYearStart','fYearStartErr']].forEach(([fid,eid])=>{
-      const el=document.getElementById(fid), err=document.getElementById(eid);
+     ['fDept','fDeptErr'],['fYearStart','fYearStartErr']].forEach(([fid, eid]) => {
+      const el = document.getElementById(fid), err = document.getElementById(eid);
       el.classList.remove('invalid'); err.classList.remove('show');
-      if (!el.value.trim()) { el.classList.add('invalid'); err.classList.add('show'); valid=false; }
+      if (!el.value.trim()) { el.classList.add('invalid'); err.classList.add('show'); valid = false; }
     });
     if (!valid) return;
 
@@ -744,18 +779,25 @@
       const nonUnique = ['Member','Ex-official'];
       const checkPos = nonUnique.includes(pos)
         ? Promise.resolve(null)
-        : db.collection('members').where('position','==',pos).get();
+        : db.collection('members').where('position', '==', pos).get();
 
       checkPos.then(snap => {
         if (snap && !snap.empty && snap.docs[0].id !== editingId) {
-          showToast(`${pos} is held by ${snap.docs[0].data().name}. Transfer first.`,'error');
-          btn.disabled=false; btn.textContent='Update Member'; return;
+          showToast(`${pos} is held by ${snap.docs[0].data().name}. Transfer first.`, 'error');
+          btn.disabled = false; btn.textContent = 'Update Member'; return;
         }
         db.collection('members').doc(editingId).update({
-          ...baseData, position: pos,
+          ...baseData,
+          position:    pos,
           yearLeaving: document.getElementById('fYearLeave').value
-        }).then(()=>{ closeAdd(); showToast('Member updated!','success'); btn.disabled=false; btn.textContent='Update Member'; })
-          .catch(err=>{ showToast('Error: '+err.message,'error'); btn.disabled=false; btn.textContent='Update Member'; });
+        }).then(() => {
+          closeAdd();
+          showToast('Member updated!', 'success');
+          btn.disabled = false; btn.textContent = 'Update Member';
+        }).catch(err => {
+          showToast('Error: ' + err.message, 'error');
+          btn.disabled = false; btn.textContent = 'Update Member';
+        });
       });
       return;
     }
@@ -763,60 +805,101 @@
     const memberType = document.getElementById('fMemberType').value;
 
     if (memberType === 'associate') {
-      const entries = Array.from(document.querySelectorAll('.assoc-entry')).map(row=>({
+      const entries = document.querySelectorAll('.assoc-entry');
+      const associateHistory = Array.from(entries).map(row => ({
         position:    row.querySelector('.assoc-pos').value,
         yearStarted: row.querySelector('.assoc-year-start').value.trim(),
         yearLeft:    row.querySelector('.assoc-year-left').value.trim()
       }));
+      // Use the year left school from the first entry (one per person)
+      const firstRow = entries[0];
+      const yearLeftSchool = firstRow
+        ? firstRow.querySelector('.assoc-year-school').value.trim()
+        : '';
+
       db.collection('past-members').add({
-        ...baseData, position:'Associates',
-        associateHistory: entries,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(()=>{ closeAdd(); showToast(baseData.name+' added to Past Members!','success'); btn.disabled=false; btn.textContent='Save Member'; })
-        .catch(err=>{ showToast('Error: '+err.message,'error'); btn.disabled=false; btn.textContent='Save Member'; });
+        ...baseData,
+        position:         'Associates',
+        associateHistory: associateHistory,
+        yearLeftSchool:   yearLeftSchool,
+        yearLeaving:      yearLeftSchool,
+        createdAt:        firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        closeAdd();
+        showToast(baseData.name + ' added to Past Members!', 'success');
+        btn.disabled = false; btn.textContent = 'Save Member';
+      }).catch(err => {
+        showToast('Error: ' + err.message, 'error');
+        btn.disabled = false; btn.textContent = 'Save Member';
+      });
+
     } else {
       const pos = document.getElementById('fPosition').value;
       const nonUnique = ['Member','Ex-official'];
       const checkPos = nonUnique.includes(pos)
         ? Promise.resolve(null)
-        : db.collection('members').where('position','==',pos).get();
+        : db.collection('members').where('position', '==', pos).get();
 
       checkPos.then(snap => {
         if (snap && !snap.empty) {
-          showToast(`${pos} is held by ${snap.docs[0].data().name}. Transfer first.`,'error');
-          btn.disabled=false; btn.textContent='Save Member'; return;
+          showToast(`${pos} is held by ${snap.docs[0].data().name}. Transfer first.`, 'error');
+          btn.disabled = false; btn.textContent = 'Save Member'; return;
         }
         db.collection('members').add({
-          ...baseData, position: pos,
+          ...baseData,
+          position:    pos,
           yearLeaving: document.getElementById('fYearLeave').value,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(()=>{ closeAdd(); showToast(baseData.name+' added!','success'); btn.disabled=false; btn.textContent='Save Member'; })
-          .catch(err=>{ showToast('Error: '+err.message,'error'); btn.disabled=false; btn.textContent='Save Member'; });
+          createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+          closeAdd();
+          showToast(baseData.name + ' added!', 'success');
+          btn.disabled = false; btn.textContent = 'Save Member';
+        }).catch(err => {
+          showToast('Error: ' + err.message, 'error');
+          btn.disabled = false; btn.textContent = 'Save Member';
+        });
       });
     }
   }
 
   function exportCSV() {
-    const active = allMembers.filter(m=>m.position!=='Associates');
+    const active = allMembers.filter(m => m.position !== 'Associates');
     const headers = ['Name','Gender','Level','Department','Faculty','Phone','State','Position','Year Started','Year Leaving'];
-    const rows = active.map(m=>[m.name,m.gender,m.level,m.department,m.faculty,m.phone,m.state,m.position,m.yearStarted,m.yearLeaving].map(v=>`"${v||''}"`).join(','));
-    const csv = [headers.join(','),...rows].join('\n');
+    const rows = active.map(m => [
+      m.name, m.gender, m.level, m.department, m.faculty,
+      m.phone, m.state, m.position, m.yearStarted, m.yearLeaving
+    ].map(v => `"${v || ''}"`).join(','));
+    const csv = [headers.join(','), ...rows].join('\n');
     const a = document.createElement('a');
-    a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-    a.download = 'gecc-members.csv'; a.click();
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = 'gecc-members.csv';
+    a.click();
   }
 
-  function showToast(msg,type) {
-    const t=document.getElementById('toast');
-    t.textContent=msg; t.className='toast show '+type;
-    setTimeout(()=>t.className='toast',2500);
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast show ' + type;
+    setTimeout(() => t.className = 'toast', 2500);
   }
-  function doLogout() { localStorage.removeItem('userRole'); window.location.href='auth.html'; }
-  const sidebar=document.getElementById('sidebar'), overlay=document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click',()=>{sidebar.classList.toggle('open');overlay.classList.toggle('show');});
-  function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show');}
-  document.getElementById('detailModal').addEventListener('click',function(e){if(e.target===this)closeDetail();});
-  document.getElementById('addModal').addEventListener('click',function(e){if(e.target===this)closeAdd();});
+
+  function doLogout() {
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userEmail');
+    window.location.href = 'auth.html';
+  }
+
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  document.getElementById('hamburger').addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('show');
+  });
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
+  }
+  document.getElementById('detailModal').addEventListener('click', function(e) { if (e.target === this) closeDetail(); });
+  document.getElementById('addModal').addEventListener('click', function(e) { if (e.target === this) closeAdd(); });
 </script>
 </body>
-  </html
+</html>
