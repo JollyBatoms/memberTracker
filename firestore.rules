@@ -2,24 +2,28 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Any authenticated user can read their OWN user document.
+    // This is what runs at login to fetch their role.
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false; // only backend/admin SDK can write user docs
+    }
+
+    // Helper functions (used below)
     function isAdmin() {
-      return request.auth != null && 
+      return request.auth != null &&
              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
     function isMember() {
-      return request.auth != null && 
+      return request.auth != null &&
              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'member';
     }
 
+    // All other collections: members can read, only admin can write
     match /{document=**} {
       allow read: if isAdmin() || isMember();
       allow write: if isAdmin();
     }
-    
-    match /users/{userId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
-    }
   }
 }
-
