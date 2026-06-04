@@ -1,1 +1,9 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.vercel.geccuniport.twa",
+        "sha256_cert_fingerprints": ["12:2E:06:43:12:25:B8:EE:3D:DC:F8:CE:BD:95:0E:1F:BA:73:8B:C0:AE:81:74:3D:95:58:EF:91:AB:F8:AB:D6"]
+      }
+    }]
 
