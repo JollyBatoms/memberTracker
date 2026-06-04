@@ -2,6 +2,7 @@
   "name": "GECC Uniport Member Portal",
   "short_name": "GECC Uniport",
   "description": "Official member portal for Greater Evangelical Campus Crusaders, University of Port Harcourt.",
+  "id": "/",
   "icons": [
     {
       "src": "gecc-logo.png",
@@ -14,6 +15,14 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "gecc-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ],
   "start_url": "/",
