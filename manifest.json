@@ -4,27 +4,27 @@
   "description": "Official member portal for Greater Evangelical Campus Crusaders, University of Port Harcourt.",
   "id": "/",
   "icons": [
-    {
-      "src": "gecc-logo.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "gecc-logo.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "gecc-logo.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
-  ],
+  {
+    "src": "gecc-logo.png",
+    "sizes": "192x192",
+    "type": "image/png",
+    "purpose": "any"
+  },
+  {
+    "src": "gecc-logo.png",
+    "sizes": "512x512",
+    "type": "image/png",
+    "purpose": "maskable"
+  }
+],
+"screenshots": [
+  {
+    "src": "gecc-logo.png",
+    "sizes": "192x192",
+    "type": "image/png",
+    "form_factor": "narrow"
+  }
+]
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f7f9fc",
