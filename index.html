@@ -146,6 +146,7 @@
       .logo-img { width: 72px; height: 72px; }
       .org-name { font-size: 1.1rem; }
     }
+  
   </style>
 </head>
 <body>
@@ -183,7 +184,7 @@
     window.location.href = 'dashboard.html';
   }
   // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+<script type="module">
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -199,6 +200,15 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('SW registered:', reg))
+        .catch(err => console.log('SW error:', err));
+    });
+  }
 </script>
 
 </body>
