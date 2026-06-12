@@ -30,37 +30,3 @@ async function getUserRoleFromDB(uid) {
   }
 }
 
-// Add this at the bottom of firebase-config.js
-
-// Make auth, db, storage available globally (you likely have these already)
-const auth = firebase.auth();
-const db = firebase.firestore();
-const storage = firebase.storage();
-
-// FCM Setup — call this once after login
-async function initFCM(userId) {
-  try {
-    if (!('Notification' in window) || !('serviceWorker' in navigator)) return;
-
-    // Register service worker
-    const reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-
-    const messaging = firebase.messaging();
-    messaging.useServiceWorker(reg);
-
-    // Only request if not already granted
-    if (Notification.permission === 'granted') {
-      // Replace with your VAPID key from:
-      // Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
-      const token = await messaging.getToken({ vapidKey: 'YOUR_VAPID_KEY_HERE' });
-      if (token && userId) {
-        await db.collection('users').doc(userId).update({ fcmToken: token });
-      }
-    }
-  } catch (e) {
-    console.log('FCM init error:', e);
-  }
-}
-
-// Call initFCM after login — add this in your auth.html login success handler:
-// initFCM(userId);
