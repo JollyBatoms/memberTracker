@@ -2,27 +2,54 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Any authenticated user can read their OWN user document.
-    // This is what runs at login to fetch their role.
+    // Users can read only their own document
     match /users/{userId} {
       allow read: if request.auth != null && request.auth.uid == userId;
-      allow write: if false; // only backend/admin SDK can write user docs
+      allow write: if false;
     }
 
-    // Helper functions (used below)
+    // Helper: look up the caller's role from their user document
+    function getRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function getStatus() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.status;
+    }
+
+    function isActive() {
+      return request.auth != null && getStatus() == 'active';
+    }
+
     function isAdmin() {
-      return request.auth != null &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      return isActive() && (getRole() == 'admin' || getRole() == 'superadmin');
+    }
+
+    function isSuperAdmin() {
+      return isActive() && getRole() == 'superadmin';
     }
 
     function isMember() {
-      return request.auth != null &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'member';
+      return isActive() && getRole() == 'member';
     }
 
-    // All other collections: members can read, only admin can write
-    match /{document=**} {
-      allow read: if isAdmin() || isMember();
+    // Notifications — users read only their own
+    match /notifications/{notifId} {
+      allow read: if request.auth != null &&
+                     resource.data.toUserId == request.auth.uid;
+      allow write: if isAdmin();
+    }
+
+    // User management — only Super Admin can write user docs
+    match /users/{userId} {
+      allow read:  if isAdmin() ||
+                      (request.auth != null && request.auth.uid == userId);
+      allow write: if isSuperAdmin();
+    }
+
+    // Members, attendance, events, finance — admins write, all active users read
+    match /{collection}/{document=**} {
+      allow read:  if isAdmin() || isMember();
       allow write: if isAdmin();
     }
   }
