@@ -7,16 +7,15 @@ const firebaseConfig = {
   appId: "1:565729305146:web:2973acd0293903725acb03"
 };
 
+
+
+
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db   = firebase.firestore();
 
-/**
- * Fetches the role ('admin' or 'member') for a given uid
- * from the /users/{uid} Firestore document.
- * Returns null if the document doesn't exist or has no role.
- */
+// Fetch role from Firestore — used across all pages
 async function getUserRoleFromDB(uid) {
   try {
     const snap = await db.collection('users').doc(uid).get();
@@ -29,5 +28,3 @@ async function getUserRoleFromDB(uid) {
     return null;
   }
 }
-
-
