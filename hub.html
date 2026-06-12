@@ -11,10 +11,12 @@
     :root { --blue:#0066cc; --green:#28a745; --red:#dc3545; --sidebar-w:240px; }
     html, body { height:100%; font-family:'Open Sans',sans-serif; background:#f7f9fc; color:#1a1a1a; }
 
+    /* ── Admin bar ── */
     .admin-bar { display:none; position:fixed; top:0; left:0; right:0; height:28px; background:#0066cc; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; color:#fff; letter-spacing:.08em; text-transform:uppercase; z-index:200; }
     .admin-bar.show { display:flex; }
     .admin-bar span { opacity:.7; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
 
+    /* ── Sidebar ── */
     .sidebar { position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh; background:#fff; border-right:1px solid #dde3ec; display:flex; flex-direction:column; z-index:100; transition:transform .3s; }
     .sidebar.admin-offset { top:28px; height:calc(100vh - 28px); }
     .sidebar-brand { display:flex; align-items:center; gap:.7rem; padding:1rem 1.1rem; border-bottom:1px solid #dde3ec; cursor:pointer; }
@@ -34,6 +36,7 @@
     .btn-logout { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; width:100%; background:none; border:none; color:#dc3545; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; cursor:pointer; transition:background .2s; }
     .btn-logout:hover { background:#fff5f5; }
 
+    /* ── Topbar ── */
     .topbar { display:none; position:fixed; top:0; left:0; right:0; height:54px; background:#fff; border-bottom:1px solid #dde3ec; align-items:center; justify-content:space-between; padding:0 1rem; z-index:99; }
     .topbar.admin-offset { top:28px; }
     .topbar-brand { display:flex; align-items:center; gap:.5rem; font-family:'Merriweather',serif; font-size:.8rem; font-weight:700; color:#0066cc; cursor:pointer; }
@@ -43,138 +46,300 @@
     .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:98; }
     .overlay.show { display:block; }
 
+    /* ── Main layout ── */
     .main { margin-left:var(--sidebar-w); min-height:100vh; }
     .main.admin-offset { margin-top:28px; }
     .main-bar { height:4px; background:#0066cc; }
-    .content { padding:1.8rem; max-width:780px; margin:0 auto; }
+    .content { padding:1.8rem; max-width:680px; margin:0 auto; }
 
-    .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; flex-wrap:wrap; gap:.8rem; }
+    /* ── Page header ── */
+    .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem; flex-wrap:wrap; gap:.8rem; }
     .page-header h1 { font-family:'Merriweather',serif; font-size:1.2rem; font-weight:700; }
-    .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; transition:background .2s; }
-    .btn-primary:hover { background:#0052a3; }
-    .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
-    .btn-outline { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:transparent; color:#0066cc; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #0066cc; border-radius:5px; cursor:pointer; }
-    .btn-outline:hover { background:#eef4ff; }
-    .btn-secondary { padding:.6rem 1.1rem; background:transparent; color:#555; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ccd4df; border-radius:5px; cursor:pointer; }
 
-    .filter-tabs { display:flex; gap:.4rem; margin-bottom:1.4rem; flex-wrap:wrap; }
-    .filter-btn { padding:.45rem .9rem; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; border:1.5px solid #dde3ec; border-radius:20px; background:#fff; color:#555; cursor:pointer; transition:all .2s; }
+    /* ── Filter tabs ── */
+    .filter-tabs { display:flex; gap:.4rem; margin-bottom:1.2rem; flex-wrap:wrap; }
+    .filter-btn { padding:.45rem .9rem; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; border:1.5px solid #dde3ec; border-radius:20px; background:#fff; color:#555; cursor:pointer; transition:all .2s; white-space:nowrap; }
     .filter-btn.active { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
 
-    /* Compose Box */
-    .compose-box { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.1rem; margin-bottom:1.4rem; box-shadow:0 1px 4px rgba(0,0,0,.04); }
-    .compose-top { display:flex; gap:.8rem; align-items:flex-start; }
-    .compose-avatar { width:38px; height:38px; border-radius:50%; background:#eef4ff; border:1.5px solid #c5d9f5; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
-    .compose-input { flex:1; padding:.65rem .85rem; border:1.5px solid #dde3ec; border-radius:6px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; resize:none; outline:none; min-height:70px; transition:border-color .2s; }
-    .compose-input:focus { border-color:#0066cc; }
-    .compose-footer { display:flex; align-items:center; justify-content:space-between; margin-top:.8rem; flex-wrap:wrap; gap:.5rem; }
-    .compose-types { display:flex; gap:.4rem; flex-wrap:wrap; }
-    .type-chip { padding:.3rem .7rem; font-size:.72rem; font-weight:700; border:1.5px solid #dde3ec; border-radius:20px; background:#f7f9fc; color:#555; cursor:pointer; transition:all .2s; }
-    .type-chip.selected { border-color:#0066cc; background:#eef4ff; color:#0066cc; }
-    .compose-actions { display:flex; gap:.5rem; align-items:center; }
-    .attach-btn { background:none; border:none; font-size:1.1rem; cursor:pointer; color:#888; padding:.3rem; }
-    .attach-btn:hover { color:#0066cc; }
+    /* ── Pending badge ── */
+    .pending-pill { display:inline-flex; align-items:center; gap:.35rem; background:#fff4e6; border:1.5px solid #ffd580; color:#c45f00; border-radius:20px; padding:.35rem .9rem; font-size:.78rem; font-weight:700; cursor:pointer; transition:background .2s; }
+    .pending-pill:hover { background:#ffe8b2; }
+    .pending-count { background:#fd7e14; color:#fff; border-radius:20px; padding:.05rem .45rem; font-size:.68rem; }
 
-    /* Post Cards */
-    .post-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; margin-bottom:1rem; box-shadow:0 1px 4px rgba(0,0,0,.04); overflow:hidden; transition:box-shadow .2s; }
+    /* ══════════════════════════════════
+       COMPOSE BOX  (Facebook-style)
+    ══════════════════════════════════ */
+    .compose-card {
+      background:#fff; border:1px solid #dde3ec; border-radius:10px;
+      margin-bottom:1.4rem; box-shadow:0 1px 4px rgba(0,0,0,.05); overflow:hidden;
+    }
+    .compose-top { display:flex; align-items:flex-start; gap:.75rem; padding:1rem 1rem .5rem; }
+    .compose-avatar {
+      width:40px; height:40px; border-radius:50%; background:#eef4ff;
+      border:1.5px solid #c5d9f5; display:flex; align-items:center;
+      justify-content:center; font-size:1rem; font-weight:700; color:#0066cc; flex-shrink:0;
+    }
+    .compose-input {
+      flex:1; padding:.7rem .9rem; border:1.5px solid #dde3ec; border-radius:22px;
+      font-family:'Open Sans',sans-serif; font-size:.9rem; color:#1a1a1a;
+      background:#f7f9fc; resize:none; outline:none; min-height:44px; max-height:200px;
+      transition:border-color .2s, background .2s; overflow-y:auto; line-height:1.5;
+    }
+    .compose-input:focus { border-color:#0066cc; background:#fff; }
+
+    /* Image preview strip */
+    .compose-img-preview {
+      display:none; position:relative; margin:0 1rem .7rem;
+      border-radius:8px; overflow:hidden; border:1px solid #dde3ec; max-height:260px;
+    }
+    .compose-img-preview img { width:100%; max-height:260px; object-fit:cover; display:block; }
+    .compose-img-remove {
+      position:absolute; top:.45rem; right:.45rem; background:rgba(0,0,0,.55);
+      color:#fff; border:none; border-radius:50%; width:28px; height:28px;
+      font-size:.95rem; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    }
+    .compose-img-remove:hover { background:rgba(220,53,69,.8); }
+
+    /* File attachment preview */
+    .compose-file-preview {
+      display:none; align-items:center; gap:.55rem; margin:0 1rem .7rem;
+      background:#f0f5ff; border:1px solid #c5d9f5; border-radius:6px; padding:.6rem .8rem;
+    }
+    .compose-file-icon { font-size:1.2rem; flex-shrink:0; }
+    .compose-file-name { font-size:.8rem; font-weight:700; color:#0066cc; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .compose-file-remove { background:none; border:none; color:#dc3545; cursor:pointer; font-size:.85rem; flex-shrink:0; }
+
+    /* Type selector */
+    .compose-type-row {
+      display:flex; align-items:center; gap:.5rem; padding:.5rem 1rem;
+      border-top:1px solid #f0f0f0; flex-wrap:wrap;
+    }
+    .type-label { font-size:.7rem; font-weight:700; color:#aaa; text-transform:uppercase; letter-spacing:.07em; margin-right:.2rem; }
+    .type-select {
+      padding:.35rem .75rem; border:1.5px solid #dde3ec; border-radius:20px;
+      font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700;
+      color:#444; background:#fff; cursor:pointer; outline:none; appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right .55rem center;
+      padding-right:1.8rem;
+    }
+
+    /* Action bar at bottom of compose */
+    .compose-action-bar {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:.7rem 1rem; border-top:1px solid #f0f0f0;
+    }
+    .compose-media-btns { display:flex; gap:.25rem; }
+    .media-btn {
+      display:flex; align-items:center; gap:.35rem; padding:.38rem .7rem;
+      border:none; background:none; border-radius:6px; font-family:'Open Sans',sans-serif;
+      font-size:.78rem; font-weight:700; color:#555; cursor:pointer; transition:background .2s, color .2s;
+    }
+    .media-btn:hover { background:#f0f5ff; color:#0066cc; }
+    .media-btn .micon { font-size:1.05rem; }
+    .btn-post {
+      padding:.55rem 1.3rem; background:#0066cc; color:#fff; border:none; border-radius:6px;
+      font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; cursor:pointer;
+      transition:background .2s; flex-shrink:0;
+    }
+    .btn-post:hover { background:#0052a3; }
+    .btn-post:disabled { opacity:.6; cursor:not-allowed; }
+
+    /* ══════════════════════════════════
+       POST CARDS
+    ══════════════════════════════════ */
+    .post-card {
+      background:#fff; border:1px solid #dde3ec; border-radius:10px;
+      margin-bottom:1rem; box-shadow:0 1px 4px rgba(0,0,0,.04);
+      transition:box-shadow .2s;
+    }
     .post-card:hover { box-shadow:0 3px 12px rgba(0,0,0,.08); }
-    .post-card.pending { border-left:3px solid #fd7e14; }
-    .post-card.pinned { border-left:3px solid #0066cc; }
-    .post-header { display:flex; align-items:flex-start; justify-content:space-between; padding:.9rem 1rem .5rem; gap:.7rem; }
+    .post-card.pending-card { border-left:3px solid #fd7e14; }
+    .post-card.pinned-card { border-top:2px solid #0066cc; }
+
+    .post-header {
+      display:flex; align-items:flex-start; justify-content:space-between;
+      padding:.9rem 1rem .5rem; gap:.7rem;
+    }
     .post-author { display:flex; align-items:center; gap:.6rem; }
-    .post-avatar { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#0066cc,#6c63ff); display:flex; align-items:center; justify-content:center; color:#fff; font-size:.85rem; font-weight:700; flex-shrink:0; }
-    .post-meta { display:flex; flex-direction:column; }
-    .post-name { font-size:.85rem; font-weight:700; color:#1a1a1a; }
-    .post-time { font-size:.72rem; color:#aaa; }
-    .post-badges { display:flex; gap:.35rem; flex-wrap:wrap; margin-top:.15rem; }
-    .badge { display:inline-block; font-size:.62rem; font-weight:700; padding:.18rem .55rem; border-radius:20px; }
-    .badge-blue { background:#eef4ff; color:#0066cc; }
+    .post-avatar {
+      width:38px; height:38px; border-radius:50%;
+      background:linear-gradient(135deg,#0066cc,#6c63ff);
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; font-size:.9rem; font-weight:700; flex-shrink:0;
+    }
+    .post-name { font-size:.88rem; font-weight:700; color:#1a1a1a; line-height:1.2; }
+    .post-time { font-size:.7rem; color:#aaa; margin-top:.1rem; }
+    .post-badges { display:flex; gap:.3rem; flex-wrap:wrap; margin-top:.2rem; }
+
+    .badge { display:inline-block; font-size:.62rem; font-weight:700; padding:.15rem .5rem; border-radius:20px; }
+    .badge-blue   { background:#eef4ff; color:#0066cc; }
     .badge-orange { background:#fff4e6; color:#c45f00; }
-    .badge-green { background:#eafaf0; color:#1e7e34; }
-    .badge-red { background:#fff0f0; color:#dc3545; }
-    .badge-pin { background:#eef4ff; color:#0066cc; }
+    .badge-green  { background:#eafaf0; color:#1e7e34; }
+    .badge-pin    { background:#eef4ff; color:#0066cc; }
+    .badge-sa     { background:linear-gradient(135deg,#0066cc,#6c63ff); color:#fff; }
+
+    /* Three-dot menu */
     .post-menu-wrap { position:relative; }
-    .post-menu-btn { background:none; border:none; color:#aaa; font-size:1.2rem; cursor:pointer; padding:.2rem .5rem; border-radius:4px; transition:background .2s; line-height:1; }
+    .post-menu-btn {
+      background:none; border:none; color:#aaa; font-size:1.3rem;
+      cursor:pointer; padding:.2rem .5rem; border-radius:6px;
+      transition:background .2s; line-height:1;
+    }
     .post-menu-btn:hover { background:#f0f0f0; color:#555; }
-    .post-dropdown { display:none; position:absolute; right:0; top:100%; background:#fff; border:1px solid #dde3ec; border-radius:6px; min-width:140px; box-shadow:0 4px 14px rgba(0,0,0,.1); z-index:50; }
+    .post-dropdown {
+      display:none; position:absolute; right:0; top:100%; z-index:50;
+      background:#fff; border:1px solid #dde3ec; border-radius:8px;
+      min-width:160px; box-shadow:0 4px 16px rgba(0,0,0,.12); overflow:hidden;
+    }
     .post-dropdown.show { display:block; }
-    .post-dropdown button { display:flex; align-items:center; gap:.5rem; width:100%; padding:.6rem .9rem; font-family:'Open Sans',sans-serif; font-size:.8rem; font-weight:600; background:none; border:none; color:#444; cursor:pointer; transition:background .2s; }
+    .post-dropdown button {
+      display:flex; align-items:center; gap:.5rem; width:100%;
+      padding:.65rem 1rem; font-family:'Open Sans',sans-serif; font-size:.82rem;
+      font-weight:600; background:none; border:none; color:#333; cursor:pointer;
+      transition:background .2s; border-bottom:1px solid #f5f5f5;
+    }
+    .post-dropdown button:last-child { border-bottom:none; }
     .post-dropdown button:hover { background:#f7f9fc; }
     .post-dropdown button.danger { color:#dc3545; }
     .post-dropdown button.danger:hover { background:#fff0f0; }
 
-    .post-type-tag { display:inline-block; font-size:.65rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; padding:.2rem .6rem; border-radius:4px; margin:0 1rem .5rem; }
-    .tag-bible { background:#eaf5ea; color:#1e7e34; }
-    .tag-sermon { background:#eef4ff; color:#0066cc; }
-    .tag-literature { background:#f0eeff; color:#5e35b1; }
-    .tag-devotional { background:#fff4e6; color:#c45f00; }
-    .tag-prayer { background:#fce4ec; color:#c62828; }
+    /* Type tag */
+    .post-type-tag {
+      display:inline-block; font-size:.65rem; font-weight:700;
+      letter-spacing:.07em; text-transform:uppercase;
+      padding:.22rem .65rem; border-radius:4px; margin:0 1rem .5rem;
+    }
+    .tag-bible        { background:#eaf5ea; color:#1e7e34; }
+    .tag-sermon       { background:#eef4ff; color:#0066cc; }
+    .tag-literature   { background:#f0eeff; color:#5e35b1; }
+    .tag-devotional   { background:#fff4e6; color:#c45f00; }
+    .tag-prayer       { background:#fce4ec; color:#c62828; }
     .tag-announcement { background:#e3f2fd; color:#1565c0; }
-    .tag-testimony { background:#e8f5e9; color:#2e7d32; }
-    .tag-ebook { background:#fce4ec; color:#880e4f; }
-    .tag-resource { background:#f3e5f5; color:#6a1b9a; }
+    .tag-testimony    { background:#e8f5e9; color:#2e7d32; }
+    .tag-ebook        { background:#fce4ec; color:#880e4f; }
+    .tag-resource     { background:#f3e5f5; color:#6a1b9a; }
 
-    .post-body { padding:.2rem 1rem .8rem; }
-    .post-text { font-size:.88rem; color:#333; line-height:1.65; white-space:pre-wrap; }
-    .post-text.truncated { display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
+    /* Post title */
+    .post-title { padding:0 1rem .3rem; font-size:.95rem; font-weight:700; color:#1a1a1a; }
+
+    /* Post text */
+    .post-body { padding:.2rem 1rem .6rem; }
+    .post-text { font-size:.88rem; color:#333; line-height:1.65; white-space:pre-wrap; word-break:break-word; }
+    .post-text.truncated { display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden; }
     .read-more { font-size:.78rem; color:#0066cc; font-weight:700; background:none; border:none; cursor:pointer; padding:0; margin-top:.3rem; display:block; }
 
-    .post-attachment { margin:.5rem 1rem .8rem; padding:.7rem .9rem; background:#f7f9fc; border:1px solid #dde3ec; border-radius:6px; display:flex; align-items:center; gap:.6rem; }
+    /* Post image */
+    .post-image { width:100%; max-height:400px; object-fit:cover; display:block; }
+
+    /* Attachment row */
+    .post-attachment {
+      margin:.2rem 1rem .6rem; padding:.7rem .9rem;
+      background:#f7f9fc; border:1px solid #dde3ec; border-radius:6px;
+      display:flex; align-items:center; gap:.6rem;
+    }
     .attach-icon { font-size:1.3rem; }
     .attach-name { font-size:.82rem; font-weight:700; color:#333; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .attach-dl { font-size:.75rem; color:#0066cc; font-weight:700; text-decoration:none; cursor:pointer; background:none; border:none; font-family:'Open Sans',sans-serif; }
+    .attach-dl { font-size:.75rem; color:#0066cc; font-weight:700; text-decoration:none; flex-shrink:0; }
     .attach-dl:hover { text-decoration:underline; }
 
-    .post-footer { display:flex; align-items:center; gap:.5rem; padding:.6rem 1rem; border-top:1px solid #f0f0f0; flex-wrap:wrap; }
-    .react-btn { display:flex; align-items:center; gap:.3rem; padding:.35rem .7rem; background:none; border:1px solid #edf0f4; border-radius:20px; font-family:'Open Sans',sans-serif; font-size:.78rem; color:#666; cursor:pointer; transition:all .2s; }
+    /* Pending notice */
+    .pending-notice {
+      display:flex; align-items:center; gap:.5rem;
+      padding:.5rem 1rem; background:#fff8f0; border-top:1px solid #ffe0b2;
+      font-size:.78rem; color:#c45f00; font-weight:600;
+    }
+
+    /* Reaction/footer bar */
+    .post-footer {
+      display:flex; align-items:center; gap:.4rem;
+      padding:.6rem 1rem; border-top:1px solid #f0f0f0; flex-wrap:wrap;
+    }
+    .react-btn {
+      display:flex; align-items:center; gap:.3rem; padding:.33rem .65rem;
+      background:none; border:1px solid #edf0f4; border-radius:20px;
+      font-family:'Open Sans',sans-serif; font-size:.78rem; color:#666;
+      cursor:pointer; transition:all .2s; line-height:1.3;
+    }
     .react-btn:hover { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
-    .react-btn.reacted { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
-    .save-btn { display:flex; align-items:center; gap:.3rem; padding:.35rem .7rem; background:none; border:1px solid #edf0f4; border-radius:20px; font-family:'Open Sans',sans-serif; font-size:.78rem; color:#666; cursor:pointer; transition:all .2s; margin-left:auto; }
+    .react-btn.reacted { border-color:#0066cc; color:#0066cc; background:#eef4ff; font-weight:700; }
+    .comment-toggle {
+      display:flex; align-items:center; gap:.3rem; padding:.33rem .65rem;
+      background:none; border:1px solid #edf0f4; border-radius:20px;
+      font-family:'Open Sans',sans-serif; font-size:.78rem; color:#666;
+      cursor:pointer; transition:all .2s;
+    }
+    .comment-toggle:hover { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
+    .save-btn {
+      display:flex; align-items:center; gap:.3rem; padding:.33rem .65rem;
+      background:none; border:1px solid #edf0f4; border-radius:20px;
+      font-family:'Open Sans',sans-serif; font-size:.78rem; color:#666;
+      cursor:pointer; transition:all .2s; margin-left:auto;
+    }
     .save-btn:hover { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
     .save-btn.saved { border-color:#28a745; color:#28a745; background:#eafaf0; }
-    .comment-toggle { display:flex; align-items:center; gap:.3rem; padding:.35rem .7rem; background:none; border:1px solid #edf0f4; border-radius:20px; font-family:'Open Sans',sans-serif; font-size:.78rem; color:#666; cursor:pointer; transition:all .2s; }
-    .comment-toggle:hover { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
 
-    .comments-section { border-top:1px solid #f0f0f0; padding:.8rem 1rem; display:none; }
+    /* ══════════════════════════════════
+       COMMENTS  (Facebook-style)
+    ══════════════════════════════════ */
+    .comments-section { border-top:1px solid #f0f0f0; padding:.85rem 1rem; display:none; }
     .comments-section.open { display:block; }
-    .comment-item { display:flex; gap:.6rem; margin-bottom:.7rem; }
-    .comment-avatar { width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#28a745,#17a2b8); display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; font-weight:700; flex-shrink:0; }
-    .comment-bubble { background:#f7f9fc; border:1px solid #edf0f4; border-radius:0 8px 8px 8px; padding:.5rem .75rem; flex:1; }
-    .comment-author { font-size:.75rem; font-weight:700; color:#333; margin-bottom:.2rem; }
-    .comment-text { font-size:.82rem; color:#444; line-height:1.5; }
-    .comment-time { font-size:.68rem; color:#bbb; margin-top:.2rem; }
-    .comment-input-row { display:flex; gap:.5rem; align-items:flex-end; margin-top:.5rem; }
-    .comment-input { flex:1; padding:.5rem .75rem; border:1.5px solid #dde3ec; border-radius:6px; font-family:'Open Sans',sans-serif; font-size:.82rem; outline:none; resize:none; min-height:38px; max-height:100px; transition:border-color .2s; }
-    .comment-input:focus { border-color:#0066cc; }
-    .comment-send { padding:.5rem .9rem; background:#0066cc; color:#fff; border:none; border-radius:6px; font-family:'Open Sans',sans-serif; font-size:.8rem; font-weight:700; cursor:pointer; }
-    .comment-send:hover { background:#0052a3; }
 
-    .pending-notice { display:flex; align-items:center; gap:.5rem; padding:.5rem 1rem; background:#fff8f0; border-top:1px solid #ffe0b2; font-size:.78rem; color:#c45f00; font-weight:600; }
+    .comment-input-row { display:flex; align-items:flex-end; gap:.55rem; margin-bottom:.85rem; }
+    .comment-user-avatar {
+      width:32px; height:32px; border-radius:50%; background:#eef4ff;
+      border:1.5px solid #c5d9f5; display:flex; align-items:center; justify-content:center;
+      font-size:.82rem; font-weight:700; color:#0066cc; flex-shrink:0;
+    }
+    .comment-input-wrap { flex:1; position:relative; }
+    .comment-input {
+      width:100%; padding:.55rem .9rem; padding-right:3rem;
+      border:1.5px solid #dde3ec; border-radius:20px;
+      font-family:'Open Sans',sans-serif; font-size:.85rem;
+      background:#f7f9fc; outline:none; resize:none; min-height:38px;
+      max-height:100px; overflow-y:auto; transition:border-color .2s, background .2s;
+      line-height:1.4;
+    }
+    .comment-input:focus { border-color:#0066cc; background:#fff; }
+    .comment-send-btn {
+      position:absolute; right:.45rem; bottom:.38rem;
+      background:none; border:none; color:#0066cc; cursor:pointer;
+      font-size:1.1rem; padding:.2rem; line-height:1;
+      opacity:.5; transition:opacity .2s;
+    }
+    .comment-send-btn:hover { opacity:1; }
 
+    .comments-list { display:flex; flex-direction:column; gap:.65rem; margin-bottom:.65rem; }
+    .comment-item { display:flex; gap:.55rem; align-items:flex-start; }
+    .comment-avatar {
+      width:30px; height:30px; border-radius:50%;
+      background:linear-gradient(135deg,#28a745,#17a2b8);
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; font-size:.72rem; font-weight:700; flex-shrink:0;
+    }
+    .comment-bubble {
+      background:#f0f2f5; border-radius:0 14px 14px 14px;
+      padding:.5rem .8rem; flex:1; min-width:0;
+    }
+    .comment-author { font-size:.78rem; font-weight:700; color:#1a1a1a; margin-bottom:.15rem; }
+    .comment-text { font-size:.84rem; color:#333; line-height:1.5; word-break:break-word; }
+    .comment-time { font-size:.68rem; color:#bbb; margin-top:.25rem; }
+    .no-comments { font-size:.78rem; color:#bbb; text-align:center; padding:.5rem 0 .3rem; }
+
+    /* ══════════════════════════════════
+       EMPTY STATE
+    ══════════════════════════════════ */
     .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; }
     .empty-state .big { font-size:2.5rem; margin-bottom:.6rem; }
 
-    /* Modal */
-    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; }
-    .modal-overlay.show { display:flex; }
-    .modal { background:#fff; border-radius:8px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); }
-    .modal-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 1.4rem; border-bottom:1px solid #edf0f4; }
-    .modal-title { font-family:'Merriweather',serif; font-size:1rem; font-weight:700; color:#0066cc; }
-    .modal-close { background:none; border:none; font-size:1.6rem; cursor:pointer; color:#888; line-height:1; }
-    .modal-body { padding:1.4rem; }
-    .modal-footer { padding:1rem 1.4rem; border-top:1px solid #edf0f4; display:flex; justify-content:flex-end; gap:.6rem; }
-    .form-group { display:flex; flex-direction:column; gap:.35rem; margin-bottom:.9rem; }
-    .form-group label { font-size:.72rem; font-weight:700; color:#444; }
-    .form-group input, .form-group select, .form-group textarea { padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; background:#fff; outline:none; transition:border-color .2s; appearance:none; }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:#0066cc; }
-    .form-group textarea { resize:vertical; min-height:100px; }
-
+    /* ── Toast ── */
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
     .toast.success { background:#28a745; }
-    .toast.error { background:#dc3545; }
-    .toast.info { background:#0066cc; }
+    .toast.error   { background:#dc3545; }
+    .toast.info    { background:#0066cc; }
 
+    /* ── Responsive ── */
     @media(max-width:768px) {
       .sidebar { transform:translateX(-100%); }
       .sidebar.open { transform:translateX(0); }
@@ -182,7 +347,7 @@
       .main { margin-left:0; padding-top:54px; }
       .main.admin-offset { margin-top:28px; padding-top:54px; }
       .topbar.admin-offset { top:28px; }
-      .content { padding:1rem .9rem 3rem; }
+      .content { padding:1rem .75rem 3rem; }
     }
   </style>
 </head>
@@ -194,8 +359,11 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script src="firebase-config.js"></script>
 
-<div class="admin-bar" id="adminBar">🔐 ADMIN MODE <span>Full access enabled</span></div>
+<div class="admin-bar" id="adminBar">
+  🔐 <span id="adminBarLabel">ADMIN MODE</span> <span id="adminBarSub">Full access enabled</span>
+</div>
 
+<!-- ── SIDEBAR ── -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand" onclick="window.location.href='index.html'">
     <div class="brand-logos">
@@ -209,24 +377,25 @@
   </div>
   <nav class="nav-section">
     <div class="nav-label">Menu</div>
-    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="icon">⚙️</span> Memo</a>
-    <a class="nav-item" href="dashboard.html"><span class="icon">📊</span> Dashboard</a>
-    <a class="nav-item" href="members.html"><span class="icon">👥</span> Members</a>
-    <a class="nav-item" href="past-members.html"><span class="icon">📜</span> Past Members</a>
-    <a class="nav-item" href="attendance.html"><span class="icon">✓</span> Attendance</a>
-    <a class="nav-item" href="finance.html"><span class="icon">💰</span> Finance</a>
-    <a class="nav-item" href="events.html"><span class="icon">📅</span> Events</a>
-    <a class="nav-item" href="positions.html"><span class="icon">🎯</span> Positions</a>
-    <a class="nav-item active" href="hub.html"><span class="icon">🌐</span> Fellowship Hub</a>
-    <a class="nav-item" href="notifications.html"><span class="icon">🔔</span> Notifications</a>
+    <a id="navMemo"     class="nav-item" href="memo.html"            style="display:none"><span class="icon">⚙️</span> Memo</a>
+    <a                  class="nav-item" href="dashboard.html">       <span class="icon">📊</span> Dashboard</a>
+    <a                  class="nav-item" href="members.html">         <span class="icon">👥</span> Members</a>
+    <a                  class="nav-item" href="past-members.html">    <span class="icon">📜</span> Past Members</a>
+    <a                  class="nav-item" href="attendance.html">      <span class="icon">✓</span> Attendance</a>
+    <a                  class="nav-item" href="finance.html">         <span class="icon">💰</span> Finance</a>
+    <a                  class="nav-item" href="events.html">          <span class="icon">📅</span> Events</a>
+    <a                  class="nav-item" href="positions.html">       <span class="icon">🎯</span> Positions</a>
+    <a                  class="nav-item active" href="hub.html">      <span class="icon">🌐</span> Fellowship Hub</a>
+    <a                  class="nav-item" href="notifications.html">   <span class="icon">🔔</span> Notifications</a>
     <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="icon">👤</span> User Management</a>
-    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="icon">🔍</span> Audit Logs</a>
+    <a id="navAudit"    class="nav-item" href="audit-logs.html"      style="display:none"><span class="icon">🔍</span> Audit Logs</a>
   </nav>
   <div class="nav-bottom">
     <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
   </div>
 </aside>
 
+<!-- ── TOPBAR ── -->
 <div class="topbar" id="topbar">
   <div class="topbar-brand" onclick="window.location.href='index.html'">
     <div class="brand-logos">
@@ -239,6 +408,7 @@
 </div>
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
+<!-- ── MAIN ── -->
 <div class="main" id="mainWrap">
   <div class="main-bar"></div>
   <div class="content">
@@ -246,64 +416,55 @@
     <div class="page-header">
       <h1>🌐 Fellowship Hub</h1>
       <div id="pendingBadgeWrap" style="display:none">
-        <button class="btn-outline" onclick="setFilter(document.querySelector('[data-filter=pending]'))">⏳ Pending <span id="pendingCount" style="background:#fd7e14;color:#fff;border-radius:20px;padding:.1rem .45rem;font-size:.7rem;margin-left:.3rem;">0</span></button>
+        <button class="pending-pill" onclick="setFilter('pending')">
+          ⏳ Pending <span class="pending-count" id="pendingCount">0</span>
+        </button>
       </div>
     </div>
 
+    <!-- Filter tabs -->
     <div class="filter-tabs">
-      <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">All</button>
-      <button class="filter-btn" data-filter="bible" onclick="setFilter(this)">📖 Bible Study</button>
-      <button class="filter-btn" data-filter="sermon" onclick="setFilter(this)">🎤 Sermons</button>
-      <button class="filter-btn" data-filter="announcement" onclick="setFilter(this)">📢 Announcements</button>
-      <button class="filter-btn" data-filter="testimony" onclick="setFilter(this)">🙌 Testimonies</button>
-      <button class="filter-btn" data-filter="devotional" onclick="setFilter(this)">🕯️ Devotionals</button>
-      <button class="filter-btn" data-filter="literature" onclick="setFilter(this)">📚 Literature</button>
-      <button class="filter-btn" data-filter="saved" onclick="setFilter(this)">🔖 Saved</button>
+      <button class="filter-btn active" data-filter="all"          onclick="setFilter('all')">All</button>
+      <button class="filter-btn"        data-filter="bible"        onclick="setFilter('bible')">📖 Bible Study</button>
+      <button class="filter-btn"        data-filter="sermon"       onclick="setFilter('sermon')">🎤 Sermons</button>
+      <button class="filter-btn"        data-filter="announcement" onclick="setFilter('announcement')">📢 Announcements</button>
+      <button class="filter-btn"        data-filter="testimony"    onclick="setFilter('testimony')">🙌 Testimonies</button>
+      <button class="filter-btn"        data-filter="devotional"   onclick="setFilter('devotional')">🕯️ Devotionals</button>
+      <button class="filter-btn"        data-filter="literature"   onclick="setFilter('literature')">📚 Literature</button>
+      <button class="filter-btn"        data-filter="saved"        onclick="setFilter('saved')">🔖 Saved</button>
     </div>
 
-    <!-- Compose Box -->
-    <div class="compose-box">
+    <!-- ══ COMPOSE CARD ══ -->
+    <div class="compose-card">
+      <!-- Row 1: Avatar + textarea -->
       <div class="compose-top">
         <div class="compose-avatar" id="composeAvatar">👤</div>
-        <textarea class="compose-input" id="composeText" placeholder="Share a Bible study, testimony, announcement…" rows="2"></textarea>
+        <textarea
+          class="compose-input"
+          id="composeText"
+          placeholder="Share a Bible study, testimony, announcement…"
+          rows="2"
+          oninput="autoGrow(this)"
+        ></textarea>
       </div>
-      <div class="compose-footer">
-        <div class="compose-types">
-          <span class="type-chip selected" data-type="bible">📖 Bible Study</span>
-          <span class="type-chip" data-type="sermon">🎤 Sermon</span>
-          <span class="type-chip" data-type="announcement">📢 Announcement</span>
-          <span class="type-chip" data-type="testimony">🙌 Testimony</span>
-          <span class="type-chip" data-type="devotional">🕯️ Devotional</span>
-          <span class="type-chip" data-type="literature">📚 Literature</span>
-          <span class="type-chip" data-type="prayer">🙏 Prayer</span>
-          <span class="type-chip" data-type="resource">📎 Resource</span>
-        </div>
-        <div class="compose-actions">
-          <label class="attach-btn" title="Attach file">📎<input type="file" id="attachFile" style="display:none" onchange="handleAttach(event)"/></label>
-          <button class="btn-primary" onclick="submitPost()">Post</button>
-        </div>
+
+      <!-- Image preview (shows after picking an image) -->
+      <div class="compose-img-preview" id="composeImgPreview">
+        <img id="composeImgEl" src="" alt="preview"/>
+        <button class="compose-img-remove" onclick="removeComposeImage()" title="Remove image">✕</button>
       </div>
-      <div id="attachPreview" style="display:none;margin-top:.5rem;font-size:.78rem;color:#0066cc;font-weight:600;">📎 <span id="attachName"></span> <button onclick="clearAttach()" style="background:none;border:none;color:#dc3545;cursor:pointer;font-size:.8rem;">✕</button></div>
-    </div>
 
-    <div id="feedContainer">
-      <div class="empty-state"><div class="big">⏳</div><p>Loading posts…</p></div>
-    </div>
+      <!-- File attachment preview (shows after picking non-image file) -->
+      <div class="compose-file-preview" id="composeFilePreview">
+        <span class="compose-file-icon">📎</span>
+        <span class="compose-file-name" id="composeFileName"></span>
+        <button class="compose-file-remove" onclick="removeComposeFile()" title="Remove file">✕</button>
+      </div>
 
-  </div>
-</div>
-
-<!-- Post Modal (Full compose for admin) -->
-<div class="modal-overlay" id="postModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">📝 New Post</div>
-      <button class="modal-close" onclick="closePostModal()">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label>Content Type</label>
-        <select id="mPostType">
+      <!-- Type selector row -->
+      <div class="compose-type-row">
+        <span class="type-label">Type:</span>
+        <select class="type-select" id="composeType">
           <option value="bible">📖 Bible Study</option>
           <option value="sermon">🎤 Sermon Notes</option>
           <option value="announcement">📢 Announcement</option>
@@ -312,381 +473,614 @@
           <option value="literature">📚 Literature</option>
           <option value="prayer">🙏 Prayer Guide</option>
           <option value="ebook">📗 E-Book</option>
-          <option value="resource">📎 Ministry Resource</option>
+          <option value="resource">📎 Resource</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Title (optional)</label>
-        <input type="text" id="mPostTitle" placeholder="Post title…"/>
-      </div>
-      <div class="form-group">
-        <label>Content *</label>
-        <textarea id="mPostContent" placeholder="Write your content here…" style="min-height:140px;"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Attach File (PDF, image, doc)</label>
-        <input type="file" id="mPostFile" style="padding:.4rem;"/>
+
+      <!-- Action bar -->
+      <div class="compose-action-bar">
+        <div class="compose-media-btns">
+          <!-- Image upload -->
+          <label class="media-btn" title="Add photo">
+            <span class="micon">🖼️</span> Photo
+            <input type="file" id="composeImageInput" accept="image/*" style="display:none" onchange="handleComposeImage(event)"/>
+          </label>
+          <!-- File/PDF upload -->
+          <label class="media-btn" title="Attach file">
+            <span class="micon">📎</span> File
+            <input type="file" id="composeFileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" style="display:none" onchange="handleComposeFile(event)"/>
+          </label>
+        </div>
+        <button class="btn-post" id="btnPost" onclick="submitPost()">Post</button>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn-secondary" onclick="closePostModal()">Cancel</button>
-      <button class="btn-primary" id="btnSubmitPost" onclick="submitAdminPost()">Publish Post</button>
+    <!-- ── END COMPOSE ── -->
+
+    <!-- Feed -->
+    <div id="feedContainer">
+      <div class="empty-state"><div class="big">⏳</div><p>Loading posts…</p></div>
     </div>
+
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  const role = localStorage.getItem('userRole');
-  const userId = localStorage.getItem('userId');
-  const userName = localStorage.getItem('userName') || 'Member';
-  if (!role) { window.location.href = 'auth.html'; }
+// ══════════════════════════════════════════════════════════
+//  AUTH + ROLE SETUP
+// ══════════════════════════════════════════════════════════
+const role     = localStorage.getItem('userRole')   || 'member';
+const userId   = localStorage.getItem('userId')     || '';
+const userName = localStorage.getItem('userName')   || 'Member';
 
-  const isAdmin = role === 'admin';
-  const isSuperAdmin = role === 'superadmin';
-  const isPrivileged = isAdmin || isSuperAdmin;
+if (!role) { window.location.href = 'auth.html'; }
 
+const isSuperAdmin = role === 'superadmin';
+const isAdmin      = role === 'admin';
+const isPrivileged = isAdmin || isSuperAdmin;
+
+// Admin bar
+if (isPrivileged) {
+  document.getElementById('adminBar').classList.add('show');
+  document.getElementById('sidebar').classList.add('admin-offset');
+  document.getElementById('topbar').classList.add('admin-offset');
+  document.getElementById('mainWrap').classList.add('admin-offset');
+  document.getElementById('navMemo').style.display = 'flex';
+  document.getElementById('pendingBadgeWrap').style.display = 'block';
+}
+if (isSuperAdmin) {
+  document.getElementById('adminBarLabel').textContent = 'SUPER ADMIN MODE';
+  document.getElementById('adminBarSub').textContent   = 'Full system access';
+  document.getElementById('navAudit').style.display    = 'flex';
+  document.getElementById('navUserMgmt').style.display = 'flex';
+}
+if (isAdmin) {
+  document.getElementById('adminBarLabel').textContent = 'ADMIN MODE';
+  document.getElementById('navUserMgmt').style.display = 'flex';
+}
+
+// Compose avatar shows name initial
+document.getElementById('composeAvatar').textContent = userName.charAt(0).toUpperCase();
+
+// ══════════════════════════════════════════════════════════
+//  COMPOSE STATE
+// ══════════════════════════════════════════════════════════
+let composeImageFile = null;   // image File object
+let composeOtherFile = null;   // non-image File object
+
+function autoGrow(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 200) + 'px';
+}
+
+function handleComposeImage(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  // Remove any previously chosen non-image file
+  removeComposeFile();
+  composeImageFile = file;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('composeImgEl').src = ev.target.result;
+    document.getElementById('composeImgPreview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+  // Reset input so same file can be re-selected
+  e.target.value = '';
+}
+
+function removeComposeImage() {
+  composeImageFile = null;
+  document.getElementById('composeImgEl').src = '';
+  document.getElementById('composeImgPreview').style.display = 'none';
+}
+
+function handleComposeFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  // Remove any previously chosen image
+  removeComposeImage();
+  composeOtherFile = file;
+  document.getElementById('composeFileName').textContent = file.name;
+  document.getElementById('composeFilePreview').style.display = 'flex';
+  e.target.value = '';
+}
+
+function removeComposeFile() {
+  composeOtherFile = null;
+  document.getElementById('composeFileName').textContent = '';
+  document.getElementById('composeFilePreview').style.display = 'none';
+}
+
+// ══════════════════════════════════════════════════════════
+//  FEED STATE + FIRESTORE LISTENER
+// ══════════════════════════════════════════════════════════
+let currentFilter = 'all';
+let allPosts      = [];
+let savedIds      = JSON.parse(localStorage.getItem('savedPosts') || '[]');
+
+function setFilter(filterVal) {
+  currentFilter = filterVal;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === filterVal);
+  });
+  renderFeed();
+}
+
+db.collection('hub_posts').orderBy('createdAt','desc').onSnapshot(snap => {
+  allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  // Pending count:
+  // — Members: only their OWN pending posts
+  // — Admin/SuperAdmin: ALL pending posts
+  let pendingCount;
   if (isPrivileged) {
-    document.getElementById('adminBar').classList.add('show');
-    document.getElementById('sidebar').classList.add('admin-offset');
-    document.getElementById('topbar').classList.add('admin-offset');
-    document.getElementById('mainWrap').classList.add('admin-offset');
-    document.getElementById('navMemo').style.display = 'flex';
+    pendingCount = allPosts.filter(p => p.status === 'pending').length;
+  } else {
+    pendingCount = allPosts.filter(p => p.status === 'pending' && p.authorId === userId).length;
+  }
+  document.getElementById('pendingCount').textContent = pendingCount;
+  if (!isPrivileged && pendingCount > 0) {
     document.getElementById('pendingBadgeWrap').style.display = 'block';
-  }
-  if (isSuperAdmin) {
-    document.getElementById('navUserMgmt').style.display = 'flex';
-    document.getElementById('navAudit').style.display = 'flex';
-  }
-  if (isAdmin) {
-    document.getElementById('navUserMgmt').style.display = 'flex';
+  } else if (!isPrivileged) {
+    document.getElementById('pendingBadgeWrap').style.display = 'none';
   }
 
-  // Set compose avatar initials
-  document.getElementById('composeAvatar').textContent = userName.charAt(0).toUpperCase();
+  renderFeed();
+});
 
-  // Type chip selection
-  let selectedType = 'bible';
-  document.querySelectorAll('.type-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('.type-chip').forEach(c => c.classList.remove('selected'));
-      chip.classList.add('selected');
-      selectedType = chip.dataset.type;
-    });
-  });
+// ══════════════════════════════════════════════════════════
+//  RENDER FEED
+// ══════════════════════════════════════════════════════════
+const typeTagMap = {
+  bible:'tag-bible', sermon:'tag-sermon', literature:'tag-literature',
+  devotional:'tag-devotional', prayer:'tag-prayer', announcement:'tag-announcement',
+  testimony:'tag-testimony', ebook:'tag-ebook', resource:'tag-resource'
+};
+const typeLabelMap = {
+  bible:'📖 Bible Study', sermon:'🎤 Sermon', literature:'📚 Literature',
+  devotional:'🕯️ Devotional', prayer:'🙏 Prayer', announcement:'📢 Announcement',
+  testimony:'🙌 Testimony', ebook:'📗 E-Book', resource:'📎 Resource'
+};
 
-  let attachedFile = null;
-  function handleAttach(e) {
-    attachedFile = e.target.files[0];
-    if (!attachedFile) return;
-    document.getElementById('attachName').textContent = attachedFile.name;
-    document.getElementById('attachPreview').style.display = 'block';
-  }
-  function clearAttach() {
-    attachedFile = null;
-    document.getElementById('attachFile').value = '';
-    document.getElementById('attachPreview').style.display = 'none';
-  }
+function renderFeed() {
+  const container = document.getElementById('feedContainer');
+  let visible = allPosts.filter(p => {
+    const isOwn     = p.authorId === userId;
+    const published = p.status === 'published';
+    const pending   = p.status === 'pending';
 
-  let currentFilter = 'all';
-  let allPosts = [];
-  let savedIds = JSON.parse(localStorage.getItem('savedPosts') || '[]');
-
-  function setFilter(btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentFilter = btn.dataset.filter;
-    renderFeed();
-  }
-
-  const typeTagMap = {
-    bible: 'tag-bible', sermon: 'tag-sermon', literature: 'tag-literature',
-    devotional: 'tag-devotional', prayer: 'tag-prayer', announcement: 'tag-announcement',
-    testimony: 'tag-testimony', ebook: 'tag-ebook', resource: 'tag-resource'
-  };
-  const typeLabelMap = {
-    bible:'📖 Bible Study', sermon:'🎤 Sermon', literature:'📚 Literature',
-    devotional:'🕯️ Devotional', prayer:'🙏 Prayer', announcement:'📢 Announcement',
-    testimony:'🙌 Testimony', ebook:'📗 E-Book', resource:'📎 Resource'
-  };
-
-  db.collection('hub_posts').orderBy('createdAt','desc').onSnapshot(snap => {
-    allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    // Update pending count
-    const pending = allPosts.filter(p => p.status === 'pending');
-    document.getElementById('pendingCount').textContent = pending.length;
-    renderFeed();
-  });
-
-  function renderFeed() {
-    const container = document.getElementById('feedContainer');
-    let filtered = allPosts.filter(p => {
-      if (p.status === 'pending' && !isPrivileged && p.authorId !== userId) return false;
-      if (currentFilter === 'all') return p.status === 'published' || (isPrivileged && p.status === 'pending') || p.authorId === userId;
-      if (currentFilter === 'pending') return p.status === 'pending';
-      if (currentFilter === 'saved') return savedIds.includes(p.id);
-      return p.type === currentFilter && (p.status === 'published' || isPrivileged);
-    });
-    if (!filtered.length) {
-      container.innerHTML = `<div class="empty-state"><div class="big">🌐</div><p>No posts here yet.</p></div>`;
-      return;
+    if (currentFilter === 'saved')   return savedIds.includes(p.id) && (published || isOwn);
+    if (currentFilter === 'pending') return pending && (isPrivileged || isOwn);
+    if (currentFilter === 'all') {
+      return published || (isPrivileged && pending) || (isOwn && pending);
     }
-    container.innerHTML = filtered.map(post => renderPost(post)).join('');
+    return p.type === currentFilter && (published || (isPrivileged && pending) || (isOwn && pending));
+  });
+
+  if (!visible.length) {
+    container.innerHTML = `<div class="empty-state"><div class="big">🌐</div><p>No posts here yet.</p></div>`;
+    return;
   }
 
-  function renderPost(post) {
-    const isSaved = savedIds.includes(post.id);
-    const isPending = post.status === 'pending';
-    const isPinned = post.pinned;
-    const typeTag = typeTagMap[post.type] || 'tag-resource';
-    const typeLabel = typeLabelMap[post.type] || post.type;
-    const initials = (post.authorName || 'U').charAt(0).toUpperCase();
-    const timeStr = post.createdAt ? timeAgo(post.createdAt.toDate ? post.createdAt.toDate() : new Date(post.createdAt)) : '';
-    const isLong = (post.content || '').length > 300;
+  // Pinned posts first, then by date
+  visible.sort((a,b) => {
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    return 0;
+  });
 
-    const adminMenu = isPrivileged ? `
+  container.innerHTML = visible.map(post => renderPost(post)).join('');
+}
+
+function renderPost(post) {
+  const isSaved   = savedIds.includes(post.id);
+  const isPending = post.status === 'pending';
+  const isPinned  = !!post.pinned;
+  const isOwn     = post.authorId === userId;
+
+  const typeTag   = typeTagMap[post.type] || 'tag-resource';
+  const typeLabel = typeLabelMap[post.type] || post.type;
+  const initials  = (post.authorName || 'U').charAt(0).toUpperCase();
+  const timeStr   = post.createdAt
+    ? timeAgo(post.createdAt.toDate ? post.createdAt.toDate() : new Date(post.createdAt))
+    : '';
+  const content   = post.content || '';
+  const isLong    = content.length > 360;
+
+  // Menu (admins + own post for delete)
+  let menuHtml = '';
+  if (isPrivileged || isOwn) {
+    const approveReject = isPrivileged && isPending ? `
+      <button onclick="approvePost('${post.id}')">✅ Approve</button>
+      <button onclick="rejectPost('${post.id}')">❌ Reject</button>` : '';
+    const pinBtn = isPrivileged && !isPending
+      ? (isPinned
+          ? `<button onclick="unpinPost('${post.id}')">📌 Unpin</button>`
+          : `<button onclick="pinPost('${post.id}')">📌 Pin Post</button>`)
+      : '';
+    const deleteBtn = isPrivileged || isOwn
+      ? `<button class="danger" onclick="deletePost('${post.id}')">🗑 Delete</button>` : '';
+
+    menuHtml = `
       <div class="post-menu-wrap">
-        <button class="post-menu-btn" onclick="toggleMenu('${post.id}')">⋯</button>
+        <button class="post-menu-btn" onclick="toggleMenu(event,'${post.id}')">•••</button>
         <div class="post-dropdown" id="menu-${post.id}">
-          ${isPending ? `<button onclick="approvePost('${post.id}')">✅ Approve</button><button onclick="rejectPost('${post.id}')">❌ Reject</button>` : ''}
-          ${!isPinned && !isPending ? `<button onclick="pinPost('${post.id}')">📌 Pin Post</button>` : ''}
-          ${isPinned ? `<button onclick="unpinPost('${post.id}')">📌 Unpin</button>` : ''}
-          <button class="danger" onclick="deletePost('${post.id}')">🗑 Delete</button>
-        </div>
-      </div>` : '';
-
-    const attachHtml = post.attachmentName ? `
-      <div class="post-attachment">
-        <span class="attach-icon">📎</span>
-        <span class="attach-name">${post.attachmentName}</span>
-        ${post.attachmentUrl ? `<a class="attach-dl" href="${post.attachmentUrl}" target="_blank" download>⬇ Download</a>` : ''}
-      </div>` : '';
-
-    const pendingNotice = isPending ? `<div class="pending-notice">⏳ Pending approval</div>` : '';
-    const pinnedBadge = isPinned ? `<span class="badge badge-pin">📌 Pinned</span>` : '';
-    const pendingBadge = isPending ? `<span class="badge badge-orange">Pending</span>` : '';
-    const roleBadge = post.authorRole === 'superadmin' ? `<span class="badge badge-blue">Super Admin</span>` : post.authorRole === 'admin' ? `<span class="badge badge-blue">Admin</span>` : '';
-
-    const reactions = post.reactions || {};
-    const likeCount = reactions.like || 0;
-    const prayCount = reactions.pray || 0;
-    const fireCount = reactions.fire || 0;
-    const userReacted = (post.reactedBy || {})[userId];
-
-    return `
-      <div class="post-card ${isPending ? 'pending' : ''} ${isPinned ? 'pinned' : ''}" id="post-${post.id}">
-        <div class="post-header">
-          <div class="post-author">
-            <div class="post-avatar">${initials}</div>
-            <div class="post-meta">
-              <div class="post-name">${post.authorName || 'Unknown'}</div>
-              <div class="post-time">${timeStr}</div>
-              <div class="post-badges">${pinnedBadge}${pendingBadge}${roleBadge}</div>
-            </div>
-          </div>
-          ${adminMenu}
-        </div>
-        <span class="post-type-tag ${typeTag}">${typeLabel}</span>
-        ${post.title ? `<div style="padding:0 1rem .4rem;font-size:.95rem;font-weight:700;color:#1a1a1a;">${post.title}</div>` : ''}
-        <div class="post-body">
-          <div class="post-text ${isLong ? 'truncated' : ''}" id="text-${post.id}">${escHtml(post.content || '')}</div>
-          ${isLong ? `<button class="read-more" onclick="expandText('${post.id}')">Read more</button>` : ''}
-        </div>
-        ${attachHtml}
-        ${pendingNotice}
-        <div class="post-footer">
-          <button class="react-btn ${userReacted==='like'?'reacted':''}" onclick="reactPost('${post.id}','like')">👍 ${likeCount||''}</button>
-          <button class="react-btn ${userReacted==='pray'?'reacted':''}" onclick="reactPost('${post.id}','pray')">🙏 ${prayCount||''}</button>
-          <button class="react-btn ${userReacted==='fire'?'reacted':''}" onclick="reactPost('${post.id}','fire')">🔥 ${fireCount||''}</button>
-          <button class="comment-toggle" onclick="toggleComments('${post.id}')">💬 ${post.commentCount || 0}</button>
-          <button class="save-btn ${isSaved?'saved':''}" onclick="toggleSave('${post.id}')">${isSaved?'🔖 Saved':'🔖 Save'}</button>
-        </div>
-        <div class="comments-section" id="comments-${post.id}">
-          <div id="commentsList-${post.id}"></div>
-          <div class="comment-input-row">
-            <textarea class="comment-input" id="commentInput-${post.id}" placeholder="Write a comment…" rows="1"></textarea>
-            <button class="comment-send" onclick="submitComment('${post.id}')">Send</button>
-          </div>
+          ${approveReject}${pinBtn}${deleteBtn}
         </div>
       </div>`;
   }
 
-  function expandText(id) {
-    const el = document.getElementById('text-' + id);
-    el.classList.remove('truncated');
-    el.nextElementSibling.style.display = 'none';
+  // Badges
+  const pinnedBadge  = isPinned  ? `<span class="badge badge-pin">📌 Pinned</span>` : '';
+  const pendingBadge = isPending ? `<span class="badge badge-orange">Pending approval</span>` : '';
+  const roleBadge    = post.authorRole === 'superadmin'
+    ? `<span class="badge badge-sa">Super Admin</span>`
+    : post.authorRole === 'admin' ? `<span class="badge badge-blue">Admin</span>` : '';
+
+  // Media
+  const imageHtml = post.imageUrl
+    ? `<img class="post-image" src="${post.imageUrl}" alt="post image" loading="lazy"/>` : '';
+
+  // File attachment
+  const attachHtml = post.attachmentName ? `
+    <div class="post-attachment">
+      <span class="attach-icon">📎</span>
+      <span class="attach-name">${post.attachmentName}</span>
+      ${post.attachmentUrl
+        ? `<a class="attach-dl" href="${post.attachmentUrl}" target="_blank" download>⬇ Download</a>` : ''}
+    </div>` : '';
+
+  // Reactions
+  const reactions = post.reactions  || {};
+  const reactedBy = post.reactedBy  || {};
+  const likeCount = reactions.like  || 0;
+  const prayCount = reactions.pray  || 0;
+  const fireCount = reactions.fire  || 0;
+  const myReact   = reactedBy[userId];
+
+  return `
+    <div class="post-card ${isPending ? 'pending-card' : ''} ${isPinned ? 'pinned-card' : ''}" id="post-${post.id}">
+      <div class="post-header">
+        <div class="post-author">
+          <div class="post-avatar">${initials}</div>
+          <div>
+            <div class="post-name">${escHtml(post.authorName || 'Unknown')}</div>
+            <div class="post-time">${timeStr}</div>
+            <div class="post-badges">${pinnedBadge}${pendingBadge}${roleBadge}</div>
+          </div>
+        </div>
+        ${menuHtml}
+      </div>
+
+      <span class="post-type-tag ${typeTag}">${typeLabel}</span>
+      ${post.title ? `<div class="post-title">${escHtml(post.title)}</div>` : ''}
+
+      <div class="post-body">
+        <div class="post-text ${isLong ? 'truncated' : ''}" id="text-${post.id}">${escHtml(content)}</div>
+        ${isLong ? `<button class="read-more" onclick="expandText('${post.id}')">Read more</button>` : ''}
+      </div>
+
+      ${imageHtml}
+      ${attachHtml}
+      ${isPending ? `<div class="pending-notice">⏳ Awaiting admin approval before others can see this</div>` : ''}
+
+      <div class="post-footer">
+        <button class="react-btn ${myReact==='like'?'reacted':''}" onclick="reactPost('${post.id}','like')">
+          👍${likeCount ? ' '+likeCount : ''}
+        </button>
+        <button class="react-btn ${myReact==='pray'?'reacted':''}" onclick="reactPost('${post.id}','pray')">
+          🙏${prayCount ? ' '+prayCount : ''}
+        </button>
+        <button class="react-btn ${myReact==='fire'?'reacted':''}" onclick="reactPost('${post.id}','fire')">
+          🔥${fireCount ? ' '+fireCount : ''}
+        </button>
+        <button class="comment-toggle" onclick="toggleComments('${post.id}')">
+          💬 ${post.commentCount || 0}
+        </button>
+        <button class="save-btn ${isSaved?'saved':''}" onclick="toggleSave('${post.id}')">
+          ${isSaved ? '🔖 Saved' : '🔖 Save'}
+        </button>
+      </div>
+
+      <div class="comments-section" id="comments-${post.id}">
+        <!-- Comment input always visible when comments open -->
+        <div class="comment-input-row">
+          <div class="comment-user-avatar">${userName.charAt(0).toUpperCase()}</div>
+          <div class="comment-input-wrap">
+            <textarea
+              class="comment-input"
+              id="commentInput-${post.id}"
+              placeholder="Write a comment…"
+              rows="1"
+              oninput="autoGrow(this)"
+              onkeydown="commentEnter(event,'${post.id}')"
+            ></textarea>
+            <button class="comment-send-btn" onclick="submitComment('${post.id}')" title="Send">➤</button>
+          </div>
+        </div>
+        <div class="comments-list" id="commentsList-${post.id}"></div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+//  SUBMIT POST
+// ══════════════════════════════════════════════════════════
+async function submitPost() {
+  const text = document.getElementById('composeText').value.trim();
+  if (!text && !composeImageFile && !composeOtherFile) {
+    showToast('Write something or attach a file first.', 'error'); return;
   }
 
-  function toggleMenu(id) {
-    document.querySelectorAll('.post-dropdown').forEach(d => { if (d.id !== 'menu-' + id) d.classList.remove('show'); });
-    document.getElementById('menu-' + id).classList.toggle('show');
-  }
-  document.addEventListener('click', e => {
-    if (!e.target.closest('.post-menu-wrap')) document.querySelectorAll('.post-dropdown').forEach(d => d.classList.remove('show'));
-  });
+  const btn = document.getElementById('btnPost');
+  btn.disabled = true; btn.textContent = 'Posting…';
 
-  async function submitPost() {
-    const text = document.getElementById('composeText').value.trim();
-    if (!text) { showToast('Please write something first.', 'error'); return; }
+  try {
     const status = isPrivileged ? 'published' : 'pending';
-    let attachmentUrl = '', attachmentName = '';
-    if (attachedFile) {
-      try {
-        const ref = storage.ref('hub_attachments/' + Date.now() + '_' + attachedFile.name);
-        await ref.put(attachedFile);
-        attachmentUrl = await ref.getDownloadURL();
-        attachmentName = attachedFile.name;
-      } catch(e) { showToast('Attachment upload failed', 'error'); return; }
+    const type   = document.getElementById('composeType').value;
+
+    let imageUrl      = '';
+    let attachmentUrl = '';
+    let attachmentName = '';
+
+    // Upload image
+    if (composeImageFile) {
+      const ref = firebase.storage().ref(`hub_images/${Date.now()}_${composeImageFile.name}`);
+      await ref.put(composeImageFile);
+      imageUrl = await ref.getDownloadURL();
     }
+
+    // Upload other file
+    if (composeOtherFile) {
+      const ref = firebase.storage().ref(`hub_attachments/${Date.now()}_${composeOtherFile.name}`);
+      await ref.put(composeOtherFile);
+      attachmentUrl  = await ref.getDownloadURL();
+      attachmentName = composeOtherFile.name;
+    }
+
     await db.collection('hub_posts').add({
-      content: text, type: selectedType, status,
-      authorId: userId, authorName: userName, authorRole: role,
-      attachmentUrl, attachmentName,
-      reactions: {}, reactedBy: {}, commentCount: 0,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      content: text,
+      type,
+      status,
+      authorId:   userId,
+      authorName: userName,
+      authorRole: role,
+      imageUrl,
+      attachmentUrl,
+      attachmentName,
+      reactions:    {},
+      reactedBy:    {},
+      commentCount: 0,
+      pinned:       false,
+      createdAt:    firebase.firestore.FieldValue.serverTimestamp()
     });
+
     if (!isPrivileged) {
-      showToast('Post submitted for approval!', 'info');
-      await notifySuperAdmin('New post pending approval from ' + userName, 'hub');
+      showToast('Post submitted — awaiting approval.', 'info');
+      await notifySuperAdmin(`New post submitted by ${userName} — awaiting approval.`, 'hub');
     } else {
       showToast('Post published!', 'success');
-      await logAudit('hub_post_published', 'Published hub post: ' + text.substring(0,50));
+      await logAudit('hub_post_published', `Published hub post by ${userName}: ${text.substring(0,60)}`);
     }
+
+    // Reset compose
     document.getElementById('composeText').value = '';
-    clearAttach();
+    document.getElementById('composeText').style.height = '';
+    removeComposeImage();
+    removeComposeFile();
+    document.getElementById('composeType').value = 'bible';
+
+  } catch (err) {
+    showToast('Error: ' + err.message, 'error');
   }
 
-  async function approvePost(id) {
-    await db.collection('hub_posts').doc(id).update({ status: 'published' });
-    await logAudit('hub_post_approved', 'Approved hub post: ' + id);
-    await notifySuperAdmin(userName + ' approved a hub post', 'hub');
-    showToast('Post approved!', 'success');
-  }
-  async function rejectPost(id) {
-    if (!confirm('Reject and delete this post?')) return;
-    await db.collection('hub_posts').doc(id).delete();
-    await logAudit('hub_post_rejected', 'Rejected hub post: ' + id);
-    showToast('Post rejected.', 'info');
-  }
-  async function deletePost(id) {
-    if (!confirm('Delete this post?')) return;
-    await db.collection('hub_posts').doc(id).delete();
-    await logAudit('hub_post_deleted', 'Deleted hub post: ' + id);
-    await notifySuperAdmin(userName + ' deleted a hub post', 'hub');
-    showToast('Post deleted.', 'success');
-  }
-  async function pinPost(id) {
-    await db.collection('hub_posts').doc(id).update({ pinned: true });
-    showToast('Post pinned!', 'success');
-  }
-  async function unpinPost(id) {
-    await db.collection('hub_posts').doc(id).update({ pinned: false });
-    showToast('Post unpinned.', 'info');
-  }
+  btn.disabled = false; btn.textContent = 'Post';
+}
 
-  async function reactPost(id, type) {
-    const post = allPosts.find(p => p.id === id);
-    if (!post) return;
-    const reactedBy = post.reactedBy || {};
-    const prev = reactedBy[userId];
-    const reactions = { ...(post.reactions || {}) };
-    if (prev) reactions[prev] = Math.max(0, (reactions[prev] || 1) - 1);
-    if (prev !== type) { reactions[type] = (reactions[type] || 0) + 1; reactedBy[userId] = type; }
-    else { delete reactedBy[userId]; }
-    await db.collection('hub_posts').doc(id).update({ reactions, reactedBy });
-  }
+// ══════════════════════════════════════════════════════════
+//  POST ACTIONS
+// ══════════════════════════════════════════════════════════
+function toggleMenu(e, id) {
+  e.stopPropagation();
+  const menu = document.getElementById('menu-' + id);
+  const isOpen = menu.classList.contains('show');
+  document.querySelectorAll('.post-dropdown').forEach(d => d.classList.remove('show'));
+  if (!isOpen) menu.classList.add('show');
+}
+document.addEventListener('click', () => {
+  document.querySelectorAll('.post-dropdown').forEach(d => d.classList.remove('show'));
+});
 
-  function toggleSave(id) {
-    if (savedIds.includes(id)) savedIds = savedIds.filter(s => s !== id);
-    else savedIds.push(id);
-    localStorage.setItem('savedPosts', JSON.stringify(savedIds));
-    renderFeed();
-  }
+function expandText(id) {
+  const el = document.getElementById('text-' + id);
+  if (!el) return;
+  el.classList.remove('truncated');
+  const btn = el.nextElementSibling;
+  if (btn) btn.style.display = 'none';
+}
 
-  function toggleComments(postId) {
-    const section = document.getElementById('comments-' + postId);
-    section.classList.toggle('open');
-    if (section.classList.contains('open')) loadComments(postId);
-  }
+async function approvePost(id) {
+  await db.collection('hub_posts').doc(id).update({ status: 'published' });
+  const post = allPosts.find(p => p.id === id);
+  if (post) await notifyUser(post.authorId, 'Your post on Fellowship Hub has been approved! ✅', 'hub');
+  await logAudit('hub_post_approved', `Approved hub post id:${id}`);
+  showToast('Post approved!', 'success');
+}
 
-  async function loadComments(postId) {
-    const snap = await db.collection('hub_posts').doc(postId).collection('comments').orderBy('createdAt','asc').get();
-    const list = document.getElementById('commentsList-' + postId);
-    if (!snap.docs.length) { list.innerHTML = '<p style="font-size:.78rem;color:#bbb;margin-bottom:.5rem;">No comments yet.</p>'; return; }
-    list.innerHTML = snap.docs.map(d => {
-      const c = d.data();
-      const init = (c.authorName||'U').charAt(0).toUpperCase();
-      return `<div class="comment-item">
-        <div class="comment-avatar">${init}</div>
-        <div class="comment-bubble">
-          <div class="comment-author">${c.authorName||'Unknown'}</div>
-          <div class="comment-text">${escHtml(c.text||'')}</div>
-          <div class="comment-time">${c.createdAt ? timeAgo(c.createdAt.toDate()) : ''}</div>
-        </div>
-      </div>`;
-    }).join('');
-  }
+async function rejectPost(id) {
+  if (!confirm('Reject and delete this post?')) return;
+  await db.collection('hub_posts').doc(id).delete();
+  await logAudit('hub_post_rejected', `Rejected hub post id:${id}`);
+  showToast('Post rejected.', 'info');
+}
 
-  async function submitComment(postId) {
-    const input = document.getElementById('commentInput-' + postId);
-    const text = input.value.trim();
-    if (!text) return;
-    await db.collection('hub_posts').doc(postId).collection('comments').add({
-      text, authorId: userId, authorName: userName,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    await db.collection('hub_posts').doc(postId).update({ commentCount: firebase.firestore.FieldValue.increment(1) });
-    input.value = '';
-    loadComments(postId);
-  }
+async function deletePost(id) {
+  if (!confirm('Delete this post permanently?')) return;
+  await db.collection('hub_posts').doc(id).delete();
+  await logAudit('hub_post_deleted', `Deleted hub post id:${id}`);
+  showToast('Post deleted.', 'success');
+}
 
-  // Shared helpers
-  async function notifySuperAdmin(message, type) {
-    const saSnap = await db.collection('users').where('role','==','superadmin').limit(1).get();
-    if (saSnap.empty) return;
-    const saId = saSnap.docs[0].id;
-    await db.collection('notifications').add({
-      toUserId: saId, message, type, read: false,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-  }
+async function pinPost(id) {
+  await db.collection('hub_posts').doc(id).update({ pinned: true });
+  showToast('Post pinned!', 'success');
+}
+async function unpinPost(id) {
+  await db.collection('hub_posts').doc(id).update({ pinned: false });
+  showToast('Post unpinned.', 'info');
+}
 
-  async function logAudit(action, description) {
-    await db.collection('audit_logs').add({
-      action, description, performedBy: userName, performedByRole: role, userId,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    });
-  }
+async function reactPost(postId, type) {
+  const post = allPosts.find(p => p.id === postId);
+  if (!post) return;
+  const reactedBy = { ...(post.reactedBy || {}) };
+  const reactions = { ...(post.reactions || {}) };
+  const prev = reactedBy[userId];
+  if (prev) reactions[prev] = Math.max(0, (reactions[prev] || 1) - 1);
+  if (prev !== type) { reactions[type] = (reactions[type] || 0) + 1; reactedBy[userId] = type; }
+  else { delete reactedBy[userId]; }
+  await db.collection('hub_posts').doc(postId).update({ reactions, reactedBy });
+}
 
-  function timeAgo(date) {
-    const diff = Math.floor((new Date() - date) / 1000);
-    if (diff < 60) return 'just now';
-    if (diff < 3600) return Math.floor(diff/60) + 'm ago';
-    if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
-    return Math.floor(diff/86400) + 'd ago';
-  }
-  function escHtml(str) { return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function toggleSave(id) {
+  if (savedIds.includes(id)) savedIds = savedIds.filter(s => s !== id);
+  else savedIds.push(id);
+  localStorage.setItem('savedPosts', JSON.stringify(savedIds));
+  renderFeed();
+}
 
-  function doLogout() {
-    auth.signOut().then(() => {
-      localStorage.removeItem('userRole');
-      localStorage.removeItem('userId');
-      localStorage.removeItem('userName');
-      window.location.href = 'auth.html';
-    });
-  }
+// ══════════════════════════════════════════════════════════
+//  COMMENTS  — Facebook style
+// ══════════════════════════════════════════════════════════
+function toggleComments(postId) {
+  const section = document.getElementById('comments-' + postId);
+  const isOpen  = section.classList.toggle('open');
+  if (isOpen) loadComments(postId);
+}
 
-  function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.className = 'toast show ' + type;
-    setTimeout(() => t.className = 'toast', 2800);
+async function loadComments(postId) {
+  const list = document.getElementById('commentsList-' + postId);
+  list.innerHTML = '<p class="no-comments">Loading…</p>';
+  const snap = await db.collection('hub_posts').doc(postId)
+    .collection('comments').orderBy('createdAt','asc').get();
+  if (!snap.docs.length) {
+    list.innerHTML = '<p class="no-comments">No comments yet — be the first!</p>';
+    return;
   }
+  list.innerHTML = snap.docs.map(d => {
+    const c = d.data();
+    const init = (c.authorName || 'U').charAt(0).toUpperCase();
+    const t = c.createdAt ? timeAgo(c.createdAt.toDate ? c.createdAt.toDate() : new Date(c.createdAt)) : '';
+    return `<div class="comment-item">
+      <div class="comment-avatar">${init}</div>
+      <div class="comment-bubble">
+        <div class="comment-author">${escHtml(c.authorName || 'Unknown')}</div>
+        <div class="comment-text">${escHtml(c.text || '')}</div>
+        <div class="comment-time">${t}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
 
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click', () => { sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
-  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+function commentEnter(e, postId) {
+  // Send on Enter (without Shift)
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    submitComment(postId);
+  }
+}
+
+async function submitComment(postId) {
+  const input = document.getElementById('commentInput-' + postId);
+  const text  = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = '';
+
+  await db.collection('hub_posts').doc(postId).collection('comments').add({
+    text,
+    authorId:   userId,
+    authorName: userName,
+    createdAt:  firebase.firestore.FieldValue.serverTimestamp()
+  });
+  await db.collection('hub_posts').doc(postId).update({
+    commentCount: firebase.firestore.FieldValue.increment(1)
+  });
+  loadComments(postId);
+}
+
+// ══════════════════════════════════════════════════════════
+//  SHARED HELPERS
+// ══════════════════════════════════════════════════════════
+async function notifySuperAdmin(message, type) {
+  const snap = await db.collection('users').where('role','==','superadmin').limit(1).get();
+  if (snap.empty) return;
+  await db.collection('notifications').add({
+    toUserId: snap.docs[0].id, message, type, read: false,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+async function notifyUser(uid, message, type) {
+  await db.collection('notifications').add({
+    toUserId: uid, message, type, read: false,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+async function logAudit(action, description) {
+  await db.collection('audit_logs').add({
+    action, description,
+    performedBy:     userName,
+    performedByRole: role,
+    userId,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+function timeAgo(date) {
+  const diff = Math.floor((new Date() - date) / 1000);
+  if (diff < 60)    return 'just now';
+  if (diff < 3600)  return Math.floor(diff/60)   + 'm ago';
+  if (diff < 86400) return Math.floor(diff/3600)  + 'h ago';
+  return Math.floor(diff/86400) + 'd ago';
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function doLogout() {
+  auth.signOut().then(() => {
+    ['userRole','userEmail','userId','userName'].forEach(k => localStorage.removeItem(k));
+    window.location.href = 'auth.html';
+  });
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show ' + type;
+  setTimeout(() => t.className = 'toast', 2800);
+}
+
+// ── Sidebar / hamburger ──
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+document.getElementById('hamburger').addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('show');
+});
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  overlay.classList.remove('show');
+}
 </script>
 </body>
-      </html>
+</html>
+
