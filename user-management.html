@@ -14,7 +14,6 @@
     .admin-bar { display:none; position:fixed; top:0; left:0; right:0; height:28px; background:#0066cc; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; color:#fff; letter-spacing:.08em; text-transform:uppercase; z-index:200; }
     .admin-bar.show { display:flex; }
     .admin-bar span { opacity:.7; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
-
     .sidebar { position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh; background:#fff; border-right:1px solid #dde3ec; display:flex; flex-direction:column; z-index:100; transition:transform .3s; }
     .sidebar.admin-offset { top:28px; height:calc(100vh - 28px); }
     .sidebar-brand { display:flex; align-items:center; gap:.7rem; padding:1rem 1.1rem; border-bottom:1px solid #dde3ec; cursor:pointer; }
@@ -33,7 +32,6 @@
     .nav-bottom { border-top:1px solid #dde3ec; padding:.5rem 0; }
     .btn-logout { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; width:100%; background:none; border:none; color:#dc3545; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; cursor:pointer; transition:background .2s; }
     .btn-logout:hover { background:#fff5f5; }
-
     .topbar { display:none; position:fixed; top:0; left:0; right:0; height:54px; background:#fff; border-bottom:1px solid #dde3ec; align-items:center; justify-content:space-between; padding:0 1rem; z-index:99; }
     .topbar.admin-offset { top:28px; }
     .topbar-brand { display:flex; align-items:center; gap:.5rem; font-family:'Merriweather',serif; font-size:.8rem; font-weight:700; color:#0066cc; cursor:pointer; }
@@ -42,7 +40,6 @@
     .hamburger span { display:block; width:22px; height:2px; background:currentColor; border-radius:2px; }
     .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:98; }
     .overlay.show { display:block; }
-
     .main { margin-left:var(--sidebar-w); min-height:100vh; }
     .main.admin-offset { margin-top:28px; }
     .main-bar { height:4px; background:#0066cc; }
@@ -51,105 +48,81 @@
     .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; flex-wrap:wrap; gap:.8rem; }
     .page-header h1 { font-family:'Merriweather',serif; font-size:1.2rem; font-weight:700; }
 
-    .tabs { display:flex; gap:0; margin-bottom:1.2rem; border-bottom:2px solid #edf0f4; overflow-x:auto; }
-    .tab { padding:.65rem 1.1rem; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; color:#888; background:none; border:none; border-bottom:2px solid transparent; cursor:pointer; margin-bottom:-2px; white-space:nowrap; transition:color .2s,border-color .2s; }
+    .tabs { display:flex; gap:.4rem; margin-bottom:1.4rem; border-bottom:2px solid #edf0f4; }
+    .tab { padding:.65rem 1.2rem; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; color:#888; background:none; border:none; border-bottom:2px solid transparent; cursor:pointer; margin-bottom:-2px; transition:color .2s,border-color .2s; }
     .tab.active { color:#0066cc; border-bottom-color:#0066cc; }
-    .tab-count { background:#fd7e14; color:#fff; border-radius:20px; padding:.05rem .4rem; font-size:.68rem; margin-left:.3rem; }
 
-    .search-bar { margin-bottom:1rem; }
-    .search-input { width:100%; padding:.65rem .9rem; border:1.5px solid #dde3ec; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; outline:none; transition:border-color .2s; }
+    .search-bar { display:flex; gap:.6rem; margin-bottom:1.2rem; }
+    .search-input { flex:1; padding:.65rem .9rem; border:1.5px solid #dde3ec; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; outline:none; transition:border-color .2s; }
     .search-input:focus { border-color:#0066cc; }
 
-    /* User Cards */
-    .user-list { display:flex; flex-direction:column; gap:.6rem; }
-    .user-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:.9rem 1rem; display:flex; align-items:center; gap:.85rem; box-shadow:0 1px 3px rgba(0,0,0,.04); cursor:pointer; transition:box-shadow .2s,border-color .2s; }
-    .user-card:hover { box-shadow:0 3px 10px rgba(0,0,0,.09); border-color:#b0c8f0; }
-    .user-card.pending-card { border-left:3px solid #fd7e14; }
-    .user-card.suspended-card { border-left:3px solid #dc3545; opacity:.8; }
-    .user-card.blocked-card { border-left:3px solid #1a1a1a; opacity:.7; }
-    .user-avatar { width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,#0066cc,#6c63ff); display:flex; align-items:center; justify-content:center; color:#fff; font-size:1rem; font-weight:700; flex-shrink:0; }
-    .user-avatar.admin-av { background:linear-gradient(135deg,#28a745,#17a2b8); }
-    .user-avatar.super-av { background:linear-gradient(135deg,#fd7e14,#dc3545); }
-    .user-info { flex:1; min-width:0; }
-    .user-name { font-size:.9rem; font-weight:700; color:#1a1a1a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .user-email { font-size:.75rem; color:#888; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:.1rem; }
-    .user-badges { display:flex; gap:.35rem; margin-top:.3rem; flex-wrap:wrap; }
-    .badge { display:inline-block; font-size:.62rem; font-weight:700; padding:.18rem .55rem; border-radius:20px; }
-    .badge-sa   { background:linear-gradient(135deg,#0066cc,#6c63ff); color:#fff; }
+    .users-table { width:100%; border-collapse:collapse; background:#fff; border:1px solid #dde3ec; border-radius:8px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.04); }
+    .users-table th { text-align:left; font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#aaa; padding:.8rem 1rem; background:#f7f9fc; border-bottom:1px solid #edf0f4; }
+    .users-table td { padding:.8rem 1rem; font-size:.84rem; color:#333; border-bottom:1px solid #f0f0f0; vertical-align:middle; }
+    .users-table tr:last-child td { border-bottom:none; }
+    .users-table tr:hover td { background:#fafbfc; }
+
+    .badge { display:inline-block; font-size:.65rem; font-weight:700; padding:.2rem .6rem; border-radius:20px; }
+    .badge-superadmin { background:linear-gradient(135deg,#0066cc,#6c63ff); color:#fff; }
     .badge-admin { background:#eef4ff; color:#0066cc; }
     .badge-member { background:#f7f9fc; color:#555; border:1px solid #dde3ec; }
     .badge-pending { background:#fff4e6; color:#c45f00; }
     .badge-suspended { background:#fff0f0; color:#dc3545; }
-    .badge-blocked { background:#1a1a1a; color:#fff; }
-    .badge-active { background:#eafaf0; color:#1e7e34; }
-    .badge-finance { background:#eafaf0; color:#1e7e34; font-size:.58rem; }
-    .user-arrow { color:#ccc; font-size:1rem; }
+    .badge-green { background:#eafaf0; color:#1e7e34; }
 
-    .view-only { background:#eef4ff; border:1px solid #c5d9f5; border-radius:6px; padding:.75rem 1rem; font-size:.82rem; color:#0066cc; font-weight:600; margin-bottom:1rem; }
+    .action-btns { display:flex; gap:.4rem; flex-wrap:wrap; }
+    .btn-xs { padding:.3rem .65rem; font-family:'Open Sans',sans-serif; font-size:.72rem; font-weight:700; border-radius:4px; cursor:pointer; border:1px solid; transition:all .2s; }
+    .btn-xs-approve { background:#eafaf0; color:#1e7e34; border-color:#b7dfca; }
+    .btn-xs-approve:hover { background:#d4f0e3; }
+    .btn-xs-reject { background:#fff0f0; color:#dc3545; border-color:#f5c0c5; }
+    .btn-xs-reject:hover { background:#fdd; }
+    .btn-xs-promote { background:#eef4ff; color:#0066cc; border-color:#c5d9f5; }
+    .btn-xs-promote:hover { background:#d6e8ff; }
+    .btn-xs-demote { background:#fff4e6; color:#c45f00; border-color:#ffd8a8; }
+    .btn-xs-demote:hover { background:#ffe8c0; }
+    .btn-xs-suspend { background:#fff8f0; color:#c45f00; border-color:#ffd8a8; }
+    .btn-xs-suspend:hover { background:#ffe8c0; }
+    .btn-xs-reactivate { background:#eafaf0; color:#1e7e34; border-color:#b7dfca; }
+    .btn-xs-reactivate:hover { background:#d4f0e3; }
+    .btn-xs-delete { background:#fff0f0; color:#dc3545; border-color:#f5c0c5; }
+    .btn-xs-delete:hover { background:#fdd; }
+    .btn-xs-transfer { background:linear-gradient(135deg,#0066cc,#6c63ff); color:#fff; border-color:transparent; }
+    .btn-xs-transfer:hover { opacity:.88; }
 
-    .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; }
-    .empty-state .big { font-size:2.5rem; margin-bottom:.6rem; }
+    .view-only-notice { background:#f7f9fc; border:1px solid #dde3ec; border-radius:6px; padding:.8rem 1rem; font-size:.82rem; color:#888; margin-bottom:1rem; }
 
-    /* ── Bottom Sheet ── */
-    .sheet-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:600; }
-    .sheet-overlay.show { display:block; }
-    .bottom-sheet { position:fixed; bottom:0; left:0; right:0; background:#fff; border-radius:16px 16px 0 0; padding:1.2rem 1.2rem 2rem; z-index:700; transform:translateY(100%); transition:transform .3s cubic-bezier(.4,0,.2,1); max-height:90vh; overflow-y:auto; }
-    .bottom-sheet.show { transform:translateY(0); }
-    .sheet-handle { width:40px; height:4px; background:#dde3ec; border-radius:2px; margin:0 auto 1.2rem; }
-    .sheet-user { display:flex; align-items:center; gap:.8rem; padding-bottom:1rem; border-bottom:1px solid #edf0f4; margin-bottom:.8rem; }
-    .sheet-avatar { width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#0066cc,#6c63ff); display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem; font-weight:700; flex-shrink:0; }
-    .sheet-name { font-size:.95rem; font-weight:700; }
-    .sheet-meta { font-size:.75rem; color:#888; margin-top:.15rem; }
-    .sheet-action { display:flex; align-items:center; gap:.85rem; padding:.85rem .5rem; border-bottom:1px solid #f5f5f5; cursor:pointer; border-radius:6px; transition:background .15s; }
-    .sheet-action:hover { background:#f7f9fc; }
-    .sheet-action:last-child { border-bottom:none; }
-    .sheet-action-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
-    .sa-approve { background:#eafaf0; }
-    .sa-reject  { background:#fff0f0; }
-    .sa-promote { background:#eef4ff; }
-    .sa-demote  { background:#fff4e6; }
-    .sa-finance { background:#eafaf0; }
-    .sa-suspend { background:#fff8f0; }
-    .sa-reactivate { background:#eafaf0; }
-    .sa-block   { background:#f5f5f5; }
-    .sa-unblock { background:#eafaf0; }
-    .sa-transfer { background:linear-gradient(135deg,#eef4ff,#f0eeff); }
-    .sa-delete  { background:#fff0f0; }
-    .sheet-action-text { flex:1; }
-    .sheet-action-label { font-size:.88rem; font-weight:700; color:#1a1a1a; }
-    .sheet-action-desc { font-size:.73rem; color:#888; margin-top:.1rem; }
-    .sheet-action.danger .sheet-action-label { color:#dc3545; }
-    .sheet-action.dark .sheet-action-label { color:#1a1a1a; }
+    .finance-perms { display:flex; gap:.5rem; flex-wrap:wrap; }
+    .perm-chip { padding:.25rem .6rem; font-size:.7rem; font-weight:700; border-radius:20px; border:1.5px solid #dde3ec; background:#fff; color:#555; cursor:pointer; transition:all .2s; }
+    .perm-chip.on { border-color:#0066cc; background:#eef4ff; color:#0066cc; }
 
-    /* Finance Modal */
-    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:800; align-items:center; justify-content:center; padding:1rem; }
+    .empty-state { text-align:center; padding:2.5rem 1rem; color:#bbb; }
+    .empty-state .big { font-size:2rem; margin-bottom:.5rem; }
+
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; }
     .modal-overlay.show { display:flex; }
-    .modal { background:#fff; border-radius:8px; width:100%; max-width:420px; box-shadow:0 8px 32px rgba(0,0,0,.15); }
+    .modal { background:#fff; border-radius:8px; width:100%; max-width:460px; max-height:90vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); }
     .modal-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 1.4rem; border-bottom:1px solid #edf0f4; }
     .modal-title { font-family:'Merriweather',serif; font-size:1rem; font-weight:700; color:#0066cc; }
-    .modal-close { background:none; border:none; font-size:1.6rem; cursor:pointer; color:#888; }
+    .modal-close { background:none; border:none; font-size:1.6rem; cursor:pointer; color:#888; line-height:1; }
     .modal-body { padding:1.4rem; }
     .modal-footer { padding:1rem 1.4rem; border-top:1px solid #edf0f4; display:flex; justify-content:flex-end; gap:.6rem; }
-    .perm-row { display:flex; align-items:center; justify-content:space-between; padding:.65rem 0; border-bottom:1px solid #f5f5f5; }
-    .perm-row:last-child { border-bottom:none; }
-    .perm-label { font-size:.86rem; font-weight:600; color:#333; }
-    .perm-desc { font-size:.73rem; color:#888; margin-top:.1rem; }
-    .toggle { position:relative; width:44px; height:24px; flex-shrink:0; }
-    .toggle input { opacity:0; width:0; height:0; }
-    .toggle-slider { position:absolute; inset:0; background:#dde3ec; border-radius:24px; cursor:pointer; transition:background .2s; }
-    .toggle-slider:before { content:''; position:absolute; width:18px; height:18px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:transform .2s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
-    .toggle input:checked + .toggle-slider { background:#28a745; }
-    .toggle input:checked + .toggle-slider:before { transform:translateX(20px); }
-
     .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; }
     .btn-primary:hover { background:#0052a3; }
     .btn-secondary { padding:.6rem 1.1rem; background:transparent; color:#555; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ccd4df; border-radius:5px; cursor:pointer; }
+    .form-group { display:flex; flex-direction:column; gap:.35rem; margin-bottom:.9rem; }
+    .form-group label { font-size:.72rem; font-weight:700; color:#444; }
+    .form-group select { padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; outline:none; appearance:none; }
+    .form-group select:focus { border-color:#0066cc; }
+    .info-row { display:flex; justify-content:space-between; padding:.5rem 0; border-bottom:1px solid #f5f5f5; font-size:.84rem; }
+    .info-row:last-child { border-bottom:none; }
+    .info-label { color:#888; font-weight:600; }
+    .info-val { font-weight:700; color:#1a1a1a; }
 
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
     .toast.success { background:#28a745; }
-    .toast.error   { background:#dc3545; }
-    .toast.info    { background:#0066cc; }
+    .toast.error { background:#dc3545; }
+    .toast.info { background:#0066cc; }
 
     @media(max-width:768px) {
       .sidebar { transform:translateX(-100%); }
@@ -159,17 +132,18 @@
       .main.admin-offset { margin-top:28px; padding-top:54px; }
       .topbar.admin-offset { top:28px; }
       .content { padding:1rem .9rem 3rem; }
+      .users-table { font-size:.78rem; }
+      .users-table th, .users-table td { padding:.6rem .7rem; }
     }
   </style>
 </head>
 <body>
-
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 
-<div class="admin-bar" id="adminBar">🔐 SUPER ADMIN MODE <span>Full system access</span></div>
+<div class="admin-bar" id="adminBar">🔐 ADMIN MODE <span>Full access enabled</span></div>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand" onclick="window.location.href='index.html'">
@@ -217,72 +191,70 @@
 <div class="main" id="mainWrap">
   <div class="main-bar"></div>
   <div class="content">
-
     <div class="page-header">
       <h1>👤 User Management</h1>
     </div>
 
-    <div class="tabs" id="tabsRow">
-      <button class="tab active" data-tab="pending" onclick="switchTab(this)">⏳ Pending <span class="tab-count" id="cntPending">0</span></button>
-      <button class="tab" data-tab="all"       onclick="switchTab(this)">All Users</button>
-      <button class="tab" data-tab="admin"     onclick="switchTab(this)">Admins</button>
-      <button class="tab" data-tab="member"    onclick="switchTab(this)">Members</button>
+    <div class="tabs">
+      <button class="tab active" data-tab="pending" onclick="switchTab(this)">⏳ Pending <span id="pendingTabCount" style="background:#fd7e14;color:#fff;border-radius:20px;padding:.05rem .4rem;font-size:.68rem;margin-left:.3rem;">0</span></button>
+      <button class="tab" data-tab="all" onclick="switchTab(this)">All Users</button>
+      <button class="tab" data-tab="admins" onclick="switchTab(this)">Admins</button>
+      <button class="tab" data-tab="members" onclick="switchTab(this)">Members</button>
       <button class="tab" data-tab="suspended" onclick="switchTab(this)">Suspended</button>
-      <button class="tab" data-tab="blocked"   onclick="switchTab(this)">Blocked</button>
     </div>
 
     <div class="search-bar">
-      <input class="search-input" type="text" id="searchInput" placeholder="🔍  Search by name or email…" oninput="renderList()"/>
+      <input class="search-input" type="text" id="searchInput" placeholder="Search by name or email…" oninput="renderTable()"/>
     </div>
 
-    <div id="viewOnlyNotice" class="view-only" style="display:none">
+    <div id="viewOnlyNotice" class="view-only-notice" style="display:none">
       👁 You have view-only access. Only the Super Admin can perform actions.
     </div>
 
-    <div class="user-list" id="userList">
-      <div class="empty-state"><div class="big">⏳</div><p>Loading users…</p></div>
-    </div>
-
+    <div id="tableWrap"></div>
   </div>
-</div>
-
-<!-- Bottom Sheet -->
-<div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet()"></div>
-<div class="bottom-sheet" id="bottomSheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-user" id="sheetUser"></div>
-  <div id="sheetActions"></div>
 </div>
 
 <!-- Finance Permissions Modal -->
 <div class="modal-overlay" id="financeModal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">💰 Finance Access</div>
+      <div class="modal-title">💰 Finance Permissions</div>
       <button class="modal-close" onclick="closeFinanceModal()">×</button>
     </div>
     <div class="modal-body">
-      <p style="font-size:.82rem;color:#555;margin-bottom:1.1rem;">Set finance permissions for <strong id="financeTargetName"></strong></p>
-      <div class="perm-row">
-        <div><div class="perm-label">View Finance</div><div class="perm-desc">Can see income, expenses, balances</div></div>
-        <label class="toggle"><input type="checkbox" id="pView"/><span class="toggle-slider"></span></label>
-      </div>
-      <div class="perm-row">
-        <div><div class="perm-label">Create Transactions</div><div class="perm-desc">Can add income & expense records</div></div>
-        <label class="toggle"><input type="checkbox" id="pCreate"/><span class="toggle-slider"></span></label>
-      </div>
-      <div class="perm-row">
-        <div><div class="perm-label">Edit Records</div><div class="perm-desc">Can modify existing transactions</div></div>
-        <label class="toggle"><input type="checkbox" id="pEdit"/><span class="toggle-slider"></span></label>
-      </div>
-      <div class="perm-row">
-        <div><div class="perm-label">Export Reports</div><div class="perm-desc">Can download financial reports</div></div>
-        <label class="toggle"><input type="checkbox" id="pExport"/><span class="toggle-slider"></span></label>
+      <p style="font-size:.82rem;color:#555;margin-bottom:1rem;">Set finance access for <strong id="financeUserName"></strong></p>
+      <div style="display:flex;flex-direction:column;gap:.6rem;">
+        <label style="display:flex;align-items:center;gap:.6rem;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="perm_view"/> View Finance</label>
+        <label style="display:flex;align-items:center;gap:.6rem;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="perm_create"/> Create Transactions</label>
+        <label style="display:flex;align-items:center;gap:.6rem;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="perm_edit"/> Edit Records</label>
+        <label style="display:flex;align-items:center;gap:.6rem;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="perm_export"/> Export Reports</label>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn-secondary" onclick="closeFinanceModal()">Cancel</button>
-      <button class="btn-primary" onclick="saveFinancePerms()">Save</button>
+      <button class="btn-primary" onclick="saveFinancePerms()">Save Permissions</button>
+    </div>
+  </div>
+</div>
+
+<!-- Transfer Super Admin Modal -->
+<div class="modal-overlay" id="transferModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🔁 Transfer Super Admin</div>
+      <button class="modal-close" onclick="closeTransferModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:.82rem;color:#dc3545;font-weight:700;margin-bottom:1rem;">⚠️ This will remove your Super Admin role. You cannot undo this.</p>
+      <div class="form-group">
+        <label>Transfer to (Admin)</label>
+        <select id="transferTarget"></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeTransferModal()">Cancel</button>
+      <button class="btn-primary" style="background:#dc3545;" onclick="confirmTransfer()">Confirm Transfer</button>
     </div>
   </div>
 </div>
@@ -290,26 +262,27 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const role     = localStorage.getItem('userRole');
-  const userId   = localStorage.getItem('userId');
+  const role = localStorage.getItem('userRole');
+  const userId = localStorage.getItem('userId');
   const userName = localStorage.getItem('userName') || 'Admin';
   if (!role) { window.location.href = 'auth.html'; }
 
+  const isAdmin = role === 'admin';
   const isSuperAdmin = role === 'superadmin';
-  const isAdmin      = role === 'admin';
-  const isPrivileged = isSuperAdmin || isAdmin;
+  const isPrivileged = isAdmin || isSuperAdmin;
+
+  // Only admins and superadmins can access
   if (!isPrivileged) { window.location.href = 'dashboard.html'; }
 
-  // Setup UI
-  document.getElementById('adminBar').classList.add('show');
-  document.getElementById('sidebar').classList.add('admin-offset');
-  document.getElementById('topbar').classList.add('admin-offset');
-  document.getElementById('mainWrap').classList.add('admin-offset');
-  document.getElementById('navMemo').style.display = 'flex';
-
+  if (isPrivileged) {
+    document.getElementById('adminBar').classList.add('show');
+    document.getElementById('sidebar').classList.add('admin-offset');
+    document.getElementById('topbar').classList.add('admin-offset');
+    document.getElementById('mainWrap').classList.add('admin-offset');
+    document.getElementById('navMemo').style.display = 'flex';
+  }
   if (isSuperAdmin) {
     document.getElementById('navAudit').style.display = 'flex';
-    document.getElementById('adminBar').querySelector('span').textContent = 'Full system access';
   }
   if (isAdmin) {
     document.getElementById('viewOnlyNotice').style.display = 'block';
@@ -317,252 +290,192 @@
 
   let allUsers = [];
   let currentTab = 'pending';
-  let selectedUser = null;
-  let financeTargetId = null;
+  let financeUserId = null;
 
-  // Live listener
-  db.collection('users').orderBy('createdAt', 'desc').onSnapshot(snap => {
+  db.collection('users').orderBy('createdAt','desc').onSnapshot(snap => {
     allUsers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    document.getElementById('cntPending').textContent = allUsers.filter(u => u.status === 'pending').length;
-    renderList();
+    const pending = allUsers.filter(u => u.status === 'pending').length;
+    document.getElementById('pendingTabCount').textContent = pending;
+    renderTable();
   });
 
   function switchTab(btn) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
     currentTab = btn.dataset.tab;
-    renderList();
+    renderTable();
   }
 
-  function renderList() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    let list = allUsers.filter(u => {
-      if (u.id === userId) return false; // don't show yourself
-      const matchSearch = !q || (u.name||'').toLowerCase().includes(q) || (u.email||'').toLowerCase().includes(q);
+  function renderTable() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    let filtered = allUsers.filter(u => {
+      const matchSearch = !search || (u.name||'').toLowerCase().includes(search) || (u.email||'').toLowerCase().includes(search);
       if (!matchSearch) return false;
-      if (currentTab === 'pending')   return u.status === 'pending';
-      if (currentTab === 'admin')     return u.role === 'admin' || u.role === 'superadmin';
-      if (currentTab === 'member')    return u.role === 'member';
+      if (currentTab === 'pending') return u.status === 'pending';
+      if (currentTab === 'admins') return u.role === 'admin' || u.role === 'superadmin';
+      if (currentTab === 'members') return u.role === 'member';
       if (currentTab === 'suspended') return u.status === 'suspended';
-      if (currentTab === 'blocked')   return u.status === 'blocked';
       return true;
     });
 
-    const wrap = document.getElementById('userList');
-    if (!list.length) {
-      wrap.innerHTML = `<div class="empty-state"><div class="big">👤</div><p>No users here.</p></div>`;
+    const wrap = document.getElementById('tableWrap');
+    if (!filtered.length) {
+      wrap.innerHTML = `<div class="empty-state"><div class="big">👤</div><p>No users found.</p></div>`;
       return;
     }
 
-    wrap.innerHTML = list.map(u => {
-      const init = (u.name||'?').charAt(0).toUpperCase();
-      const avCls = u.role === 'superadmin' ? 'super-av' : u.role === 'admin' ? 'admin-av' : '';
-      const cardCls = u.status === 'pending' ? 'pending-card' : u.status === 'suspended' ? 'suspended-card' : u.status === 'blocked' ? 'blocked-card' : '';
-
-      const roleBadge = u.role === 'superadmin'
-        ? `<span class="badge badge-sa">Super Admin</span>`
-        : u.role === 'admin'
-        ? `<span class="badge badge-admin">Admin</span>`
-        : `<span class="badge badge-member">Member</span>`;
-
-      const statusBadge = u.status === 'pending'
-        ? `<span class="badge badge-pending">Pending</span>`
-        : u.status === 'suspended'
-        ? `<span class="badge badge-suspended">Suspended</span>`
-        : u.status === 'blocked'
-        ? `<span class="badge badge-blocked">Blocked</span>`
-        : `<span class="badge badge-active">Active</span>`;
-
-      const finBadge = u.financePerms && Object.values(u.financePerms).some(v=>v)
-        ? `<span class="badge badge-finance">💰 Finance Access</span>` : '';
-
-      return `<div class="user-card ${cardCls}" onclick="openSheet('${u.id}')">
-        <div class="user-avatar ${avCls}">${init}</div>
-        <div class="user-info">
-          <div class="user-name">${u.name || '—'}</div>
-          <div class="user-email">${u.email || '—'}</div>
-          <div class="user-badges">${roleBadge}${statusBadge}${finBadge}</div>
-        </div>
-        <div class="user-arrow">›</div>
-      </div>`;
-    }).join('');
+    wrap.innerHTML = `<table class="users-table">
+      <thead><tr>
+        <th>Name</th><th>Email</th><th>Role</th><th>Status</th>
+        ${isSuperAdmin ? '<th>Actions</th>' : ''}
+      </tr></thead>
+      <tbody>${filtered.map(u => renderUserRow(u)).join('')}</tbody>
+    </table>`;
   }
 
-  // ── Bottom Sheet ──
-  function openSheet(uid) {
-    if (!isSuperAdmin) return; // admins are view-only
-    selectedUser = allUsers.find(u => u.id === uid);
-    if (!selectedUser) return;
+  function renderUserRow(u) {
+    const roleBadge = u.role === 'superadmin' ? `<span class="badge badge-superadmin">Super Admin</span>`
+      : u.role === 'admin' ? `<span class="badge badge-admin">Admin</span>`
+      : `<span class="badge badge-member">Member</span>`;
+    const statusBadge = u.status === 'pending' ? `<span class="badge badge-pending">Pending</span>`
+      : u.status === 'suspended' ? `<span class="badge badge-suspended">Suspended</span>`
+      : `<span class="badge badge-green">Active</span>`;
 
-    const u = selectedUser;
-    const init = (u.name||'?').charAt(0).toUpperCase();
-
-    // Sheet user info
-    document.getElementById('sheetUser').innerHTML = `
-      <div class="sheet-avatar">${init}</div>
-      <div>
-        <div class="sheet-name">${u.name || '—'}</div>
-        <div class="sheet-meta">${u.email || ''} · ${u.role || 'member'}</div>
-      </div>`;
-
-    // Build actions based on user state
     let actions = '';
-    const isPending   = u.status === 'pending';
-    const isSuspended = u.status === 'suspended';
-    const isBlocked   = u.status === 'blocked';
-    const isActive    = !isPending && !isSuspended && !isBlocked;
+    if (isSuperAdmin && u.id !== userId) {
+      if (u.status === 'pending') {
+        actions += `<button class="btn-xs btn-xs-approve" onclick="approveUser('${u.id}')">✅ Approve</button>
+                    <button class="btn-xs btn-xs-reject" onclick="rejectUser('${u.id}')">❌ Reject</button>`;
+      } else {
+        if (u.role === 'member') actions += `<button class="btn-xs btn-xs-promote" onclick="promoteUser('${u.id}')">⬆ Promote</button>`;
+        if (u.role === 'admin') {
+          actions += `<button class="btn-xs btn-xs-demote" onclick="demoteUser('${u.id}')">⬇ Demote</button>`;
+          actions += `<button class="btn-xs btn-xs-promote" onclick="openFinanceModal('${u.id}','${u.name||''}')">💰 Finance</button>`;
+          actions += `<button class="btn-xs btn-xs-transfer" onclick="openTransferModal()">🔁 Transfer SA</button>`;
+        }
+        if (u.status === 'suspended') actions += `<button class="btn-xs btn-xs-reactivate" onclick="reactivateUser('${u.id}')">✓ Reactivate</button>`;
+        else actions += `<button class="btn-xs btn-xs-suspend" onclick="suspendUser('${u.id}')">⏸ Suspend</button>`;
+        actions += `<button class="btn-xs btn-xs-delete" onclick="deleteUser('${u.id}')">🗑</button>`;
+      }
+    }
 
-    if (isPending) {
-      actions += sheetAction('sa-approve', '✅', 'Approve', 'Allow this user to log in', "doApprove()", false);
-      actions += sheetAction('sa-reject',  '❌', 'Reject',  'Reject and remove registration', "doReject()", true);
-    }
-    if (isActive) {
-      if (u.role === 'member') actions += sheetAction('sa-promote', '⬆️', 'Promote to Admin', 'Give this member admin access', "doPromote()", false);
-      if (u.role === 'admin')  actions += sheetAction('sa-demote',  '⬇️', 'Demote to Member', 'Remove admin access', "doDemote()", false);
-      if (u.role === 'admin')  actions += sheetAction('sa-transfer','🔁', 'Transfer Super Admin', 'Make this person the Super Admin', "doTransfer()", false);
-      actions += sheetAction('sa-finance', '💰', 'Finance Access', 'Set finance permissions', "openFinanceModal()", false);
-      actions += sheetAction('sa-suspend', '⏸', 'Suspend Account', 'Temporarily disable login', "doSuspend()", true);
-      actions += sheetAction('sa-block',   '🚫', 'Block Account', 'Permanently block this user', "doBlock()", true);
-    }
-    if (isSuspended) {
-      actions += sheetAction('sa-reactivate', '✅', 'Reactivate', 'Restore account access', "doReactivate()", false);
-      actions += sheetAction('sa-block', '🚫', 'Block Account', 'Permanently block this user', "doBlock()", true);
-    }
-    if (isBlocked) {
-      actions += sheetAction('sa-unblock', '✅', 'Unblock', 'Restore account access', "doReactivate()", false);
-    }
-    actions += sheetAction('sa-delete', '🗑', 'Delete User', 'Permanently remove this account', "doDelete()", true);
-
-    document.getElementById('sheetActions').innerHTML = actions;
-    document.getElementById('sheetOverlay').classList.add('show');
-    document.getElementById('bottomSheet').classList.add('show');
+    return `<tr>
+      <td><strong>${u.name||'—'}</strong></td>
+      <td>${u.email||'—'}</td>
+      <td>${roleBadge}</td>
+      <td>${statusBadge}</td>
+      ${isSuperAdmin ? `<td><div class="action-btns">${actions||'<span style="color:#bbb;font-size:.78rem;">—</span>'}</div></td>` : ''}
+    </tr>`;
   }
 
-  function sheetAction(iconCls, icon, label, desc, fn, isDanger) {
-    return `<div class="sheet-action ${isDanger?'danger':''}" onclick="${fn}">
-      <div class="sheet-action-icon ${iconCls}">${icon}</div>
-      <div class="sheet-action-text">
-        <div class="sheet-action-label">${label}</div>
-        <div class="sheet-action-desc">${desc}</div>
-      </div>
-    </div>`;
+  async function approveUser(id) {
+    await db.collection('users').doc(id).update({ status: 'active' });
+    await logAudit('user_approved', 'Approved registration for user: ' + id);
+    await notifySuperAdmin(userName + ' approved a user registration', 'approval');
+    await notifyUser(id, 'Your registration has been approved! Welcome to GECC Uniport.', 'approval');
+    showToast('User approved!', 'success');
   }
-
-  function closeSheet() {
-    document.getElementById('sheetOverlay').classList.remove('show');
-    document.getElementById('bottomSheet').classList.remove('show');
-  }
-
-  // ── Actions ──
-  async function doApprove() {
-    closeSheet();
-    await db.collection('users').doc(selectedUser.id).update({ status: 'active' });
-    await notifyUser(selectedUser.id, 'Your GECC Uniport account has been approved! You can now log in.', 'approval');
-    await logAudit('user_approved', 'Approved registration for: ' + selectedUser.name);
-    showToast('✅ ' + selectedUser.name + ' approved!', 'success');
-  }
-
-  async function doReject() {
-    if (!confirm('Reject and delete ' + selectedUser.name + '\'s registration?')) return;
-    closeSheet();
-    await db.collection('users').doc(selectedUser.id).delete();
-    await logAudit('user_rejected', 'Rejected registration for: ' + selectedUser.name);
+  async function rejectUser(id) {
+    if (!confirm('Reject and delete this registration?')) return;
+    await db.collection('users').doc(id).delete();
+    await logAudit('user_rejected', 'Rejected registration for user: ' + id);
     showToast('Registration rejected.', 'info');
   }
-
-  async function doPromote() {
-    if (!confirm('Promote ' + selectedUser.name + ' to Admin?')) return;
-    closeSheet();
-    await db.collection('users').doc(selectedUser.id).update({ role: 'admin' });
-    await notifyUser(selectedUser.id, 'You have been promoted to Admin on GECC Uniport.', 'system');
-    await logAudit('user_promoted', 'Promoted ' + selectedUser.name + ' to Admin');
-    showToast('⬆️ Promoted to Admin!', 'success');
+  async function promoteUser(id) {
+    if (!confirm('Promote this member to Admin?')) return;
+    await db.collection('users').doc(id).update({ role: 'admin' });
+    await logAudit('user_promoted', 'Promoted user to Admin: ' + id);
+    await notifySuperAdmin(userName + ' promoted a member to Admin', 'member');
+    await notifyUser(id, 'You have been promoted to Admin on GECC Uniport.', 'system');
+    showToast('User promoted to Admin!', 'success');
+  }
+  async function demoteUser(id) {
+    if (!confirm('Demote this Admin to Member?')) return;
+    await db.collection('users').doc(id).update({ role: 'member' });
+    await logAudit('user_demoted', 'Demoted Admin to Member: ' + id);
+    await notifySuperAdmin(userName + ' demoted an Admin to Member', 'member');
+    showToast('User demoted to Member.', 'info');
+  }
+  async function suspendUser(id) {
+    if (!confirm('Suspend this account?')) return;
+    await db.collection('users').doc(id).update({ status: 'suspended' });
+    await logAudit('user_suspended', 'Suspended user: ' + id);
+    await notifySuperAdmin(userName + ' suspended a user account', 'member');
+    showToast('Account suspended.', 'info');
+  }
+  async function reactivateUser(id) {
+    await db.collection('users').doc(id).update({ status: 'active' });
+    await logAudit('user_reactivated', 'Reactivated user: ' + id);
+    await notifyUser(id, 'Your account has been reactivated.', 'system');
+    showToast('Account reactivated!', 'success');
+  }
+  async function deleteUser(id) {
+    if (!confirm('Permanently delete this user?')) return;
+    await db.collection('users').doc(id).delete();
+    await logAudit('user_deleted', 'Deleted user: ' + id);
+    await notifySuperAdmin(userName + ' deleted a user account', 'member');
+    showToast('User deleted.', 'success');
   }
 
-  async function doDemote() {
-    if (!confirm('Demote ' + selectedUser.name + ' to Member?')) return;
-    closeSheet();
-    await db.collection('users').doc(selectedUser.id).update({ role: 'member' });
-    await notifyUser(selectedUser.id, 'Your role has been changed to Member.', 'system');
-    await logAudit('user_demoted', 'Demoted ' + selectedUser.name + ' to Member');
-    showToast('⬇️ Demoted to Member.', 'info');
-  }
-
-  async function doSuspend() {
-    if (!confirm('Suspend ' + selectedUser.name + '\'s account?')) return;
-    closeSheet();
-    await db.collection('users').doc(selectedUser.id).update({ status: 'suspended' });
-    await notifyUser(selectedUser.id, 'Your account has been suspended. Contact the admin.', 'system');
-    await logAudit('user_suspended', 'Suspended account: ' + selectedUser.name);
-    showToast('⏸ Account suspended.', 'info');
-  }
-
-  async function doReactivate() {
-    closeSheet();
-    await db.collection('users').doc(selectedUser.id).update({ status: 'active' });
-    await notifyUser(selectedUser.id, 'Your GECC Uniport account has been reactivated.', 'system');
-    await logAudit('user_reactivated', 'Reactivated account: ' + selectedUser.name);
-    showToast('✅ Account reactivated!', 'success');
-  }
-
-  async function doBlock() {
-    if (!confirm('Block ' + selectedUser.name + '? They will not be able to log in.')) return;
-    closeSheet();
-    await db.collection('users').doc(selectedUser.id).update({ status: 'blocked' });
-    await logAudit('user_blocked', 'Blocked account: ' + selectedUser.name);
-    showToast('🚫 Account blocked.', 'info');
-  }
-
-  async function doDelete() {
-    if (!confirm('Permanently delete ' + selectedUser.name + '? This cannot be undone.')) return;
-    closeSheet();
-    await db.collection('users').doc(selectedUser.id).delete();
-    await logAudit('user_deleted', 'Deleted user: ' + selectedUser.name);
-    showToast('🗑 User deleted.', 'success');
-  }
-
-  async function doTransfer() {
-    if (!confirm('Transfer Super Admin to ' + selectedUser.name + '? You will become an Admin.')) return;
-    closeSheet();
-    const batch = db.batch();
-    batch.update(db.collection('users').doc(userId), { role: 'admin' });
-    batch.update(db.collection('users').doc(selectedUser.id), { role: 'superadmin' });
-    await batch.commit();
-    await notifyUser(selectedUser.id, 'You are now the Super Admin of GECC Uniport.', 'system');
-    await logAudit('superadmin_transferred', 'Transferred Super Admin to: ' + selectedUser.name);
-    localStorage.setItem('userRole', 'admin');
-    showToast('🔁 Super Admin transferred.', 'info');
-    setTimeout(() => window.location.href = 'dashboard.html', 1500);
-  }
-
-  // Finance Modal
-  function openFinanceModal() {
-    closeSheet();
-    financeTargetId = selectedUser.id;
-    document.getElementById('financeTargetName').textContent = selectedUser.name;
-    const perms = selectedUser.financePerms || {};
-    document.getElementById('pView').checked   = !!perms.view;
-    document.getElementById('pCreate').checked = !!perms.create;
-    document.getElementById('pEdit').checked   = !!perms.edit;
-    document.getElementById('pExport').checked = !!perms.export;
+  function openFinanceModal(uid, uname) {
+    financeUserId = uid;
+    document.getElementById('financeUserName').textContent = uname;
+    db.collection('users').doc(uid).get().then(d => {
+      const perms = d.data().financePerms || {};
+      document.getElementById('perm_view').checked = !!perms.view;
+      document.getElementById('perm_create').checked = !!perms.create;
+      document.getElementById('perm_edit').checked = !!perms.edit;
+      document.getElementById('perm_export').checked = !!perms.export;
+    });
     document.getElementById('financeModal').classList.add('show');
   }
   function closeFinanceModal() { document.getElementById('financeModal').classList.remove('show'); }
   async function saveFinancePerms() {
     const perms = {
-      view:   document.getElementById('pView').checked,
-      create: document.getElementById('pCreate').checked,
-      edit:   document.getElementById('pEdit').checked,
-      export: document.getElementById('pExport').checked
+      view: document.getElementById('perm_view').checked,
+      create: document.getElementById('perm_create').checked,
+      edit: document.getElementById('perm_edit').checked,
+      export: document.getElementById('perm_export').checked
     };
-    await db.collection('users').doc(financeTargetId).update({ financePerms: perms });
-    await logAudit('finance_perms_updated', 'Updated finance permissions for: ' + selectedUser.name);
+    await db.collection('users').doc(financeUserId).update({ financePerms: perms });
+    await logAudit('finance_perms_updated', 'Updated finance permissions for: ' + financeUserId);
     closeFinanceModal();
-    showToast('💰 Finance permissions saved!', 'success');
+    showToast('Finance permissions saved!', 'success');
   }
-  document.getElementById('financeModal').addEventListener('click', function(e){ if(e.target===this) closeFinanceModal(); });
 
-  // ── Shared helpers ──
+  function openTransferModal() {
+    const admins = allUsers.filter(u => u.role === 'admin');
+    const sel = document.getElementById('transferTarget');
+    sel.innerHTML = admins.length
+      ? admins.map(a => `<option value="${a.id}">${a.name} (${a.email})</option>`).join('')
+      : '<option disabled>No admins available</option>';
+    document.getElementById('transferModal').classList.add('show');
+  }
+  function closeTransferModal() { document.getElementById('transferModal').classList.remove('show'); }
+  async function confirmTransfer() {
+    const targetId = document.getElementById('transferTarget').value;
+    if (!targetId) return;
+    if (!confirm('Are you sure? You will lose Super Admin access.')) return;
+    const batch = db.batch();
+    batch.update(db.collection('users').doc(userId), { role: 'admin' });
+    batch.update(db.collection('users').doc(targetId), { role: 'superadmin' });
+    await batch.commit();
+    await logAudit('superadmin_transferred', 'Super Admin role transferred to: ' + targetId);
+    showToast('Super Admin transferred. You are now an Admin.', 'info');
+    localStorage.setItem('userRole', 'admin');
+    closeTransferModal();
+    setTimeout(() => window.location.href = 'dashboard.html', 1500);
+  }
+
+  async function notifySuperAdmin(message, type) {
+    if (isSuperAdmin) return; // Don't notify yourself
+    const saSnap = await db.collection('users').where('role','==','superadmin').limit(1).get();
+    if (saSnap.empty) return;
+    await db.collection('notifications').add({
+      toUserId: saSnap.docs[0].id, message, type, read: false,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  }
   async function notifyUser(uid, message, type) {
     await db.collection('notifications').add({
       toUserId: uid, message, type, read: false,
@@ -571,15 +484,16 @@
   }
   async function logAudit(action, description) {
     await db.collection('audit_logs').add({
-      action, description,
-      performedBy: userName, performedByRole: role, userId,
+      action, description, performedBy: userName, performedByRole: role, userId,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
   }
 
   function doLogout() {
     auth.signOut().then(() => {
-      localStorage.clear();
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userName');
       window.location.href = 'auth.html';
     });
   }
@@ -592,6 +506,8 @@
   const overlay = document.getElementById('overlay');
   document.getElementById('hamburger').addEventListener('click', () => { sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
   function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+  document.getElementById('financeModal').addEventListener('click', function(e){ if(e.target===this) closeFinanceModal(); });
+  document.getElementById('transferModal').addEventListener('click', function(e){ if(e.target===this) closeTransferModal(); });
 </script>
 </body>
 </html>
