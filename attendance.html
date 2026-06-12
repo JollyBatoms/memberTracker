@@ -219,6 +219,10 @@
     <a class="nav-item active" href="attendance.html"><span class="icon">✓</span> Attendance</a>
     <a class="nav-item" href="finance.html"><span class="icon">💰</span> Finance</a>
     <a class="nav-item" href="events.html"><span class="icon">📅</span> Events</a>
+    <a class="nav-item" href="hub.html"><span class="icon">🌐</span> Fellowship Hub</a>
+<a class="nav-item" href="notifications.html"><span class="icon">🔔</span> Notifications</a>
+<a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="icon">👤</span> User Management</a>
+<a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="icon">🔍</span> Audit Logs</a>
     <a class="nav-item" href="positions.html"><span class="icon">🎯</span> Positions</a>
   </nav>
   <div class="nav-bottom">
@@ -872,6 +876,13 @@
   document.getElementById('hamburger').addEventListener('click',()=>{sidebar.classList.toggle('open');overlay.classList.toggle('show');});
   function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show');}
 
+  if (role === 'superadmin') {
+  document.getElementById('navUserMgmt').style.display = 'flex';
+  document.getElementById('navAudit').style.display = 'flex';
+}
+if (role === 'admin') {
+  document.getElementById('navUserMgmt').style.display = 'flex';
+}
 </script>
 </body>
   </html>
