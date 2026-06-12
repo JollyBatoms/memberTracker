@@ -28,3 +28,10 @@ async function getUserRoleFromDB(uid) {
     return null;
   }
 }
+
+
+
+// Inside firebase-config.js
+firebase.initializeApp(firebaseConfig);
+window.db = firebase.firestore();
+window.auth = firebase.auth();
