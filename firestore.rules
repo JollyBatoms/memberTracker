@@ -2,28 +2,37 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Any authenticated user can read their OWN user document.
-    // This is what runs at login to fetch their role.
+    function getUser() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    function isSuperAdmin() {
+      return request.auth != null && getUser().role == 'superadmin';
+    }
+    function isAdminOrAbove() {
+      return request.auth != null && 
+             (getUser().role == 'admin' || getUser().role == 'superadmin');
+    }
+    function isActiveUser() {
+      return request.auth != null && 
+             getUser().status == 'active';
+    }
+
+    // Users collection
     match /users/{userId} {
+      // Anyone authenticated can read their own doc (needed at login)
       allow read: if request.auth != null && request.auth.uid == userId;
-      allow write: if false; // only backend/admin SDK can write user docs
+      // Active admins/superadmins can read all user docs
+      allow read: if isAdminOrAbove() && isActiveUser();
+      // Only superadmin can write user docs (approve, suspend, promote etc.)
+      allow write: if isSuperAdmin() && isActiveUser();
+      // New registrations: user can create their OWN doc
+      allow create: if request.auth != null && request.auth.uid == userId;
     }
 
-    // Helper functions (used below)
-    function isAdmin() {
-      return request.auth != null &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-    }
-
-    function isMember() {
-      return request.auth != null &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'member';
-    }
-
-    // All other collections: members can read, only admin can write
+    // Everything else
     match /{document=**} {
-      allow read: if isAdmin() || isMember();
-      allow write: if isAdmin();
+      allow read: if isActiveUser();
+      allow write: if isAdminOrAbove() && isActiveUser();
     }
   }
 }
