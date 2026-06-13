@@ -492,7 +492,7 @@
       ? sortedAtt.slice(0,5).map(a=>`
           <tr>
             <td>${fmtDate(a.date)}</td>
-            <td><span class="badge \( {badgeClass(a.type)}"> \){a.type||'Event'}</span></td>
+            <td><span class="badge ${badgeClass(a.type)}">${a.type||'Event'}</span></td>
             <td><strong>${(a.members||[]).length+(a.visitors||0)}</strong></td>
           </tr>`).join('')
       : '<tr><td colspan="3" class="empty-msg">No records yet</td></tr>';
@@ -531,17 +531,17 @@
       const imgHtml = ev.image
         ? `<div class="slide-img"><img src="${ev.image}" alt=""></div>`
         : `<div class="slide-img">📅</div>`;
-      return `<div class="carousel-slide \( {i===0?'active':''}"> \){imgHtml}
+      return `<div class="carousel-slide ${i===0?'active':''}">${imgHtml}
         <div class="slide-info">
-          <span class="slide-status \( {up?'upcoming':'past'}"> \){up?'Upcoming':'Past'}</span>
+          <span class="slide-status ${up?'upcoming':'past'}">${up?'Upcoming':'Past'}</span>
           <div class="slide-title">${ev.title}</div>
-          <div class="slide-date">📅 \( {ds} \){ev.time?' · '+ev.time:''}</div>
+          <div class="slide-date">📅 ${ds}${ev.time?' · '+ev.time:''}</div>
         </div>
       </div>`;
     }).join('');
 
     dots.innerHTML = sorted.map((_,i)=>
-      `<div class="dot \( {i===0?'active':''}" data-i=" \){i}"></div>`
+      `<div class="dot ${i===0?'active':''}" data-i="${i}"></div>`
     ).join('');
 
     let cur = 0;
@@ -562,7 +562,7 @@
           <div class="lost-item">
             <div>
               <div class="lost-name">${m.name}</div>
-              <div class="lost-dept">\( {m.department||''} \){m.level?' · '+m.level:''}</div>
+              <div class="lost-dept">${m.department||''}${m.level?' · '+m.level:''}</div>
             </div>
             <div class="lost-weeks">8+ wks absent</div>
           </div>`).join('')
