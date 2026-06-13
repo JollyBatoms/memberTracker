@@ -2,28 +2,126 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Any authenticated user can read their OWN user document.
-    // This is what runs at login to fetch their role.
-    match /users/{userId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
-      allow write: if false; // only backend/admin SDK can write user docs
+    // Helper functions
+    function isAuth() {
+      return request.auth != null;
     }
-
-    // Helper functions (used below)
-    function isAdmin() {
-      return request.auth != null &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
     }
-
+    function getRole() {
+      return getUserData().role;
+    }
+    function isActive() {
+      return getUserData().status == 'active';
+    }
     function isMember() {
-      return request.auth != null &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'member';
+      return isAuth() && isActive() && getRole() == 'member';
+    }
+    function isAdmin() {
+      return isAuth() && isActive() && getRole() == 'admin';
+    }
+    function isSuperAdmin() {
+      return isAuth() && isActive() && getRole() == 'superadmin';
+    }
+    function isPrivileged() {
+      return isAdmin() || isSuperAdmin();
+    }
+    function isAnyRole() {
+      return isMember() || isAdmin() || isSuperAdmin();
     }
 
-    // All other collections: members can read, only admin can write
-    match /{document=**} {
-      allow read: if isAdmin() || isMember();
-      allow write: if isAdmin();
+    // USERS collection
+    match /users/{userId} {
+      allow read: if isAuth();
+      allow create: if isAuth();
+      allow update: if isSuperAdmin() || request.auth.uid == userId;
+      allow delete: if isSuperAdmin();
+    }
+
+    // MEMBERS collection
+    match /members/{docId} {
+      allow read: if isAnyRole();
+      allow create, update: if isPrivileged();
+      allow delete: if isPrivileged();
+    }
+
+    // ATTENDANCE collection
+    match /attendance/{docId} {
+      allow read: if isAnyRole();
+      allow create, update: if isPrivileged();
+      allow delete: if isPrivileged();
+    }
+
+    // EVENTS collection
+    match /events/{docId} {
+      allow read: if isAnyRole();
+      allow create, update, delete: if isPrivileged();
+    }
+
+    // POSITIONS collection
+    match /positions/{docId} {
+      allow read: if isAnyRole();
+      allow create, update, delete: if isPrivileged();
+    }
+
+    // FINANCE collections
+    match /finance_records/{docId} {
+      allow read: if isPrivileged();
+      allow create: if isPrivileged();
+      allow update, delete: if isSuperAdmin();
+    }
+    match /finance_transfers/{docId} {
+      allow read: if isPrivileged();
+      allow create: if isPrivileged();
+      allow update, delete: if isSuperAdmin();
+    }
+    match /finance_levies/{docId} {
+      allow read: if isPrivileged();
+      allow create: if isPrivileged();
+      allow update, delete: if isSuperAdmin();
+    }
+
+    // SETTINGS (memo etc)
+    match /settings/{docId} {
+      allow read: if isAnyRole();
+      allow write: if isPrivileged();
+    }
+
+    // NOTIFICATIONS
+    match /notifications/{docId} {
+      allow read: if isAuth() && (
+        resource.data.toUserId == request.auth.uid || isSuperAdmin()
+      );
+      allow create: if isAuth();
+      allow update: if isAuth() && resource.data.toUserId == request.auth.uid;
+      allow delete: if isAuth() && resource.data.toUserId == request.auth.uid;
+    }
+
+    // AUDIT LOGS
+    match /audit_logs/{docId} {
+      allow read: if isSuperAdmin();
+      allow create: if isAnyRole();
+      allow update, delete: if false;
+    }
+
+    // FELLOWSHIP HUB
+    match /hub_posts/{docId} {
+      allow read: if isAnyRole();
+      allow create: if isAnyRole();
+      allow update: if isPrivileged() || request.auth.uid == resource.data.authorId;
+      allow delete: if isPrivileged() || request.auth.uid == resource.data.authorId;
+    }
+    match /hub_posts/{postId}/comments/{commentId} {
+      allow read: if isAnyRole();
+      allow create: if isAnyRole();
+      allow delete: if isPrivileged() || request.auth.uid == resource.data.authorId;
+    }
+
+    // PAST MEMBERS (associates)
+    match /past_members/{docId} {
+      allow read: if isAnyRole();
+      allow write: if isPrivileged();
     }
   }
 }
