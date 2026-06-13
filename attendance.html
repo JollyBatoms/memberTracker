@@ -6,6 +6,8 @@
   <title>GECC Uniport — Attendance</title>
   <link rel="manifest" href="manifest.json" />
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- Google Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --blue:#0066cc; --green:#28a745; --red:#dc3545; --sidebar-w:240px; }
@@ -31,7 +33,7 @@
     .nav-item { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; color:#555; font-size:.85rem; font-weight:600; text-decoration:none; border-left:3px solid transparent; transition:color .2s,background .2s,border-color .2s; }
     .nav-item:hover { color:#0066cc; background:#f0f5ff; }
     .nav-item.active { color:#0066cc; background:#eef4ff; border-left-color:#0066cc; }
-    .nav-item .icon { width:18px; text-align:center; font-size:.95rem; }
+    .nav-item .icon { width:18px; text-align:center; font-size:18px; line-height:1; display:flex; align-items:center; justify-content:center; }
     .nav-bottom { border-top:1px solid #dde3ec; padding:.5rem 0; }
     .btn-logout { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; width:100%; background:none; border:none; color:#dc3545; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; cursor:pointer; transition:background .2s; }
     .btn-logout:hover { background:#fff5f5; }
@@ -219,18 +221,18 @@
   </div>
   <nav class="nav-section">
     <div class="nav-label">Menu</div>
-    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="icon">⚙️</span> Memo</a>
-    <a class="nav-item" href="dashboard.html"><span class="icon">📊</span> Dashboard</a>
-    <a class="nav-item" href="members.html"><span class="icon">👥</span> Members</a>
-    <a class="nav-item" href="past-members.html"><span class="icon">📜</span> Past Members</a>
-    <a class="nav-item active" href="attendance.html"><span class="icon">✓</span> Attendance</a>
-    <a id="navFinance" class="nav-item" href="finance.html" style="display:none"><span class="icon">💰</span> Finance</a>
-    <a class="nav-item" href="events.html"><span class="icon">📅</span> Events</a>
-    <a class="nav-item" href="positions.html"><span class="icon">🎯</span> Positions</a>
-    <a class="nav-item" href="hub.html"><span class="icon">🌐</span> Fellowship Hub</a>
-    <a class="nav-item" href="notifications.html"><span class="icon">🔔</span> Notifications</a>
-    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="icon">👤</span> User Management</a>
-    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="icon">🔍</span> Audit Logs</a>
+    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="icon material-icons">settings</span> Memo</a>
+    <a class="nav-item" href="dashboard.html"><span class="icon material-icons">dashboard</span> Dashboard</a>
+    <a class="nav-item" href="members.html"><span class="icon material-icons">group</span> Members</a>
+    <a class="nav-item" href="past-members.html"><span class="icon material-icons">history</span> Past Members</a>
+    <a class="nav-item active" href="attendance.html"><span class="icon material-icons">check_circle</span> Attendance</a>
+    <a id="navFinance" class="nav-item" href="finance.html" style="display:none"><span class="icon material-icons">account_balance_wallet</span> Finance</a>
+    <a class="nav-item" href="events.html"><span class="icon material-icons">event</span> Events</a>
+    <a class="nav-item" href="positions.html"><span class="icon material-icons">military_tech</span> Positions</a>
+    <a class="nav-item" href="hub.html"><span class="icon material-icons">hub</span> Fellowship Hub</a>
+    <a class="nav-item" href="notifications.html"><span class="icon material-icons">notifications</span> Notifications</a>
+    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="icon material-icons">manage_accounts</span> User Management</a>
+    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="icon material-icons">fact_check</span> Audit Logs</a>
   </nav>
   <div class="nav-bottom">
     <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
