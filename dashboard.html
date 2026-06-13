@@ -6,6 +6,7 @@
   <title>GECC Uniport — Dashboard</title>
   <link rel="manifest" href="manifest.json" />
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --blue:#0066cc; --green:#28a745; --red:#dc3545; --orange:#fd7e14; --sidebar-w:240px; }
@@ -182,26 +183,26 @@
   <nav class="nav-section">
     <div class="nav-label">Menu</div>
     <!-- Super Admin only -->
-    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="icon">⚙️</span> Memo</a>
+    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="icon material-icons">settings</span> Memo</a>
     <!-- All roles -->
-    <a class="nav-item active" href="dashboard.html"><span class="icon">📊</span> Dashboard</a>
-    <a class="nav-item" href="members.html"><span class="icon">👥</span> Members</a>
-    <a class="nav-item" href="past-members.html"><span class="icon">📜</span> Past Members</a>
-    <a class="nav-item" href="attendance.html"><span class="icon">✓</span> Attendance</a>
+    <a class="nav-item active" href="dashboard.html"><span class="icon material-icons">dashboard</span> Dashboard</a>
+    <a class="nav-item" href="members.html"><span class="icon material-icons">people</span> Members</a>
+    <a class="nav-item" href="past-members.html"><span class="icon material-icons">history</span> Past Members</a>
+    <a class="nav-item" href="attendance.html"><span class="icon material-icons">check_circle</span> Attendance</a>
     <!-- Admin + Super Admin only -->
-    <a id="navFinance" class="nav-item" href="finance.html" style="display:none"><span class="icon">💰</span> Finance</a>
+    <a id="navFinance" class="nav-item" href="finance.html" style="display:none"><span class="icon material-icons">account_balance_wallet</span> Finance</a>
     <!-- All roles -->
-    <a class="nav-item" href="events.html"><span class="icon">📅</span> Events</a>
-    <a class="nav-item" href="positions.html"><span class="icon">🎯</span> Positions</a>
-    <a class="nav-item" href="hub.html"><span class="icon">🌐</span> Fellowship Hub</a>
-    <a class="nav-item" href="notifications.html"><span class="icon">🔔</span> Notifications</a>
+    <a class="nav-item" href="events.html"><span class="icon material-icons">event</span> Events</a>
+    <a class="nav-item" href="positions.html"><span class="icon material-icons">flag</span> Positions</a>
+    <a class="nav-item" href="hub.html"><span class="icon material-icons">public</span> Fellowship Hub</a>
+    <a class="nav-item" href="notifications.html"><span class="icon material-icons">notifications</span> Notifications</a>
     <!-- Admin + Super Admin only -->
-    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="icon">👤</span> User Management</a>
+    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="icon material-icons">person</span> User Management</a>
     <!-- Super Admin only -->
-    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="icon">🔍</span> Audit Logs</a>
+    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="icon material-icons">search</span> Audit Logs</a>
   </nav>
   <div class="nav-bottom">
-    <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
+    <button class="btn-logout" onclick="doLogout()"><span class="material-icons">logout</span> Logout</button>
   </div>
 </aside>
 
@@ -491,7 +492,7 @@
       ? sortedAtt.slice(0,5).map(a=>`
           <tr>
             <td>${fmtDate(a.date)}</td>
-            <td><span class="badge ${badgeClass(a.type)}">${a.type||'Event'}</span></td>
+            <td><span class="badge \( {badgeClass(a.type)}"> \){a.type||'Event'}</span></td>
             <td><strong>${(a.members||[]).length+(a.visitors||0)}</strong></td>
           </tr>`).join('')
       : '<tr><td colspan="3" class="empty-msg">No records yet</td></tr>';
@@ -530,17 +531,17 @@
       const imgHtml = ev.image
         ? `<div class="slide-img"><img src="${ev.image}" alt=""></div>`
         : `<div class="slide-img">📅</div>`;
-      return `<div class="carousel-slide ${i===0?'active':''}">${imgHtml}
+      return `<div class="carousel-slide \( {i===0?'active':''}"> \){imgHtml}
         <div class="slide-info">
-          <span class="slide-status ${up?'upcoming':'past'}">${up?'Upcoming':'Past'}</span>
+          <span class="slide-status \( {up?'upcoming':'past'}"> \){up?'Upcoming':'Past'}</span>
           <div class="slide-title">${ev.title}</div>
-          <div class="slide-date">📅 ${ds}${ev.time?' · '+ev.time:''}</div>
+          <div class="slide-date">📅 \( {ds} \){ev.time?' · '+ev.time:''}</div>
         </div>
       </div>`;
     }).join('');
 
     dots.innerHTML = sorted.map((_,i)=>
-      `<div class="dot ${i===0?'active':''}" data-i="${i}"></div>`
+      `<div class="dot \( {i===0?'active':''}" data-i=" \){i}"></div>`
     ).join('');
 
     let cur = 0;
@@ -561,7 +562,7 @@
           <div class="lost-item">
             <div>
               <div class="lost-name">${m.name}</div>
-              <div class="lost-dept">${m.department||''}${m.level?' · '+m.level:''}</div>
+              <div class="lost-dept">\( {m.department||''} \){m.level?' · '+m.level:''}</div>
             </div>
             <div class="lost-weeks">8+ wks absent</div>
           </div>`).join('')
