@@ -13,10 +13,12 @@
 
     .admin-bar { display:none; position:fixed; top:0; left:0; right:0; height:28px; background:#0066cc; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; color:#fff; letter-spacing:.08em; text-transform:uppercase; z-index:200; }
     .admin-bar.show { display:flex; }
-    .admin-bar span { opacity:.7; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
+    .admin-bar.member-bar { background:#28a745; }
+    .admin-bar.super-bar { background:linear-gradient(90deg,#0066cc,#6c63ff); }
+    .admin-bar span { opacity:.8; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
 
     .sidebar { position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh; background:#fff; border-right:1px solid #dde3ec; display:flex; flex-direction:column; z-index:100; transition:transform .3s; }
-    .sidebar.admin-offset { top:28px; height:calc(100vh - 28px); }
+    .sidebar.offset { top:28px; height:calc(100vh - 28px); }
     .sidebar-brand { display:flex; align-items:center; gap:.7rem; padding:1rem 1.1rem; border-bottom:1px solid #dde3ec; cursor:pointer; }
     .brand-logos { display:flex; align-items:center; gap:.3rem; }
     .brand-logo { width:30px; height:30px; border-radius:50%; overflow:hidden; border:1px solid #dde3ec; }
@@ -35,7 +37,7 @@
     .btn-logout:hover { background:#fff5f5; }
 
     .topbar { display:none; position:fixed; top:0; left:0; right:0; height:54px; background:#fff; border-bottom:1px solid #dde3ec; align-items:center; justify-content:space-between; padding:0 1rem; z-index:99; }
-    .topbar.admin-offset { top:28px; }
+    .topbar.offset { top:28px; }
     .topbar-brand { display:flex; align-items:center; gap:.5rem; font-family:'Merriweather',serif; font-size:.8rem; font-weight:700; color:#0066cc; cursor:pointer; }
     .topbar-brand .brand-logo { width:26px; height:26px; }
     .hamburger { background:none; border:none; cursor:pointer; color:#555; padding:.3rem; display:flex; flex-direction:column; gap:5px; }
@@ -44,117 +46,143 @@
     .overlay.show { display:block; }
 
     .main { margin-left:var(--sidebar-w); min-height:100vh; }
-    .main.admin-offset { margin-top:28px; }
+    .main.offset { margin-top:28px; }
     .main-bar { height:4px; background:#0066cc; }
+    .main-bar.member-bar { background:#28a745; }
+    .main-bar.super-bar { background:linear-gradient(90deg,#0066cc,#6c63ff); }
     .content { padding:1.8rem; }
 
     .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; flex-wrap:wrap; gap:.8rem; }
     .page-header h1 { font-family:'Merriweather',serif; font-size:1.2rem; font-weight:700; }
-    .header-actions { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
-    .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; text-decoration:none; transition:background .2s; }
+    .header-actions { display:flex; gap:.6rem; flex-wrap:wrap; }
+    .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; transition:background .2s; }
     .btn-primary:hover { background:#0052a3; }
     .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
-    .btn-outline { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:transparent; color:#0066cc; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #0066cc; border-radius:5px; cursor:pointer; transition:background .2s; }
+    .btn-outline { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:transparent; color:#0066cc; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #0066cc; border-radius:5px; cursor:pointer; }
     .btn-outline:hover { background:#eef4ff; }
 
-    .members-stats { display:flex; gap:1rem; margin-bottom:1.4rem; flex-wrap:wrap; }
-    .mstat { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:.8rem 1.1rem; flex:1; min-width:100px; box-sizing:border-box; box-shadow:0 1px 4px rgba(0,0,0,.04); }
-    .mstat-val { font-size:1.5rem; font-weight:700; color:#0066cc; line-height:1; }
-    .mstat-label { font-size:.68rem; color:#999; font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin-top:.2rem; }
+    .stats-row { display:flex; gap:.8rem; margin-bottom:1.2rem; flex-wrap:wrap; }
+    .stat-pill { background:#fff; border:1px solid #dde3ec; border-radius:20px; padding:.45rem 1rem; font-size:.78rem; font-weight:700; color:#555; display:flex; align-items:center; gap:.4rem; }
+    .stat-pill .num { color:#0066cc; font-size:.95rem; }
+    .stat-pill.green .num { color:#28a745; }
+    .stat-pill.orange .num { color:#fd7e14; }
 
     .toolbar { display:flex; align-items:center; gap:.7rem; margin-bottom:1.2rem; flex-wrap:wrap; }
-    .search-wrap { position:relative; flex:1; min-width:200px; }
-    .search-wrap input { width:100%; padding:.65rem .9rem .65rem 2.2rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; outline:none; transition:border-color .2s; }
+    .search-wrap { position:relative; flex:1; min-width:180px; }
+    .search-wrap input { width:100%; padding:.6rem .9rem .6rem 2.1rem; border:1.5px solid #dde3ec; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.85rem; outline:none; transition:border-color .2s; background:#fff; }
     .search-wrap input:focus { border-color:#0066cc; }
-    .search-icon { position:absolute; left:.7rem; top:50%; transform:translateY(-50%); color:#aaa; }
-    .filter-btns { display:flex; gap:.4rem; }
-    .filter-btn { padding:.5rem .9rem; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; border:1.5px solid #dde3ec; border-radius:5px; background:#fff; color:#555; cursor:pointer; transition:border-color .2s,color .2s,background .2s; }
+    .search-icon { position:absolute; left:.65rem; top:50%; transform:translateY(-50%); color:#aaa; font-size:.9rem; }
+    .filter-btns { display:flex; gap:.4rem; flex-wrap:wrap; }
+    .filter-btn { padding:.45rem .9rem; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; border:1.5px solid #dde3ec; border-radius:20px; background:#fff; color:#555; cursor:pointer; transition:all .2s; }
     .filter-btn.active { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
 
-    .members-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
-    .member-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.1rem; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.04); transition:box-shadow .2s,border-color .2s; }
-    .member-card:hover { box-shadow:0 4px 12px rgba(0,0,0,.1); border-color:#b0c8f0; }
-    .member-card-top { display:flex; align-items:center; gap:.75rem; margin-bottom:.75rem; }
-    .member-avatar { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:700; color:#fff; flex-shrink:0; }
-    .member-card-name { font-size:.9rem; font-weight:700; color:#1a1a1a; line-height:1.2; }
-    .member-card-pos { font-size:.72rem; font-weight:700; margin-top:.1rem; }
-    .member-card-info { display:flex; flex-direction:column; gap:.28rem; }
-    .member-card-row { display:flex; align-items:center; gap:.4rem; font-size:.76rem; color:#666; }
-    .member-card-row .lbl { color:#aaa; font-size:.68rem; font-weight:700; text-transform:uppercase; min-width:40px; }
-    .fyb-badge { display:inline-block; font-size:.6rem; font-weight:700; background:#fff3cd; color:#856404; border:1px solid #ffc107; border-radius:3px; padding:.1rem .35rem; margin-left:.35rem; }
+    .members-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1rem; }
+    .member-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.04); transition:box-shadow .2s,border-color .2s; }
+    .member-card:hover { box-shadow:0 4px 14px rgba(0,0,0,.09); border-color:#b0c8f0; }
+    .member-card-top { padding:1.1rem 1rem .8rem; display:flex; align-items:center; gap:.85rem; }
+    .member-avatar { width:46px; height:46px; border-radius:50%; object-fit:cover; flex-shrink:0; }
+    .member-avatar-placeholder { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.1rem; font-weight:700; color:#fff; flex-shrink:0; }
+    .member-info { flex:1; min-width:0; }
+    .member-name { font-size:.9rem; font-weight:700; color:#1a1a1a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .member-pos { font-size:.72rem; color:#888; margin-top:.1rem; }
+    .member-badges { display:flex; gap:.3rem; margin-top:.3rem; flex-wrap:wrap; }
+    .badge { display:inline-block; font-size:.6rem; font-weight:700; padding:.15rem .5rem; border-radius:20px; }
+    .badge-blue   { background:#eef4ff; color:#0066cc; }
+    .badge-green  { background:#eafaf0; color:#1e7e34; }
+    .badge-orange { background:#fff4e6; color:#c45f00; }
+    .badge-red    { background:#fff0f0; color:#dc3545; }
+    .badge-purple { background:#f0eeff; color:#5e35b1; }
+    .badge-fyb    { background:#dc3545; color:#fff; }
+
+    .member-details { padding:.6rem 1rem .9rem; border-top:1px solid #f0f0f0; display:grid; grid-template-columns:1fr 1fr; gap:.35rem .6rem; }
+    .detail-item { font-size:.75rem; color:#777; }
+    .detail-item strong { color:#333; display:block; font-size:.78rem; }
+
+    .member-actions { padding:.7rem 1rem; border-top:1px solid #f0f0f0; display:flex; gap:.5rem; }
+    .btn-sm { padding:.38rem .8rem; font-family:'Open Sans',sans-serif; font-size:.74rem; font-weight:700; border-radius:4px; cursor:pointer; transition:all .2s; border:1px solid; }
+    .btn-sm-edit { background:#eef4ff; color:#0066cc; border-color:#c5d9f5; }
+    .btn-sm-edit:hover { background:#d6e8ff; }
+    .btn-sm-del  { background:#fff0f0; color:#dc3545; border-color:#f5c0c5; }
+    .btn-sm-del:hover { background:#fdd; }
+    .btn-sm-view { background:#f7f9fc; color:#555; border-color:#dde3ec; }
+    .btn-sm-view:hover { background:#eef4ff; color:#0066cc; border-color:#0066cc; }
 
     .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; grid-column:1/-1; }
     .empty-state .big { font-size:2.5rem; margin-bottom:.6rem; }
 
-    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; }
+    /* Avatar gradient colours */
+    .av-0 { background:linear-gradient(135deg,#0066cc,#6c63ff); }
+    .av-1 { background:linear-gradient(135deg,#28a745,#17a2b8); }
+    .av-2 { background:linear-gradient(135deg,#fd7e14,#dc3545); }
+    .av-3 { background:linear-gradient(135deg,#6f42c1,#e83e8c); }
+    .av-4 { background:linear-gradient(135deg,#20c997,#0066cc); }
+
+    /* View-only notice for members */
+    .view-notice { background:#f0f5ff; border:1px solid #c5d9f5; border-radius:6px; padding:.7rem 1rem; font-size:.8rem; color:#0066cc; font-weight:600; margin-bottom:1rem; display:none; }
+    .view-notice.show { display:block; }
+
+    /* Modal */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; overflow-y:auto; }
     .modal-overlay.show { display:flex; }
-    .modal { background:#fff; border-radius:8px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); }
-    .modal-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 1.4rem; border-bottom:1px solid #edf0f4; }
+    .modal { background:#fff; border-radius:8px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); margin:auto; }
+    .modal-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 1.4rem; border-bottom:1px solid #edf0f4; position:sticky; top:0; background:#fff; z-index:2; }
     .modal-title { font-family:'Merriweather',serif; font-size:1rem; font-weight:700; color:#0066cc; }
     .modal-close { background:none; border:none; font-size:1.6rem; cursor:pointer; color:#888; line-height:1; }
     .modal-body { padding:1.4rem; }
-    .modal-footer { padding:1rem 1.4rem; border-top:1px solid #edf0f4; display:flex; justify-content:flex-end; gap:.6rem; flex-wrap:wrap; }
-
-    .detail-top { display:flex; align-items:center; gap:1rem; margin-bottom:1.4rem; }
-    .detail-avatar { width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:700; color:#fff; flex-shrink:0; }
-    .detail-name { font-size:1.1rem; font-weight:700; }
-    .detail-pos { font-size:.8rem; font-weight:700; margin-top:.2rem; }
-    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem .9rem; }
-    .detail-field { display:flex; flex-direction:column; gap:.2rem; }
-    .detail-field .lbl { font-size:.65rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#aaa; }
-    .detail-field .val { font-size:.88rem; color:#1a1a1a; font-weight:600; }
-
-    .btn-danger { padding:.6rem 1.1rem; background:#dc3545; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; transition:background .2s; }
-    .btn-danger:hover { background:#b02a37; }
+    .modal-footer { padding:1rem 1.4rem; border-top:1px solid #edf0f4; display:flex; justify-content:flex-end; gap:.6rem; position:sticky; bottom:0; background:#fff; }
     .btn-secondary { padding:.6rem 1.1rem; background:transparent; color:#555; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ccd4df; border-radius:5px; cursor:pointer; }
-    .btn-edit { padding:.6rem 1.1rem; background:#fff8e1; color:#856404; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ffc107; border-radius:5px; cursor:pointer; transition:background .2s; }
-    .btn-edit:hover { background:#fff3cd; }
 
-    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
-    .form-group { display:flex; flex-direction:column; gap:.35rem; }
-    .form-group.full { grid-column:1/-1; }
+    .form-group { display:flex; flex-direction:column; gap:.35rem; margin-bottom:.9rem; }
     .form-group label { font-size:.72rem; font-weight:700; color:#444; }
-    .form-group input, .form-group select { padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; background:#fff; outline:none; transition:border-color .2s; appearance:none; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding:.65rem .85rem; border:1.5px solid #ccd4df; border-radius:5px;
+      font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a;
+      background:#fff; outline:none; transition:border-color .2s; appearance:none;
+    }
     .form-group input:focus, .form-group select:focus { border-color:#0066cc; }
-    .form-group input.invalid, .form-group select.invalid { border-color:#dc3545; }
-    .select-wrap { position:relative; }
-    .select-wrap::after { content:''; position:absolute; right:.85rem; top:50%; transform:translateY(-50%); border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid #888; pointer-events:none; }
-    .field-err { font-size:.7rem; color:#dc3545; display:none; }
-    .field-err.show { display:block; }
-    .dob-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:.5rem; }
+    .form-group input.invalid { border-color:#dc3545; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
 
-    .assoc-section { margin-top:.5rem; }
-    .assoc-section-title { font-size:.72rem; font-weight:700; color:#444; margin-bottom:.6rem; text-transform:uppercase; letter-spacing:.06em; }
-    .assoc-entry { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr auto; gap:.5rem; align-items:center; margin-bottom:.5rem; }
-    .assoc-entry select, .assoc-entry input { padding:.55rem .7rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.82rem; color:#1a1a1a; background:#fff; outline:none; appearance:none; }
-    .assoc-entry select:focus, .assoc-entry input:focus { border-color:#0066cc; }
-    .btn-remove-assoc { background:#fff0f0; color:#dc3545; border:1px solid #f5c0c5; border-radius:4px; padding:.4rem .6rem; font-size:.8rem; cursor:pointer; white-space:nowrap; }
-    .btn-add-assoc { display:inline-flex; align-items:center; gap:.3rem; padding:.5rem .9rem; background:#eef4ff; color:#0066cc; border:1.5px solid #c5d9f5; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; cursor:pointer; margin-top:.3rem; }
-    .assoc-note { font-size:.72rem; color:#888; margin-top:.5rem; font-style:italic; }
-    .assoc-header { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr auto; gap:.5rem; margin-bottom:.3rem; }
-    .assoc-header span { font-size:.65rem; font-weight:700; color:#aaa; letter-spacing:.06em; text-transform:uppercase; }
+    .photo-upload { border:2px dashed #ccd4df; border-radius:8px; padding:1.2rem; text-align:center; cursor:pointer; position:relative; transition:border-color .2s,background .2s; }
+    .photo-upload:hover { border-color:#0066cc; background:#f5f9ff; }
+    .photo-upload input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    .photo-preview { width:70px; height:70px; border-radius:50%; object-fit:cover; margin:0 auto .5rem; display:block; border:2px solid #dde3ec; }
+
+    /* Profile sheet */
+    .sheet-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:600; }
+    .sheet-overlay.show { display:block; }
+    .profile-sheet { position:fixed; bottom:0; left:0; right:0; background:#fff; border-radius:16px 16px 0 0; padding:1.2rem 1.4rem 2.5rem; z-index:700; transform:translateY(100%); transition:transform .3s cubic-bezier(.4,0,.2,1); max-height:88vh; overflow-y:auto; }
+    .profile-sheet.show { transform:translateY(0); }
+    .sheet-handle { width:40px; height:4px; background:#dde3ec; border-radius:2px; margin:0 auto 1.2rem; }
+    .profile-top { display:flex; align-items:center; gap:1rem; margin-bottom:1.2rem; padding-bottom:1rem; border-bottom:1px solid #edf0f4; }
+    .profile-avatar { width:56px; height:56px; border-radius:50%; object-fit:cover; flex-shrink:0; border:2px solid #edf0f4; }
+    .profile-avatar-ph { width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.3rem; font-weight:700; color:#fff; flex-shrink:0; }
+    .profile-name { font-size:1rem; font-weight:700; color:#1a1a1a; }
+    .profile-pos  { font-size:.78rem; color:#888; margin-top:.15rem; }
+    .profile-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem 1rem; }
+    .profile-field { font-size:.82rem; }
+    .profile-field .lbl { font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#aaa; margin-bottom:.15rem; }
+    .profile-field .val { color:#333; font-weight:600; }
+    .profile-actions { display:flex; gap:.6rem; margin-top:1.2rem; padding-top:1rem; border-top:1px solid #edf0f4; flex-wrap:wrap; }
 
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
     .toast.success { background:#28a745; }
-    .toast.error { background:#dc3545; }
+    .toast.error   { background:#dc3545; }
+    .toast.info    { background:#0066cc; }
 
     @media(max-width:768px) {
       .sidebar { transform:translateX(-100%); }
       .sidebar.open { transform:translateX(0); }
       .topbar { display:flex; }
       .main { margin-left:0; padding-top:54px; }
-      .main.admin-offset { margin-top:28px; padding-top:54px; }
-      .topbar.admin-offset { top:28px; }
+      .main.offset { margin-top:28px; padding-top:54px; }
+      .topbar.offset { top:28px; }
       .content { padding:1rem .9rem 3rem; }
-      .form-grid { grid-template-columns:1fr; }
-      .form-group.full { grid-column:1; }
-      .detail-grid { grid-template-columns:1fr; }
-      .members-grid { grid-template-columns:1fr 1fr; }
-      .assoc-entry { grid-template-columns:1fr 1fr; }
-      .assoc-header { display:none; }
+      .members-grid { grid-template-columns:1fr; }
+      .form-row { grid-template-columns:1fr; }
+      .profile-grid { grid-template-columns:1fr; }
     }
-    @media(max-width:420px) { .members-grid { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
@@ -162,10 +190,10 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script src="firebase-config.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
-<div class="admin-bar" id="adminBar">🔐 ADMIN MODE <span>Full access enabled</span></div>
+<div class="admin-bar" id="adminBar"><span id="adminBarText"></span></div>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand" onclick="window.location.href='index.html'">
@@ -175,7 +203,7 @@
     </div>
     <div class="brand-text">
       <span class="brand-name">GECC Uniport</span>
-      <span class="brand-sub">Member Portal</span>
+      <span class="brand-sub" id="portalLabel">Member Portal</span>
     </div>
   </div>
   <nav class="nav-section">
@@ -185,9 +213,13 @@
     <a class="nav-item active" href="members.html"><span class="icon">👥</span> Members</a>
     <a class="nav-item" href="past-members.html"><span class="icon">📜</span> Past Members</a>
     <a class="nav-item" href="attendance.html"><span class="icon">✓</span> Attendance</a>
-    <a class="nav-item" href="finance.html"><span class="icon">💰</span> Finance</a>
+    <a id="navFinance" class="nav-item" href="finance.html" style="display:none"><span class="icon">💰</span> Finance</a>
     <a class="nav-item" href="events.html"><span class="icon">📅</span> Events</a>
     <a class="nav-item" href="positions.html"><span class="icon">🎯</span> Positions</a>
+    <a class="nav-item" href="hub.html"><span class="icon">🌐</span> Fellowship Hub</a>
+    <a class="nav-item" href="notifications.html"><span class="icon">🔔</span> Notifications</a>
+    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="icon">👤</span> User Management</a>
+    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="icon">🔍</span> Audit Logs</a>
   </nav>
   <div class="nav-bottom">
     <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
@@ -207,31 +239,36 @@
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
 <div class="main" id="mainWrap">
-  <div class="main-bar"></div>
+  <div class="main-bar" id="mainBar"></div>
   <div class="content">
 
     <div class="page-header">
       <h1>👥 Members</h1>
       <div class="header-actions">
-        <button class="btn-outline" id="btnExport" onclick="exportCSV()" style="display:none">⬇ Export</button>
-        <button class="btn-primary" id="btnAdd" onclick="openAddModal()" style="display:none">+ Add Member</button>
+        <button class="btn-outline" id="btnExport" style="display:none" onclick="exportCSV()">⬇ Export</button>
+        <button class="btn-primary" id="btnAdd" style="display:none" onclick="openAddModal()">+ Add Member</button>
       </div>
     </div>
 
-    <div class="members-stats">
-      <div class="mstat"><div class="mstat-val" id="msTotal">—</div><div class="mstat-label">Total Active</div></div>
-      <div class="mstat"><div class="mstat-val" id="msFinal">—</div><div class="mstat-label">Final Year</div></div>
-      <div class="mstat"><div class="mstat-val" id="msLeaders">—</div><div class="mstat-label">Leaders</div></div>
+    <div class="view-notice" id="viewNotice">
+      👁 You are in view-only mode. Contact an admin to make changes.
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-pill"><span class="num" id="stTotal">—</span> Total Members</div>
+      <div class="stat-pill green"><span class="num" id="stLeaders">—</span> Leaders</div>
+      <div class="stat-pill orange"><span class="num" id="stFinal">—</span> Final Year</div>
     </div>
 
     <div class="toolbar">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Search by name or department…" oninput="filterRender()" />
+        <input type="text" id="searchInput" placeholder="Search by name, dept, level…" oninput="renderMembers()"/>
       </div>
       <div class="filter-btns">
         <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">All</button>
-        <button class="filter-btn" data-filter="fyb" onclick="setFilter(this)">🎓 Final Year</button>
+        <button class="filter-btn" data-filter="leaders" onclick="setFilter(this)">Leaders</button>
+        <button class="filter-btn" data-filter="final" onclick="setFilter(this)">Final Year</button>
       </div>
     </div>
 
@@ -242,667 +279,506 @@
   </div>
 </div>
 
-<!-- Detail Modal -->
-<div class="modal-overlay" id="detailModal">
+<!-- Add/Edit Modal — privileged only -->
+<div class="modal-overlay" id="memberModal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">Member Details</div>
-      <button class="modal-close" onclick="closeDetail()">×</button>
-    </div>
-    <div class="modal-body" id="detailBody"></div>
-    <div class="modal-footer" id="detailFooter"></div>
-  </div>
-</div>
-
-<!-- Add / Edit Modal -->
-<div class="modal-overlay" id="addModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="addModalTitle">Add New Member</div>
-      <button class="modal-close" onclick="closeAdd()">×</button>
+      <div class="modal-title" id="modalTitle">Add Member</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
     </div>
     <div class="modal-body">
-      <div class="form-grid">
-
-        <div class="form-group full">
-          <label>Full Name *</label>
-          <input type="text" id="fName" placeholder="e.g. Chukwuemeka Eze"/>
-          <span class="field-err" id="fNameErr">Name is required</span>
+      <div class="form-group">
+        <label>Passport Photo (optional)</label>
+        <div class="photo-upload" id="photoUploadArea">
+          <input type="file" id="fPhoto" accept="image/*" onchange="handlePhotoSelect(event)"/>
+          <div id="photoPlaceholder">
+            <div style="font-size:2rem;margin-bottom:.3rem;">📷</div>
+            <div style="font-size:.78rem;color:#888;">Tap to upload photo</div>
+          </div>
+          <img id="photoPreview" class="photo-preview" style="display:none;" alt="preview"/>
         </div>
-
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="fName" placeholder="e.g. John Doe"/>
+        </div>
         <div class="form-group">
           <label>Gender *</label>
-          <div class="select-wrap"><select id="fGender">
+          <select id="fGender">
             <option value="">— Select —</option>
-            <option>Male</option><option>Female</option>
-          </select></div>
-          <span class="field-err" id="fGenderErr">Required</span>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
         </div>
-
+      </div>
+      <div class="form-row">
         <div class="form-group">
-          <label>Level *</label>
-          <div class="select-wrap"><select id="fLevel">
-            <option value="">— Select —</option>
-            <option>100L</option><option>200L</option><option>300L</option>
-            <option>400L</option><option>500L</option><option>600L</option><option>700L</option>
-          </select></div>
-          <span class="field-err" id="fLevelErr">Required</span>
+          <label>Phone Number</label>
+          <input type="tel" id="fPhone" placeholder="e.g. 08012345678"/>
         </div>
-
+        <div class="form-group">
+          <label>State of Origin</label>
+          <input type="text" id="fState" placeholder="e.g. Rivers"/>
+        </div>
+      </div>
+      <div class="form-row">
         <div class="form-group">
           <label>Department *</label>
           <input type="text" id="fDept" placeholder="e.g. Computer Science"/>
-          <span class="field-err" id="fDeptErr">Required</span>
         </div>
-
         <div class="form-group">
           <label>Faculty</label>
-          <div class="select-wrap"><select id="fFaculty">
+          <input type="text" id="fFaculty" placeholder="e.g. Sciences"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Level *</label>
+          <select id="fLevel">
             <option value="">— Select —</option>
-            <option>Agriculture</option><option>Allied Health Sciences</option>
-            <option>Basic Medical Sciences</option><option>Clinical Sciences</option>
-            <option>Communication &amp; Media Studies</option><option>Computing</option>
-            <option>Dentistry</option><option>Education</option><option>Engineering</option>
-            <option>Humanities</option><option>Law</option><option>Management Sciences</option>
-            <option>Pharmaceutical Sciences</option><option>Science</option>
-            <option>SSLT</option><option>Social Sciences</option>
-          </select></div>
+            <option>100</option><option>200</option><option>300</option>
+            <option>400</option><option>500</option><option>600</option>
+            <option>700</option>
+          </select>
         </div>
-
         <div class="form-group">
-          <label>Phone</label>
-          <input type="tel" id="fPhone" placeholder="08012345678"/>
+          <label>Fellowship Position</label>
+          <select id="fPosition">
+            <option value="">— Member (no position) —</option>
+            <option>President</option>
+            <option>Vice President</option>
+            <option>General Secretary</option>
+            <option>Asst. General Secretary</option>
+            <option>Financial Secretary</option>
+            <option>Treasurer</option>
+            <option>Bible Study Secretary</option>
+            <option>Asst Bible Study Secretary</option>
+            <option>Evangelism Secretary</option>
+            <option>Follow up Secretary</option>
+            <option>Prayer Secretary</option>
+            <option>Asst Prayer Secretary</option>
+            <option>Media/Publicity Secretary</option>
+            <option>Asst Media/Publicity Secretary</option>
+            <option>Organizing Secretary</option>
+            <option>Asst Organizing Secretary</option>
+            <option>Welfare Secretary</option>
+            <option>Asst. Welfare Secretary</option>
+            <option>Academic/Magazine Secretary</option>
+            <option>Music Director</option>
+          </select>
         </div>
-
+      </div>
+      <div class="form-row">
         <div class="form-group">
-          <label>State of Origin</label>
-          <div class="select-wrap"><select id="fState">
+          <label>Birthday Month</label>
+          <select id="fBdMonth">
             <option value="">— Select —</option>
-            <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option>
-            <option>Anambra</option><option>Bauchi</option><option>Bayelsa</option>
-            <option>Benue</option><option>Borno</option><option>Cross River</option>
-            <option>Delta</option><option>Ebonyi</option><option>Edo</option>
-            <option>Ekiti</option><option>Enugu</option><option>FCT</option>
-            <option>Gombe</option><option>Imo</option><option>Jigawa</option>
-            <option>Kaduna</option><option>Kano</option><option>Katsina</option>
-            <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
-            <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
-            <option>Ogun</option><option>Ondo</option><option>Osun</option>
-            <option>Oyo</option><option>Plateau</option><option>Rivers</option>
-            <option>Sokoto</option><option>Taraba</option><option>Yobe</option>
-            <option>Zamfara</option>
-          </select></div>
+            <option value="1">January</option><option value="2">February</option>
+            <option value="3">March</option><option value="4">April</option>
+            <option value="5">May</option><option value="6">June</option>
+            <option value="7">July</option><option value="8">August</option>
+            <option value="9">September</option><option value="10">October</option>
+            <option value="11">November</option><option value="12">December</option>
+          </select>
         </div>
-
-        <div class="form-group" id="memberTypeGroup">
-          <label>Member Type *</label>
-          <div class="select-wrap"><select id="fMemberType" onchange="handleMemberTypeChange()">
-            <option value="active">Active Member</option>
-            <option value="associate">Associate (Past Member)</option>
-          </select></div>
-        </div>
-
-        <div class="form-group" id="positionGroup">
-          <label>Position</label>
-          <div class="select-wrap"><select id="fPosition">
-            <option value="Member">Member</option>
-            <option>President</option><option>Vice President</option>
-            <option>General Secretary</option><option>Asst. General Secretary</option>
-            <option>Bible Study Secretary</option><option>Asst Bible Study Secretary</option>
-            <option>Evangelism Secretary</option><option>Follow up Secretary</option>
-            <option>Prayer Secretary</option><option>Asst Prayer Secretary</option>
-            <option>Media/Publicity Secretary</option><option>Asst Media/Publicity Secretary</option>
-            <option>Organizing Secretary</option><option>Asst Organizing Secretary</option>
-            <option>Welfare Secretary</option><option>Asst. Welfare Secretary</option>
-            <option>Academic/Magazine Secretary</option><option>Music Director</option>
-            <option>Financial Secretary</option><option>Treasurer</option>
-            <option>Ex-official</option>
-          </select></div>
-        </div>
-
         <div class="form-group">
-          <label>Year Started *</label>
-          <input type="number" id="fYearStart" placeholder="e.g. 2023" min="2000" max="2099"/>
-          <span class="field-err" id="fYearStartErr">Required</span>
+          <label>Birthday Day</label>
+          <input type="number" id="fBdDay" placeholder="e.g. 14" min="1" max="31"/>
         </div>
-
-        <div class="form-group" id="yearLeaveGroup">
-          <label>Year Leaving</label>
-          <input type="number" id="fYearLeave" placeholder="e.g. 2027" min="2000" max="2099"/>
-        </div>
-
-        <div class="form-group full">
-          <label>Date of Birth (optional)</label>
-          <div class="dob-row">
-            <div class="select-wrap"><select id="fDobDay">
-              <option value="">Day</option>
-              <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-              <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-              <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option>
-              <option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
-              <option>21</option><option>22</option><option>23</option><option>24</option><option>25</option>
-              <option>26</option><option>27</option><option>28</option><option>29</option><option>30</option>
-              <option>31</option>
-            </select></div>
-            <div class="select-wrap"><select id="fDobMonth">
-              <option value="">Month</option>
-              <option value="1">January</option><option value="2">February</option>
-              <option value="3">March</option><option value="4">April</option>
-              <option value="5">May</option><option value="6">June</option>
-              <option value="7">July</option><option value="8">August</option>
-              <option value="9">September</option><option value="10">October</option>
-              <option value="11">November</option><option value="12">December</option>
-            </select></div>
-            <input type="number" id="fDobYear" placeholder="Year" min="1980" max="2010"/>
-          </div>
-        </div>
-
-        <div class="form-group full" id="assocSection" style="display:none">
-          <div class="assoc-section">
-            <div class="assoc-section-title">📋 Positions &amp; Years Served</div>
-            <div class="assoc-header">
-              <span>Position</span>
-              <span>Yr Started</span>
-              <span>Yr Left Role</span>
-              <span>Yr Left School</span>
-              <span></span>
-            </div>
-            <div id="assocEntries"></div>
-            <button class="btn-add-assoc" type="button" onclick="addAssocEntry()">+ Add Position</button>
-            <div class="assoc-note">This person will be saved directly to Past Members.</div>
-          </div>
-        </div>
-
+      </div>
+      <div class="form-group">
+        <label>Membership Status</label>
+        <select id="fStatus">
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-secondary" onclick="closeAdd()">Cancel</button>
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
       <button class="btn-primary" id="btnSave" onclick="saveMember()">Save Member</button>
     </div>
   </div>
 </div>
 
+<!-- Profile Sheet — all roles can view -->
+<div class="sheet-overlay" id="sheetOverlay" onclick="closeProfile()"></div>
+<div class="profile-sheet" id="profileSheet">
+  <div class="sheet-handle"></div>
+  <div class="profile-top" id="profileTop"></div>
+  <div class="profile-grid" id="profileGrid"></div>
+  <div class="profile-actions" id="profileActions"></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
+  // ── Role setup ──
   const role = localStorage.getItem('userRole');
   if (!role) { window.location.href = 'auth.html'; }
-  const isAdmin = role === 'admin';
 
-  if (isAdmin) {
-    document.getElementById('adminBar').classList.add('show');
-    document.getElementById('sidebar').classList.add('admin-offset');
-    document.getElementById('topbar').classList.add('admin-offset');
-    document.getElementById('mainWrap').classList.add('admin-offset');
+  const isMember     = role === 'member';
+  const isAdmin      = role === 'admin';
+  const isSuperAdmin = role === 'superadmin';
+  const isPrivileged = isAdmin || isSuperAdmin;
+
+  // ── Admin bar ──
+  const adminBar = document.getElementById('adminBar');
+  adminBar.classList.add('show');
+  if (isMember) {
+    adminBar.classList.add('member-bar');
+    document.getElementById('mainBar').classList.add('member-bar');
+    document.getElementById('adminBarText').innerHTML = '🟢 MEMBER MODE <span>· Limited access</span>';
+    document.getElementById('portalLabel').textContent = 'Member Portal';
+    document.getElementById('viewNotice').classList.add('show');
+  } else if (isAdmin) {
+    document.getElementById('adminBarText').innerHTML = '🔐 ADMIN MODE <span>· Full access enabled</span>';
+    document.getElementById('portalLabel').textContent = 'Admin Portal';
+  } else if (isSuperAdmin) {
+    adminBar.classList.add('super-bar');
+    document.getElementById('mainBar').classList.add('super-bar');
+    document.getElementById('adminBarText').innerHTML = '👑 SUPER ADMIN MODE <span>· Full system access</span>';
+    document.getElementById('portalLabel').textContent = 'Super Admin Portal';
+  }
+
+  // ── Offset ──
+  document.getElementById('sidebar').classList.add('offset');
+  document.getElementById('topbar').classList.add('offset');
+  document.getElementById('mainWrap').classList.add('offset');
+
+  // ── Nav ──
+  if (isPrivileged) {
     document.getElementById('navMemo').style.display = 'flex';
+    document.getElementById('navFinance').style.display = 'flex';
+    document.getElementById('navUserMgmt').style.display = 'flex';
     document.getElementById('btnAdd').style.display = 'flex';
     document.getElementById('btnExport').style.display = 'flex';
   }
+  if (isSuperAdmin) {
+    document.getElementById('navAudit').style.display = 'flex';
+  }
 
-  const POSITION_COLORS = {
-    'Member':'#28a745','Associates':'#8B6F47','President':'#0066cc',
-    'Vice President':'#6c63ff','General Secretary':'#dc3545',
-    'Asst. General Secretary':'#fd7e14','Bible Study Secretary':'#20c997',
-    'Asst Bible Study Secretary':'#17a2b8','Evangelism Secretary':'#e83e8c',
-    'Follow up Secretary':'#6f42c1','Prayer Secretary':'#fd7e14',
-    'Asst Prayer Secretary':'#ffc107','Media/Publicity Secretary':'#28a745',
-    'Asst Media/Publicity Secretary':'#20c997','Organizing Secretary':'#0066cc',
-    'Asst Organizing Secretary':'#6c63ff','Ex-official':'#6c757d',
-    'Welfare Secretary':'#e83e8c','Asst. Welfare Secretary':'#d63384',
-    'Academic/Magazine Secretary':'#0d6efd','Music Director':'#fd7e14',
-    'Financial Secretary':'#198754','Treasurer':'#dc3545'
-  };
-
-  const ALL_POSITIONS = [
-    'Member','President','Vice President','General Secretary','Asst. General Secretary',
-    'Bible Study Secretary','Asst Bible Study Secretary','Evangelism Secretary','Follow up Secretary',
-    'Prayer Secretary','Asst Prayer Secretary','Media/Publicity Secretary','Asst Media/Publicity Secretary',
-    'Organizing Secretary','Asst Organizing Secretary','Welfare Secretary','Asst. Welfare Secretary',
-    'Academic/Magazine Secretary','Music Director','Financial Secretary','Treasurer','Ex-official'
-  ];
-
-  const LEADERS = [
+  // ── Data ──
+  const FINAL_YEAR_LEVELS = ['400','500','600','700'];
+  const EXEC_POSITIONS = [
     'President','Vice President','General Secretary','Asst. General Secretary',
-    'Bible Study Secretary','Asst Bible Study Secretary','Evangelism Secretary','Follow up Secretary',
-    'Prayer Secretary','Asst Prayer Secretary','Media/Publicity Secretary','Asst Media/Publicity Secretary',
-    'Organizing Secretary','Asst Organizing Secretary','Welfare Secretary','Asst. Welfare Secretary',
-    'Academic/Magazine Secretary','Music Director','Financial Secretary','Treasurer'
+    'Financial Secretary','Treasurer','Bible Study Secretary','Asst Bible Study Secretary',
+    'Evangelism Secretary','Follow up Secretary','Prayer Secretary','Asst Prayer Secretary',
+    'Media/Publicity Secretary','Asst Media/Publicity Secretary','Organizing Secretary',
+    'Asst Organizing Secretary','Welfare Secretary','Asst. Welfare Secretary',
+    'Academic/Magazine Secretary','Music Director'
   ];
+  const AV_CLASSES = ['av-0','av-1','av-2','av-3','av-4'];
 
-  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const currentYear = new Date().getFullYear();
   let allMembers = [];
   let currentFilter = 'all';
   let editingId = null;
-  let memoData = {};
+  let selectedPhotoFile = null;
+  let viewingMember = null;
 
-  // Prevents duplicate graduation attempts within the same session
-  const graduatingIds = new Set();
-
-  function avatarColor(name) {
-    const colors = ['#0066cc','#6c63ff','#28a745','#fd7e14','#e83e8c','#17a2b8','#dc3545','#6f42c1'];
-    let h = 0;
-    for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
-    return colors[Math.abs(h) % colors.length];
-  }
-
-  function initials(name) {
-    return name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
-  }
-
-  function isFYB(m) {
-    return m.yearLeaving && parseInt(m.yearLeaving) === currentYear;
-  }
-
-  function shouldGraduate(m) {
-    if (!m.yearLeaving || m.position === 'Associates') return false;
-    const leavingYear = parseInt(m.yearLeaving);
-    if (leavingYear < currentYear) return true;
-    if (leavingYear === currentYear) {
-      if (!memoData || memoData.semester !== '2nd' || !memoData.endDate) return false;
-      return new Date() > new Date(memoData.endDate);
-    }
-    return false;
-  }
-
-  async function graduateMember(m) {
-    // Skip if already being processed in this session
-    if (graduatingIds.has(m.id)) return;
-    graduatingIds.add(m.id);
-
-    try {
-      // Check if already exists in past-members to prevent duplicates
-      const existing = await db.collection('past-members')
-        .where('originalMemberId', '==', m.id)
-        .get();
-
-      if (!existing.empty) {
-        // Already moved — just clean up the members collection
-        await db.collection('members').doc(m.id).delete();
-        return;
-      }
-
-      const history = m.associateHistory || [{
-        position:    m.position || 'Member',
-        yearStarted: m.yearStarted || '',
-        yearLeft:    m.yearLeaving || ''
-      }];
-
-      await db.collection('past-members').add({
-        ...m,
-        originalMemberId: m.id,
-        position:         'Associates',
-        associateHistory: history,
-        yearLeftSchool:   m.yearLeaving || '',
-        movedAt:          firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      await db.collection('members').doc(m.id).delete();
-
-    } catch (err) {
-      console.error('Graduate error:', err);
-      graduatingIds.delete(m.id); // Allow retry on genuine error
-    }
-  }
-
-  // Load memo settings first, then load members
-  db.collection('settings').doc('memo').get().then(snap => {
-    memoData = snap.exists ? snap.data() : {};
-
-    db.collection('members').onSnapshot(snap => {
-      allMembers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-      // Alphabetical sort
-      allMembers.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-
-      // Auto-graduate eligible members (with duplicate protection)
-      allMembers.forEach(m => {
-        if (shouldGraduate(m)) graduateMember(m);
-      });
-
-      filterRender();
-    });
+  db.collection('members').orderBy('name').onSnapshot(snap => {
+    allMembers = snap.docs.map(d => ({id:d.id,...d.data()}))
+      .filter(m => m.position !== 'Associates');
+    updateStats();
+    renderMembers();
   });
 
-  function filterRender() {
-    const active = allMembers
-      .filter(m => m.position !== 'Associates' && !shouldGraduate(m))
-      .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = active.filter(m => {
-      const matchQ = !q || m.name.toLowerCase().includes(q) || (m.department || '').toLowerCase().includes(q);
-      const matchF = currentFilter === 'all' || (currentFilter === 'fyb' && isFYB(m));
-      return matchQ && matchF;
-    });
-
-    document.getElementById('msTotal').textContent   = active.length;
-    document.getElementById('msFinal').textContent   = active.filter(isFYB).length;
-    document.getElementById('msLeaders').textContent = active.filter(m => LEADERS.includes(m.position)).length;
-
-    const grid = document.getElementById('membersGrid');
-    if (!filtered.length) {
-      grid.innerHTML = `<div class="empty-state"><div class="big">👥</div><p>${q || currentFilter !== 'all' ? 'No members match your search.' : 'No members yet.'}</p></div>`;
-      return;
-    }
-
-    grid.innerHTML = filtered.map(m => {
-      const color = POSITION_COLORS[m.position] || '#0066cc';
-      const fyb = isFYB(m) ? '<span class="fyb-badge">🎓 FYB</span>' : '';
-      return `<div class="member-card" onclick="openDetail('${m.id}')">
-        <div class="member-card-top">
-          <div class="member-avatar" style="background:${avatarColor(m.name)}">${initials(m.name)}</div>
-          <div>
-            <div class="member-card-name">${m.name}${fyb}</div>
-            <div class="member-card-pos" style="color:${color}">${m.position || 'Member'}</div>
-          </div>
-        </div>
-        <div class="member-card-info">
-          <div class="member-card-row"><span class="lbl">Level</span>${m.level || '—'}</div>
-          <div class="member-card-row"><span class="lbl">Dept</span>${m.department || '—'}</div>
-          <div class="member-card-row"><span class="lbl">State</span>${m.state || '—'}</div>
-        </div>
-      </div>`;
-    }).join('');
+  function updateStats() {
+    document.getElementById('stTotal').textContent   = allMembers.length;
+    document.getElementById('stLeaders').textContent = allMembers.filter(m=>EXEC_POSITIONS.includes(m.position)).length;
+    document.getElementById('stFinal').textContent   = allMembers.filter(m=>FINAL_YEAR_LEVELS.includes(String(m.level))).length;
   }
 
   function setFilter(btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     currentFilter = btn.dataset.filter;
-    filterRender();
+    renderMembers();
   }
 
-  function openDetail(id) {
-    const m = allMembers.find(x => x.id === id);
-    if (!m) return;
-    const color = POSITION_COLORS[m.position] || '#0066cc';
-    const fyb = isFYB(m) ? '<span class="fyb-badge">🎓 Final Year</span>' : '';
-    const dobStr = m.dob_day && m.dob_month
-      ? `${m.dob_day} ${MONTHS[parseInt(m.dob_month) - 1]}${m.dob_year ? ' ' + m.dob_year : ''}`
-      : '—';
+  function renderMembers() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    let filtered = allMembers.filter(m => {
+      const matchQ = !q ||
+        (m.name||'').toLowerCase().includes(q) ||
+        (m.department||'').toLowerCase().includes(q) ||
+        (m.level||'').toString().includes(q) ||
+        (m.position||'').toLowerCase().includes(q);
+      if (!matchQ) return false;
+      if (currentFilter === 'leaders') return EXEC_POSITIONS.includes(m.position);
+      if (currentFilter === 'final')   return FINAL_YEAR_LEVELS.includes(String(m.level));
+      return true;
+    });
 
-    document.getElementById('detailBody').innerHTML = `
-      <div class="detail-top">
-        <div class="detail-avatar" style="background:${avatarColor(m.name)}">${initials(m.name)}</div>
-        <div>
-          <div class="detail-name">${m.name} ${fyb}</div>
-          <div class="detail-pos" style="color:${color}">${m.position || 'Member'}</div>
-        </div>
-      </div>
-      <div class="detail-grid">
-        <div class="detail-field"><span class="lbl">Gender</span><span class="val">${m.gender || '—'}</span></div>
-        <div class="detail-field"><span class="lbl">Level</span><span class="val">${m.level || '—'}</span></div>
-        <div class="detail-field"><span class="lbl">Department</span><span class="val">${m.department || '—'}</span></div>
-        <div class="detail-field"><span class="lbl">Faculty</span><span class="val">${m.faculty || '—'}</span></div>
-        <div class="detail-field"><span class="lbl">Phone</span><span class="val">${m.phone || '—'}</span></div>
-        <div class="detail-field"><span class="lbl">State</span><span class="val">${m.state || '—'}</span></div>
-        <div class="detail-field"><span class="lbl">Date of Birth</span><span class="val">${dobStr}</span></div>
-        <div class="detail-field"><span class="lbl">Year Started</span><span class="val">${m.yearStarted || '—'}</span></div>
-        <div class="detail-field"><span class="lbl">Year Leaving</span><span class="val">${m.yearLeaving || '—'}</span></div>
-        <div class="detail-field"><span class="lbl">Position</span><span class="val" style="color:${color}">${m.position || 'Member'}</span></div>
+    const grid = document.getElementById('membersGrid');
+    if (!filtered.length) {
+      grid.innerHTML = `<div class="empty-state"><div class="big">👥</div><p>No members found.</p></div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map((m, i) => {
+      const init = (m.name||'?').charAt(0).toUpperCase();
+      const avCls = AV_CLASSES[i % AV_CLASSES.length];
+      const isFinal = FINAL_YEAR_LEVELS.includes(String(m.level));
+      const isLeader = EXEC_POSITIONS.includes(m.position);
+
+      const avatarHtml = m.photo
+        ? `<img class="member-avatar" src="${m.photo}" alt="${m.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+           <div class="member-avatar-placeholder ${avCls}" style="display:none">${init}</div>`
+        : `<div class="member-avatar-placeholder ${avCls}">${init}</div>`;
+
+      const badges = [
+        isFinal  ? `<span class="badge badge-fyb">FYB</span>` : '',
+        isLeader ? `<span class="badge badge-blue">${m.position}</span>` : '',
+        m.gender === 'Female' ? `<span class="badge badge-purple">Sister</span>` : `<span class="badge badge-green">Brother</span>`
+      ].filter(Boolean).join('');
+
+      // Action buttons differ by role
+      const actions = isPrivileged
+        ? `<button class="btn-sm btn-sm-view" onclick="openProfile('${m.id}')">👁 View</button>
+           <button class="btn-sm btn-sm-edit" onclick="openEditModal('${m.id}')">✏ Edit</button>
+           <button class="btn-sm btn-sm-del" onclick="deleteMember('${m.id}','${m.name}')">🗑</button>`
+        : `<button class="btn-sm btn-sm-view" onclick="openProfile('${m.id}')">👁 View Profile</button>`;
+
+      return `
+        <div class="member-card">
+          <div class="member-card-top">
+            ${avatarHtml}
+            <div class="member-info">
+              <div class="member-name">${m.name||'—'}</div>
+              <div class="member-pos">${m.position||'Member'} · ${m.level||'—'}L</div>
+              <div class="member-badges">${badges}</div>
+            </div>
+          </div>
+          <div class="member-details">
+            <div class="detail-item"><strong>${m.department||'—'}</strong>Department</div>
+            <div class="detail-item"><strong>${m.faculty||'—'}</strong>Faculty</div>
+            <div class="detail-item"><strong>${m.state||'—'}</strong>State</div>
+            <div class="detail-item"><strong>${m.phone||'—'}</strong>Phone</div>
+          </div>
+          <div class="member-actions">${actions}</div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── Profile Sheet (view only — all roles) ──
+  function openProfile(id) {
+    viewingMember = allMembers.find(m => m.id === id);
+    if (!viewingMember) return;
+    const m = viewingMember;
+    const init = (m.name||'?').charAt(0).toUpperCase();
+    const avCls = AV_CLASSES[allMembers.indexOf(m) % AV_CLASSES.length];
+    const isFinal = FINAL_YEAR_LEVELS.includes(String(m.level));
+    const MONTHS = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    const avatarHtml = m.photo
+      ? `<img class="profile-avatar" src="${m.photo}" alt="${m.name}">`
+      : `<div class="profile-avatar-ph ${avCls}">${init}</div>`;
+
+    document.getElementById('profileTop').innerHTML = `
+      ${avatarHtml}
+      <div>
+        <div class="profile-name">${m.name||'—'} ${isFinal?'<span class="badge badge-fyb">FYB</span>':''}</div>
+        <div class="profile-pos">${m.position||'Member'} · Level ${m.level||'—'}</div>
       </div>`;
 
-    document.getElementById('detailFooter').innerHTML = isAdmin
-      ? `<button class="btn-secondary" onclick="closeDetail()">Close</button>
-         <button class="btn-edit" onclick="openEditModal('${m.id}')">✏ Edit</button>
-         <button class="btn-danger" onclick="deleteMember('${m.id}')">🗑 Delete</button>`
-      : `<button class="btn-secondary" onclick="closeDetail()">Close</button>`;
+    document.getElementById('profileGrid').innerHTML = `
+      <div class="profile-field"><div class="lbl">Department</div><div class="val">${m.department||'—'}</div></div>
+      <div class="profile-field"><div class="lbl">Faculty</div><div class="val">${m.faculty||'—'}</div></div>
+      <div class="profile-field"><div class="lbl">Gender</div><div class="val">${m.gender||'—'}</div></div>
+      <div class="profile-field"><div class="lbl">State</div><div class="val">${m.state||'—'}</div></div>
+      <div class="profile-field"><div class="lbl">Phone</div><div class="val">${m.phone||'—'}</div></div>
+      <div class="profile-field"><div class="lbl">Birthday</div><div class="val">${m.dob_day&&m.dob_month?m.dob_day+' '+MONTHS[parseInt(m.dob_month)]:'—'}</div></div>
+      <div class="profile-field"><div class="lbl">Status</div><div class="val">${m.memberStatus||'Active'}</div></div>`;
 
-    document.getElementById('detailModal').classList.add('show');
+    // Profile actions — privileged only
+    document.getElementById('profileActions').innerHTML = isPrivileged
+      ? `<button class="btn-primary" onclick="closeProfile();openEditModal('${m.id}')">✏ Edit</button>
+         <button class="btn-secondary" onclick="closeProfile();deleteMember('${m.id}','${m.name}')">🗑 Delete</button>`
+      : '';
+
+    document.getElementById('sheetOverlay').classList.add('show');
+    document.getElementById('profileSheet').classList.add('show');
   }
 
-  function closeDetail() { document.getElementById('detailModal').classList.remove('show'); }
+  function closeProfile() {
+    document.getElementById('sheetOverlay').classList.remove('show');
+    document.getElementById('profileSheet').classList.remove('show');
+  }
 
-  function deleteMember(id) {
-    if (!confirm('Delete this member? This cannot be undone.')) return;
-    db.collection('members').doc(id).delete()
-      .then(() => { closeDetail(); showToast('Member deleted.', 'success'); })
-      .catch(err => showToast('Error: ' + err.message, 'error'));
+  // ── Add / Edit Modal ──
+  function openAddModal() {
+    if (!isPrivileged) return;
+    editingId = null;
+    selectedPhotoFile = null;
+    document.getElementById('modalTitle').textContent = 'Add Member';
+    document.getElementById('btnSave').textContent = 'Save Member';
+    clearForm();
+    document.getElementById('memberModal').classList.add('show');
   }
 
   function openEditModal(id) {
+    if (!isPrivileged) return;
     const m = allMembers.find(x => x.id === id);
     if (!m) return;
     editingId = id;
-    closeDetail();
-    document.getElementById('addModalTitle').textContent = 'Edit Member';
+    selectedPhotoFile = null;
+    document.getElementById('modalTitle').textContent = 'Edit Member';
     document.getElementById('btnSave').textContent = 'Update Member';
-    document.getElementById('memberTypeGroup').style.display = 'none';
-    document.getElementById('assocSection').style.display = 'none';
-    document.getElementById('positionGroup').style.display = 'flex';
-    document.getElementById('yearLeaveGroup').style.display = 'flex';
-    document.getElementById('fName').value      = m.name || '';
-    document.getElementById('fGender').value    = m.gender || '';
-    document.getElementById('fLevel').value     = m.level || '';
-    document.getElementById('fDept').value      = m.department || '';
-    document.getElementById('fFaculty').value   = m.faculty || '';
-    document.getElementById('fPhone').value     = m.phone || '';
-    document.getElementById('fState').value     = m.state || '';
-    document.getElementById('fPosition').value  = m.position || 'Member';
-    document.getElementById('fYearStart').value = m.yearStarted || '';
-    document.getElementById('fYearLeave').value = m.yearLeaving || '';
-    document.getElementById('fDobDay').value    = m.dob_day || '';
-    document.getElementById('fDobMonth').value  = m.dob_month || '';
-    document.getElementById('fDobYear').value   = m.dob_year || '';
-    document.getElementById('addModal').classList.add('show');
-  }
-
-  function openAddModal() {
-    editingId = null;
-    document.getElementById('addModalTitle').textContent = 'Add New Member';
-    document.getElementById('btnSave').textContent = 'Save Member';
-    document.getElementById('memberTypeGroup').style.display = 'flex';
-    document.getElementById('positionGroup').style.display = 'flex';
-    document.getElementById('yearLeaveGroup').style.display = 'flex';
-    document.getElementById('assocSection').style.display = 'none';
-    document.getElementById('assocEntries').innerHTML = '';
-    document.getElementById('fMemberType').value = 'active';
-    document.getElementById('addModal').classList.add('show');
-  }
-
-  function closeAdd() {
-    document.getElementById('addModal').classList.remove('show');
-    editingId = null;
-    ['fName','fPhone','fYearStart','fYearLeave','fDobYear'].forEach(id => document.getElementById(id).value = '');
-    ['fGender','fLevel','fFaculty','fState','fDobDay','fDobMonth'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('fDept').value = '';
-    document.getElementById('fPosition').value = 'Member';
-    document.getElementById('fMemberType').value = 'active';
-    document.getElementById('assocSection').style.display = 'none';
-    document.getElementById('assocEntries').innerHTML = '';
-    document.getElementById('memberTypeGroup').style.display = 'flex';
-    document.getElementById('positionGroup').style.display = 'flex';
-    document.getElementById('yearLeaveGroup').style.display = 'flex';
-    document.querySelectorAll('.field-err').forEach(e => e.classList.remove('show'));
-    document.querySelectorAll('.invalid').forEach(e => e.classList.remove('invalid'));
-    document.getElementById('btnSave').textContent = 'Save Member';
-    document.getElementById('btnSave').disabled = false;
-  }
-
-  function handleMemberTypeChange() {
-    const type = document.getElementById('fMemberType').value;
-    if (type === 'associate') {
-      document.getElementById('assocSection').style.display = 'block';
-      document.getElementById('positionGroup').style.display = 'none';
-      document.getElementById('yearLeaveGroup').style.display = 'none';
-      if (!document.getElementById('assocEntries').children.length) addAssocEntry();
-    } else {
-      document.getElementById('assocSection').style.display = 'none';
-      document.getElementById('positionGroup').style.display = 'flex';
-      document.getElementById('yearLeaveGroup').style.display = 'flex';
+    document.getElementById('fName').value     = m.name||'';
+    document.getElementById('fGender').value   = m.gender||'';
+    document.getElementById('fPhone').value    = m.phone||'';
+    document.getElementById('fState').value    = m.state||'';
+    document.getElementById('fDept').value     = m.department||'';
+    document.getElementById('fFaculty').value  = m.faculty||'';
+    document.getElementById('fLevel').value    = m.level||'';
+    document.getElementById('fPosition').value = m.position||'';
+    document.getElementById('fBdMonth').value  = m.dob_month||'';
+    document.getElementById('fBdDay').value    = m.dob_day||'';
+    document.getElementById('fStatus').value   = m.memberStatus||'Active';
+    if (m.photo) {
+      document.getElementById('photoPreview').src = m.photo;
+      document.getElementById('photoPreview').style.display = 'block';
+      document.getElementById('photoPlaceholder').style.display = 'none';
     }
+    document.getElementById('memberModal').classList.add('show');
   }
 
-  function addAssocEntry() {
-    const container = document.getElementById('assocEntries');
-    const posOptions = ALL_POSITIONS.map(p => `<option value="${p}">${p}</option>`).join('');
-    const div = document.createElement('div');
-    div.className = 'assoc-entry';
-    div.innerHTML = `
-      <div class="select-wrap" style="position:relative">
-        <select class="assoc-pos">${posOptions}</select>
-      </div>
-      <input type="number" class="assoc-year-start" placeholder="Yr Started" min="2000" max="2099"/>
-      <input type="number" class="assoc-year-left" placeholder="Yr Left Role" min="2000" max="2099"/>
-      <input type="number" class="assoc-year-school" placeholder="Yr Left School" min="2000" max="2099"/>
-      <button class="btn-remove-assoc" type="button" onclick="this.closest('.assoc-entry').remove()">✕</button>`;
-    container.appendChild(div);
+  function closeModal() {
+    document.getElementById('memberModal').classList.remove('show');
+    clearForm(); editingId = null;
   }
 
-  function saveMember() {
-    let valid = true;
-    [['fName','fNameErr'],['fGender','fGenderErr'],['fLevel','fLevelErr'],
-     ['fDept','fDeptErr'],['fYearStart','fYearStartErr']].forEach(([fid, eid]) => {
-      const el = document.getElementById(fid), err = document.getElementById(eid);
-      el.classList.remove('invalid'); err.classList.remove('show');
-      if (!el.value.trim()) { el.classList.add('invalid'); err.classList.add('show'); valid = false; }
-    });
-    if (!valid) return;
+  function clearForm() {
+    ['fName','fPhone','fState','fDept','fFaculty','fBdDay'].forEach(id=>document.getElementById(id).value='');
+    ['fGender','fLevel','fPosition','fBdMonth','fStatus'].forEach(id=>document.getElementById(id).value = id==='fStatus'?'Active':'');
+    selectedPhotoFile = null;
+    document.getElementById('fPhoto').value = '';
+    document.getElementById('photoPreview').src = '';
+    document.getElementById('photoPreview').style.display = 'none';
+    document.getElementById('photoPlaceholder').style.display = 'block';
+  }
+
+  function handlePhotoSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    selectedPhotoFile = file;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('photoPreview').src = ev.target.result;
+      document.getElementById('photoPreview').style.display = 'block';
+      document.getElementById('photoPlaceholder').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function saveMember() {
+    if (!isPrivileged) return;
+    const name = document.getElementById('fName').value.trim();
+    const gender = document.getElementById('fGender').value;
+    const dept = document.getElementById('fDept').value.trim();
+    const level = document.getElementById('fLevel').value;
+    if (!name || !gender || !dept || !level) {
+      showToast('Please fill all required fields.', 'error'); return;
+    }
 
     const btn = document.getElementById('btnSave');
     btn.disabled = true; btn.textContent = 'Saving…';
 
-    const baseData = {
-      name:        document.getElementById('fName').value.trim(),
-      gender:      document.getElementById('fGender').value,
-      level:       document.getElementById('fLevel').value,
-      department:  document.getElementById('fDept').value.trim(),
-      faculty:     document.getElementById('fFaculty').value,
-      phone:       document.getElementById('fPhone').value.trim(),
-      state:       document.getElementById('fState').value,
-      yearStarted: document.getElementById('fYearStart').value,
-      dob_day:     document.getElementById('fDobDay').value,
-      dob_month:   document.getElementById('fDobMonth').value,
-      dob_year:    document.getElementById('fDobYear').value,
+    let photoUrl = editingId ? (allMembers.find(m=>m.id===editingId)?.photo || '') : '';
+    if (selectedPhotoFile) {
+      try {
+        const ref = storage.ref(`member_photos/${Date.now()}_${selectedPhotoFile.name}`);
+        await ref.put(selectedPhotoFile);
+        photoUrl = await ref.getDownloadURL();
+      } catch(e) { showToast('Photo upload failed, saving without photo.', 'info'); }
+    }
+
+    const data = {
+      name, gender,
+      phone:        document.getElementById('fPhone').value.trim(),
+      state:        document.getElementById('fState').value.trim(),
+      department:   dept,
+      faculty:      document.getElementById('fFaculty').value.trim(),
+      level,
+      position:     document.getElementById('fPosition').value,
+      dob_month:    document.getElementById('fBdMonth').value,
+      dob_day:      document.getElementById('fBdDay').value,
+      memberStatus: document.getElementById('fStatus').value,
+      photo:        photoUrl,
+      updatedAt:    firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    if (editingId) {
-      const pos = document.getElementById('fPosition').value;
-      const nonUnique = ['Member','Ex-official'];
-      const checkPos = nonUnique.includes(pos)
-        ? Promise.resolve(null)
-        : db.collection('members').where('position', '==', pos).get();
-
-      checkPos.then(snap => {
-        if (snap && !snap.empty && snap.docs[0].id !== editingId) {
-          showToast(`${pos} is held by ${snap.docs[0].data().name}. Transfer first.`, 'error');
-          btn.disabled = false; btn.textContent = 'Update Member'; return;
-        }
-        db.collection('members').doc(editingId).update({
-          ...baseData,
-          position:    pos,
-          yearLeaving: document.getElementById('fYearLeave').value
-        }).then(() => {
-          closeAdd();
-          showToast('Member updated!', 'success');
-          btn.disabled = false; btn.textContent = 'Update Member';
-        }).catch(err => {
-          showToast('Error: ' + err.message, 'error');
-          btn.disabled = false; btn.textContent = 'Update Member';
-        });
-      });
-      return;
+    try {
+      if (editingId) {
+        await db.collection('members').doc(editingId).update(data);
+        await logAudit('member_edited', `Edited member: ${name}`);
+        showToast('Member updated!', 'success');
+      } else {
+        await db.collection('members').add({ ...data, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+        await logAudit('member_added', `Added new member: ${name}`);
+        showToast('Member added!', 'success');
+      }
+      closeModal();
+    } catch(err) {
+      showToast('Error: ' + err.message, 'error');
     }
+    btn.disabled = false;
+    btn.textContent = editingId ? 'Update Member' : 'Save Member';
+  }
 
-    const memberType = document.getElementById('fMemberType').value;
-
-    if (memberType === 'associate') {
-      const entries = document.querySelectorAll('.assoc-entry');
-      const associateHistory = Array.from(entries).map(row => ({
-        position:    row.querySelector('.assoc-pos').value,
-        yearStarted: row.querySelector('.assoc-year-start').value.trim(),
-        yearLeft:    row.querySelector('.assoc-year-left').value.trim()
-      }));
-      // Use the year left school from the first entry (one per person)
-      const firstRow = entries[0];
-      const yearLeftSchool = firstRow
-        ? firstRow.querySelector('.assoc-year-school').value.trim()
-        : '';
-
-      db.collection('past-members').add({
-        ...baseData,
-        position:         'Associates',
-        associateHistory: associateHistory,
-        yearLeftSchool:   yearLeftSchool,
-        yearLeaving:      yearLeftSchool,
-        createdAt:        firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        closeAdd();
-        showToast(baseData.name + ' added to Past Members!', 'success');
-        btn.disabled = false; btn.textContent = 'Save Member';
-      }).catch(err => {
-        showToast('Error: ' + err.message, 'error');
-        btn.disabled = false; btn.textContent = 'Save Member';
-      });
-
-    } else {
-      const pos = document.getElementById('fPosition').value;
-      const nonUnique = ['Member','Ex-official'];
-      const checkPos = nonUnique.includes(pos)
-        ? Promise.resolve(null)
-        : db.collection('members').where('position', '==', pos).get();
-
-      checkPos.then(snap => {
-        if (snap && !snap.empty) {
-          showToast(`${pos} is held by ${snap.docs[0].data().name}. Transfer first.`, 'error');
-          btn.disabled = false; btn.textContent = 'Save Member'; return;
-        }
-        db.collection('members').add({
-          ...baseData,
-          position:    pos,
-          yearLeaving: document.getElementById('fYearLeave').value,
-          createdAt:   firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
-          closeAdd();
-          showToast(baseData.name + ' added!', 'success');
-          btn.disabled = false; btn.textContent = 'Save Member';
-        }).catch(err => {
-          showToast('Error: ' + err.message, 'error');
-          btn.disabled = false; btn.textContent = 'Save Member';
-        });
-      });
-    }
+  async function deleteMember(id, name) {
+    if (!isPrivileged) return;
+    if (!confirm(`Delete ${name}? This cannot be undone.`)) return;
+    try {
+      await db.collection('members').doc(id).delete();
+      await logAudit('member_deleted', `Deleted member: ${name}`);
+      showToast('Member deleted.', 'success');
+    } catch(err) { showToast('Error: ' + err.message, 'error'); }
   }
 
   function exportCSV() {
-    const active = allMembers.filter(m => m.position !== 'Associates');
-    const headers = ['Name','Gender','Level','Department','Faculty','Phone','State','Position','Year Started','Year Leaving'];
-    const rows = active.map(m => [
-      m.name, m.gender, m.level, m.department, m.faculty,
-      m.phone, m.state, m.position, m.yearStarted, m.yearLeaving
-    ].map(v => `"${v || ''}"`).join(','));
-    const csv = [headers.join(','), ...rows].join('\n');
+    if (!isPrivileged) return;
+    const headers = ['Name','Gender','Department','Faculty','Level','Position','Phone','State','Status'];
+    const rows = allMembers.map(m=>[
+      `"${m.name||''}"`,`"${m.gender||''}"`,`"${m.department||''}"`,
+      `"${m.faculty||''}"`,`"${m.level||''}"`,`"${m.position||''}"`,
+      `"${m.phone||''}"`,`"${m.state||''}"`,`"${m.memberStatus||'Active'}"`
+    ].join(','));
+    const csv = [headers.join(','),...rows].join('\n');
     const a = document.createElement('a');
     a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-    a.download = 'gecc-members.csv';
-    a.click();
+    a.download = 'gecc-members.csv'; a.click();
   }
 
-  function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.className = 'toast show ' + type;
-    setTimeout(() => t.className = 'toast', 2500);
+  async function logAudit(action, description) {
+    const userName = localStorage.getItem('userName') || 'Unknown';
+    const userId   = localStorage.getItem('userId') || '';
+    try {
+      await db.collection('audit_logs').add({
+        action, description,
+        performedBy: userName, performedByRole: role, userId,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } catch(e) { console.log('Audit log error:', e); }
   }
 
   function doLogout() {
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userEmail');
-    window.location.href = 'auth.html';
+    auth.signOut().then(() => { localStorage.clear(); window.location.href = 'auth.html'; });
+  }
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast show ' + type;
+    setTimeout(() => t.className = 'toast', 2800);
   }
 
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click', () => {
-    sidebar.classList.toggle('open');
-    overlay.classList.toggle('show');
-  });
-  function closeSidebar() {
-    sidebar.classList.remove('open');
-    overlay.classList.remove('show');
-  }
-  document.getElementById('detailModal').addEventListener('click', function(e) { if (e.target === this) closeDetail(); });
-  document.getElementById('addModal').addEventListener('click', function(e) { if (e.target === this) closeAdd(); });
+  document.getElementById('memberModal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+
+  const sidebarEl = document.getElementById('sidebar');
+  const overlayEl = document.getElementById('overlay');
+  document.getElementById('hamburger').addEventListener('click', ()=>{ sidebarEl.classList.toggle('open'); overlayEl.classList.toggle('show'); });
+  function closeSidebar() { sidebarEl.classList.remove('open'); overlayEl.classList.remove('show'); }
 </script>
 </body>
 </html>
