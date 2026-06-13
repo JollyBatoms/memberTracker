@@ -2,126 +2,119 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper functions
-    function isAuth() {
+    function isSignedIn() {
       return request.auth != null;
     }
-    function getUserData() {
+
+    function userDoc() {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
     }
-    function getRole() {
-      return getUserData().role;
-    }
-    function isActive() {
-      return getUserData().status == 'active';
-    }
-    function isMember() {
-      return isAuth() && isActive() && getRole() == 'member';
-    }
-    function isAdmin() {
-      return isAuth() && isActive() && getRole() == 'admin';
-    }
-    function isSuperAdmin() {
-      return isAuth() && isActive() && getRole() == 'superadmin';
-    }
-    function isPrivileged() {
-      return isAdmin() || isSuperAdmin();
-    }
-    function isAnyRole() {
-      return isMember() || isAdmin() || isSuperAdmin();
+
+    function myRole() {
+      return isSignedIn() ? userDoc().role : '';
     }
 
-    // USERS collection
-    match /users/{userId} {
-      allow read: if isAuth();
-      allow create: if isAuth();
-      allow update: if isSuperAdmin() || request.auth.uid == userId;
+    function isSuperAdmin() {
+      return myRole() == 'superadmin';
+    }
+
+    function isAdmin() {
+      return myRole() == 'admin';
+    }
+
+    function isPrivileged() {
+      return myRole() == 'admin' || myRole() == 'superadmin';
+    }
+
+    function isAnyMember() {
+      return myRole() == 'member' || myRole() == 'admin' || myRole() == 'superadmin';
+    }
+
+    // Users
+    match /users/{uid} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSuperAdmin() || request.auth.uid == uid;
       allow delete: if isSuperAdmin();
     }
 
-    // MEMBERS collection
-    match /members/{docId} {
-      allow read: if isAnyRole();
-      allow create, update: if isPrivileged();
-      allow delete: if isPrivileged();
-    }
-
-    // ATTENDANCE collection
-    match /attendance/{docId} {
-      allow read: if isAnyRole();
-      allow create, update: if isPrivileged();
-      allow delete: if isPrivileged();
-    }
-
-    // EVENTS collection
-    match /events/{docId} {
-      allow read: if isAnyRole();
-      allow create, update, delete: if isPrivileged();
-    }
-
-    // POSITIONS collection
-    match /positions/{docId} {
-      allow read: if isAnyRole();
-      allow create, update, delete: if isPrivileged();
-    }
-
-    // FINANCE collections
-    match /finance_records/{docId} {
-      allow read: if isPrivileged();
-      allow create: if isPrivileged();
-      allow update, delete: if isSuperAdmin();
-    }
-    match /finance_transfers/{docId} {
-      allow read: if isPrivileged();
-      allow create: if isPrivileged();
-      allow update, delete: if isSuperAdmin();
-    }
-    match /finance_levies/{docId} {
-      allow read: if isPrivileged();
-      allow create: if isPrivileged();
-      allow update, delete: if isSuperAdmin();
-    }
-
-    // SETTINGS (memo etc)
-    match /settings/{docId} {
-      allow read: if isAnyRole();
+    // Members
+    match /members/{id} {
+      allow read: if isAnyMember();
       allow write: if isPrivileged();
     }
 
-    // NOTIFICATIONS
-    match /notifications/{docId} {
-      allow read: if isAuth() && (
-        resource.data.toUserId == request.auth.uid || isSuperAdmin()
-      );
-      allow create: if isAuth();
-      allow update: if isAuth() && resource.data.toUserId == request.auth.uid;
-      allow delete: if isAuth() && resource.data.toUserId == request.auth.uid;
+    // Past members
+    match /past_members/{id} {
+      allow read: if isAnyMember();
+      allow write: if isPrivileged();
     }
 
-    // AUDIT LOGS
-    match /audit_logs/{docId} {
+    // Attendance
+    match /attendance/{id} {
+      allow read: if isAnyMember();
+      allow write: if isPrivileged();
+    }
+
+    // Events
+    match /events/{id} {
+      allow read: if isAnyMember();
+      allow write: if isPrivileged();
+    }
+
+    // Positions
+    match /positions/{id} {
+      allow read: if isAnyMember();
+      allow write: if isPrivileged();
+    }
+
+    // Settings / Memo
+    match /settings/{id} {
+      allow read: if isAnyMember();
+      allow write: if isPrivileged();
+    }
+
+    // Finance
+    match /finance_records/{id} {
+      allow read: if isPrivileged();
+      allow write: if isPrivileged();
+    }
+    match /finance_transfers/{id} {
+      allow read: if isPrivileged();
+      allow write: if isPrivileged();
+    }
+    match /finance_levies/{id} {
+      allow read: if isPrivileged();
+      allow write: if isPrivileged();
+    }
+
+    // Notifications
+    match /notifications/{id} {
+      allow read: if isSignedIn() && (
+        resource.data.toUserId == request.auth.uid || isSuperAdmin()
+      );
+      allow create: if isSignedIn();
+      allow update, delete: if isSignedIn() && resource.data.toUserId == request.auth.uid;
+    }
+
+    // Audit logs
+    match /audit_logs/{id} {
       allow read: if isSuperAdmin();
-      allow create: if isAnyRole();
+      allow create: if isAnyMember();
       allow update, delete: if false;
     }
 
-    // FELLOWSHIP HUB
-    match /hub_posts/{docId} {
-      allow read: if isAnyRole();
-      allow create: if isAnyRole();
+    // Fellowship Hub
+    match /hub_posts/{id} {
+      allow read: if isAnyMember();
+      allow create: if isAnyMember();
       allow update: if isPrivileged() || request.auth.uid == resource.data.authorId;
       allow delete: if isPrivileged() || request.auth.uid == resource.data.authorId;
     }
     match /hub_posts/{postId}/comments/{commentId} {
-      allow read: if isAnyRole();
-      allow create: if isAnyRole();
+      allow read: if isAnyMember();
+      allow create: if isAnyMember();
       allow delete: if isPrivileged() || request.auth.uid == resource.data.authorId;
-    }
-
-    // PAST MEMBERS (associates)
-    match /past_members/{docId} {
-      allow read: if isAnyRole();
-      allow write: if isPrivileged();
     }
   }
 }
