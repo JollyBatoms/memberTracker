@@ -2,28 +2,54 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Any authenticated user can read their OWN user document.
-    // This is what runs at login to fetch their role.
+    function getUser() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    function isSuperAdmin() {
+      return request.auth != null && getUser().role == 'superadmin';
+    }
+    function isAdminOrAbove() {
+      return request.auth != null &&
+             (getUser().role == 'admin' || getUser().role == 'superadmin');
+    }
+    function isActiveUser() {
+      return request.auth != null && getUser().status == 'active';
+    }
+
+    // Users collection
     match /users/{userId} {
       allow read: if request.auth != null && request.auth.uid == userId;
-      allow write: if false; // only backend/admin SDK can write user docs
+      allow read: if isAdminOrAbove() && isActiveUser();
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update, delete: if isSuperAdmin() && isActiveUser();
     }
 
-    // Helper functions (used below)
-    function isAdmin() {
-      return request.auth != null &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    // Hub posts — everyone active can read published posts
+    match /hub_posts/{postId} {
+      allow read: if isActiveUser();
+      allow create: if isActiveUser();
+      allow update: if isAdminOrAbove() && isActiveUser();
+      allow delete: if isAdminOrAbove() && isActiveUser();
+
+      // Comments — everyone active can read and write
+      match /comments/{commentId} {
+        allow read: if isActiveUser();
+        allow create: if isActiveUser();
+        allow delete: if isAdminOrAbove() && isActiveUser();
+      }
     }
 
-    function isMember() {
-      return request.auth != null &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'member';
+    // Notifications — users can read their own
+    match /notifications/{notifId} {
+      allow read, update, delete: if request.auth != null &&
+        resource.data.toUserId == request.auth.uid;
+      allow create: if isActiveUser();
     }
 
-    // All other collections: members can read, only admin can write
+    // Everything else
     match /{document=**} {
-      allow read: if isAdmin() || isMember();
-      allow write: if isAdmin();
+      allow read: if isActiveUser();
+      allow write: if isAdminOrAbove() && isActiveUser();
     }
   }
 }
