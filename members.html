@@ -7,8 +7,6 @@
   <link rel="manifest" href="manifest.json" />
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    <link rel="stylesheet"
-href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --blue:#0066cc; --green:#28a745; --red:#dc3545; --sidebar-w:240px; }
     html, body { height:100%; font-family:'Open Sans',sans-serif; background:#f7f9fc; color:#1a1a1a; }
@@ -218,19 +216,18 @@ href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
   </div>
   <nav class="nav-section">
     <div class="nav-label">Menu</div>
-    <span class="material-icons">description</span> Memo
-<span class="material-icons">dashboard</span> Dashboard
-<span class="material-icons">groups</span> Members
-<span class="material-icons">history_edu</span> Past Members
-<span class="material-icons">fact_check</span> Attendance
-<span class="material-icons">payments</span> Finance
-<span class="material-icons">event</span> Events
-<span class="material-icons">military_tech</span> Positions
-<span class="material-icons">public</span> Fellowship Hub
-<span class="material-icons">notifications</span> Notifications
-<span class="material-icons">manage_accounts</span> User Management
-<span class="material-icons">manage_search</span> Audit Logs
-<span class="material-icons">logout</span> Logout
+    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="icon">⚙️</span> Memo</a>
+    <a class="nav-item" href="dashboard.html"><span class="icon">📊</span> Dashboard</a>
+    <a class="nav-item active" href="members.html"><span class="icon">👥</span> Members</a>
+    <a class="nav-item" href="past-members.html"><span class="icon">📜</span> Past Members</a>
+    <a class="nav-item" href="attendance.html"><span class="icon">✓</span> Attendance</a>
+    <a id="navFinance" class="nav-item" href="finance.html" style="display:none"><span class="icon">💰</span> Finance</a>
+    <a class="nav-item" href="events.html"><span class="icon">📅</span> Events</a>
+    <a class="nav-item" href="positions.html"><span class="icon">🎯</span> Positions</a>
+    <a class="nav-item" href="hub.html"><span class="icon">🌐</span> Fellowship Hub</a>
+    <a class="nav-item" href="notifications.html"><span class="icon">🔔</span> Notifications</a>
+    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="icon">👤</span> User Management</a>
+    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="icon">🔍</span> Audit Logs</a>
   </nav>
   <div class="nav-bottom">
     <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
@@ -1007,4 +1004,4 @@ href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
   function closeSidebar() { sidebarEl.classList.remove('open'); overlayEl.classList.remove('show'); }
 </script>
 </body>
-  </html>
+</html>
