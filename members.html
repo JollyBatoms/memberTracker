@@ -117,14 +117,13 @@
     .av-3 { background:linear-gradient(135deg,#6f42c1,#e83e8c); }
     .av-4 { background:linear-gradient(135deg,#20c997,#0066cc); }
 
-    /* View-only notice for members */
     .view-notice { background:#f0f5ff; border:1px solid #c5d9f5; border-radius:6px; padding:.7rem 1rem; font-size:.8rem; color:#0066cc; font-weight:600; margin-bottom:1rem; display:none; }
     .view-notice.show { display:block; }
 
     /* Modal */
     .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; overflow-y:auto; }
     .modal-overlay.show { display:flex; }
-    .modal { background:#fff; border-radius:8px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); margin:auto; }
+    .modal { background:#fff; border-radius:8px; width:100%; max-width:560px; max-height:92vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); margin:auto; }
     .modal-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 1.4rem; border-bottom:1px solid #edf0f4; position:sticky; top:0; background:#fff; z-index:2; }
     .modal-title { font-family:'Merriweather',serif; font-size:1rem; font-weight:700; color:#0066cc; }
     .modal-close { background:none; border:none; font-size:1.6rem; cursor:pointer; color:#888; line-height:1; }
@@ -134,19 +133,17 @@
 
     .form-group { display:flex; flex-direction:column; gap:.35rem; margin-bottom:.9rem; }
     .form-group label { font-size:.72rem; font-weight:700; color:#444; }
-    .form-group input, .form-group select, .form-group textarea {
-      padding:.65rem .85rem; border:1.5px solid #ccd4df; border-radius:5px;
-      font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a;
-      background:#fff; outline:none; transition:border-color .2s; appearance:none;
-    }
+    .form-group input, .form-group select { padding:.65rem .85rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; background:#fff; outline:none; transition:border-color .2s; }
     .form-group input:focus, .form-group select:focus { border-color:#0066cc; }
-    .form-group input.invalid { border-color:#dc3545; }
-    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .form-grid .full { grid-column: 1 / -1; }
+    .dob-row { display:grid; grid-template-columns:1fr 1.2fr 1fr; gap:.8rem; }
 
     .photo-upload { border:2px dashed #ccd4df; border-radius:8px; padding:1.2rem; text-align:center; cursor:pointer; position:relative; transition:border-color .2s,background .2s; }
     .photo-upload:hover { border-color:#0066cc; background:#f5f9ff; }
     .photo-upload input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
-    .photo-preview { width:70px; height:70px; border-radius:50%; object-fit:cover; margin:0 auto .5rem; display:block; border:2px solid #dde3ec; }
+    .photo-preview { width:80px; height:80px; border-radius:50%; object-fit:cover; margin:0 auto .5rem; display:block; border:2px solid #dde3ec; }
 
     /* Profile sheet */
     .sheet-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:600; }
@@ -180,8 +177,9 @@
       .topbar.offset { top:28px; }
       .content { padding:1rem .9rem 3rem; }
       .members-grid { grid-template-columns:1fr; }
-      .form-row { grid-template-columns:1fr; }
+      .form-grid { grid-template-columns:1fr; }
       .profile-grid { grid-template-columns:1fr; }
+      .dob-row { grid-template-columns:1fr 1fr; }
     }
   </style>
 </head>
@@ -247,6 +245,7 @@
       <div class="header-actions">
         <button class="btn-outline" id="btnExport" style="display:none" onclick="exportCSV()">⬇ Export</button>
         <button class="btn-primary" id="btnAdd" style="display:none" onclick="openAddModal()">+ Add Member</button>
+        <button class="btn-outline" id="btnGraduate" style="display:none" onclick="runGraduation()">🎓 Graduate FYB</button>
       </div>
     </div>
 
@@ -279,11 +278,11 @@
   </div>
 </div>
 
-<!-- Add/Edit Modal — privileged only -->
+<!-- Add/Edit Member Modal -->
 <div class="modal-overlay" id="memberModal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" id="modalTitle">Add Member</div>
+      <div class="modal-title" id="modalTitle">Add New Member</div>
       <button class="modal-close" onclick="closeModal()">×</button>
     </div>
     <div class="modal-body">
@@ -298,11 +297,13 @@
           <img id="photoPreview" class="photo-preview" style="display:none;" alt="preview"/>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
+
+      <div class="form-grid">
+        <div class="form-group full">
           <label>Full Name *</label>
-          <input type="text" id="fName" placeholder="e.g. John Doe"/>
+          <input type="text" id="fName" placeholder="e.g. Chukwuemeka Eze" />
         </div>
+
         <div class="form-group">
           <label>Gender *</label>
           <select id="fGender">
@@ -311,88 +312,128 @@
             <option value="Female">Female</option>
           </select>
         </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" id="fPhone" placeholder="e.g. 08012345678"/>
-        </div>
-        <div class="form-group">
-          <label>State of Origin</label>
-          <input type="text" id="fState" placeholder="e.g. Rivers"/>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Department *</label>
-          <input type="text" id="fDept" placeholder="e.g. Computer Science"/>
-        </div>
-        <div class="form-group">
-          <label>Faculty</label>
-          <input type="text" id="fFaculty" placeholder="e.g. Sciences"/>
-        </div>
-      </div>
-      <div class="form-row">
+
         <div class="form-group">
           <label>Level *</label>
           <select id="fLevel">
             <option value="">— Select —</option>
-            <option>100</option><option>200</option><option>300</option>
-            <option>400</option><option>500</option><option>600</option>
-            <option>700</option>
+            <option value="100">100L</option>
+            <option value="200">200L</option>
+            <option value="300">300L</option>
+            <option value="400">400L</option>
+            <option value="500">500L</option>
+            <option value="600">600L</option>
+            <option value="700">700L</option>
           </select>
         </div>
+
         <div class="form-group">
-          <label>Fellowship Position</label>
-          <select id="fPosition">
-            <option value="">— Member (no position) —</option>
-            <option>President</option>
-            <option>Vice President</option>
-            <option>General Secretary</option>
-            <option>Asst. General Secretary</option>
-            <option>Financial Secretary</option>
-            <option>Treasurer</option>
-            <option>Bible Study Secretary</option>
-            <option>Asst Bible Study Secretary</option>
-            <option>Evangelism Secretary</option>
-            <option>Follow up Secretary</option>
-            <option>Prayer Secretary</option>
-            <option>Asst Prayer Secretary</option>
-            <option>Media/Publicity Secretary</option>
-            <option>Asst Media/Publicity Secretary</option>
-            <option>Organizing Secretary</option>
-            <option>Asst Organizing Secretary</option>
-            <option>Welfare Secretary</option>
-            <option>Asst. Welfare Secretary</option>
-            <option>Academic/Magazine Secretary</option>
-            <option>Music Director</option>
-          </select>
+          <label>Department *</label>
+          <input type="text" id="fDept" placeholder="e.g. Computer Science" />
         </div>
-      </div>
-      <div class="form-row">
+
         <div class="form-group">
-          <label>Birthday Month</label>
-          <select id="fBdMonth">
+          <label>Faculty</label>
+          <select id="fFaculty">
             <option value="">— Select —</option>
-            <option value="1">January</option><option value="2">February</option>
-            <option value="3">March</option><option value="4">April</option>
-            <option value="5">May</option><option value="6">June</option>
-            <option value="7">July</option><option value="8">August</option>
-            <option value="9">September</option><option value="10">October</option>
-            <option value="11">November</option><option value="12">December</option>
+            <option>Agriculture</option>
+            <option>Allied Health Sciences</option>
+            <option>Basic Medical Sciences</option>
+            <option>Clinical Sciences</option>
+            <option>Communication & Media Studies</option>
+            <option>Computing</option>
+            <option>Dentistry</option>
+            <option>Education</option>
+            <option>Engineering</option>
+            <option>Humanities</option>
+            <option>Law</option>
+            <option>Management Sciences</option>
+            <option>Pharmaceutical Sciences</option>
+            <option>Science</option>
+            <option>SSLT</option>
+            <option>Social Sciences</option>
           </select>
         </div>
+
         <div class="form-group">
-          <label>Birthday Day</label>
-          <input type="number" id="fBdDay" placeholder="e.g. 14" min="1" max="31"/>
+          <label>Phone</label>
+          <input type="tel" id="fPhone" placeholder="08012345678" />
         </div>
-      </div>
-      <div class="form-group">
-        <label>Membership Status</label>
-        <select id="fStatus">
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-        </select>
+
+        <div class="form-group">
+          <label>State of Origin</label>
+          <select id="fState">
+            <option value="">— Select —</option>
+            <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option>
+            <option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option>
+            <option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option>
+            <option>Ekiti</option><option>Enugu</option><option>FCT</option><option>Gombe</option>
+            <option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option>
+            <option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+            <option>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option>
+            <option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option>
+            <option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option>
+            <option>Zamfara</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Position</label>
+          <select id="fPosition">
+            <option value="Member">Member</option>
+            <option>President</option><option>Vice President</option>
+            <option>General Secretary</option><option>Asst. General Secretary</option>
+            <option>Bible Study Secretary</option><option>Asst Bible Study Secretary</option>
+            <option>Evangelism Secretary</option><option>Follow up Secretary</option>
+            <option>Prayer Secretary</option><option>Asst Prayer Secretary</option>
+            <option>Media/Publicity Secretary</option><option>Asst Media/Publicity Secretary</option>
+            <option>Organizing Secretary</option><option>Asst Organizing Secretary</option>
+            <option>Welfare Secretary</option><option>Asst. Welfare Secretary</option>
+            <option>Academic/Magazine Secretary</option><option>Music Director</option>
+            <option>Financial Secretary</option><option>Treasurer</option>
+            <option>Ex-official</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Year Started *</label>
+          <input type="number" id="fYearStart" placeholder="e.g. 2023" min="2000" max="2099" />
+        </div>
+
+        <div class="form-group">
+          <label>Year Leaving (FYB)</label>
+          <input type="number" id="fYearLeave" placeholder="e.g. 2027" min="2000" max="2099" />
+        </div>
+
+        <div class="form-group full">
+          <label>Date of Birth (optional)</label>
+          <div class="dob-row">
+            <select id="fDobDay">
+              <option value="">Day</option>
+              <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+              <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+              <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+              <option value="13">13</option><option value="14">14</option><option value="15">15</option>
+              <option value="16">16</option><option value="17">17</option><option value="18">18</option>
+              <option value="19">19</option><option value="20">20</option><option value="21">21</option>
+              <option value="22">22</option><option value="23">23</option><option value="24">24</option>
+              <option value="25">25</option><option value="26">26</option><option value="27">27</option>
+              <option value="28">28</option><option value="29">29</option><option value="30">30</option>
+              <option value="31">31</option>
+            </select>
+            <select id="fDobMonth">
+              <option value="">Month</option>
+              <option value="1">January</option><option value="2">February</option>
+              <option value="3">March</option><option value="4">April</option>
+              <option value="5">May</option><option value="6">June</option>
+              <option value="7">July</option><option value="8">August</option>
+              <option value="9">September</option><option value="10">October</option>
+              <option value="11">November</option><option value="12">December</option>
+            </select>
+            <input type="number" id="fDobYear" placeholder="Year" min="1980" max="2010" />
+          </div>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -402,7 +443,7 @@
   </div>
 </div>
 
-<!-- Profile Sheet — all roles can view -->
+<!-- Profile Sheet -->
 <div class="sheet-overlay" id="sheetOverlay" onclick="closeProfile()"></div>
 <div class="profile-sheet" id="profileSheet">
   <div class="sheet-handle"></div>
@@ -414,16 +455,16 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // ── Role setup ──
+  // Role setup
   const role = localStorage.getItem('userRole');
-  if (!role) { window.location.href = 'auth.html'; }
+  if (!role) window.location.href = 'auth.html';
 
-  const isMember     = role === 'member';
-  const isAdmin      = role === 'admin';
+  const isMember = role === 'member';
+  const isAdmin = role === 'admin';
   const isSuperAdmin = role === 'superadmin';
   const isPrivileged = isAdmin || isSuperAdmin;
 
-  // ── Admin bar ──
+  // UI setup
   const adminBar = document.getElementById('adminBar');
   adminBar.classList.add('show');
   if (isMember) {
@@ -442,25 +483,25 @@
     document.getElementById('portalLabel').textContent = 'Super Admin Portal';
   }
 
-  // ── Offset ──
+  // Offset for admin bar
   document.getElementById('sidebar').classList.add('offset');
   document.getElementById('topbar').classList.add('offset');
   document.getElementById('mainWrap').classList.add('offset');
 
-  // ── Nav ──
+  // Show privileged nav & buttons
   if (isPrivileged) {
     document.getElementById('navMemo').style.display = 'flex';
     document.getElementById('navFinance').style.display = 'flex';
     document.getElementById('navUserMgmt').style.display = 'flex';
     document.getElementById('btnAdd').style.display = 'flex';
     document.getElementById('btnExport').style.display = 'flex';
+    document.getElementById('btnGraduate').style.display = 'flex';
   }
   if (isSuperAdmin) {
     document.getElementById('navAudit').style.display = 'flex';
   }
 
-  // ── Data ──
-  const FINAL_YEAR_LEVELS = ['400','500','600','700'];
+  // Constants
   const EXEC_POSITIONS = [
     'President','Vice President','General Secretary','Asst. General Secretary',
     'Financial Secretary','Treasurer','Bible Study Secretary','Asst Bible Study Secretary',
@@ -470,6 +511,7 @@
     'Academic/Magazine Secretary','Music Director'
   ];
   const AV_CLASSES = ['av-0','av-1','av-2','av-3','av-4'];
+  const CURRENT_YEAR = new Date().getFullYear();
 
   let allMembers = [];
   let currentFilter = 'all';
@@ -477,37 +519,44 @@
   let selectedPhotoFile = null;
   let viewingMember = null;
 
+  // Real-time listener
   db.collection('members').orderBy('name').onSnapshot(snap => {
-    allMembers = snap.docs.map(d => ({id:d.id,...d.data()}))
-      .filter(m => m.position !== 'Associates');
+    allMembers = snap.docs.map(d => ({id: d.id, ...d.data()}))
+      .filter(m => m.position !== 'Associates' && m.memberStatus !== 'Past');
     updateStats();
     renderMembers();
   });
 
   function updateStats() {
-    document.getElementById('stTotal').textContent   = allMembers.length;
-    document.getElementById('stLeaders').textContent = allMembers.filter(m=>EXEC_POSITIONS.includes(m.position)).length;
-    document.getElementById('stFinal').textContent   = allMembers.filter(m=>FINAL_YEAR_LEVELS.includes(String(m.level))).length;
+    document.getElementById('stTotal').textContent = allMembers.length;
+    document.getElementById('stLeaders').textContent = allMembers.filter(m => EXEC_POSITIONS.includes(m.position)).length;
+    document.getElementById('stFinal').textContent = allMembers.filter(m => isFYB(m)).length;
+  }
+
+  function isFYB(m) {
+    return m.yearLeave && parseInt(m.yearLeave) <= CURRENT_YEAR;
   }
 
   function setFilter(btn) {
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentFilter = btn.dataset.filter;
     renderMembers();
   }
 
   function renderMembers() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
+    const q = document.getElementById('searchInput').value.toLowerCase().trim();
     let filtered = allMembers.filter(m => {
-      const matchQ = !q ||
-        (m.name||'').toLowerCase().includes(q) ||
-        (m.department||'').toLowerCase().includes(q) ||
-        (m.level||'').toString().includes(q) ||
-        (m.position||'').toLowerCase().includes(q);
+      const matchQ = !q || 
+        (m.name || '').toLowerCase().includes(q) ||
+        (m.department || '').toLowerCase().includes(q) ||
+        (m.level || '').toString().includes(q) ||
+        (m.position || '').toLowerCase().includes(q);
+
       if (!matchQ) return false;
+
       if (currentFilter === 'leaders') return EXEC_POSITIONS.includes(m.position);
-      if (currentFilter === 'final')   return FINAL_YEAR_LEVELS.includes(String(m.level));
+      if (currentFilter === 'final') return isFYB(m);
       return true;
     });
 
@@ -518,27 +567,26 @@
     }
 
     grid.innerHTML = filtered.map((m, i) => {
-      const init = (m.name||'?').charAt(0).toUpperCase();
+      const init = (m.name || '?').charAt(0).toUpperCase();
       const avCls = AV_CLASSES[i % AV_CLASSES.length];
-      const isFinal = FINAL_YEAR_LEVELS.includes(String(m.level));
+      const isFinal = isFYB(m);
       const isLeader = EXEC_POSITIONS.includes(m.position);
 
-      const avatarHtml = m.photo
-        ? `<img class="member-avatar" src="${m.photo}" alt="${m.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-           <div class="member-avatar-placeholder ${avCls}" style="display:none">${init}</div>`
-        : `<div class="member-avatar-placeholder ${avCls}">${init}</div>`;
+      const avatarHtml = m.photo 
+        ? `<img class="member-avatar" src="\( {m.photo}" alt=" \){m.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"> 
+           <div class="member-avatar-placeholder \( {avCls}" style="display:none"> \){init}</div>`
+        : `<div class="member-avatar-placeholder \( {avCls}"> \){init}</div>`;
 
       const badges = [
-        isFinal  ? `<span class="badge badge-fyb">FYB</span>` : '',
+        isFinal ? `<span class="badge badge-fyb">FYB ${m.yearLeave}</span>` : '',
         isLeader ? `<span class="badge badge-blue">${m.position}</span>` : '',
         m.gender === 'Female' ? `<span class="badge badge-purple">Sister</span>` : `<span class="badge badge-green">Brother</span>`
       ].filter(Boolean).join('');
 
-      // Action buttons differ by role
       const actions = isPrivileged
         ? `<button class="btn-sm btn-sm-view" onclick="openProfile('${m.id}')">👁 View</button>
            <button class="btn-sm btn-sm-edit" onclick="openEditModal('${m.id}')">✏ Edit</button>
-           <button class="btn-sm btn-sm-del" onclick="deleteMember('${m.id}','${m.name}')">🗑</button>`
+           <button class="btn-sm btn-sm-del" onclick="deleteMember('\( {m.id}',' \){m.name}')">🗑</button>`
         : `<button class="btn-sm btn-sm-view" onclick="openProfile('${m.id}')">👁 View Profile</button>`;
 
       return `
@@ -546,60 +594,66 @@
           <div class="member-card-top">
             ${avatarHtml}
             <div class="member-info">
-              <div class="member-name">${m.name||'—'}</div>
-              <div class="member-pos">${m.position||'Member'} · ${m.level||'—'}L</div>
+              <div class="member-name">${m.name || '—'}</div>
+              <div class="member-pos">${m.position || 'Member'} · ${m.level || '—'}L</div>
               <div class="member-badges">${badges}</div>
             </div>
           </div>
           <div class="member-details">
-            <div class="detail-item"><strong>${m.department||'—'}</strong>Department</div>
-            <div class="detail-item"><strong>${m.faculty||'—'}</strong>Faculty</div>
-            <div class="detail-item"><strong>${m.state||'—'}</strong>State</div>
-            <div class="detail-item"><strong>${m.phone||'—'}</strong>Phone</div>
+            <div class="detail-item"><strong>${m.department || '—'}</strong>Department</div>
+            <div class="detail-item"><strong>${m.faculty || '—'}</strong>Faculty</div>
+            <div class="detail-item"><strong>${m.state || '—'}</strong>State</div>
+            <div class="detail-item"><strong>${m.phone || '—'}</strong>Phone</div>
           </div>
           <div class="member-actions">${actions}</div>
         </div>`;
     }).join('');
   }
 
-  // ── Profile Sheet (view only — all roles) ──
+  // Profile Sheet
   function openProfile(id) {
     viewingMember = allMembers.find(m => m.id === id);
     if (!viewingMember) return;
     const m = viewingMember;
-    const init = (m.name||'?').charAt(0).toUpperCase();
+    const init = (m.name || '?').charAt(0).toUpperCase();
     const avCls = AV_CLASSES[allMembers.indexOf(m) % AV_CLASSES.length];
-    const isFinal = FINAL_YEAR_LEVELS.includes(String(m.level));
-    const MONTHS = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const isFinal = isFYB(m);
 
-    const avatarHtml = m.photo
-      ? `<img class="profile-avatar" src="${m.photo}" alt="${m.name}">`
-      : `<div class="profile-avatar-ph ${avCls}">${init}</div>`;
+    const avatarHtml = m.photo 
+      ? `<img class="profile-avatar" src="\( {m.photo}" alt=" \){m.name}">`
+      : `<div class="profile-avatar-ph \( {avCls}"> \){init}</div>`;
 
     document.getElementById('profileTop').innerHTML = `
       ${avatarHtml}
       <div>
-        <div class="profile-name">${m.name||'—'} ${isFinal?'<span class="badge badge-fyb">FYB</span>':''}</div>
-        <div class="profile-pos">${m.position||'Member'} · Level ${m.level||'—'}</div>
+        <div class="profile-name">${m.name || '—'} ${isFinal ? `<span class="badge badge-fyb">FYB ${m.yearLeave}</span>` : ''}</div>
+        <div class="profile-pos">${m.position || 'Member'} · ${m.level || '—'}L</div>
       </div>`;
 
     document.getElementById('profileGrid').innerHTML = `
-      <div class="profile-field"><div class="lbl">Department</div><div class="val">${m.department||'—'}</div></div>
-      <div class="profile-field"><div class="lbl">Faculty</div><div class="val">${m.faculty||'—'}</div></div>
-      <div class="profile-field"><div class="lbl">Gender</div><div class="val">${m.gender||'—'}</div></div>
-      <div class="profile-field"><div class="lbl">State</div><div class="val">${m.state||'—'}</div></div>
-      <div class="profile-field"><div class="lbl">Phone</div><div class="val">${m.phone||'—'}</div></div>
-      <div class="profile-field"><div class="lbl">Birthday</div><div class="val">${m.dob_day&&m.dob_month?m.dob_day+' '+MONTHS[parseInt(m.dob_month)]:'—'}</div></div>
-      <div class="profile-field"><div class="lbl">Status</div><div class="val">${m.memberStatus||'Active'}</div></div>`;
+      <div class="profile-field"><div class="lbl">Department</div><div class="val">${m.department || '—'}</div></div>
+      <div class="profile-field"><div class="lbl">Faculty</div><div class="val">${m.faculty || '—'}</div></div>
+      <div class="profile-field"><div class="lbl">Gender</div><div class="val">${m.gender || '—'}</div></div>
+      <div class="profile-field"><div class="lbl">State</div><div class="val">${m.state || '—'}</div></div>
+      <div class="profile-field"><div class="lbl">Phone</div><div class="val">${m.phone || '—'}</div></div>
+      <div class="profile-field"><div class="lbl">Year Started</div><div class="val">${m.yearStart || '—'}</div></div>
+      <div class="profile-field"><div class="lbl">Year Leaving</div><div class="val">${m.yearLeave || '—'}</div></div>
+      <div class="profile-field"><div class="lbl">DOB</div><div class="val">${formatDOB(m)}</div></div>
+      <div class="profile-field"><div class="lbl">Status</div><div class="val">${m.memberStatus || 'Active'}</div></div>`;
 
-    // Profile actions — privileged only
-    document.getElementById('profileActions').innerHTML = isPrivileged
+    document.getElementById('profileActions').innerHTML = isPrivileged 
       ? `<button class="btn-primary" onclick="closeProfile();openEditModal('${m.id}')">✏ Edit</button>
-         <button class="btn-secondary" onclick="closeProfile();deleteMember('${m.id}','${m.name}')">🗑 Delete</button>`
+         <button class="btn-secondary" onclick="closeProfile();deleteMember('\( {m.id}',' \){m.name}')">🗑 Delete</button>`
       : '';
 
     document.getElementById('sheetOverlay').classList.add('show');
     document.getElementById('profileSheet').classList.add('show');
+  }
+
+  function formatDOB(m) {
+    if (!m.dobDay || !m.dobMonth) return '—';
+    const months = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return `${m.dobDay} ${months[parseInt(m.dobMonth)]} ${m.dobYear || ''}`;
   }
 
   function closeProfile() {
@@ -607,12 +661,12 @@
     document.getElementById('profileSheet').classList.remove('show');
   }
 
-  // ── Add / Edit Modal ──
+  // Add/Edit Modal
   function openAddModal() {
     if (!isPrivileged) return;
     editingId = null;
     selectedPhotoFile = null;
-    document.getElementById('modalTitle').textContent = 'Add Member';
+    document.getElementById('modalTitle').textContent = 'Add New Member';
     document.getElementById('btnSave').textContent = 'Save Member';
     clearForm();
     document.getElementById('memberModal').classList.add('show');
@@ -626,17 +680,21 @@
     selectedPhotoFile = null;
     document.getElementById('modalTitle').textContent = 'Edit Member';
     document.getElementById('btnSave').textContent = 'Update Member';
-    document.getElementById('fName').value     = m.name||'';
-    document.getElementById('fGender').value   = m.gender||'';
-    document.getElementById('fPhone').value    = m.phone||'';
-    document.getElementById('fState').value    = m.state||'';
-    document.getElementById('fDept').value     = m.department||'';
-    document.getElementById('fFaculty').value  = m.faculty||'';
-    document.getElementById('fLevel').value    = m.level||'';
-    document.getElementById('fPosition').value = m.position||'';
-    document.getElementById('fBdMonth').value  = m.dob_month||'';
-    document.getElementById('fBdDay').value    = m.dob_day||'';
-    document.getElementById('fStatus').value   = m.memberStatus||'Active';
+
+    document.getElementById('fName').value = m.name || '';
+    document.getElementById('fGender').value = m.gender || '';
+    document.getElementById('fLevel').value = m.level || '';
+    document.getElementById('fDept').value = m.department || '';
+    document.getElementById('fFaculty').value = m.faculty || '';
+    document.getElementById('fPhone').value = m.phone || '';
+    document.getElementById('fState').value = m.state || '';
+    document.getElementById('fPosition').value = m.position || 'Member';
+    document.getElementById('fYearStart').value = m.yearStart || '';
+    document.getElementById('fYearLeave').value = m.yearLeave || '';
+    document.getElementById('fDobDay').value = m.dobDay || '';
+    document.getElementById('fDobMonth').value = m.dobMonth || '';
+    document.getElementById('fDobYear').value = m.dobYear || '';
+
     if (m.photo) {
       document.getElementById('photoPreview').src = m.photo;
       document.getElementById('photoPreview').style.display = 'block';
@@ -647,15 +705,21 @@
 
   function closeModal() {
     document.getElementById('memberModal').classList.remove('show');
-    clearForm(); editingId = null;
+    clearForm();
+    editingId = null;
   }
 
   function clearForm() {
-    ['fName','fPhone','fState','fDept','fFaculty','fBdDay'].forEach(id=>document.getElementById(id).value='');
-    ['fGender','fLevel','fPosition','fBdMonth','fStatus'].forEach(id=>document.getElementById(id).value = id==='fStatus'?'Active':'');
+    const ids = ['fName','fDept','fPhone','fYearStart','fYearLeave','fDobYear'];
+    ids.forEach(id => document.getElementById(id).value = '');
+    
+    ['fGender','fLevel','fFaculty','fState','fPosition','fDobDay','fDobMonth'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('fPosition').value = 'Member';
+
     selectedPhotoFile = null;
     document.getElementById('fPhoto').value = '';
-    document.getElementById('photoPreview').src = '';
     document.getElementById('photoPreview').style.display = 'none';
     document.getElementById('photoPlaceholder').style.display = 'block';
   }
@@ -675,57 +739,106 @@
 
   async function saveMember() {
     if (!isPrivileged) return;
+
     const name = document.getElementById('fName').value.trim();
     const gender = document.getElementById('fGender').value;
-    const dept = document.getElementById('fDept').value.trim();
     const level = document.getElementById('fLevel').value;
-    if (!name || !gender || !dept || !level) {
-      showToast('Please fill all required fields.', 'error'); return;
+    const dept = document.getElementById('fDept').value.trim();
+    const yearStart = document.getElementById('fYearStart').value;
+
+    if (!name || !gender || !level || !dept || !yearStart) {
+      showToast('Please fill all required fields (*)', 'error');
+      return;
     }
 
     const btn = document.getElementById('btnSave');
-    btn.disabled = true; btn.textContent = 'Saving…';
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
 
-    let photoUrl = editingId ? (allMembers.find(m=>m.id===editingId)?.photo || '') : '';
+    let photoUrl = editingId ? (allMembers.find(m => m.id === editingId)?.photo || '') : '';
+
     if (selectedPhotoFile) {
       try {
-        const ref = storage.ref(`member_photos/${Date.now()}_${selectedPhotoFile.name}`);
-        await ref.put(selectedPhotoFile);
-        photoUrl = await ref.getDownloadURL();
-      } catch(e) { showToast('Photo upload failed, saving without photo.', 'info'); }
+        const storageRef = storage.ref(`member_photos/\( {Date.now()}_ \){selectedPhotoFile.name}`);
+        await storageRef.put(selectedPhotoFile);
+        photoUrl = await storageRef.getDownloadURL();
+      } catch (e) {
+        console.error("Photo upload error:", e);
+        showToast('Photo upload failed. Saving without new photo.', 'info');
+      }
     }
 
     const data = {
-      name, gender,
-      phone:        document.getElementById('fPhone').value.trim(),
-      state:        document.getElementById('fState').value.trim(),
-      department:   dept,
-      faculty:      document.getElementById('fFaculty').value.trim(),
+      name,
+      gender,
       level,
-      position:     document.getElementById('fPosition').value,
-      dob_month:    document.getElementById('fBdMonth').value,
-      dob_day:      document.getElementById('fBdDay').value,
-      memberStatus: document.getElementById('fStatus').value,
-      photo:        photoUrl,
-      updatedAt:    firebase.firestore.FieldValue.serverTimestamp()
+      department: dept,
+      faculty: document.getElementById('fFaculty').value,
+      phone: document.getElementById('fPhone').value.trim(),
+      state: document.getElementById('fState').value,
+      position: document.getElementById('fPosition').value,
+      yearStart: parseInt(yearStart),
+      yearLeave: document.getElementById('fYearLeave').value ? parseInt(document.getElementById('fYearLeave').value) : null,
+      dobDay: document.getElementById('fDobDay').value,
+      dobMonth: document.getElementById('fDobMonth').value,
+      dobYear: document.getElementById('fDobYear').value ? parseInt(document.getElementById('fDobYear').value) : null,
+      photo: photoUrl,
+      memberStatus: 'Active',
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
     try {
       if (editingId) {
         await db.collection('members').doc(editingId).update(data);
         await logAudit('member_edited', `Edited member: ${name}`);
-        showToast('Member updated!', 'success');
+        showToast('Member updated successfully!', 'success');
       } else {
-        await db.collection('members').add({ ...data, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+        await db.collection('members').add({
+          ...data,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
         await logAudit('member_added', `Added new member: ${name}`);
-        showToast('Member added!', 'success');
+        showToast('New member added!', 'success');
       }
       closeModal();
-    } catch(err) {
+    } catch (err) {
       showToast('Error: ' + err.message, 'error');
     }
+
     btn.disabled = false;
     btn.textContent = editingId ? 'Update Member' : 'Save Member';
+  }
+
+  // Automatic / Manual Graduation Logic
+  async function runGraduation() {
+    if (!isPrivileged) return;
+    if (!confirm('This will move all current FYB members (whose leaving year has passed) to Past Members. Continue?')) return;
+
+    const now = new Date().getFullYear();
+    const fybMembers = allMembers.filter(m => m.yearLeave && parseInt(m.yearLeave) <= now);
+
+    if (!fybMembers.length) {
+      showToast('No FYB members ready for graduation.', 'info');
+      return;
+    }
+
+    const batch = db.batch();
+    fybMembers.forEach(member => {
+      const docRef = db.collection('members').doc(member.id);
+      batch.update(docRef, {
+        memberStatus: 'Past',
+        position: 'Associates',
+        graduatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    });
+
+    try {
+      await batch.commit();
+      await logAudit('batch_graduation', `Graduated ${fybMembers.length} FYB members to Past`);
+      showToast(`${fybMembers.length} members moved to Past Members.`, 'success');
+    } catch (err) {
+      showToast('Graduation failed: ' + err.message, 'error');
+    }
   }
 
   async function deleteMember(id, name) {
@@ -735,50 +848,79 @@
       await db.collection('members').doc(id).delete();
       await logAudit('member_deleted', `Deleted member: ${name}`);
       showToast('Member deleted.', 'success');
-    } catch(err) { showToast('Error: ' + err.message, 'error'); }
+    } catch (err) {
+      showToast('Error: ' + err.message, 'error');
+    }
   }
 
   function exportCSV() {
     if (!isPrivileged) return;
-    const headers = ['Name','Gender','Department','Faculty','Level','Position','Phone','State','Status'];
-    const rows = allMembers.map(m=>[
-      `"${m.name||''}"`,`"${m.gender||''}"`,`"${m.department||''}"`,
-      `"${m.faculty||''}"`,`"${m.level||''}"`,`"${m.position||''}"`,
-      `"${m.phone||''}"`,`"${m.state||''}"`,`"${m.memberStatus||'Active'}"`
+    const headers = ['Name','Gender','Level','Department','Faculty','Position','Phone','State','Year Start','Year Leave','Status'];
+    const rows = allMembers.map(m => [
+      `"${m.name||''}"`,
+      `"${m.gender||''}"`,
+      `"${m.level||''}"`,
+      `"${m.department||''}"`,
+      `"${m.faculty||''}"`,
+      `"${m.position||''}"`,
+      `"${m.phone||''}"`,
+      `"${m.state||''}"`,
+      `"${m.yearStart||''}"`,
+      `"${m.yearLeave||''}"`,
+      `"${m.memberStatus||'Active'}"`
     ].join(','));
-    const csv = [headers.join(','),...rows].join('\n');
+    const csv = [headers.join(','), ...rows].join('\n');
     const a = document.createElement('a');
     a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-    a.download = 'gecc-members.csv'; a.click();
+    a.download = `gecc-members-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
   }
 
   async function logAudit(action, description) {
     const userName = localStorage.getItem('userName') || 'Unknown';
-    const userId   = localStorage.getItem('userId') || '';
     try {
       await db.collection('audit_logs').add({
-        action, description,
-        performedBy: userName, performedByRole: role, userId,
+        action,
+        description,
+        performedBy: userName,
+        performedByRole: role,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
-    } catch(e) { console.log('Audit log error:', e); }
+    } catch (e) {
+      console.log('Audit log error:', e);
+    }
   }
 
   function doLogout() {
-    auth.signOut().then(() => { localStorage.clear(); window.location.href = 'auth.html'; });
+    auth.signOut().then(() => {
+      localStorage.clear();
+      window.location.href = 'auth.html';
+    });
   }
+
   function showToast(msg, type) {
     const t = document.getElementById('toast');
-    t.textContent = msg; t.className = 'toast show ' + type;
-    setTimeout(() => t.className = 'toast', 2800);
+    t.textContent = msg;
+    t.className = `toast show ${type}`;
+    setTimeout(() => t.className = 'toast', 3000);
   }
 
-  document.getElementById('memberModal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+  // Close modal on background click
+  document.getElementById('memberModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('memberModal')) closeModal();
+  });
 
+  // Mobile sidebar
   const sidebarEl = document.getElementById('sidebar');
   const overlayEl = document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click', ()=>{ sidebarEl.classList.toggle('open'); overlayEl.classList.toggle('show'); });
-  function closeSidebar() { sidebarEl.classList.remove('open'); overlayEl.classList.remove('show'); }
+  document.getElementById('hamburger').addEventListener('click', () => {
+    sidebarEl.classList.toggle('open');
+    overlayEl.classList.toggle('show');
+  });
+  function closeSidebar() {
+    sidebarEl.classList.remove('open');
+    overlayEl.classList.remove('show');
+  }
 </script>
 </body>
-</html>
+          </html>
