@@ -13,10 +13,13 @@
 
     .admin-bar { display:none; position:fixed; top:0; left:0; right:0; height:28px; background:#0066cc; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; color:#fff; letter-spacing:.08em; text-transform:uppercase; z-index:200; }
     .admin-bar.show { display:flex; }
-    .admin-bar span { opacity:.7; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
+    .admin-bar.member-bar { background:#28a745; }
+    .admin-bar.admin-bar-style { background:#0066cc; }
+    .admin-bar.super-bar { background:linear-gradient(90deg,#0066cc,#6c63ff); }
+    .admin-bar span { opacity:.8; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
 
     .sidebar { position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh; background:#fff; border-right:1px solid #dde3ec; display:flex; flex-direction:column; z-index:100; transition:transform .3s; }
-    .sidebar.admin-offset { top:28px; height:calc(100vh - 28px); }
+    .sidebar.offset { top:28px; height:calc(100vh - 28px); }
     .sidebar-brand { display:flex; align-items:center; gap:.7rem; padding:1rem 1.1rem; border-bottom:1px solid #dde3ec; cursor:pointer; }
     .brand-logos { display:flex; align-items:center; gap:.3rem; }
     .brand-logo { width:30px; height:30px; border-radius:50%; overflow:hidden; border:1px solid #dde3ec; }
@@ -35,7 +38,7 @@
     .btn-logout:hover { background:#fff5f5; }
 
     .topbar { display:none; position:fixed; top:0; left:0; right:0; height:54px; background:#fff; border-bottom:1px solid #dde3ec; align-items:center; justify-content:space-between; padding:0 1rem; z-index:99; }
-    .topbar.admin-offset { top:28px; }
+    .topbar.offset { top:28px; }
     .topbar-brand { display:flex; align-items:center; gap:.5rem; font-family:'Merriweather',serif; font-size:.8rem; font-weight:700; color:#0066cc; cursor:pointer; }
     .topbar-brand .brand-logo { width:26px; height:26px; }
     .hamburger { background:none; border:none; cursor:pointer; color:#555; padding:.3rem; display:flex; flex-direction:column; gap:5px; }
@@ -44,8 +47,10 @@
     .overlay.show { display:block; }
 
     .main { margin-left:var(--sidebar-w); min-height:100vh; }
-    .main.admin-offset { margin-top:28px; }
+    .main.offset { margin-top:28px; }
     .main-bar { height:4px; background:#0066cc; }
+    .main-bar.member-bar { background:#28a745; }
+    .main-bar.super-bar { background:linear-gradient(90deg,#0066cc,#6c63ff); }
     .content { padding:1.8rem; }
 
     .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.6rem; flex-wrap:wrap; gap:.8rem; }
@@ -65,7 +70,7 @@
     .stat-card.red .stat-value { color:#dc3545; }
 
     .mid-row { display:grid; grid-template-columns:1fr 280px; gap:1rem; margin-bottom:1.6rem; }
-    .mid-row.member-view { grid-template-columns:1fr; }
+    .mid-row.full { grid-template-columns:1fr; }
 
     .carousel-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.04); }
     .carousel-header { padding:.85rem 1.1rem; border-bottom:1px solid #edf0f4; display:flex; align-items:center; justify-content:space-between; }
@@ -116,6 +121,13 @@
     .badge-orange { background:#fff4e6; color:#c45f00; }
     .badge-purple { background:#f0eeff; color:#5e35b1; }
 
+    /* Pending users banner — admin/superadmin only */
+    .pending-banner { display:none; background:#fff8f0; border:1px solid #ffe0b2; border-radius:8px; padding:.85rem 1.1rem; margin-bottom:1.2rem; align-items:center; justify-content:space-between; gap:.8rem; flex-wrap:wrap; }
+    .pending-banner.show { display:flex; }
+    .pending-banner-text { font-size:.84rem; font-weight:700; color:#c45f00; }
+    .pending-banner-text span { font-weight:400; color:#888; font-size:.78rem; display:block; margin-top:.1rem; }
+    .btn-banner { padding:.45rem 1rem; background:#fd7e14; color:#fff; border:none; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; cursor:pointer; text-decoration:none; }
+
     .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; }
     .modal-overlay.show { display:flex; }
     .modal { background:#fff; border-radius:8px; padding:1.8rem; width:90%; max-width:440px; max-height:80vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); }
@@ -128,8 +140,6 @@
     .lost-dept { font-size:.75rem; color:#888; margin-top:.1rem; }
     .lost-weeks { font-size:.75rem; font-weight:700; color:#dc3545; }
 
-    .loading { text-align:center; padding:2rem; color:#aaa; font-size:.85rem; }
-
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
     .toast.success { background:#28a745; }
@@ -140,8 +150,8 @@
       .sidebar.open { transform:translateX(0); }
       .topbar { display:flex; }
       .main { margin-left:0; padding-top:54px; }
-      .main.admin-offset { margin-top:28px; padding-top:54px; }
-      .topbar.admin-offset { top:28px; }
+      .main.offset { margin-top:28px; padding-top:54px; }
+      .topbar.offset { top:28px; }
       .content { padding:1.2rem .9rem 3rem; }
       .stats-grid { grid-template-columns:1fr 1fr; }
       .mid-row { grid-template-columns:1fr; }
@@ -152,14 +162,11 @@
 <body>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
-<div class="admin-bar" id="adminBar">
-  🔐 ADMIN MODE <span>Full access enabled</span>
-</div>
+<div class="admin-bar" id="adminBar"><span id="adminBarText"></span></div>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand" onclick="window.location.href='index.html'">
@@ -169,19 +176,29 @@
     </div>
     <div class="brand-text">
       <span class="brand-name">GECC Uniport</span>
-      <span class="brand-sub">Member Portal</span>
+      <span class="brand-sub" id="portalLabel">Member Portal</span>
     </div>
   </div>
   <nav class="nav-section">
     <div class="nav-label">Menu</div>
+    <!-- Super Admin only -->
     <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="icon">⚙️</span> Memo</a>
+    <!-- All roles -->
     <a class="nav-item active" href="dashboard.html"><span class="icon">📊</span> Dashboard</a>
     <a class="nav-item" href="members.html"><span class="icon">👥</span> Members</a>
     <a class="nav-item" href="past-members.html"><span class="icon">📜</span> Past Members</a>
     <a class="nav-item" href="attendance.html"><span class="icon">✓</span> Attendance</a>
-    <a class="nav-item" href="finance.html"><span class="icon">💰</span> Finance</a>
+    <!-- Admin + Super Admin only -->
+    <a id="navFinance" class="nav-item" href="finance.html" style="display:none"><span class="icon">💰</span> Finance</a>
+    <!-- All roles -->
     <a class="nav-item" href="events.html"><span class="icon">📅</span> Events</a>
     <a class="nav-item" href="positions.html"><span class="icon">🎯</span> Positions</a>
+    <a class="nav-item" href="hub.html"><span class="icon">🌐</span> Fellowship Hub</a>
+    <a class="nav-item" href="notifications.html"><span class="icon">🔔</span> Notifications</a>
+    <!-- Admin + Super Admin only -->
+    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="icon">👤</span> User Management</a>
+    <!-- Super Admin only -->
+    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="icon">🔍</span> Audit Logs</a>
   </nav>
   <div class="nav-bottom">
     <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
@@ -201,7 +218,7 @@
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
 <div class="main" id="mainWrap">
-  <div class="main-bar"></div>
+  <div class="main-bar" id="mainBar"></div>
   <div class="content">
 
     <div class="page-header">
@@ -209,7 +226,16 @@
       <span class="session-tag" id="sessionTag">Loading…</span>
     </div>
 
-    <div class="stats-grid">
+    <!-- Pending users banner (admin/superadmin) -->
+    <div class="pending-banner" id="pendingBanner">
+      <div class="pending-banner-text">
+        ⏳ <span id="pendingBannerCount">0</span> pending registration(s)
+        <span>Tap to review and approve new users</span>
+      </div>
+      <a class="btn-banner" href="user-management.html">Review →</a>
+    </div>
+
+    <div class="stats-grid" id="statsGrid">
       <div class="stat-card blue">
         <div class="stat-label">Active Members</div>
         <div class="stat-value" id="statTotal">—</div>
@@ -225,6 +251,7 @@
         <div class="stat-value" id="statAvg">—</div>
         <div class="stat-sub">attendance avg</div>
       </div>
+      <!-- Inactive members card — admin/superadmin only -->
       <div class="stat-card red clickable" id="lostCard" onclick="showLostModal()" style="display:none">
         <div class="stat-label">Inactive Members</div>
         <div class="stat-value" id="statLost">—</div>
@@ -242,14 +269,10 @@
           <div class="carousel-empty"><span>📅</span><span>No events yet</span></div>
         </div>
       </div>
+      <!-- Quick actions — admin/superadmin only -->
       <div class="quick-card" id="quickCard" style="display:none">
         <div class="quick-title">Quick Actions</div>
-        <div class="quick-grid">
-          <a class="quick-btn" href="attendance.html"><span class="qicon">✓</span><span>Attendance</span></a>
-          <a class="quick-btn" href="members.html"><span class="qicon">👤</span><span>Add Member</span></a>
-          <a class="quick-btn" href="events.html"><span class="qicon">📅</span><span>Add Event</span></a>
-          <a class="quick-btn" href="memo.html"><span class="qicon">⚙️</span><span>Memo</span></a>
-        </div>
+        <div class="quick-grid" id="quickGrid"></div>
       </div>
     </div>
 
@@ -280,6 +303,7 @@
   </div>
 </div>
 
+<!-- Lost members modal — admin/superadmin only -->
 <div class="modal-overlay" id="lostModal">
   <div class="modal">
     <div class="modal-header">
@@ -293,67 +317,128 @@
 <div class="toast" id="toast"></div>
 
 <script>
+  // ── Role setup ──
   const role = localStorage.getItem('userRole');
   if (!role) { window.location.href = 'auth.html'; }
-  const isAdmin = role === 'admin';
 
-  if (isAdmin) {
-    document.getElementById('adminBar').classList.add('show');
-    document.getElementById('sidebar').classList.add('admin-offset');
-    document.getElementById('topbar').classList.add('admin-offset');
-    document.getElementById('mainWrap').classList.add('admin-offset');
-    document.getElementById('navMemo').style.display = 'flex';
-    document.getElementById('lostCard').style.display = 'block';
-    document.getElementById('quickCard').style.display = 'block';
-  } else {
-    document.getElementById('midRow').classList.add('member-view');
+  const isMember     = role === 'member';
+  const isAdmin      = role === 'admin';
+  const isSuperAdmin = role === 'superadmin';
+  const isPrivileged = isAdmin || isSuperAdmin;
+
+  const adminBar  = document.getElementById('adminBar');
+  const mainBar   = document.getElementById('mainBar');
+  const sidebar   = document.getElementById('sidebar');
+  const topbar    = document.getElementById('topbar');
+  const mainWrap  = document.getElementById('mainWrap');
+  const midRow    = document.getElementById('midRow');
+
+  // ── Admin bar & color theming per role ──
+  adminBar.classList.add('show');
+  if (isMember) {
+    adminBar.classList.add('member-bar');
+    mainBar.classList.add('member-bar');
+    document.getElementById('adminBarText').innerHTML = '🟢 MEMBER MODE <span>· Limited access</span>';
+    document.getElementById('portalLabel').textContent = 'Member Portal';
+    midRow.classList.add('full');
+  } else if (isAdmin) {
+    adminBar.classList.add('admin-bar-style');
+    document.getElementById('adminBarText').innerHTML = '🔐 ADMIN MODE <span>· Full access enabled</span>';
+    document.getElementById('portalLabel').textContent = 'Admin Portal';
+  } else if (isSuperAdmin) {
+    adminBar.classList.add('super-bar');
+    mainBar.classList.add('super-bar');
+    document.getElementById('adminBarText').innerHTML = '👑 SUPER ADMIN MODE <span>· Full system access</span>';
+    document.getElementById('portalLabel').textContent = 'Super Admin Portal';
   }
 
-  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  // ── Apply offset ──
+  sidebar.classList.add('offset');
+  topbar.classList.add('offset');
+  mainWrap.classList.add('offset');
+
+  // ── Nav visibility ──
+  if (isAdmin || isSuperAdmin) {
+    document.getElementById('navFinance').style.display = 'flex';
+    document.getElementById('navUserMgmt').style.display = 'flex';
+  }
+  if (isAdmin || isSuperAdmin) {
+    document.getElementById('navMemo').style.display = 'flex';
+  }
+  if (isSuperAdmin) {
+    document.getElementById('navAudit').style.display = 'flex';
+  }
+
+  // ── Admin/SuperAdmin only UI ──
+  if (isPrivileged) {
+    document.getElementById('lostCard').style.display = 'block';
+    document.getElementById('quickCard').style.display = 'block';
+
+    // Quick actions — differ by role
+    const quickGrid = document.getElementById('quickGrid');
+    if (isSuperAdmin) {
+      quickGrid.innerHTML = `
+        <a class="quick-btn" href="attendance.html"><span class="qicon">✓</span><span>Attendance</span></a>
+        <a class="quick-btn" href="members.html"><span class="qicon">👤</span><span>Members</span></a>
+        <a class="quick-btn" href="events.html"><span class="qicon">📅</span><span>Events</span></a>
+        <a class="quick-btn" href="user-management.html"><span class="qicon">👥</span><span>Users</span></a>
+        <a class="quick-btn" href="finance.html"><span class="qicon">💰</span><span>Finance</span></a>
+        <a class="quick-btn" href="audit-logs.html"><span class="qicon">🔍</span><span>Audit Logs</span></a>`;
+    } else {
+      quickGrid.innerHTML = `
+        <a class="quick-btn" href="attendance.html"><span class="qicon">✓</span><span>Attendance</span></a>
+        <a class="quick-btn" href="members.html"><span class="qicon">👤</span><span>Members</span></a>
+        <a class="quick-btn" href="events.html"><span class="qicon">📅</span><span>Events</span></a>
+        <a class="quick-btn" href="memo.html"><span class="qicon">⚙️</span><span>Memo</span></a>`;
+    }
+  }
+
+  // ── Helpers ──
+  const MONTHS       = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function ordinal(n) { const s=['th','st','nd','rd'],v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
   function fmtDate(ds) { const d=new Date(ds); return ordinal(d.getDate())+' '+MONTHS_SHORT[d.getMonth()]; }
   function badgeClass(t) {
-    if (t==='Sunday Service') return 'badge-blue';
-    if (t==='Bible Study') return 'badge-green';
-    if (t==='Prayer Meeting') return 'badge-purple';
+    if (t==='Sunday Service')  return 'badge-blue';
+    if (t==='Bible Study')     return 'badge-green';
+    if (t==='Prayer Meeting')  return 'badge-purple';
     return 'badge-orange';
   }
 
   const now = new Date();
-  let allMembers = [], allAttendance = [], allEvents = [], lostMembers = [];
+  let allMembers=[], allAttendance=[], allEvents=[], lostMembers=[];
 
-  // Load everything in parallel
+  // ── Load data ──
   Promise.all([
     db.collection('settings').doc('memo').get(),
     db.collection('members').get(),
     db.collection('attendance').orderBy('date','desc').get(),
-    db.collection('events').get()
-  ]).then(([memoSnap, membersSnap, attSnap, eventsSnap]) => {
+    db.collection('events').get(),
+    isPrivileged ? db.collection('users').where('status','==','pending').get() : Promise.resolve(null)
+  ]).then(([memoSnap, membersSnap, attSnap, eventsSnap, pendingSnap]) => {
 
     // Session tag
     if (memoSnap.exists) {
       const m = memoSnap.data();
       if (m.session && m.semester && m.startDate) {
-        const start = new Date(m.startDate);
+        const start  = new Date(m.startDate);
         const weekNum = Math.max(1, Math.ceil((now - start) / (7*24*60*60*1000)));
         document.getElementById('sessionTag').textContent = m.semester + ' Semester · Wk ' + weekNum;
       } else {
-        document.getElementById('sessionTag').textContent = m.session ? m.session : 'No session set';
+        document.getElementById('sessionTag').textContent = m.session || 'No session set';
       }
     } else {
       document.getElementById('sessionTag').textContent = 'No session set';
     }
 
     // Members
-    allMembers = membersSnap.docs.map(d => ({ id:d.id, ...d.data() }));
-    const activeMembers = allMembers.filter(m => m.position !== 'Associates');
-    document.getElementById('statTotal').textContent = activeMembers.length;
+    allMembers = membersSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const active = allMembers.filter(m => m.position !== 'Associates');
+    document.getElementById('statTotal').textContent = active.length;
 
     // Attendance
-    allAttendance = attSnap.docs.map(d => ({ id:d.id, ...d.data() }));
-    const sortedAtt = [...allAttendance].sort((a,b) => new Date(b.date)-new Date(a.date));
-
+    allAttendance = attSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const sortedAtt = [...allAttendance].sort((a,b)=>new Date(b.date)-new Date(a.date));
     if (sortedAtt.length) {
       const last = sortedAtt[0];
       document.getElementById('statLastEvent').textContent = (last.members||[]).length + (last.visitors||0);
@@ -371,54 +456,54 @@
       ? Math.round(thisMonthAtt.reduce((s,a)=>s+(a.members||[]).length+(a.visitors||0),0)/thisMonthAtt.length) : 0;
     document.getElementById('statAvg').textContent = avg;
 
-    // Lost members (0 attendance in 8 weeks)
-    const eightWeeksAgo = new Date(now - 8*7*24*60*60*1000);
-    const recentAtt = allAttendance.filter(a => new Date(a.date) >= eightWeeksAgo);
-    const presentIds = new Set(recentAtt.flatMap(a => a.members||[]));
-    lostMembers = activeMembers.filter(m => !presentIds.has(m.id));
-    document.getElementById('statLost').textContent = lostMembers.length;
+    // Lost members — admin/superadmin only
+    if (isPrivileged) {
+      const eightWeeksAgo = new Date(now - 8*7*24*60*60*1000);
+      const recentAtt = allAttendance.filter(a=>new Date(a.date)>=eightWeeksAgo);
+      const presentIds = new Set(recentAtt.flatMap(a=>a.members||[]));
+      lostMembers = active.filter(m=>!presentIds.has(m.id));
+      document.getElementById('statLost').textContent = lostMembers.length;
+    }
 
     // Activeness
-    const activeThisMonth = activeMembers.filter(m =>
-      thisMonthAtt.some(a => (a.members||[]).includes(m.id))
-    );
-    const pct = activeMembers.length ? Math.round(activeThisMonth.length/activeMembers.length*100) : 0;
+    const activeThisMonth = active.filter(m=>thisMonthAtt.some(a=>(a.members||[]).includes(m.id)));
+    const pct = active.length ? Math.round(activeThisMonth.length/active.length*100) : 0;
     document.getElementById('activenessPct').textContent = pct + '%';
     document.getElementById('progressFill').style.width = pct + '%';
 
-    // Birthdays this month
-    const bdays = activeMembers.filter(m => m.dob_month && parseInt(m.dob_month)===now.getMonth()+1);
+    // Birthdays
+    const bdays = active.filter(m=>m.dob_month && parseInt(m.dob_month)===now.getMonth()+1);
     const bdList = document.getElementById('birthdayList');
-    if (bdays.length) {
-      bdList.innerHTML = bdays.map(m => `
-        <div class="birthday-item">
-          <span class="birthday-icon">🎂</span>
-          <div>
-            <div class="birthday-name">${m.name}</div>
-            <div class="birthday-date">${ordinal(parseInt(m.dob_day||1))} ${MONTHS[now.getMonth()]}</div>
-          </div>
-        </div>`).join('');
-    } else {
-      bdList.innerHTML = '<div class="empty-msg">No birthdays this month</div>';
-    }
+    bdList.innerHTML = bdays.length
+      ? bdays.map(m=>`
+          <div class="birthday-item">
+            <span class="birthday-icon">🎂</span>
+            <div>
+              <div class="birthday-name">${m.name}</div>
+              <div class="birthday-date">${ordinal(parseInt(m.dob_day||1))} ${MONTHS[now.getMonth()]}</div>
+            </div>
+          </div>`).join('')
+      : '<div class="empty-msg">No birthdays this month</div>';
 
     // Recent activity
     const actBody = document.getElementById('activityBody');
-    if (sortedAtt.length) {
-      actBody.innerHTML = sortedAtt.slice(0,5).map(a => {
-        const total = (a.members||[]).length+(a.visitors||0);
-        return `<tr>
-          <td>${fmtDate(a.date)}</td>
-          <td><span class="badge ${badgeClass(a.type)}">${a.type||'Event'}</span></td>
-          <td><strong>${total}</strong></td>
-        </tr>`;
-      }).join('');
-    } else {
-      actBody.innerHTML = '<tr><td colspan="3" class="empty-msg">No records yet</td></tr>';
+    actBody.innerHTML = sortedAtt.length
+      ? sortedAtt.slice(0,5).map(a=>`
+          <tr>
+            <td>${fmtDate(a.date)}</td>
+            <td><span class="badge ${badgeClass(a.type)}">${a.type||'Event'}</span></td>
+            <td><strong>${(a.members||[]).length+(a.visitors||0)}</strong></td>
+          </tr>`).join('')
+      : '<tr><td colspan="3" class="empty-msg">No records yet</td></tr>';
+
+    // Pending users banner
+    if (isPrivileged && pendingSnap && !pendingSnap.empty) {
+      document.getElementById('pendingBannerCount').textContent = pendingSnap.size;
+      document.getElementById('pendingBanner').classList.add('show');
     }
 
     // Events carousel
-    allEvents = eventsSnap.docs.map(d => ({ id:d.id, ...d.data() }));
+    allEvents = eventsSnap.docs.map(d=>({id:d.id,...d.data()}));
     buildCarousel(allEvents);
 
   }).catch(err => {
@@ -426,19 +511,20 @@
     document.getElementById('sessionTag').textContent = 'Error loading';
   });
 
+  // ── Carousel ──
   function buildCarousel(events) {
-    const carouselBody = document.getElementById('carouselBody');
-    const carouselDots = document.getElementById('carouselDots');
+    const body = document.getElementById('carouselBody');
+    const dots = document.getElementById('carouselDots');
     if (!events.length) return;
 
-    const sorted = [...events].sort((a,b) => {
+    const sorted = [...events].sort((a,b)=>{
       const aUp=new Date(a.date)>=now, bUp=new Date(b.date)>=now;
       if (aUp&&!bUp) return -1; if (!aUp&&bUp) return 1;
       return new Date(a.date)-new Date(b.date);
     });
 
-    carouselBody.innerHTML = sorted.map((ev,i) => {
-      const d = new Date(ev.date);
+    body.innerHTML = sorted.map((ev,i)=>{
+      const d  = new Date(ev.date);
       const ds = ordinal(d.getDate())+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();
       const up = d >= now;
       const imgHtml = ev.image
@@ -453,20 +539,21 @@
       </div>`;
     }).join('');
 
-    carouselDots.innerHTML = sorted.map((_,i) =>
+    dots.innerHTML = sorted.map((_,i)=>
       `<div class="dot ${i===0?'active':''}" data-i="${i}"></div>`
     ).join('');
 
     let cur = 0;
     function goTo(i) {
       document.querySelectorAll('.carousel-slide').forEach((s,j)=>s.classList.toggle('active',j===i));
-      document.querySelectorAll('.dot').forEach((dd,j)=>dd.classList.toggle('active',j===i));
+      document.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('active',j===i));
       cur = i;
     }
     document.querySelectorAll('.dot').forEach(d=>d.addEventListener('click',()=>goTo(+d.dataset.i)));
     if (sorted.length > 1) setInterval(()=>goTo((cur+1)%sorted.length), 3000);
   }
 
+  // ── Lost members modal ──
   function showLostModal() {
     const list = document.getElementById('lostList');
     list.innerHTML = lostMembers.length
@@ -478,32 +565,30 @@
             </div>
             <div class="lost-weeks">8+ wks absent</div>
           </div>`).join('')
-      : '<p class="empty-msg">No lost members 🎉</p>';
+      : '<p class="empty-msg">No inactive members 🎉</p>';
     document.getElementById('lostModal').classList.add('show');
   }
   function closeLostModal() { document.getElementById('lostModal').classList.remove('show'); }
-  document.getElementById('lostModal').addEventListener('click',function(e){ if(e.target===this) closeLostModal(); });
+  document.getElementById('lostModal').addEventListener('click', function(e){ if(e.target===this) closeLostModal(); });
 
-function doLogout() {
-  auth.signOut().then(() => {
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userEmail');
-    window.location.href = 'auth.html';
-  });
-}
-
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click',()=>{ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
-  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+  // ── Logout ──
+  function doLogout() {
+    auth.signOut().then(() => {
+      localStorage.clear();
+      window.location.href = 'auth.html';
+    });
+  }
 
   function showToast(msg, type) {
     const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast show ' + type;
+    t.textContent = msg; t.className = 'toast show ' + type;
     setTimeout(()=>t.className='toast', 2500);
   }
+
+  const sidebarEl = document.getElementById('sidebar');
+  const overlayEl = document.getElementById('overlay');
+  document.getElementById('hamburger').addEventListener('click', ()=>{ sidebarEl.classList.toggle('open'); overlayEl.classList.toggle('show'); });
+  function closeSidebar() { sidebarEl.classList.remove('open'); overlayEl.classList.remove('show'); }
 </script>
 </body>
 </html>
-
