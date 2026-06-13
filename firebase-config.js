@@ -7,15 +7,12 @@ const firebaseConfig = {
   appId: "1:565729305146:web:2973acd0293903725acb03"
 };
 
-
-
-
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db   = firebase.firestore();
+const storage = firebase.storage();
 
-// Fetch role from Firestore — used across all pages
 async function getUserRoleFromDB(uid) {
   try {
     const snap = await db.collection('users').doc(uid).get();
@@ -28,10 +25,3 @@ async function getUserRoleFromDB(uid) {
     return null;
   }
 }
-
-
-
-// Inside firebase-config.js
-firebase.initializeApp(firebaseConfig);
-window.db = firebase.firestore();
-window.auth = firebase.auth();
