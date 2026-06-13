@@ -6,6 +6,7 @@
   <title>GECC Uniport — Members</title>
   <link rel="manifest" href="manifest.json" />
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --blue:#0066cc; --green:#28a745; --red:#dc3545; --sidebar-w:240px; }
@@ -216,21 +217,21 @@
   </div>
   <nav class="nav-section">
     <div class="nav-label">Menu</div>
-    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="icon">⚙️</span> Memo</a>
-    <a class="nav-item" href="dashboard.html"><span class="icon">📊</span> Dashboard</a>
-    <a class="nav-item active" href="members.html"><span class="icon">👥</span> Members</a>
-    <a class="nav-item" href="past-members.html"><span class="icon">📜</span> Past Members</a>
-    <a class="nav-item" href="attendance.html"><span class="icon">✓</span> Attendance</a>
-    <a id="navFinance" class="nav-item" href="finance.html" style="display:none"><span class="icon">💰</span> Finance</a>
-    <a class="nav-item" href="events.html"><span class="icon">📅</span> Events</a>
-    <a class="nav-item" href="positions.html"><span class="icon">🎯</span> Positions</a>
-    <a class="nav-item" href="hub.html"><span class="icon">🌐</span> Fellowship Hub</a>
-    <a class="nav-item" href="notifications.html"><span class="icon">🔔</span> Notifications</a>
-    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="icon">👤</span> User Management</a>
-    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="icon">🔍</span> Audit Logs</a>
+    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="icon material-icons">settings</span> Memo</a>
+    <a class="nav-item" href="dashboard.html"><span class="icon material-icons">dashboard</span> Dashboard</a>
+    <a class="nav-item active" href="members.html"><span class="icon material-icons">people</span> Members</a>
+    <a class="nav-item" href="past-members.html"><span class="icon material-icons">history</span> Past Members</a>
+    <a class="nav-item" href="attendance.html"><span class="icon material-icons">check_circle</span> Attendance</a>
+    <a id="navFinance" class="nav-item" href="finance.html" style="display:none"><span class="icon material-icons">account_balance_wallet</span> Finance</a>
+    <a class="nav-item" href="events.html"><span class="icon material-icons">event</span> Events</a>
+    <a class="nav-item" href="positions.html"><span class="icon material-icons">flag</span> Positions</a>
+    <a class="nav-item" href="hub.html"><span class="icon material-icons">public</span> Fellowship Hub</a>
+    <a class="nav-item" href="notifications.html"><span class="icon material-icons">notifications</span> Notifications</a>
+    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="icon material-icons">person</span> User Management</a>
+    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="icon material-icons">search</span> Audit Logs</a>
   </nav>
   <div class="nav-bottom">
-    <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
+    <button class="btn-logout" onclick="doLogout()"><span class="material-icons">logout</span> Logout</button>
   </div>
 </aside>
 
@@ -456,7 +457,7 @@
             <div class="select-wrap">
               <select id="fDobDay">
                 <option value="">Day</option>
-                <script>for(let i=1;i<=31;i++) document.write(`<option value="${i}">${i}</option>`);</script>
+                <script>for(let i=1;i<=31;i++) document.write(`<option value="\( {i}"> \){i}</option>`);</script>
               </select>
             </div>
             <div class="select-wrap">
@@ -596,9 +597,7 @@
   });
 
   // ── FYB logic ──
-  // A member is FYB if their yearLeaving matches the current academic year from memo
   function getCurrentGradYear() {
-    // Academic year format e.g. "2024/2025" — use the ending year
     if (!memoData.session) return null;
     const parts = memoData.session.split('/');
     return parseInt(parts[parts.length - 1]);
@@ -617,15 +616,13 @@
   }
 
   // ── Graduation banner ──
-  // Show to Super Admin at end of 2nd semester when FYB members exist
   function checkGraduationBanner() {
     if (!isSuperAdmin || gradBannerDismissed) return;
     const fybs = allMembers.filter(isFYB);
     if (!fybs.length) return;
-    // Show if semester is 2nd
     if (memoData.semester && memoData.semester.toLowerCase().includes('2')) {
       document.getElementById('gradBannerMsg').textContent =
-        `${fybs.length} final-year member(s) are ready to graduate this session (${memoData.session||''}). Review and confirm to move them to Past Members.`;
+        `\( {fybs.length} final-year member(s) are ready to graduate this session ( \){memoData.session||''}). Review and confirm to move them to Past Members.`;
       document.getElementById('gradBanner').classList.add('show');
     }
   }
@@ -640,7 +637,7 @@
     const list = document.getElementById('gradList');
     list.innerHTML = fybs.map((m,i) => `
       <div style="display:flex;align-items:center;gap:.7rem;padding:.6rem .8rem;background:#f7f9fc;border:1px solid #edf0f4;border-radius:6px;">
-        <div class="member-avatar-ph ${AV[i%AV.length]}" style="width:36px;height:36px;font-size:.85rem;">${(m.name||'?').charAt(0)}</div>
+        <div class="member-avatar-ph \( {AV[i%AV.length]}" style="width:36px;height:36px;font-size:.85rem;"> \){(m.name||'?').charAt(0)}</div>
         <div>
           <div style="font-size:.85rem;font-weight:700;">${m.name}</div>
           <div style="font-size:.72rem;color:#888;">${m.position||'Member'} · ${m.level||''} · ${m.department||''}</div>
@@ -660,7 +657,6 @@
     try {
       const batch = db.batch();
       for (const m of fybs) {
-        // Move to past_members collection
         const pastRef = db.collection('past_members').doc(m.id);
         batch.set(pastRef, {
           ...m,
@@ -668,7 +664,6 @@
           graduatedSession: memoData.session || '',
           graduatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-        // Remove from members
         batch.delete(db.collection('members').doc(m.id));
       }
       await batch.commit();
@@ -720,9 +715,9 @@
       const isLeader = EXEC_POSITIONS.includes(m.position);
 
       const avatarHtml = m.photo
-        ? `<img class="member-avatar" src="${m.photo}" alt="${m.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-           <div class="member-avatar-ph ${avCls}" style="display:none">${init}</div>`
-        : `<div class="member-avatar-ph ${avCls}">${init}</div>`;
+        ? `<img class="member-avatar" src="\( {m.photo}" alt=" \){m.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+           <div class="member-avatar-ph \( {avCls}" style="display:none"> \){init}</div>`
+        : `<div class="member-avatar-ph \( {avCls}"> \){init}</div>`;
 
       const badges = [
         fyb       ? `<span class="badge badge-fyb">🎓 FYB</span>` : '',
@@ -731,7 +726,7 @@
       ].filter(Boolean).join('');
 
       return `
-        <div class="member-card ${fyb?'fyb-card':''}" onclick="openProfile('${m.id}')">
+        <div class="member-card \( {fyb?'fyb-card':''}" onclick="openProfile(' \){m.id}')">
           ${avatarHtml}
           <div class="member-info">
             <div class="member-name">${m.name||'—'}</div>
@@ -753,8 +748,8 @@
     const fyb   = isFYB(m);
 
     const avatarHtml = m.photo
-      ? `<img class="profile-avatar" src="${m.photo}" alt="${m.name}">`
-      : `<div class="profile-avatar-ph ${avCls}">${init}</div>`;
+      ? `<img class="profile-avatar" src="\( {m.photo}" alt=" \){m.name}">`
+      : `<div class="profile-avatar-ph \( {avCls}"> \){init}</div>`;
 
     document.getElementById('profileTop').innerHTML = `
       ${avatarHtml}
@@ -775,7 +770,7 @@
 
     document.getElementById('profileFooter').innerHTML = isPrivileged
       ? `<button class="btn-primary" onclick="closeProfile();openEditModal('${m.id}')">✏ Edit</button>
-         <button class="btn-secondary" onclick="closeProfile();deleteMember('${m.id}','${m.name}')">🗑 Delete</button>`
+         <button class="btn-secondary" onclick="closeProfile();deleteMember('\( {m.id}',' \){m.name}')">🗑 Delete</button>`
       : '';
 
     document.getElementById('sheetOverlay').classList.add('show');
@@ -849,7 +844,6 @@
     document.querySelectorAll('.invalid').forEach(e=>e.classList.remove('invalid'));
   }
 
-  // ── Photo select — preview only, upload happens on save ──
   function handlePhotoSelect(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -864,11 +858,9 @@
     reader.readAsDataURL(file);
   }
 
-  // ── Save member — upload photo to Firebase Storage first (same pattern as events.html) ──
   async function saveMember() {
     if (!isPrivileged) return;
 
-    // Validate required fields
     let valid = true;
     const checks = [
       ['fName','fNameErr'],['fGender','fGenderErr'],
@@ -883,7 +875,6 @@
         valid = false;
       }
     });
-    // Year start optional but check
     const yearStart = document.getElementById('fYearStart').value.trim();
     if (!yearStart) {
       document.getElementById('fYearStart').classList.add('invalid');
@@ -895,7 +886,6 @@
     const btn = document.getElementById('btnSave');
     btn.disabled = true; btn.textContent = 'Saving…';
 
-    // ── Upload photo to Firebase Storage (same pattern as events.html) ──
     let finalPhotoUrl = currentPhotoUrl;
     if (selectedPhotoFile) {
       try {
@@ -965,9 +955,9 @@
     if (!isPrivileged) return;
     const headers = ['Name','Gender','Level','Department','Faculty','Phone','State','Position','Year Started','Year Leaving'];
     const rows = allMembers.map(m=>[
-      `"${m.name||''}"`,`"${m.gender||''}"`,`"${m.level||''}"`,`"${m.department||''}"`,
-      `"${m.faculty||''}"`,`"${m.phone||''}"`,`"${m.state||''}"`,`"${m.position||''}"`,
-      `"${m.yearStart||''}"`,`"${m.yearLeaving||''}"`
+      `"\( {m.name||''}"`,`" \){m.gender||''}"`,`"\( {m.level||''}"`,`" \){m.department||''}"`,
+      `"\( {m.faculty||''}"`,`" \){m.phone||''}"`,`"\( {m.state||''}"`,`" \){m.position||''}"`,
+      `"\( {m.yearStart||''}"`,`" \){m.yearLeaving||''}"`
     ].join(','));
     const csv = [headers.join(','),...rows].join('\n');
     const a = document.createElement('a');
