@@ -184,7 +184,7 @@
     localStorage.setItem('userRole',  data.role  || 'member');
     localStorage.setItem('userEmail', user.email);
     localStorage.setItem('userId',    user.uid);
-    localStorage.setItem('userName',  data.name  || user.email);
+    localStorage.setItem('userName', data.name || '');
   }
 
   async function notifySuperAdmin(message, type) {
