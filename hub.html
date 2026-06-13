@@ -11,12 +11,10 @@
     :root { --blue:#0066cc; --green:#28a745; --red:#dc3545; --sidebar-w:240px; }
     html, body { height:100%; font-family:'Open Sans',sans-serif; background:#f7f9fc; color:#1a1a1a; }
 
-    /* ── Admin bar ── */
     .admin-bar { display:none; position:fixed; top:0; left:0; right:0; height:28px; background:#0066cc; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; color:#fff; letter-spacing:.08em; text-transform:uppercase; z-index:200; }
     .admin-bar.show { display:flex; }
     .admin-bar span { opacity:.7; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
 
-    /* ── Sidebar ── */
     .sidebar { position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh; background:#fff; border-right:1px solid #dde3ec; display:flex; flex-direction:column; z-index:100; transition:transform .3s; }
     .sidebar.admin-offset { top:28px; height:calc(100vh - 28px); }
     .sidebar-brand { display:flex; align-items:center; gap:.7rem; padding:1rem 1.1rem; border-bottom:1px solid #dde3ec; cursor:pointer; }
@@ -36,7 +34,6 @@
     .btn-logout { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; width:100%; background:none; border:none; color:#dc3545; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; cursor:pointer; transition:background .2s; }
     .btn-logout:hover { background:#fff5f5; }
 
-    /* ── Topbar ── */
     .topbar { display:none; position:fixed; top:0; left:0; right:0; height:54px; background:#fff; border-bottom:1px solid #dde3ec; align-items:center; justify-content:space-between; padding:0 1rem; z-index:99; }
     .topbar.admin-offset { top:28px; }
     .topbar-brand { display:flex; align-items:center; gap:.5rem; font-family:'Merriweather',serif; font-size:.8rem; font-weight:700; color:#0066cc; cursor:pointer; }
@@ -46,170 +43,89 @@
     .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:98; }
     .overlay.show { display:block; }
 
-    /* ── Main layout ── */
     .main { margin-left:var(--sidebar-w); min-height:100vh; }
     .main.admin-offset { margin-top:28px; }
     .main-bar { height:4px; background:#0066cc; }
     .content { padding:1.8rem; max-width:680px; margin:0 auto; }
 
-    /* ── Page header ── */
     .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem; flex-wrap:wrap; gap:.8rem; }
     .page-header h1 { font-family:'Merriweather',serif; font-size:1.2rem; font-weight:700; }
 
-    /* ── Filter tabs ── */
     .filter-tabs { display:flex; gap:.4rem; margin-bottom:1.2rem; flex-wrap:wrap; }
-    .filter-btn { padding:.45rem .9rem; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; border:1.5px solid #dde3ec; border-radius:20px; background:#fff; color:#555; cursor:pointer; transition:all .2s; white-space:nowrap; }
+    .filter-btn { padding:.42rem .85rem; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; border:1.5px solid #dde3ec; border-radius:20px; background:#fff; color:#555; cursor:pointer; transition:all .2s; white-space:nowrap; }
     .filter-btn.active { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
 
-    /* ── Pending badge ── */
-    .pending-pill { display:inline-flex; align-items:center; gap:.35rem; background:#fff4e6; border:1.5px solid #ffd580; color:#c45f00; border-radius:20px; padding:.35rem .9rem; font-size:.78rem; font-weight:700; cursor:pointer; transition:background .2s; }
+    .pending-pill { display:inline-flex; align-items:center; gap:.35rem; background:#fff4e6; border:1.5px solid #ffd580; color:#c45f00; border-radius:20px; padding:.35rem .9rem; font-size:.78rem; font-weight:700; cursor:pointer; }
     .pending-pill:hover { background:#ffe8b2; }
     .pending-count { background:#fd7e14; color:#fff; border-radius:20px; padding:.05rem .45rem; font-size:.68rem; }
 
-    /* ══════════════════════════════════
-       COMPOSE BOX  (Facebook-style)
-    ══════════════════════════════════ */
-    .compose-card {
-      background:#fff; border:1px solid #dde3ec; border-radius:10px;
-      margin-bottom:1.4rem; box-shadow:0 1px 4px rgba(0,0,0,.05); overflow:hidden;
-    }
-    .compose-top { display:flex; align-items:flex-start; gap:.75rem; padding:1rem 1rem .5rem; }
-    .compose-avatar {
-      width:40px; height:40px; border-radius:50%; background:#eef4ff;
-      border:1.5px solid #c5d9f5; display:flex; align-items:center;
-      justify-content:center; font-size:1rem; font-weight:700; color:#0066cc; flex-shrink:0;
-    }
-    .compose-input {
-      flex:1; padding:.7rem .9rem; border:1.5px solid #dde3ec; border-radius:22px;
-      font-family:'Open Sans',sans-serif; font-size:.9rem; color:#1a1a1a;
-      background:#f7f9fc; resize:none; outline:none; min-height:44px; max-height:200px;
-      transition:border-color .2s, background .2s; overflow-y:auto; line-height:1.5;
-    }
+    /* ── COMPOSE ── */
+    .compose-card { background:#fff; border:1px solid #dde3ec; border-radius:10px; margin-bottom:1.4rem; box-shadow:0 1px 4px rgba(0,0,0,.05); overflow:hidden; }
+    .compose-top { display:flex; align-items:flex-start; gap:.75rem; padding:1rem 1rem .6rem; }
+    .compose-avatar { width:40px; height:40px; border-radius:50%; background:#eef4ff; border:1.5px solid #c5d9f5; display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:700; color:#0066cc; flex-shrink:0; }
+    .compose-input { flex:1; padding:.7rem .9rem; border:1.5px solid #dde3ec; border-radius:22px; font-family:'Open Sans',sans-serif; font-size:.9rem; color:#1a1a1a; background:#f7f9fc; resize:none; outline:none; min-height:44px; max-height:200px; transition:border-color .2s,background .2s; overflow-y:hidden; line-height:1.5; }
     .compose-input:focus { border-color:#0066cc; background:#fff; }
 
-    /* Image preview strip */
-    .compose-img-preview {
-      display:none; position:relative; margin:0 1rem .7rem;
-      border-radius:8px; overflow:hidden; border:1px solid #dde3ec; max-height:260px;
-    }
-    .compose-img-preview img { width:100%; max-height:260px; object-fit:cover; display:block; }
-    .compose-img-remove {
-      position:absolute; top:.45rem; right:.45rem; background:rgba(0,0,0,.55);
-      color:#fff; border:none; border-radius:50%; width:28px; height:28px;
-      font-size:.95rem; cursor:pointer; display:flex; align-items:center; justify-content:center;
-    }
-    .compose-img-remove:hover { background:rgba(220,53,69,.8); }
+    .compose-img-preview { display:none; position:relative; margin:0 1rem .7rem; border-radius:8px; overflow:hidden; border:1px solid #dde3ec; }
+    .compose-img-preview img { width:100%; max-height:300px; object-fit:cover; display:block; }
+    .compose-img-remove { position:absolute; top:.45rem; right:.45rem; background:rgba(0,0,0,.6); color:#fff; border:none; border-radius:50%; width:28px; height:28px; font-size:.9rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    .compose-img-remove:hover { background:rgba(220,53,69,.85); }
 
-    /* File attachment preview */
-    .compose-file-preview {
-      display:none; align-items:center; gap:.55rem; margin:0 1rem .7rem;
-      background:#f0f5ff; border:1px solid #c5d9f5; border-radius:6px; padding:.6rem .8rem;
-    }
+    .compose-file-preview { display:none; align-items:center; gap:.55rem; margin:0 1rem .7rem; background:#f0f5ff; border:1px solid #c5d9f5; border-radius:6px; padding:.6rem .85rem; }
     .compose-file-icon { font-size:1.2rem; flex-shrink:0; }
     .compose-file-name { font-size:.8rem; font-weight:700; color:#0066cc; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .compose-file-remove { background:none; border:none; color:#dc3545; cursor:pointer; font-size:.85rem; flex-shrink:0; }
+    .compose-file-remove { background:none; border:none; color:#dc3545; cursor:pointer; font-size:.9rem; flex-shrink:0; padding:0; }
 
-    /* Type selector */
-    .compose-type-row {
-      display:flex; align-items:center; gap:.5rem; padding:.5rem 1rem;
-      border-top:1px solid #f0f0f0; flex-wrap:wrap;
-    }
-    .type-label { font-size:.7rem; font-weight:700; color:#aaa; text-transform:uppercase; letter-spacing:.07em; margin-right:.2rem; }
-    .type-select {
-      padding:.35rem .75rem; border:1.5px solid #dde3ec; border-radius:20px;
-      font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700;
-      color:#444; background:#fff; cursor:pointer; outline:none; appearance:none;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat:no-repeat; background-position:right .55rem center;
-      padding-right:1.8rem;
-    }
+    .compose-type-row { display:flex; align-items:center; gap:.5rem; padding:.55rem 1rem; border-top:1px solid #f0f0f0; }
+    .type-label { font-size:.7rem; font-weight:700; color:#aaa; text-transform:uppercase; letter-spacing:.07em; }
+    .type-select { padding:.35rem .75rem; border:1.5px solid #dde3ec; border-radius:20px; font-family:'Open Sans',sans-serif; font-size:.8rem; font-weight:700; color:#444; background:#fff; cursor:pointer; outline:none; }
 
-    /* Action bar at bottom of compose */
-    .compose-action-bar {
-      display:flex; align-items:center; justify-content:space-between;
-      padding:.7rem 1rem; border-top:1px solid #f0f0f0;
-    }
-    .compose-media-btns { display:flex; gap:.25rem; }
-    .media-btn {
-      display:flex; align-items:center; gap:.35rem; padding:.38rem .7rem;
-      border:none; background:none; border-radius:6px; font-family:'Open Sans',sans-serif;
-      font-size:.78rem; font-weight:700; color:#555; cursor:pointer; transition:background .2s, color .2s;
-    }
+    .compose-action-bar { display:flex; align-items:center; justify-content:space-between; padding:.65rem 1rem; border-top:1px solid #f0f0f0; }
+    .compose-media-btns { display:flex; gap:.2rem; }
+    .media-btn { display:flex; align-items:center; gap:.35rem; padding:.38rem .7rem; border:none; background:none; border-radius:6px; font-family:'Open Sans',sans-serif; font-size:.8rem; font-weight:700; color:#555; cursor:pointer; transition:background .2s,color .2s; }
     .media-btn:hover { background:#f0f5ff; color:#0066cc; }
-    .media-btn .micon { font-size:1.05rem; }
-    .btn-post {
-      padding:.55rem 1.3rem; background:#0066cc; color:#fff; border:none; border-radius:6px;
-      font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; cursor:pointer;
-      transition:background .2s; flex-shrink:0;
-    }
-    .btn-post:hover { background:#0052a3; }
-    .btn-post:disabled { opacity:.6; cursor:not-allowed; }
+    .media-btn .micon { font-size:1rem; }
 
-    /* ══════════════════════════════════
-       POST CARDS
-    ══════════════════════════════════ */
-    .post-card {
-      background:#fff; border:1px solid #dde3ec; border-radius:10px;
-      margin-bottom:1rem; box-shadow:0 1px 4px rgba(0,0,0,.04);
-      transition:box-shadow .2s;
-    }
+    .upload-progress { display:none; align-items:center; gap:.5rem; padding:.4rem 1rem; background:#eef4ff; border-top:1px solid #c5d9f5; font-size:.78rem; color:#0066cc; font-weight:600; }
+    .upload-progress.show { display:flex; }
+    .progress-bar-wrap { flex:1; height:5px; background:#c5d9f5; border-radius:3px; overflow:hidden; }
+    .progress-bar-fill { height:100%; background:#0066cc; border-radius:3px; transition:width .3s; }
+
+    .btn-post { padding:.55rem 1.3rem; background:#0066cc; color:#fff; border:none; border-radius:6px; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; cursor:pointer; transition:background .2s; }
+    .btn-post:hover { background:#0052a3; }
+    .btn-post:disabled { opacity:.55; cursor:not-allowed; }
+
+    /* ── POST CARDS ── */
+    .post-card { background:#fff; border:1px solid #dde3ec; border-radius:10px; margin-bottom:1rem; box-shadow:0 1px 4px rgba(0,0,0,.04); transition:box-shadow .2s; }
     .post-card:hover { box-shadow:0 3px 12px rgba(0,0,0,.08); }
     .post-card.pending-card { border-left:3px solid #fd7e14; }
     .post-card.pinned-card { border-top:2px solid #0066cc; }
 
-    .post-header {
-      display:flex; align-items:flex-start; justify-content:space-between;
-      padding:.9rem 1rem .5rem; gap:.7rem;
-    }
+    .post-header { display:flex; align-items:flex-start; justify-content:space-between; padding:.9rem 1rem .5rem; gap:.7rem; }
     .post-author { display:flex; align-items:center; gap:.6rem; }
-    .post-avatar {
-      width:38px; height:38px; border-radius:50%;
-      background:linear-gradient(135deg,#0066cc,#6c63ff);
-      display:flex; align-items:center; justify-content:center;
-      color:#fff; font-size:.9rem; font-weight:700; flex-shrink:0;
-    }
+    .post-avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#0066cc,#6c63ff); display:flex; align-items:center; justify-content:center; color:#fff; font-size:.9rem; font-weight:700; flex-shrink:0; }
     .post-name { font-size:.88rem; font-weight:700; color:#1a1a1a; line-height:1.2; }
     .post-time { font-size:.7rem; color:#aaa; margin-top:.1rem; }
     .post-badges { display:flex; gap:.3rem; flex-wrap:wrap; margin-top:.2rem; }
-
-    .badge { display:inline-block; font-size:.62rem; font-weight:700; padding:.15rem .5rem; border-radius:20px; }
+    .badge { display:inline-block; font-size:.62rem; font-weight:700; padding:.16rem .52rem; border-radius:20px; }
     .badge-blue   { background:#eef4ff; color:#0066cc; }
     .badge-orange { background:#fff4e6; color:#c45f00; }
     .badge-green  { background:#eafaf0; color:#1e7e34; }
     .badge-pin    { background:#eef4ff; color:#0066cc; }
     .badge-sa     { background:linear-gradient(135deg,#0066cc,#6c63ff); color:#fff; }
 
-    /* Three-dot menu */
     .post-menu-wrap { position:relative; }
-    .post-menu-btn {
-      background:none; border:none; color:#aaa; font-size:1.3rem;
-      cursor:pointer; padding:.2rem .5rem; border-radius:6px;
-      transition:background .2s; line-height:1;
-    }
+    .post-menu-btn { background:none; border:none; color:#bbb; font-size:1.1rem; cursor:pointer; padding:.25rem .55rem; border-radius:6px; transition:background .2s; letter-spacing:.1em; }
     .post-menu-btn:hover { background:#f0f0f0; color:#555; }
-    .post-dropdown {
-      display:none; position:absolute; right:0; top:100%; z-index:50;
-      background:#fff; border:1px solid #dde3ec; border-radius:8px;
-      min-width:160px; box-shadow:0 4px 16px rgba(0,0,0,.12); overflow:hidden;
-    }
+    .post-dropdown { display:none; position:absolute; right:0; top:100%; z-index:50; background:#fff; border:1px solid #dde3ec; border-radius:8px; min-width:160px; box-shadow:0 4px 16px rgba(0,0,0,.12); overflow:hidden; }
     .post-dropdown.show { display:block; }
-    .post-dropdown button {
-      display:flex; align-items:center; gap:.5rem; width:100%;
-      padding:.65rem 1rem; font-family:'Open Sans',sans-serif; font-size:.82rem;
-      font-weight:600; background:none; border:none; color:#333; cursor:pointer;
-      transition:background .2s; border-bottom:1px solid #f5f5f5;
-    }
+    .post-dropdown button { display:flex; align-items:center; gap:.5rem; width:100%; padding:.65rem 1rem; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:600; background:none; border:none; border-bottom:1px solid #f5f5f5; color:#333; cursor:pointer; transition:background .2s; }
     .post-dropdown button:last-child { border-bottom:none; }
     .post-dropdown button:hover { background:#f7f9fc; }
     .post-dropdown button.danger { color:#dc3545; }
     .post-dropdown button.danger:hover { background:#fff0f0; }
 
-    /* Type tag */
-    .post-type-tag {
-      display:inline-block; font-size:.65rem; font-weight:700;
-      letter-spacing:.07em; text-transform:uppercase;
-      padding:.22rem .65rem; border-radius:4px; margin:0 1rem .5rem;
-    }
+    .post-type-tag { display:inline-block; font-size:.65rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; padding:.22rem .65rem; border-radius:4px; margin:0 1rem .5rem; }
     .tag-bible        { background:#eaf5ea; color:#1e7e34; }
     .tag-sermon       { background:#eef4ff; color:#0066cc; }
     .tag-literature   { background:#f0eeff; color:#5e35b1; }
@@ -220,126 +136,62 @@
     .tag-ebook        { background:#fce4ec; color:#880e4f; }
     .tag-resource     { background:#f3e5f5; color:#6a1b9a; }
 
-    /* Post title */
     .post-title { padding:0 1rem .3rem; font-size:.95rem; font-weight:700; color:#1a1a1a; }
-
-    /* Post text */
     .post-body { padding:.2rem 1rem .6rem; }
     .post-text { font-size:.88rem; color:#333; line-height:1.65; white-space:pre-wrap; word-break:break-word; }
-    .post-text.truncated { display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden; }
+    .post-text.truncated { display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden; white-space:normal; }
     .read-more { font-size:.78rem; color:#0066cc; font-weight:700; background:none; border:none; cursor:pointer; padding:0; margin-top:.3rem; display:block; }
 
-    /* Post image */
-    .post-image { width:100%; max-height:400px; object-fit:cover; display:block; }
+    .post-image { width:100%; max-height:420px; object-fit:cover; display:block; }
 
-    /* Attachment row */
-    .post-attachment {
-      margin:.2rem 1rem .6rem; padding:.7rem .9rem;
-      background:#f7f9fc; border:1px solid #dde3ec; border-radius:6px;
-      display:flex; align-items:center; gap:.6rem;
-    }
+    .post-attachment { margin:.2rem 1rem .6rem; padding:.7rem .9rem; background:#f7f9fc; border:1px solid #dde3ec; border-radius:6px; display:flex; align-items:center; gap:.6rem; }
     .attach-icon { font-size:1.3rem; }
     .attach-name { font-size:.82rem; font-weight:700; color:#333; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .attach-dl { font-size:.75rem; color:#0066cc; font-weight:700; text-decoration:none; flex-shrink:0; }
     .attach-dl:hover { text-decoration:underline; }
 
-    /* Pending notice */
-    .pending-notice {
-      display:flex; align-items:center; gap:.5rem;
-      padding:.5rem 1rem; background:#fff8f0; border-top:1px solid #ffe0b2;
-      font-size:.78rem; color:#c45f00; font-weight:600;
-    }
+    .pending-notice { display:flex; align-items:center; gap:.5rem; padding:.5rem 1rem; background:#fff8f0; border-top:1px solid #ffe0b2; font-size:.78rem; color:#c45f00; font-weight:600; }
 
-    /* Reaction/footer bar */
-    .post-footer {
-      display:flex; align-items:center; gap:.4rem;
-      padding:.6rem 1rem; border-top:1px solid #f0f0f0; flex-wrap:wrap;
-    }
-    .react-btn {
-      display:flex; align-items:center; gap:.3rem; padding:.33rem .65rem;
-      background:none; border:1px solid #edf0f4; border-radius:20px;
-      font-family:'Open Sans',sans-serif; font-size:.78rem; color:#666;
-      cursor:pointer; transition:all .2s; line-height:1.3;
-    }
+    .post-footer { display:flex; align-items:center; gap:.4rem; padding:.65rem 1rem; border-top:1px solid #f0f0f0; flex-wrap:wrap; }
+    .react-btn { display:flex; align-items:center; gap:.3rem; padding:.33rem .65rem; background:none; border:1px solid #edf0f4; border-radius:20px; font-family:'Open Sans',sans-serif; font-size:.8rem; color:#555; cursor:pointer; transition:all .2s; line-height:1.3; }
     .react-btn:hover { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
     .react-btn.reacted { border-color:#0066cc; color:#0066cc; background:#eef4ff; font-weight:700; }
-    .comment-toggle {
-      display:flex; align-items:center; gap:.3rem; padding:.33rem .65rem;
-      background:none; border:1px solid #edf0f4; border-radius:20px;
-      font-family:'Open Sans',sans-serif; font-size:.78rem; color:#666;
-      cursor:pointer; transition:all .2s;
-    }
+    .comment-toggle { display:flex; align-items:center; gap:.3rem; padding:.33rem .65rem; background:none; border:1px solid #edf0f4; border-radius:20px; font-family:'Open Sans',sans-serif; font-size:.8rem; color:#555; cursor:pointer; transition:all .2s; }
     .comment-toggle:hover { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
-    .save-btn {
-      display:flex; align-items:center; gap:.3rem; padding:.33rem .65rem;
-      background:none; border:1px solid #edf0f4; border-radius:20px;
-      font-family:'Open Sans',sans-serif; font-size:.78rem; color:#666;
-      cursor:pointer; transition:all .2s; margin-left:auto;
-    }
+    .save-btn { display:flex; align-items:center; gap:.3rem; padding:.33rem .65rem; background:none; border:1px solid #edf0f4; border-radius:20px; font-family:'Open Sans',sans-serif; font-size:.8rem; color:#555; cursor:pointer; transition:all .2s; margin-left:auto; }
     .save-btn:hover { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
     .save-btn.saved { border-color:#28a745; color:#28a745; background:#eafaf0; }
 
-    /* ══════════════════════════════════
-       COMMENTS  (Facebook-style)
-    ══════════════════════════════════ */
+    /* ── COMMENTS ── */
     .comments-section { border-top:1px solid #f0f0f0; padding:.85rem 1rem; display:none; }
     .comments-section.open { display:block; }
 
-    .comment-input-row { display:flex; align-items:flex-end; gap:.55rem; margin-bottom:.85rem; }
-    .comment-user-avatar {
-      width:32px; height:32px; border-radius:50%; background:#eef4ff;
-      border:1.5px solid #c5d9f5; display:flex; align-items:center; justify-content:center;
-      font-size:.82rem; font-weight:700; color:#0066cc; flex-shrink:0;
-    }
+    .comment-input-row { display:flex; align-items:flex-end; gap:.5rem; margin-bottom:.85rem; }
+    .comment-user-avatar { width:32px; height:32px; border-radius:50%; background:#eef4ff; border:1.5px solid #c5d9f5; display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:700; color:#0066cc; flex-shrink:0; }
     .comment-input-wrap { flex:1; position:relative; }
-    .comment-input {
-      width:100%; padding:.55rem .9rem; padding-right:3rem;
-      border:1.5px solid #dde3ec; border-radius:20px;
-      font-family:'Open Sans',sans-serif; font-size:.85rem;
-      background:#f7f9fc; outline:none; resize:none; min-height:38px;
-      max-height:100px; overflow-y:auto; transition:border-color .2s, background .2s;
-      line-height:1.4;
-    }
+    .comment-input { width:100%; padding:.55rem .9rem; padding-right:2.8rem; border:1.5px solid #dde3ec; border-radius:20px; font-family:'Open Sans',sans-serif; font-size:.85rem; background:#f7f9fc; outline:none; resize:none; min-height:38px; max-height:100px; overflow-y:auto; transition:border-color .2s,background .2s; line-height:1.4; }
     .comment-input:focus { border-color:#0066cc; background:#fff; }
-    .comment-send-btn {
-      position:absolute; right:.45rem; bottom:.38rem;
-      background:none; border:none; color:#0066cc; cursor:pointer;
-      font-size:1.1rem; padding:.2rem; line-height:1;
-      opacity:.5; transition:opacity .2s;
-    }
+    .comment-send-btn { position:absolute; right:.45rem; bottom:.38rem; background:none; border:none; color:#0066cc; cursor:pointer; font-size:1.05rem; padding:.2rem; line-height:1; opacity:.45; transition:opacity .2s; }
     .comment-send-btn:hover { opacity:1; }
 
-    .comments-list { display:flex; flex-direction:column; gap:.65rem; margin-bottom:.65rem; }
-    .comment-item { display:flex; gap:.55rem; align-items:flex-start; }
-    .comment-avatar {
-      width:30px; height:30px; border-radius:50%;
-      background:linear-gradient(135deg,#28a745,#17a2b8);
-      display:flex; align-items:center; justify-content:center;
-      color:#fff; font-size:.72rem; font-weight:700; flex-shrink:0;
-    }
-    .comment-bubble {
-      background:#f0f2f5; border-radius:0 14px 14px 14px;
-      padding:.5rem .8rem; flex:1; min-width:0;
-    }
-    .comment-author { font-size:.78rem; font-weight:700; color:#1a1a1a; margin-bottom:.15rem; }
+    .comments-list { display:flex; flex-direction:column; gap:.6rem; margin-bottom:.65rem; }
+    .comment-item { display:flex; gap:.5rem; align-items:flex-start; }
+    .comment-avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#28a745,#17a2b8); display:flex; align-items:center; justify-content:center; color:#fff; font-size:.72rem; font-weight:700; flex-shrink:0; }
+    .comment-bubble { background:#f0f2f5; border-radius:0 14px 14px 14px; padding:.5rem .8rem; flex:1; min-width:0; }
+    .comment-author { font-size:.78rem; font-weight:700; color:#1a1a1a; margin-bottom:.12rem; }
     .comment-text { font-size:.84rem; color:#333; line-height:1.5; word-break:break-word; }
-    .comment-time { font-size:.68rem; color:#bbb; margin-top:.25rem; }
-    .no-comments { font-size:.78rem; color:#bbb; text-align:center; padding:.5rem 0 .3rem; }
+    .comment-time { font-size:.68rem; color:#bbb; margin-top:.22rem; }
+    .no-comments { font-size:.78rem; color:#bbb; text-align:center; padding:.4rem 0 .3rem; }
 
-    /* ══════════════════════════════════
-       EMPTY STATE
-    ══════════════════════════════════ */
     .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; }
     .empty-state .big { font-size:2.5rem; margin-bottom:.6rem; }
 
-    /* ── Toast ── */
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
     .toast.success { background:#28a745; }
     .toast.error   { background:#dc3545; }
     .toast.info    { background:#0066cc; }
 
-    /* ── Responsive ── */
     @media(max-width:768px) {
       .sidebar { transform:translateX(-100%); }
       .sidebar.open { transform:translateX(0); }
@@ -360,10 +212,10 @@
 <script src="firebase-config.js"></script>
 
 <div class="admin-bar" id="adminBar">
-  🔐 <span id="adminBarLabel">ADMIN MODE</span> <span id="adminBarSub">Full access enabled</span>
+  🔐 <span id="adminBarLabel">ADMIN MODE</span>
+  <span id="adminBarSub" style="opacity:.7;font-weight:400;margin-left:.5rem;text-transform:none;letter-spacing:0;">Full access enabled</span>
 </div>
 
-<!-- ── SIDEBAR ── -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand" onclick="window.location.href='index.html'">
     <div class="brand-logos">
@@ -395,7 +247,6 @@
   </div>
 </aside>
 
-<!-- ── TOPBAR ── -->
 <div class="topbar" id="topbar">
   <div class="topbar-brand" onclick="window.location.href='index.html'">
     <div class="brand-logos">
@@ -408,7 +259,6 @@
 </div>
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
-<!-- ── MAIN ── -->
 <div class="main" id="mainWrap">
   <div class="main-bar"></div>
   <div class="content">
@@ -422,7 +272,6 @@
       </div>
     </div>
 
-    <!-- Filter tabs -->
     <div class="filter-tabs">
       <button class="filter-btn active" data-filter="all"          onclick="setFilter('all')">All</button>
       <button class="filter-btn"        data-filter="bible"        onclick="setFilter('bible')">📖 Bible Study</button>
@@ -434,9 +283,8 @@
       <button class="filter-btn"        data-filter="saved"        onclick="setFilter('saved')">🔖 Saved</button>
     </div>
 
-    <!-- ══ COMPOSE CARD ══ -->
+    <!-- COMPOSE CARD -->
     <div class="compose-card">
-      <!-- Row 1: Avatar + textarea -->
       <div class="compose-top">
         <div class="compose-avatar" id="composeAvatar">👤</div>
         <textarea
@@ -448,20 +296,20 @@
         ></textarea>
       </div>
 
-      <!-- Image preview (shows after picking an image) -->
+      <!-- Image preview -->
       <div class="compose-img-preview" id="composeImgPreview">
         <img id="composeImgEl" src="" alt="preview"/>
-        <button class="compose-img-remove" onclick="removeComposeImage()" title="Remove image">✕</button>
+        <button class="compose-img-remove" onclick="removeComposeImage()">✕</button>
       </div>
 
-      <!-- File attachment preview (shows after picking non-image file) -->
+      <!-- File preview -->
       <div class="compose-file-preview" id="composeFilePreview">
         <span class="compose-file-icon">📎</span>
         <span class="compose-file-name" id="composeFileName"></span>
-        <button class="compose-file-remove" onclick="removeComposeFile()" title="Remove file">✕</button>
+        <button class="compose-file-remove" onclick="removeComposeFile()">✕</button>
       </div>
 
-      <!-- Type selector row -->
+      <!-- Type selector -->
       <div class="compose-type-row">
         <span class="type-label">Type:</span>
         <select class="type-select" id="composeType">
@@ -477,15 +325,22 @@
         </select>
       </div>
 
+      <!-- Upload progress bar -->
+      <div class="upload-progress" id="uploadProgress">
+        <span id="uploadLabel">Uploading…</span>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+        </div>
+        <span id="uploadPct">0%</span>
+      </div>
+
       <!-- Action bar -->
       <div class="compose-action-bar">
         <div class="compose-media-btns">
-          <!-- Image upload -->
           <label class="media-btn" title="Add photo">
             <span class="micon">🖼️</span> Photo
             <input type="file" id="composeImageInput" accept="image/*" style="display:none" onchange="handleComposeImage(event)"/>
           </label>
-          <!-- File/PDF upload -->
           <label class="media-btn" title="Attach file">
             <span class="micon">📎</span> File
             <input type="file" id="composeFileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" style="display:none" onchange="handleComposeFile(event)"/>
@@ -494,9 +349,7 @@
         <button class="btn-post" id="btnPost" onclick="submitPost()">Post</button>
       </div>
     </div>
-    <!-- ── END COMPOSE ── -->
 
-    <!-- Feed -->
     <div id="feedContainer">
       <div class="empty-state"><div class="big">⏳</div><p>Loading posts…</p></div>
     </div>
@@ -507,12 +360,32 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════════════════════
-//  AUTH + ROLE SETUP
-// ══════════════════════════════════════════════════════════
-const role     = localStorage.getItem('userRole')   || 'member';
-const userId   = localStorage.getItem('userId')     || '';
-const userName = localStorage.getItem('userName')   || 'Member';
+// ─────────────────────────────────────────
+//  AUTH + ROLE
+// ─────────────────────────────────────────
+const role     = localStorage.getItem('userRole')  || 'member';
+const userId   = localStorage.getItem('userId')    || '';
+
+// IMPORTANT: userName is the FULL NAME set at registration, stored at login
+// If somehow it's missing or is an email, fall back gracefully
+let userName = localStorage.getItem('userName') || '';
+if (!userName || userName.includes('@')) {
+  // Try to re-fetch from Firestore if it looks like an email
+  auth.onAuthStateChanged(async user => {
+    if (!user) return;
+    try {
+      const doc = await db.collection('users').doc(user.uid).get();
+      if (doc.exists && doc.data().name) {
+        userName = doc.data().name;
+        localStorage.setItem('userName', userName);
+        document.getElementById('composeAvatar').textContent = userName.charAt(0).toUpperCase();
+        document.querySelectorAll('.comment-user-avatar').forEach(el => {
+          el.textContent = userName.charAt(0).toUpperCase();
+        });
+      }
+    } catch(e) { /* silent */ }
+  });
+}
 
 if (!role) { window.location.href = 'auth.html'; }
 
@@ -520,7 +393,6 @@ const isSuperAdmin = role === 'superadmin';
 const isAdmin      = role === 'admin';
 const isPrivileged = isAdmin || isSuperAdmin;
 
-// Admin bar
 if (isPrivileged) {
   document.getElementById('adminBar').classList.add('show');
   document.getElementById('sidebar').classList.add('admin-offset');
@@ -536,18 +408,17 @@ if (isSuperAdmin) {
   document.getElementById('navUserMgmt').style.display = 'flex';
 }
 if (isAdmin) {
-  document.getElementById('adminBarLabel').textContent = 'ADMIN MODE';
   document.getElementById('navUserMgmt').style.display = 'flex';
 }
 
-// Compose avatar shows name initial
-document.getElementById('composeAvatar').textContent = userName.charAt(0).toUpperCase();
+// Set compose avatar
+document.getElementById('composeAvatar').textContent = userName ? userName.charAt(0).toUpperCase() : '👤';
 
-// ══════════════════════════════════════════════════════════
+// ─────────────────────────────────────────
 //  COMPOSE STATE
-// ══════════════════════════════════════════════════════════
-let composeImageFile = null;   // image File object
-let composeOtherFile = null;   // non-image File object
+// ─────────────────────────────────────────
+let composeImageFile = null;
+let composeOtherFile = null;
 
 function autoGrow(el) {
   el.style.height = 'auto';
@@ -557,8 +428,7 @@ function autoGrow(el) {
 function handleComposeImage(e) {
   const file = e.target.files[0];
   if (!file) return;
-  // Remove any previously chosen non-image file
-  removeComposeFile();
+  removeComposeFile(); // can't have both
   composeImageFile = file;
   const reader = new FileReader();
   reader.onload = ev => {
@@ -566,7 +436,6 @@ function handleComposeImage(e) {
     document.getElementById('composeImgPreview').style.display = 'block';
   };
   reader.readAsDataURL(file);
-  // Reset input so same file can be re-selected
   e.target.value = '';
 }
 
@@ -579,8 +448,7 @@ function removeComposeImage() {
 function handleComposeFile(e) {
   const file = e.target.files[0];
   if (!file) return;
-  // Remove any previously chosen image
-  removeComposeImage();
+  removeComposeImage(); // can't have both
   composeOtherFile = file;
   document.getElementById('composeFileName').textContent = file.name;
   document.getElementById('composeFilePreview').style.display = 'flex';
@@ -593,9 +461,50 @@ function removeComposeFile() {
   document.getElementById('composeFilePreview').style.display = 'none';
 }
 
-// ══════════════════════════════════════════════════════════
-//  FEED STATE + FIRESTORE LISTENER
-// ══════════════════════════════════════════════════════════
+function showUploadProgress(label) {
+  document.getElementById('uploadLabel').textContent = label;
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('uploadPct').textContent = '0%';
+  document.getElementById('uploadProgress').classList.add('show');
+}
+function updateUploadProgress(pct) {
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('uploadPct').textContent = Math.round(pct) + '%';
+}
+function hideUploadProgress() {
+  document.getElementById('uploadProgress').classList.remove('show');
+}
+
+// ─────────────────────────────────────────
+//  UPLOAD HELPER — returns download URL
+//  Uses task.on() to show real progress
+// ─────────────────────────────────────────
+function uploadFile(file, path, progressLabel) {
+  return new Promise((resolve, reject) => {
+    showUploadProgress(progressLabel);
+    const storageRef = firebase.storage().ref(path);
+    const task = storageRef.put(file);
+    task.on('state_changed',
+      snapshot => {
+        const pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        updateUploadProgress(pct);
+      },
+      err => {
+        hideUploadProgress();
+        reject(err);
+      },
+      async () => {
+        const url = await task.snapshot.ref.getDownloadURL();
+        hideUploadProgress();
+        resolve(url);
+      }
+    );
+  });
+}
+
+// ─────────────────────────────────────────
+//  FEED
+// ─────────────────────────────────────────
 let currentFilter = 'all';
 let allPosts      = [];
 let savedIds      = JSON.parse(localStorage.getItem('savedPosts') || '[]');
@@ -611,28 +520,23 @@ function setFilter(filterVal) {
 db.collection('hub_posts').orderBy('createdAt','desc').onSnapshot(snap => {
   allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-  // Pending count:
-  // — Members: only their OWN pending posts
-  // — Admin/SuperAdmin: ALL pending posts
-  let pendingCount;
+  // Pending count
+  let pCount;
   if (isPrivileged) {
-    pendingCount = allPosts.filter(p => p.status === 'pending').length;
-  } else {
-    pendingCount = allPosts.filter(p => p.status === 'pending' && p.authorId === userId).length;
-  }
-  document.getElementById('pendingCount').textContent = pendingCount;
-  if (!isPrivileged && pendingCount > 0) {
+    pCount = allPosts.filter(p => p.status === 'pending').length;
     document.getElementById('pendingBadgeWrap').style.display = 'block';
-  } else if (!isPrivileged) {
-    document.getElementById('pendingBadgeWrap').style.display = 'none';
+  } else {
+    pCount = allPosts.filter(p => p.status === 'pending' && p.authorId === userId).length;
+    document.getElementById('pendingBadgeWrap').style.display = pCount > 0 ? 'block' : 'none';
   }
+  document.getElementById('pendingCount').textContent = pCount;
 
   renderFeed();
 });
 
-// ══════════════════════════════════════════════════════════
-//  RENDER FEED
-// ══════════════════════════════════════════════════════════
+// ─────────────────────────────────────────
+//  RENDER
+// ─────────────────────────────────────────
 const typeTagMap = {
   bible:'tag-bible', sermon:'tag-sermon', literature:'tag-literature',
   devotional:'tag-devotional', prayer:'tag-prayer', announcement:'tag-announcement',
@@ -646,30 +550,32 @@ const typeLabelMap = {
 
 function renderFeed() {
   const container = document.getElementById('feedContainer');
+  const isOwn     = p => p.authorId === userId;
+
   let visible = allPosts.filter(p => {
-    const isOwn     = p.authorId === userId;
     const published = p.status === 'published';
     const pending   = p.status === 'pending';
 
-    if (currentFilter === 'saved')   return savedIds.includes(p.id) && (published || isOwn);
-    if (currentFilter === 'pending') return pending && (isPrivileged || isOwn);
+    if (currentFilter === 'saved')   return savedIds.includes(p.id) && (published || isOwn(p));
+    if (currentFilter === 'pending') return pending && (isPrivileged || isOwn(p));
     if (currentFilter === 'all') {
-      return published || (isPrivileged && pending) || (isOwn && pending);
+      // Members see: published posts + their own pending
+      return published || (isPrivileged && pending) || (isOwn(p) && pending);
     }
-    return p.type === currentFilter && (published || (isPrivileged && pending) || (isOwn && pending));
+    return p.type === currentFilter && (published || (isPrivileged && pending) || (isOwn(p) && pending));
+  });
+
+  // Pinned first
+  visible.sort((a,b) => {
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    return 0;
   });
 
   if (!visible.length) {
     container.innerHTML = `<div class="empty-state"><div class="big">🌐</div><p>No posts here yet.</p></div>`;
     return;
   }
-
-  // Pinned posts first, then by date
-  visible.sort((a,b) => {
-    if (a.pinned && !b.pinned) return -1;
-    if (!a.pinned && b.pinned) return 1;
-    return 0;
-  });
 
   container.innerHTML = visible.map(post => renderPost(post)).join('');
 }
@@ -678,9 +584,9 @@ function renderPost(post) {
   const isSaved   = savedIds.includes(post.id);
   const isPending = post.status === 'pending';
   const isPinned  = !!post.pinned;
-  const isOwn     = post.authorId === userId;
+  const mine      = post.authorId === userId;
 
-  const typeTag   = typeTagMap[post.type] || 'tag-resource';
+  const typeTag   = typeTagMap[post.type]   || 'tag-resource';
   const typeLabel = typeLabelMap[post.type] || post.type;
   const initials  = (post.authorName || 'U').charAt(0).toUpperCase();
   const timeStr   = post.createdAt
@@ -689,28 +595,29 @@ function renderPost(post) {
   const content   = post.content || '';
   const isLong    = content.length > 360;
 
-  // Menu (admins + own post for delete)
-  let menuHtml = '';
-  if (isPrivileged || isOwn) {
-    const approveReject = isPrivileged && isPending ? `
-      <button onclick="approvePost('${post.id}')">✅ Approve</button>
-      <button onclick="rejectPost('${post.id}')">❌ Reject</button>` : '';
-    const pinBtn = isPrivileged && !isPending
-      ? (isPinned
-          ? `<button onclick="unpinPost('${post.id}')">📌 Unpin</button>`
-          : `<button onclick="pinPost('${post.id}')">📌 Pin Post</button>`)
-      : '';
-    const deleteBtn = isPrivileged || isOwn
-      ? `<button class="danger" onclick="deletePost('${post.id}')">🗑 Delete</button>` : '';
+  // Determine name to show — always use authorName (full name), never email
+  const displayName = post.authorName || 'Unknown';
 
-    menuHtml = `
-      <div class="post-menu-wrap">
-        <button class="post-menu-btn" onclick="toggleMenu(event,'${post.id}')">•••</button>
-        <div class="post-dropdown" id="menu-${post.id}">
-          ${approveReject}${pinBtn}${deleteBtn}
-        </div>
-      </div>`;
+  // Build menu items
+  let menuItems = '';
+  if (isPrivileged && isPending) {
+    menuItems += `<button onclick="approvePost('${post.id}')">✅ Approve</button>
+                  <button onclick="rejectPost('${post.id}')">❌ Reject</button>`;
   }
+  if (isPrivileged && !isPending) {
+    menuItems += isPinned
+      ? `<button onclick="unpinPost('${post.id}')">📌 Unpin</button>`
+      : `<button onclick="pinPost('${post.id}')">📌 Pin Post</button>`;
+  }
+  if (isPrivileged || mine) {
+    menuItems += `<button class="danger" onclick="deletePost('${post.id}')">🗑 Delete</button>`;
+  }
+
+  const menuHtml = menuItems
+    ? `<div class="post-menu-wrap">
+         <button class="post-menu-btn" onclick="toggleMenu(event,'${post.id}')">•••</button>
+         <div class="post-dropdown" id="menu-${post.id}">${menuItems}</div>
+       </div>` : '';
 
   // Badges
   const pinnedBadge  = isPinned  ? `<span class="badge badge-pin">📌 Pinned</span>` : '';
@@ -720,33 +627,32 @@ function renderPost(post) {
     : post.authorRole === 'admin' ? `<span class="badge badge-blue">Admin</span>` : '';
 
   // Media
-  const imageHtml = post.imageUrl
+  const imageHtml  = post.imageUrl
     ? `<img class="post-image" src="${post.imageUrl}" alt="post image" loading="lazy"/>` : '';
-
-  // File attachment
-  const attachHtml = post.attachmentName ? `
-    <div class="post-attachment">
-      <span class="attach-icon">📎</span>
-      <span class="attach-name">${post.attachmentName}</span>
-      ${post.attachmentUrl
-        ? `<a class="attach-dl" href="${post.attachmentUrl}" target="_blank" download>⬇ Download</a>` : ''}
-    </div>` : '';
+  const attachHtml = post.attachmentName
+    ? `<div class="post-attachment">
+         <span class="attach-icon">📎</span>
+         <span class="attach-name">${escHtml(post.attachmentName)}</span>
+         ${post.attachmentUrl
+           ? `<a class="attach-dl" href="${post.attachmentUrl}" target="_blank" download>⬇ Download</a>` : ''}
+       </div>` : '';
 
   // Reactions
-  const reactions = post.reactions  || {};
-  const reactedBy = post.reactedBy  || {};
-  const likeCount = reactions.like  || 0;
-  const prayCount = reactions.pray  || 0;
-  const fireCount = reactions.fire  || 0;
+  const reactions = post.reactions || {};
+  const reactedBy = post.reactedBy || {};
   const myReact   = reactedBy[userId];
 
+  const likeC = reactions.like || 0;
+  const prayC = reactions.pray || 0;
+  const fireC = reactions.fire || 0;
+
   return `
-    <div class="post-card ${isPending ? 'pending-card' : ''} ${isPinned ? 'pinned-card' : ''}" id="post-${post.id}">
+    <div class="post-card ${isPending?'pending-card':''} ${isPinned?'pinned-card':''}" id="post-${post.id}">
       <div class="post-header">
         <div class="post-author">
           <div class="post-avatar">${initials}</div>
           <div>
-            <div class="post-name">${escHtml(post.authorName || 'Unknown')}</div>
+            <div class="post-name">${escHtml(displayName)}</div>
             <div class="post-time">${timeStr}</div>
             <div class="post-badges">${pinnedBadge}${pendingBadge}${roleBadge}</div>
           </div>
@@ -758,23 +664,23 @@ function renderPost(post) {
       ${post.title ? `<div class="post-title">${escHtml(post.title)}</div>` : ''}
 
       <div class="post-body">
-        <div class="post-text ${isLong ? 'truncated' : ''}" id="text-${post.id}">${escHtml(content)}</div>
+        <div class="post-text ${isLong?'truncated':''}" id="text-${post.id}">${escHtml(content)}</div>
         ${isLong ? `<button class="read-more" onclick="expandText('${post.id}')">Read more</button>` : ''}
       </div>
 
       ${imageHtml}
       ${attachHtml}
-      ${isPending ? `<div class="pending-notice">⏳ Awaiting admin approval before others can see this</div>` : ''}
+      ${isPending ? `<div class="pending-notice">⏳ Awaiting admin approval</div>` : ''}
 
       <div class="post-footer">
         <button class="react-btn ${myReact==='like'?'reacted':''}" onclick="reactPost('${post.id}','like')">
-          👍${likeCount ? ' '+likeCount : ''}
+          👍${likeC ? ' '+likeC : ''}
         </button>
         <button class="react-btn ${myReact==='pray'?'reacted':''}" onclick="reactPost('${post.id}','pray')">
-          🙏${prayCount ? ' '+prayCount : ''}
+          🙏${prayC ? ' '+prayC : ''}
         </button>
         <button class="react-btn ${myReact==='fire'?'reacted':''}" onclick="reactPost('${post.id}','fire')">
-          🔥${fireCount ? ' '+fireCount : ''}
+          🔥${fireC ? ' '+fireC : ''}
         </button>
         <button class="comment-toggle" onclick="toggleComments('${post.id}')">
           💬 ${post.commentCount || 0}
@@ -785,9 +691,8 @@ function renderPost(post) {
       </div>
 
       <div class="comments-section" id="comments-${post.id}">
-        <!-- Comment input always visible when comments open -->
         <div class="comment-input-row">
-          <div class="comment-user-avatar">${userName.charAt(0).toUpperCase()}</div>
+          <div class="comment-user-avatar">${userName ? userName.charAt(0).toUpperCase() : '👤'}</div>
           <div class="comment-input-wrap">
             <textarea
               class="comment-input"
@@ -805,64 +710,66 @@ function renderPost(post) {
     </div>`;
 }
 
-// ══════════════════════════════════════════════════════════
-//  SUBMIT POST
-// ══════════════════════════════════════════════════════════
+// ─────────────────────────────────────────
+//  SUBMIT POST  — uploads first, then saves
+// ─────────────────────────────────────────
 async function submitPost() {
   const text = document.getElementById('composeText').value.trim();
   if (!text && !composeImageFile && !composeOtherFile) {
-    showToast('Write something or attach a file first.', 'error'); return;
+    showToast('Write something or attach a file first.', 'error');
+    return;
   }
 
   const btn = document.getElementById('btnPost');
-  btn.disabled = true; btn.textContent = 'Posting…';
+  btn.disabled = true;
+  btn.textContent = 'Posting…';
 
   try {
     const status = isPrivileged ? 'published' : 'pending';
     const type   = document.getElementById('composeType').value;
 
-    let imageUrl      = '';
-    let attachmentUrl = '';
+    let imageUrl       = '';
+    let attachmentUrl  = '';
     let attachmentName = '';
 
-    // Upload image
+    // ── Upload image first (sequential, not parallel) ──
     if (composeImageFile) {
-      const ref = firebase.storage().ref(`hub_images/${Date.now()}_${composeImageFile.name}`);
-      await ref.put(composeImageFile);
-      imageUrl = await ref.getDownloadURL();
+      const path = `hub_images/${Date.now()}_${composeImageFile.name}`;
+      imageUrl = await uploadFile(composeImageFile, path, '📷 Uploading image…');
     }
 
-    // Upload other file
+    // ── Upload file ──
     if (composeOtherFile) {
-      const ref = firebase.storage().ref(`hub_attachments/${Date.now()}_${composeOtherFile.name}`);
-      await ref.put(composeOtherFile);
-      attachmentUrl  = await ref.getDownloadURL();
+      const path = `hub_attachments/${Date.now()}_${composeOtherFile.name}`;
+      attachmentUrl  = await uploadFile(composeOtherFile, path, '📎 Uploading file…');
       attachmentName = composeOtherFile.name;
     }
 
+    // ── Now save to Firestore ──
     await db.collection('hub_posts').add({
-      content: text,
+      content:        text,
       type,
       status,
-      authorId:   userId,
-      authorName: userName,
-      authorRole: role,
+      authorId:       userId,
+      authorName:     userName,   // always the full name
+      authorRole:     role,
       imageUrl,
       attachmentUrl,
       attachmentName,
-      reactions:    {},
-      reactedBy:    {},
-      commentCount: 0,
-      pinned:       false,
-      createdAt:    firebase.firestore.FieldValue.serverTimestamp()
+      reactions:      {},
+      reactedBy:      {},
+      commentCount:   0,
+      pinned:         false,
+      createdAt:      firebase.firestore.FieldValue.serverTimestamp()
     });
 
+    // Notify super admin if member post
     if (!isPrivileged) {
       showToast('Post submitted — awaiting approval.', 'info');
-      await notifySuperAdmin(`New post submitted by ${userName} — awaiting approval.`, 'hub');
+      await notifySuperAdmin(`New post awaiting approval from ${userName}.`, 'hub');
     } else {
       showToast('Post published!', 'success');
-      await logAudit('hub_post_published', `Published hub post by ${userName}: ${text.substring(0,60)}`);
+      await logAudit('hub_post_published', `Published: "${text.substring(0,60)}"`);
     }
 
     // Reset compose
@@ -873,18 +780,20 @@ async function submitPost() {
     document.getElementById('composeType').value = 'bible';
 
   } catch (err) {
-    showToast('Error: ' + err.message, 'error');
+    console.error('Post error:', err);
+    showToast('Failed: ' + err.message, 'error');
   }
 
-  btn.disabled = false; btn.textContent = 'Post';
+  btn.disabled = false;
+  btn.textContent = 'Post';
 }
 
-// ══════════════════════════════════════════════════════════
+// ─────────────────────────────────────────
 //  POST ACTIONS
-// ══════════════════════════════════════════════════════════
+// ─────────────────────────────────────────
 function toggleMenu(e, id) {
   e.stopPropagation();
-  const menu = document.getElementById('menu-' + id);
+  const menu   = document.getElementById('menu-' + id);
   const isOpen = menu.classList.contains('show');
   document.querySelectorAll('.post-dropdown').forEach(d => d.classList.remove('show'));
   if (!isOpen) menu.classList.add('show');
@@ -894,32 +803,32 @@ document.addEventListener('click', () => {
 });
 
 function expandText(id) {
-  const el = document.getElementById('text-' + id);
+  const el  = document.getElementById('text-' + id);
   if (!el) return;
   el.classList.remove('truncated');
   const btn = el.nextElementSibling;
-  if (btn) btn.style.display = 'none';
+  if (btn && btn.classList.contains('read-more')) btn.style.display = 'none';
 }
 
 async function approvePost(id) {
   await db.collection('hub_posts').doc(id).update({ status: 'published' });
   const post = allPosts.find(p => p.id === id);
-  if (post) await notifyUser(post.authorId, 'Your post on Fellowship Hub has been approved! ✅', 'hub');
-  await logAudit('hub_post_approved', `Approved hub post id:${id}`);
+  if (post) await notifyUser(post.authorId, `Your post on Fellowship Hub has been approved! ✅`, 'hub');
+  await logAudit('hub_post_approved', `Approved post id:${id}`);
   showToast('Post approved!', 'success');
 }
 
 async function rejectPost(id) {
   if (!confirm('Reject and delete this post?')) return;
   await db.collection('hub_posts').doc(id).delete();
-  await logAudit('hub_post_rejected', `Rejected hub post id:${id}`);
+  await logAudit('hub_post_rejected', `Rejected post id:${id}`);
   showToast('Post rejected.', 'info');
 }
 
 async function deletePost(id) {
   if (!confirm('Delete this post permanently?')) return;
   await db.collection('hub_posts').doc(id).delete();
-  await logAudit('hub_post_deleted', `Deleted hub post id:${id}`);
+  await logAudit('hub_post_deleted', `Deleted post id:${id}`);
   showToast('Post deleted.', 'success');
 }
 
@@ -939,8 +848,12 @@ async function reactPost(postId, type) {
   const reactions = { ...(post.reactions || {}) };
   const prev = reactedBy[userId];
   if (prev) reactions[prev] = Math.max(0, (reactions[prev] || 1) - 1);
-  if (prev !== type) { reactions[type] = (reactions[type] || 0) + 1; reactedBy[userId] = type; }
-  else { delete reactedBy[userId]; }
+  if (prev !== type) {
+    reactions[type] = (reactions[type] || 0) + 1;
+    reactedBy[userId] = type;
+  } else {
+    delete reactedBy[userId];
+  }
   await db.collection('hub_posts').doc(postId).update({ reactions, reactedBy });
 }
 
@@ -951,9 +864,9 @@ function toggleSave(id) {
   renderFeed();
 }
 
-// ══════════════════════════════════════════════════════════
-//  COMMENTS  — Facebook style
-// ══════════════════════════════════════════════════════════
+// ─────────────────────────────────────────
+//  COMMENTS
+// ─────────────────────────────────────────
 function toggleComments(postId) {
   const section = document.getElementById('comments-' + postId);
   const isOpen  = section.classList.toggle('open');
@@ -963,29 +876,35 @@ function toggleComments(postId) {
 async function loadComments(postId) {
   const list = document.getElementById('commentsList-' + postId);
   list.innerHTML = '<p class="no-comments">Loading…</p>';
-  const snap = await db.collection('hub_posts').doc(postId)
-    .collection('comments').orderBy('createdAt','asc').get();
-  if (!snap.docs.length) {
-    list.innerHTML = '<p class="no-comments">No comments yet — be the first!</p>';
-    return;
+  try {
+    const snap = await db.collection('hub_posts').doc(postId)
+      .collection('comments').orderBy('createdAt','asc').get();
+    if (!snap.docs.length) {
+      list.innerHTML = '<p class="no-comments">No comments yet — be the first!</p>';
+      return;
+    }
+    list.innerHTML = snap.docs.map(d => {
+      const c    = d.data();
+      const init = (c.authorName || 'U').charAt(0).toUpperCase();
+      const t    = c.createdAt
+        ? timeAgo(c.createdAt.toDate ? c.createdAt.toDate() : new Date(c.createdAt))
+        : '';
+      return `<div class="comment-item">
+        <div class="comment-avatar">${init}</div>
+        <div class="comment-bubble">
+          <div class="comment-author">${escHtml(c.authorName || 'Unknown')}</div>
+          <div class="comment-text">${escHtml(c.text || '')}</div>
+          <div class="comment-time">${t}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(err) {
+    list.innerHTML = '<p class="no-comments" style="color:#dc3545;">Could not load comments.</p>';
+    console.error('Comment load error:', err);
   }
-  list.innerHTML = snap.docs.map(d => {
-    const c = d.data();
-    const init = (c.authorName || 'U').charAt(0).toUpperCase();
-    const t = c.createdAt ? timeAgo(c.createdAt.toDate ? c.createdAt.toDate() : new Date(c.createdAt)) : '';
-    return `<div class="comment-item">
-      <div class="comment-avatar">${init}</div>
-      <div class="comment-bubble">
-        <div class="comment-author">${escHtml(c.authorName || 'Unknown')}</div>
-        <div class="comment-text">${escHtml(c.text || '')}</div>
-        <div class="comment-time">${t}</div>
-      </div>
-    </div>`;
-  }).join('');
 }
 
 function commentEnter(e, postId) {
-  // Send on Enter (without Shift)
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
     submitComment(postId);
@@ -994,66 +913,75 @@ function commentEnter(e, postId) {
 
 async function submitComment(postId) {
   const input = document.getElementById('commentInput-' + postId);
-  const text  = input.value.trim();
+  const text  = (input.value || '').trim();
   if (!text) return;
   input.value = '';
   input.style.height = '';
 
-  await db.collection('hub_posts').doc(postId).collection('comments').add({
-    text,
-    authorId:   userId,
-    authorName: userName,
-    createdAt:  firebase.firestore.FieldValue.serverTimestamp()
-  });
-  await db.collection('hub_posts').doc(postId).update({
-    commentCount: firebase.firestore.FieldValue.increment(1)
-  });
-  loadComments(postId);
+  try {
+    await db.collection('hub_posts').doc(postId).collection('comments').add({
+      text,
+      authorId:   userId,
+      authorName: userName,  // full name, not email
+      createdAt:  firebase.firestore.FieldValue.serverTimestamp()
+    });
+    await db.collection('hub_posts').doc(postId).update({
+      commentCount: firebase.firestore.FieldValue.increment(1)
+    });
+    loadComments(postId);
+  } catch(err) {
+    showToast('Could not post comment: ' + err.message, 'error');
+    console.error(err);
+  }
 }
 
-// ══════════════════════════════════════════════════════════
-//  SHARED HELPERS
-// ══════════════════════════════════════════════════════════
+// ─────────────────────────────────────────
+//  HELPERS
+// ─────────────────────────────────────────
 async function notifySuperAdmin(message, type) {
-  const snap = await db.collection('users').where('role','==','superadmin').limit(1).get();
-  if (snap.empty) return;
-  await db.collection('notifications').add({
-    toUserId: snap.docs[0].id, message, type, read: false,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
+  try {
+    const snap = await db.collection('users').where('role','==','superadmin').limit(1).get();
+    if (snap.empty) return;
+    await db.collection('notifications').add({
+      toUserId: snap.docs[0].id, message, type, read: false,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch(e) { console.error(e); }
 }
 
 async function notifyUser(uid, message, type) {
-  await db.collection('notifications').add({
-    toUserId: uid, message, type, read: false,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
+  try {
+    await db.collection('notifications').add({
+      toUserId: uid, message, type, read: false,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch(e) { console.error(e); }
 }
 
 async function logAudit(action, description) {
-  await db.collection('audit_logs').add({
-    action, description,
-    performedBy:     userName,
-    performedByRole: role,
-    userId,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  });
+  try {
+    await db.collection('audit_logs').add({
+      action, description,
+      performedBy:     userName,
+      performedByRole: role,
+      userId,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch(e) { console.error(e); }
 }
 
 function timeAgo(date) {
   const diff = Math.floor((new Date() - date) / 1000);
   if (diff < 60)    return 'just now';
-  if (diff < 3600)  return Math.floor(diff/60)   + 'm ago';
-  if (diff < 86400) return Math.floor(diff/3600)  + 'h ago';
+  if (diff < 3600)  return Math.floor(diff/60)  + 'm ago';
+  if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
   return Math.floor(diff/86400) + 'd ago';
 }
 
 function escHtml(str) {
-  return String(str)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
+  return String(str || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function doLogout() {
@@ -1065,11 +993,11 @@ function doLogout() {
 
 function showToast(msg, type) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'toast show ' + type;
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
   setTimeout(() => t.className = 'toast', 2800);
 }
 
-// ── Sidebar / hamburger ──
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('overlay');
 document.getElementById('hamburger').addEventListener('click', () => {
@@ -1083,4 +1011,3 @@ function closeSidebar() {
 </script>
 </body>
 </html>
-
