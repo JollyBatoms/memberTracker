@@ -56,61 +56,66 @@
 
     .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; flex-wrap:wrap; gap:.8rem; }
     .page-header h1 { font-family:'Merriweather',serif; font-size:1.2rem; font-weight:700; }
-    .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; transition:background .2s; }
-    .btn-primary:hover { background:#0052a3; }
-    .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
-    .btn-secondary { padding:.6rem 1.1rem; background:transparent; color:#555; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ccd4df; border-radius:5px; cursor:pointer; }
-    .btn-outline { display:inline-flex; align-items:center; gap:.4rem; padding:.5rem .9rem; background:transparent; color:#0066cc; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; border:1.5px solid #0066cc; border-radius:5px; cursor:pointer; }
-    .btn-outline:hover { background:#eef4ff; }
 
     .view-notice { background:#f0f5ff; border:1px solid #c5d9f5; border-radius:6px; padding:.7rem 1rem; font-size:.8rem; color:#0066cc; font-weight:600; margin-bottom:1rem; display:none; }
     .view-notice.show { display:block; }
 
-    /* Position cards grid */
-    .positions-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1rem; }
+    /* Section headers */
+    .section-title { font-family:'Merriweather',serif; font-size:.88rem; font-weight:700; color:#333; margin:1.4rem 0 .8rem; display:flex; align-items:center; gap:.5rem; padding-bottom:.5rem; border-bottom:2px solid #edf0f4; }
+    .section-title .material-symbols-outlined { color:#0066cc; font-size:1.1rem; }
 
-    .position-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.04); transition:box-shadow .2s,border-color .2s; }
-    .position-card:hover { box-shadow:0 3px 12px rgba(0,0,0,.08); border-color:#b0c8f0; }
-    .position-card-top { padding:1rem 1rem .8rem; display:flex; align-items:center; gap:.85rem; }
-    .position-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0; }
-    .pos-info { flex:1; min-width:0; }
-    .pos-title { font-size:.9rem; font-weight:700; color:#1a1a1a; }
-    .pos-holder { font-size:.78rem; color:#0066cc; font-weight:600; margin-top:.2rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .pos-holder.vacant { color:#aaa; font-weight:400; font-style:italic; }
-    .pos-since { font-size:.7rem; color:#aaa; margin-top:.1rem; }
+    /* Positions grid */
+    .positions-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:.9rem; }
 
-    .position-history { padding:.6rem 1rem .8rem; border-top:1px solid #f0f0f0; }
-    .history-label { font-size:.62rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#aaa; margin-bottom:.4rem; }
-    .history-list { display:flex; flex-direction:column; gap:.3rem; }
-    .history-item { font-size:.75rem; color:#666; display:flex; align-items:center; gap:.4rem; }
-    .history-item::before { content:''; width:6px; height:6px; border-radius:50%; background:#dde3ec; flex-shrink:0; }
-    .history-more { font-size:.72rem; color:#aaa; margin-top:.2rem; }
+    .pos-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.04); transition:box-shadow .2s,border-color .2s; }
+    .pos-card:hover { box-shadow:0 3px 12px rgba(0,0,0,.08); border-color:#c5d9f5; }
+    .pos-card.occupied { border-left:3px solid #0066cc; }
+    .pos-card.vacant   { border-left:3px solid #dde3ec; }
 
-    .position-footer { padding:.7rem 1rem; border-top:1px solid #f0f0f0; display:flex; gap:.5rem; flex-wrap:wrap; }
-    .btn-xs { padding:.35rem .75rem; font-family:'Open Sans',sans-serif; font-size:.72rem; font-weight:700; border-radius:4px; cursor:pointer; border:1px solid; transition:all .2s; }
-    .btn-xs-assign { background:#eef4ff; color:#0066cc; border-color:#c5d9f5; }
+    .pos-card-body { padding:.9rem 1rem; display:flex; align-items:center; gap:.85rem; }
+    .pos-icon { width:40px; height:40px; border-radius:8px; background:#eef4ff; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .pos-icon .material-symbols-outlined { color:#0066cc; font-size:1.2rem; }
+    .pos-icon.vacant-icon { background:#f5f5f5; }
+    .pos-icon.vacant-icon .material-symbols-outlined { color:#bbb; }
+    .pos-details { flex:1; min-width:0; }
+    .pos-name { font-size:.85rem; font-weight:700; color:#1a1a1a; margin-bottom:.15rem; }
+    .pos-holder { font-size:.8rem; color:#0066cc; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .pos-holder.vacant-text { color:#bbb; font-style:italic; font-weight:400; }
+    .pos-since { font-size:.68rem; color:#aaa; margin-top:.1rem; }
+    .pos-status { flex-shrink:0; }
+    .badge { display:inline-block; font-size:.62rem; font-weight:700; padding:.18rem .55rem; border-radius:20px; }
+    .badge-active  { background:#eef4ff; color:#0066cc; }
+    .badge-vacant  { background:#f5f5f5; color:#aaa; border:1px solid #dde3ec; }
+
+    .pos-history-preview { padding:.4rem 1rem .6rem; border-top:1px solid #f5f5f5; }
+    .pos-history-preview-item { font-size:.72rem; color:#888; display:flex; align-items:center; gap:.35rem; padding:.15rem 0; }
+    .pos-history-preview-item::before { content:''; width:5px; height:5px; border-radius:50%; background:#dde3ec; flex-shrink:0; }
+
+    .pos-footer { padding:.65rem 1rem; border-top:1px solid #f0f0f0; display:flex; gap:.4rem; flex-wrap:wrap; align-items:center; }
+    .btn-xs { padding:.35rem .75rem; font-family:'Open Sans',sans-serif; font-size:.72rem; font-weight:700; border-radius:4px; cursor:pointer; border:1px solid; transition:all .2s; display:inline-flex; align-items:center; gap:.3rem; }
+    .btn-xs .material-symbols-outlined { font-size:.85rem; }
+    .btn-xs-assign   { background:#eef4ff; color:#0066cc; border-color:#c5d9f5; }
     .btn-xs-assign:hover { background:#d6e8ff; }
     .btn-xs-transfer { background:#eafaf0; color:#1e7e34; border-color:#b7dfca; }
     .btn-xs-transfer:hover { background:#d4f0e3; }
-    .btn-xs-clear { background:#fff0f0; color:#dc3545; border-color:#f5c0c5; }
+    .btn-xs-clear    { background:#fff0f0; color:#dc3545; border-color:#f5c0c5; }
     .btn-xs-clear:hover { background:#fdd; }
+    .btn-xs-history  { background:#f7f9fc; color:#555; border-color:#dde3ec; }
+    .btn-xs-history:hover { background:#eef4ff; color:#0066cc; border-color:#0066cc; }
 
-    /* Color themes per category */
-    .cat-executive .position-icon { background:#eef4ff; }
-    .cat-secretary .position-icon { background:#eafaf0; }
-    .cat-finance   .position-icon { background:#fff4e6; }
-    .cat-media     .position-icon { background:#f0eeff; }
-    .cat-welfare   .position-icon { background:#fce4ec; }
-    .cat-other     .position-icon { background:#f5f5f5; }
+    /* Ex-officials section */
+    .exoff-list { display:flex; flex-direction:column; gap:.5rem; }
+    .exoff-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:.8rem 1rem; display:flex; align-items:center; gap:.85rem; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+    .exoff-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.9rem; font-weight:700; color:#fff; flex-shrink:0; background:linear-gradient(135deg,#6f42c1,#e83e8c); }
+    .exoff-info { flex:1; min-width:0; }
+    .exoff-name { font-size:.88rem; font-weight:700; color:#1a1a1a; }
+    .exoff-sub  { font-size:.73rem; color:#888; margin-top:.1rem; }
+    .btn-xs-remove { background:#fff0f0; color:#dc3545; border-color:#f5c0c5; }
+    .btn-xs-remove:hover { background:#fdd; }
 
-    .badge { display:inline-block; font-size:.6rem; font-weight:700; padding:.15rem .5rem; border-radius:20px; }
-    .badge-blue   { background:#eef4ff; color:#0066cc; }
-    .badge-vacant { background:#f5f5f5; color:#aaa; border:1px solid #dde3ec; }
+    .empty-notice { background:#f7f9fc; border:1px solid #edf0f4; border-radius:6px; padding:.9rem 1rem; font-size:.82rem; color:#aaa; text-align:center; }
 
-    .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; grid-column:1/-1; }
-    .empty-state .big { font-size:2.5rem; margin-bottom:.6rem; }
-
-    /* Modal */
+    /* Modals */
     .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:500; align-items:center; justify-content:center; padding:1rem; }
     .modal-overlay.show { display:flex; }
     .modal { background:#fff; border-radius:8px; width:100%; max-width:460px; max-height:90vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,.15); }
@@ -119,469 +124,11 @@
     .modal-close { background:none; border:none; font-size:1.6rem; cursor:pointer; color:#888; line-height:1; }
     .modal-body { padding:1.4rem; }
     .modal-footer { padding:1rem 1.4rem; border-top:1px solid #edf0f4; display:flex; justify-content:flex-end; gap:.6rem; position:sticky; bottom:0; background:#fff; }
+    .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.6rem 1.1rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; }
+    .btn-primary:hover { background:#0052a3; }
+    .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
+    .btn-secondary { padding:.6rem 1.1rem; background:transparent; color:#555; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ccd4df; border-radius:5px; cursor:pointer; }
 
     .form-group { display:flex; flex-direction:column; gap:.35rem; margin-bottom:.9rem; }
     .form-group label { font-size:.72rem; font-weight:700; color:#444; }
-    .form-group input, .form-group select {
-      padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px;
-      font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a;
-      background:#fff; outline:none; transition:border-color .2s; appearance:none;
-    }
-    .form-group input:focus, .form-group select:focus { border-color:#0066cc; }
-    .select-wrap { position:relative; }
-    .select-wrap::after { content:''; position:absolute; right:.85rem; top:50%; transform:translateY(-50%); border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid #888; pointer-events:none; }
-
-    /* History modal */
-    .history-full { display:flex; flex-direction:column; gap:.6rem; max-height:50vh; overflow-y:auto; }
-    .history-row { display:flex; align-items:flex-start; gap:.75rem; padding:.65rem; background:#f7f9fc; border:1px solid #edf0f4; border-radius:6px; }
-    .history-row-name { font-size:.85rem; font-weight:700; color:#1a1a1a; }
-    .history-row-date { font-size:.72rem; color:#aaa; margin-top:.1rem; }
-
-    .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
-    .toast.show { opacity:1; transform:translateY(0); }
-    .toast.success { background:#28a745; }
-    .toast.error   { background:#dc3545; }
-    .toast.info    { background:#0066cc; }
-
-    @media(max-width:768px) {
-      .sidebar { transform:translateX(-100%); }
-      .sidebar.open { transform:translateX(0); }
-      .topbar { display:flex; }
-      .main { margin-left:0; padding-top:54px; }
-      .main.offset { margin-top:28px; padding-top:54px; }
-      .topbar.offset { top:28px; }
-      .content { padding:1rem .9rem 3rem; }
-      .positions-grid { grid-template-columns:1fr; }
-    }
-  </style>
-</head>
-<body>
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="firebase-config.js"></script>
-
-<div class="admin-bar" id="adminBar"><span id="adminBarText"></span></div>
-
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-brand" onclick="window.location.href='index.html'">
-    <div class="brand-logos">
-      <div class="brand-logo"><img src="gecc-logo.jpg" alt="GECC"/></div>
-      <div class="brand-logo"><img src="uniport-logo.jpg" alt="Uniport"/></div>
-    </div>
-    <div class="brand-text">
-      <span class="brand-name">GECC Uniport</span>
-      <span class="brand-sub" id="portalLabel">Member Portal</span>
-    </div>
-  </div>
-  <nav class="nav-section">
-    <div class="nav-label">Menu</div>
-    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="material-symbols-outlined icon">settings</span> Memo</a>
-    <a class="nav-item" href="dashboard.html"><span class="material-symbols-outlined icon">dashboard</span> Dashboard</a>
-    <a class="nav-item" href="members.html"><span class="material-symbols-outlined icon">group</span> Members</a>
-    <a class="nav-item" href="past-members.html"><span class="material-symbols-outlined icon">history</span> Past Members</a>
-    <a class="nav-item" href="attendance.html"><span class="material-symbols-outlined icon">check_circle</span> Attendance</a>
-    <a id="navFinance" class="nav-item" href="finance.html" style="display:none"><span class="material-symbols-outlined icon">account_balance_wallet</span> Finance</a>
-    <a class="nav-item" href="events.html"><span class="material-symbols-outlined icon">calendar_month</span> Events</a>
-    <a class="nav-item active" href="positions.html"><span class="material-symbols-outlined icon">military_tech</span> Positions</a>
-    <a class="nav-item" href="hub.html"><span class="material-symbols-outlined icon">hub</span> Fellowship Hub</a>
-    <a class="nav-item" href="notifications.html"><span class="material-symbols-outlined icon">notifications</span> Notifications</a>
-    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="material-symbols-outlined icon">manage_accounts</span> User Management</a>
-    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="material-symbols-outlined icon">fact_check</span> Audit Logs</a>
-  </nav>
-  <div class="nav-bottom">
-    <button class="btn-logout" onclick="doLogout()"><span class="material-symbols-outlined icon">logout</span> Logout</button>
-  </div>
-</aside>
-
-<div class="topbar" id="topbar">
-  <div class="topbar-brand" onclick="window.location.href='index.html'">
-    <div class="brand-logos">
-      <div class="brand-logo"><img src="gecc-logo.jpg" alt="GECC"/></div>
-      <div class="brand-logo"><img src="uniport-logo.jpg" alt="Uniport"/></div>
-    </div>
-    &nbsp;GECC Uniport
-  </div>
-  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
-</div>
-<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-
-<div class="main" id="mainWrap">
-  <div class="main-bar" id="mainBar"></div>
-  <div class="content">
-
-    <div class="page-header">
-      <h1>🎯 Positions</h1>
-    </div>
-
-    <div class="view-notice" id="viewNotice">👁 View-only mode. Positions are managed by admins.</div>
-
-    <div class="positions-grid" id="positionsGrid">
-      <div class="empty-state"><div class="big">⏳</div><p>Loading positions…</p></div>
-    </div>
-
-  </div>
-</div>
-
-<!-- Assign / Transfer Modal -->
-<div class="modal-overlay" id="assignModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="assignModalTitle">Assign Position</div>
-      <button class="modal-close" onclick="closeAssignModal()">×</button>
-    </div>
-    <div class="modal-body">
-      <div style="background:#f7f9fc;border:1px solid #edf0f4;border-radius:6px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.84rem;color:#333;">
-        <strong id="assignPosName"></strong>
-        <div id="assignCurrentHolder" style="font-size:.75rem;color:#888;margin-top:.2rem;"></div>
-      </div>
-      <div class="form-group">
-        <label>Select Member *</label>
-        <div class="select-wrap">
-          <select id="assignMemberSelect">
-            <option value="">— Select a member —</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Assigned Date</label>
-        <input type="date" id="assignDate"/>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-secondary" onclick="closeAssignModal()">Cancel</button>
-      <button class="btn-primary" id="btnAssign" onclick="confirmAssign()">Confirm</button>
-    </div>
-  </div>
-</div>
-
-<!-- Full History Modal -->
-<div class="modal-overlay" id="historyModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="historyModalTitle">Position History</div>
-      <button class="modal-close" onclick="closeHistoryModal()">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="history-full" id="historyFull"></div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-secondary" onclick="closeHistoryModal()">Close</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-  const role     = localStorage.getItem('userRole');
-  const userId   = localStorage.getItem('userId') || '';
-  const userName = localStorage.getItem('userName') || 'Unknown';
-  if (!role) { window.location.href = 'auth.html'; }
-
-  const isMember     = role === 'member';
-  const isAdmin      = role === 'admin';
-  const isSuperAdmin = role === 'superadmin';
-  const isPrivileged = isAdmin || isSuperAdmin;
-
-  // ── Admin bar ──
-  const adminBar = document.getElementById('adminBar');
-  adminBar.classList.add('show');
-  if (isMember) {
-    adminBar.classList.add('member-bar');
-    document.getElementById('mainBar').classList.add('member-bar');
-    document.getElementById('adminBarText').innerHTML = '🟢 MEMBER MODE <span>· Limited access</span>';
-    document.getElementById('portalLabel').textContent = 'Member Portal';
-    document.getElementById('viewNotice').classList.add('show');
-  } else if (isAdmin) {
-    document.getElementById('adminBarText').innerHTML = '🔐 ADMIN MODE <span>· Full access enabled</span>';
-    document.getElementById('portalLabel').textContent = 'Admin Portal';
-  } else {
-    adminBar.classList.add('super-bar');
-    document.getElementById('mainBar').classList.add('super-bar');
-    document.getElementById('adminBarText').innerHTML = '👑 SUPER ADMIN MODE <span>· Full system access</span>';
-    document.getElementById('portalLabel').textContent = 'Super Admin Portal';
-  }
-
-  document.getElementById('sidebar').classList.add('offset');
-  document.getElementById('topbar').classList.add('offset');
-  document.getElementById('mainWrap').classList.add('offset');
-
-  if (isPrivileged) {
-    document.getElementById('navMemo').style.display = 'flex';
-    document.getElementById('navFinance').style.display = 'flex';
-    document.getElementById('navUserMgmt').style.display = 'flex';
-  }
-  if (isSuperAdmin) {
-    document.getElementById('navAudit').style.display = 'flex';
-  }
-
-  // ── Position definitions ──
-  const POSITIONS = [
-    { key:'president',       title:'President',                    icon:'👑', cat:'executive' },
-    { key:'vice_president',  title:'Vice President',               icon:'🌟', cat:'executive' },
-    { key:'gen_sec',         title:'General Secretary',            icon:'📋', cat:'secretary' },
-    { key:'asst_gen_sec',    title:'Asst. General Secretary',      icon:'📋', cat:'secretary' },
-    { key:'bible_sec',       title:'Bible Study Secretary',        icon:'📖', cat:'secretary' },
-    { key:'asst_bible_sec',  title:'Asst Bible Study Secretary',   icon:'📖', cat:'secretary' },
-    { key:'evangelism_sec',  title:'Evangelism Secretary',         icon:'✝️',  cat:'secretary' },
-    { key:'followup_sec',    title:'Follow-up Secretary',          icon:'🤝', cat:'secretary' },
-    { key:'prayer_sec',      title:'Prayer Secretary',             icon:'🙏', cat:'secretary' },
-    { key:'asst_prayer_sec', title:'Asst Prayer Secretary',        icon:'🙏', cat:'secretary' },
-    { key:'media_sec',       title:'Media/Publicity Secretary',    icon:'📢', cat:'media'     },
-    { key:'asst_media_sec',  title:'Asst Media/Publicity Sec.',    icon:'📢', cat:'media'     },
-    { key:'org_sec',         title:'Organizing Secretary',         icon:'📌', cat:'secretary' },
-    { key:'asst_org_sec',    title:'Asst Organizing Secretary',    icon:'📌', cat:'secretary' },
-    { key:'welfare_sec',     title:'Welfare Secretary',            icon:'❤️',  cat:'welfare'   },
-    { key:'asst_welfare_sec',title:'Asst. Welfare Secretary',      icon:'❤️',  cat:'welfare'   },
-    { key:'academic_sec',    title:'Academic/Magazine Secretary',  icon:'📚', cat:'secretary' },
-    { key:'music_director',  title:'Music Director',               icon:'🎵', cat:'other'     },
-    { key:'fin_sec',         title:'Financial Secretary',          icon:'💰', cat:'finance'   },
-    { key:'treasurer',       title:'Treasurer',                    icon:'💳', cat:'finance'   },
-    { key:'ex_official',     title:'Ex-official',                  icon:'🔰', cat:'other'     },
-  ];
-
-  const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  function fmtDate(ds) {
-    if (!ds) return '—';
-    const d = new Date(ds);
-    return d.getDate() + ' ' + MONTHS_SHORT[d.getMonth()] + ' ' + d.getFullYear();
-  }
-
-  let allMembers   = [];
-  let positionDocs = {}; // key → Firestore doc data
-  let assigningKey = null;
-  let assigningMode = 'assign'; // 'assign' | 'transfer' | 'clear'
-
-  // ── Load members + positions in parallel ──
-  Promise.all([
-    db.collection('members').orderBy('name').get(),
-    db.collection('positions').get()
-  ]).then(([membersSnap, posSnap]) => {
-    allMembers = membersSnap.docs.map(d=>({id:d.id,...d.data()}))
-      .filter(m => m.position !== 'Associates' && m.isAssociate !== true);
-    posSnap.docs.forEach(d => { positionDocs[d.id] = {id:d.id,...d.data()}; });
-    renderPositions();
-  });
-
-  // Live listener for position changes
-  db.collection('positions').onSnapshot(snap => {
-    snap.docs.forEach(d => { positionDocs[d.id] = {id:d.id,...d.data()}; });
-    renderPositions();
-  });
-
-  function renderPositions() {
-    const grid = document.getElementById('positionsGrid');
-    grid.innerHTML = POSITIONS.map(p => {
-      const doc     = positionDocs[p.key] || {};
-      const holder  = doc.currentHolder || null;
-      const history = doc.history || [];
-      const since   = doc.assignedDate || null;
-
-      const recentHistory = history.slice(-3).reverse();
-
-      const adminFooter = isPrivileged ? `
-        <div class="position-footer">
-          ${!holder
-            ? `<button class="btn-xs btn-xs-assign" onclick="openAssignModal('${p.key}','${p.title}','assign')">+ Assign</button>`
-            : `<button class="btn-xs btn-xs-transfer" onclick="openAssignModal('${p.key}','${p.title}','transfer')">⇄ Transfer</button>
-               <button class="btn-xs btn-xs-clear" onclick="clearPosition('${p.key}','${p.title}')">✕ Clear</button>`
-          }
-          ${history.length ? `<button class="btn-xs" style="background:#f7f9fc;color:#555;border-color:#dde3ec;" onclick="openHistoryModal('${p.key}','${p.title}')">📋 History</button>` : ''}
-        </div>` : `
-        <div class="position-footer">
-          ${history.length ? `<button class="btn-outline" onclick="openHistoryModal('${p.key}','${p.title}')">📋 View History</button>` : ''}
-        </div>`;
-
-      return `
-        <div class="position-card cat-${p.cat}">
-          <div class="position-card-top">
-            <div class="position-icon">${p.icon}</div>
-            <div class="pos-info">
-              <div class="pos-title">${p.title}</div>
-              <div class="pos-holder ${holder?'':'vacant'}">${holder || 'Vacant'}</div>
-              ${since ? `<div class="pos-since">Since ${fmtDate(since)}</div>` : ''}
-            </div>
-            ${holder ? `<span class="badge badge-blue">Active</span>` : `<span class="badge badge-vacant">Vacant</span>`}
-          </div>
-          ${recentHistory.length ? `
-          <div class="position-history">
-            <div class="history-label">Recent Holders</div>
-            <div class="history-list">
-              ${recentHistory.map(h=>`
-                <div class="history-item">${h.name} <span style="color:#bbb;font-size:.68rem;">${fmtDate(h.from)} – ${h.to?fmtDate(h.to):'present'}</span></div>
-              `).join('')}
-            </div>
-            ${history.length > 3 ? `<div class="history-more">+${history.length-3} more</div>` : ''}
-          </div>` : ''}
-          ${adminFooter}
-        </div>`;
-    }).join('');
-  }
-
-  // ── Assign / Transfer modal ──
-  function openAssignModal(key, title, mode) {
-    if (!isPrivileged) return;
-    assigningKey  = key;
-    assigningMode = mode;
-    const doc = positionDocs[key] || {};
-
-    document.getElementById('assignModalTitle').textContent =
-      mode === 'assign' ? 'Assign Position' : 'Transfer Position';
-    document.getElementById('assignPosName').textContent = title;
-    document.getElementById('assignCurrentHolder').textContent =
-      doc.currentHolder ? 'Current: ' + doc.currentHolder : 'Currently vacant';
-
-    // Populate member select — exclude current holder
-    const sel = document.getElementById('assignMemberSelect');
-    sel.innerHTML = '<option value="">— Select a member —</option>' +
-      allMembers
-        .filter(m => m.name !== doc.currentHolder)
-        .map(m => `<option value="${m.id}|${m.name}">${m.name} · ${m.position||'Member'} · ${m.level||''}</option>`)
-        .join('');
-
-    // Default date to today
-    document.getElementById('assignDate').value = new Date().toISOString().split('T')[0];
-    document.getElementById('btnAssign').textContent = mode === 'assign' ? 'Assign' : 'Transfer';
-    document.getElementById('assignModal').classList.add('show');
-  }
-
-  function closeAssignModal() { document.getElementById('assignModal').classList.remove('show'); }
-
-  async function confirmAssign() {
-    if (!isPrivileged) return;
-    const val  = document.getElementById('assignMemberSelect').value;
-    const date = document.getElementById('assignDate').value;
-    if (!val) { showToast('Please select a member.', 'error'); return; }
-
-    const [memberId, memberName] = val.split('|');
-    const btn = document.getElementById('btnAssign');
-    btn.disabled = true; btn.textContent = 'Saving…';
-
-    const doc     = positionDocs[assigningKey] || {};
-    const history = [...(doc.history || [])];
-    const posTitle = POSITIONS.find(p=>p.key===assigningKey)?.title || assigningKey;
-
-    // Close out previous holder in history
-    if (doc.currentHolder && history.length) {
-      const last = history[history.length - 1];
-      if (!last.to) last.to = date;
-    }
-
-    // Add new entry
-    history.push({ name: memberName, memberId, from: date, to: null });
-
-    const data = {
-      currentHolder:  memberName,
-      currentMemberId: memberId,
-      assignedDate:   date,
-      history,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
-
-    try {
-      await db.collection('positions').doc(assigningKey).set(data, { merge: true });
-      // Also update position field on the member doc
-      await db.collection('members').doc(memberId).update({ position: posTitle });
-
-      const action = assigningMode === 'assign' ? 'position_assigned' : 'position_transferred';
-      await logAudit(action, `${posTitle} ${assigningMode === 'assign'?'assigned to':'transferred to'} ${memberName}`);
-
-      // Notify Super Admin if action done by admin
-      if (isAdmin) await notifySuperAdmin(`${userName} ${assigningMode === 'assign'?'assigned':'transferred'} ${posTitle} to ${memberName}`, 'member');
-
-      closeAssignModal();
-      showToast(`${posTitle} ${assigningMode === 'assign'?'assigned to':'transferred to'} ${memberName}!`, 'success');
-    } catch(err) {
-      showToast('Error: ' + err.message, 'error');
-    }
-    btn.disabled = false;
-    btn.textContent = assigningMode === 'assign' ? 'Assign' : 'Transfer';
-  }
-
-  async function clearPosition(key, title) {
-    if (!isPrivileged) return;
-    if (!confirm(`Clear ${title}? The current holder will be unassigned.`)) return;
-    const doc     = positionDocs[key] || {};
-    const history = [...(doc.history || [])];
-    const today   = new Date().toISOString().split('T')[0];
-
-    // Close out current holder
-    if (history.length) {
-      const last = history[history.length - 1];
-      if (!last.to) last.to = today;
-    }
-
-    try {
-      await db.collection('positions').doc(key).set({
-        currentHolder: null, currentMemberId: null,
-        assignedDate: null, history,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }, { merge: true });
-
-      await logAudit('position_cleared', `${title} cleared — ${doc.currentHolder||''} unassigned`);
-      if (isAdmin) await notifySuperAdmin(`${userName} cleared the position: ${title}`, 'member');
-      showToast(`${title} cleared.`, 'info');
-    } catch(err) { showToast('Error: ' + err.message, 'error'); }
-  }
-
-  // ── History modal ──
-  function openHistoryModal(key, title) {
-    const doc     = positionDocs[key] || {};
-    const history = [...(doc.history || [])].reverse();
-    document.getElementById('historyModalTitle').textContent = title + ' — History';
-    document.getElementById('historyFull').innerHTML = history.length
-      ? history.map(h=>`
-          <div class="history-row">
-            <div style="flex:1">
-              <div class="history-row-name">${h.name}</div>
-              <div class="history-row-date">${fmtDate(h.from)} → ${h.to ? fmtDate(h.to) : 'Present'}</div>
-            </div>
-            ${!h.to ? '<span class="badge badge-blue">Current</span>' : ''}
-          </div>`).join('')
-      : '<div style="text-align:center;color:#bbb;padding:1rem;">No history yet.</div>';
-    document.getElementById('historyModal').classList.add('show');
-  }
-  function closeHistoryModal() { document.getElementById('historyModal').classList.remove('show'); }
-
-  async function notifySuperAdmin(message, type) {
-    try {
-      const snap = await db.collection('users').where('role','==','superadmin').limit(1).get();
-      if (snap.empty) return;
-      await db.collection('notifications').add({
-        toUserId: snap.docs[0].id, message, type, read: false,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    } catch(e) {}
-  }
-
-  async function logAudit(action, description) {
-    try {
-      await db.collection('audit_logs').add({
-        action, description,
-        performedBy: userName, performedByRole: role, userId,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    } catch(e) {}
-  }
-
-  function doLogout() {
-    auth.signOut().then(() => { localStorage.clear(); window.location.href = 'auth.html'; });
-  }
-  function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.className = 'toast show ' + type;
-    setTimeout(() => t.className = 'toast', 2800);
-  }
-
-  document.getElementById('assignModal').addEventListener('click', function(e){ if(e.target===this) closeAssignModal(); });
-  document.getElementById('historyModal').addEventListener('click', function(e){ if(e.target===this) closeHistoryModal(); });
-
-  const sidebarEl = document.getElementById('sidebar');
-  const overlayEl = document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click', ()=>{ sidebarEl.classList.toggle('open'); overlayEl.classList.toggle('show'); });
-  function closeSidebar() { sidebarEl.classList.remove('open'); overlayEl.classList.remove('show'); }
-</script>
-</body>
-</html>
+    .form-group input, .form-group select { padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; background:#fff; outline:none;
