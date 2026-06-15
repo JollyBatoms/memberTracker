@@ -131,4 +131,677 @@
 
     .form-group { display:flex; flex-direction:column; gap:.35rem; margin-bottom:.9rem; }
     .form-group label { font-size:.72rem; font-weight:700; color:#444; }
-    .form-group input, .form-group select { padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; background:#fff; outline:none;
+    .form-group input, .form-group select { padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a; background:#fff; outline:none; transition:border-color .2s; appearance:none; }
+    .form-group input:focus, .form-group select:focus { border-color:#0066cc; }
+    .select-wrap { position:relative; }
+    .select-wrap::after { content:''; position:absolute; right:.85rem; top:50%; transform:translateY(-50%); border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid #888; pointer-events:none; }
+
+    .current-box { background:#f7f9fc; border:1px solid #edf0f4; border-radius:6px; padding:.75rem 1rem; margin-bottom:1rem; }
+    .current-box-title { font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#aaa; margin-bottom:.3rem; }
+    .current-box-val { font-size:.9rem; font-weight:700; color:#0066cc; }
+    .current-box-sub { font-size:.75rem; color:#888; margin-top:.15rem; }
+
+    /* History list in modal */
+    .history-list-full { display:flex; flex-direction:column; gap:.5rem; max-height:55vh; overflow-y:auto; }
+    .history-row { display:flex; align-items:center; gap:.75rem; padding:.65rem .8rem; background:#f7f9fc; border:1px solid #edf0f4; border-radius:6px; }
+    .history-row-avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#0066cc,#6c63ff); display:flex; align-items:center; justify-content:center; color:#fff; font-size:.75rem; font-weight:700; flex-shrink:0; }
+    .history-row-info { flex:1; min-width:0; }
+    .history-row-name { font-size:.84rem; font-weight:700; color:#1a1a1a; }
+    .history-row-dates { font-size:.7rem; color:#aaa; margin-top:.1rem; }
+
+    .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
+    .toast.show { opacity:1; transform:translateY(0); }
+    .toast.success { background:#28a745; }
+    .toast.error   { background:#dc3545; }
+    .toast.info    { background:#0066cc; }
+
+    @media(max-width:768px) {
+      .sidebar { transform:translateX(-100%); }
+      .sidebar.open { transform:translateX(0); }
+      .topbar { display:flex; }
+      .main { margin-left:0; padding-top:54px; }
+      .main.offset { margin-top:28px; padding-top:54px; }
+      .topbar.offset { top:28px; }
+      .content { padding:1rem .9rem 3rem; }
+      .positions-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<div class="admin-bar" id="adminBar"><span id="adminBarText"></span></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand" onclick="window.location.href='index.html'">
+    <div class="brand-logos">
+      <div class="brand-logo"><img src="gecc-logo.jpg" alt="GECC"/></div>
+      <div class="brand-logo"><img src="uniport-logo.jpg" alt="Uniport"/></div>
+    </div>
+    <div class="brand-text">
+      <span class="brand-name">GECC Uniport</span>
+      <span class="brand-sub" id="portalLabel">Member Portal</span>
+    </div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-label">Menu</div>
+    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="material-symbols-outlined icon">settings</span> Memo</a>
+    <a class="nav-item" href="dashboard.html"><span class="material-symbols-outlined icon">dashboard</span> Dashboard</a>
+    <a class="nav-item" href="members.html"><span class="material-symbols-outlined icon">group</span> Members</a>
+    <a class="nav-item" href="past-members.html"><span class="material-symbols-outlined icon">history</span> Past Members</a>
+    <a class="nav-item" href="attendance.html"><span class="material-symbols-outlined icon">check_circle</span> Attendance</a>
+    <a id="navFinance" class="nav-item" href="finance.html" style="display:none"><span class="material-symbols-outlined icon">account_balance_wallet</span> Finance</a>
+    <a class="nav-item" href="events.html"><span class="material-symbols-outlined icon">calendar_month</span> Events</a>
+    <a class="nav-item active" href="positions.html"><span class="material-symbols-outlined icon">military_tech</span> Positions</a>
+    <a class="nav-item" href="hub.html"><span class="material-symbols-outlined icon">hub</span> Fellowship Hub</a>
+    <a class="nav-item" href="notifications.html"><span class="material-symbols-outlined icon">notifications</span> Notifications</a>
+    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="material-symbols-outlined icon">manage_accounts</span> User Management</a>
+    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="material-symbols-outlined icon">fact_check</span> Audit Logs</a>
+  </nav>
+  <div class="nav-bottom">
+    <button class="btn-logout" onclick="doLogout()"><span class="material-symbols-outlined icon">logout</span> Logout</button>
+  </div>
+</aside>
+
+<div class="topbar" id="topbar">
+  <div class="topbar-brand" onclick="window.location.href='index.html'">
+    <div class="brand-logos">
+      <div class="brand-logo"><img src="gecc-logo.jpg" alt="GECC"/></div>
+      <div class="brand-logo"><img src="uniport-logo.jpg" alt="Uniport"/></div>
+    </div>
+    &nbsp;GECC Uniport
+  </div>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</div>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="main" id="mainWrap">
+  <div class="main-bar" id="mainBar"></div>
+  <div class="content">
+
+    <div class="page-header">
+      <h1>Leadership & Positions</h1>
+    </div>
+
+    <div class="view-notice" id="viewNotice">
+      <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle;">visibility</span>
+      View-only mode. Positions are managed by admins.
+    </div>
+
+    <!-- Executive Positions -->
+    <div class="section-title">
+      <span class="material-symbols-outlined">workspace_premium</span>
+      Executive Positions
+    </div>
+    <div class="positions-grid" id="gridExecutive"></div>
+
+    <!-- Secretariat -->
+    <div class="section-title">
+      <span class="material-symbols-outlined">edit_note</span>
+      Secretariat
+    </div>
+    <div class="positions-grid" id="gridSecretariat"></div>
+
+    <!-- Finance -->
+    <div class="section-title">
+      <span class="material-symbols-outlined">account_balance_wallet</span>
+      Finance
+    </div>
+    <div class="positions-grid" id="gridFinance"></div>
+
+    <!-- Other -->
+    <div class="section-title">
+      <span class="material-symbols-outlined">stars</span>
+      Other Positions
+    </div>
+    <div class="positions-grid" id="gridOther"></div>
+
+    <!-- Ex-officials -->
+    <div class="section-title">
+      <span class="material-symbols-outlined">history_edu</span>
+      Ex-officials
+      <span id="exoffAddBtn" style="display:none;margin-left:auto;">
+        <button class="btn-xs btn-xs-assign" onclick="openExoffModal()">
+          <span class="material-symbols-outlined" style="font-size:.85rem;">add</span> Add
+        </button>
+      </span>
+    </div>
+    <div id="exoffSection"></div>
+
+  </div>
+</div>
+
+<!-- Transfer / Assign Modal -->
+<div class="modal-overlay" id="assignModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="assignModalTitle">Transfer Position</div>
+      <button class="modal-close" onclick="closeAssignModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="current-box">
+        <div class="current-box-title">Position</div>
+        <div class="current-box-val" id="modalPosName"></div>
+        <div class="current-box-sub" id="modalCurrentHolder"></div>
+      </div>
+      <div class="form-group">
+        <label>Select Member to Assign *</label>
+        <div class="select-wrap">
+          <select id="assignMemberSelect">
+            <option value="">— Choose a member —</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Effective Date</label>
+        <input type="date" id="assignDate"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeAssignModal()">Cancel</button>
+      <button class="btn-primary" id="btnConfirmAssign" onclick="confirmAssign()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- History Modal -->
+<div class="modal-overlay" id="historyModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="historyModalTitle">Position History</div>
+      <button class="modal-close" onclick="closeHistoryModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="history-list-full" id="historyListFull"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeHistoryModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Ex-official Add Modal -->
+<div class="modal-overlay" id="exoffModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add Ex-official</div>
+      <button class="modal-close" onclick="closeExoffModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:.82rem;color:#666;margin-bottom:1rem;line-height:1.5;">
+        Select a member to tag as Ex-official. This is typically given to outgoing executives at the end of their tenure.
+      </p>
+      <div class="form-group">
+        <label>Select Member *</label>
+        <div class="select-wrap">
+          <select id="exoffMemberSelect">
+            <option value="">— Choose a member —</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Date Assigned</label>
+        <input type="date" id="exoffDate"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeExoffModal()">Cancel</button>
+      <button class="btn-primary" id="btnConfirmExoff" onclick="confirmAddExoff()">Add Ex-official</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const role     = localStorage.getItem('userRole');
+  const userId   = localStorage.getItem('userId') || '';
+  const userName = localStorage.getItem('userName') || 'Unknown';
+  if (!role) { window.location.href = 'auth.html'; }
+
+  const isMember     = role === 'member';
+  const isAdmin      = role === 'admin';
+  const isSuperAdmin = role === 'superadmin';
+  const isPrivileged = isAdmin || isSuperAdmin;
+
+  // ── Admin bar ──
+  const adminBar = document.getElementById('adminBar');
+  adminBar.classList.add('show');
+  if (isMember) {
+    adminBar.classList.add('member-bar');
+    document.getElementById('mainBar').classList.add('member-bar');
+    document.getElementById('adminBarText').innerHTML = '🟢 MEMBER MODE <span>· Limited access</span>';
+    document.getElementById('portalLabel').textContent = 'Member Portal';
+    document.getElementById('viewNotice').classList.add('show');
+  } else if (isAdmin) {
+    document.getElementById('adminBarText').innerHTML = '🔐 ADMIN MODE <span>· Full access enabled</span>';
+    document.getElementById('portalLabel').textContent = 'Admin Portal';
+  } else {
+    adminBar.classList.add('super-bar');
+    document.getElementById('mainBar').classList.add('super-bar');
+    document.getElementById('adminBarText').innerHTML = '👑 SUPER ADMIN MODE <span>· Full system access</span>';
+    document.getElementById('portalLabel').textContent = 'Super Admin Portal';
+  }
+
+  document.getElementById('sidebar').classList.add('offset');
+  document.getElementById('topbar').classList.add('offset');
+  document.getElementById('mainWrap').classList.add('offset');
+
+  if (isPrivileged) {
+    document.getElementById('navMemo').style.display    = 'flex';
+    document.getElementById('navFinance').style.display = 'flex';
+    document.getElementById('navUserMgmt').style.display = 'flex';
+    document.getElementById('exoffAddBtn').style.display = 'inline-flex';
+  }
+  if (isSuperAdmin) {
+    document.getElementById('navAudit').style.display = 'flex';
+  }
+
+  // ── Position definitions by category ──
+  const POSITION_GROUPS = {
+    executive: [
+      { key:'President',              icon:'workspace_premium' },
+      { key:'Vice President',         icon:'star'              },
+    ],
+    secretariat: [
+      { key:'General Secretary',            icon:'edit_note'      },
+      { key:'Asst. General Secretary',      icon:'edit_note'      },
+      { key:'Bible Study Secretary',        icon:'menu_book'      },
+      { key:'Asst Bible Study Secretary',   icon:'menu_book'      },
+      { key:'Evangelism Secretary',         icon:'record_voice_over' },
+      { key:'Follow up Secretary',          icon:'follow_the_signs' },
+      { key:'Prayer Secretary',             icon:'self_improvement' },
+      { key:'Asst Prayer Secretary',        icon:'self_improvement' },
+      { key:'Media/Publicity Secretary',    icon:'campaign'       },
+      { key:'Asst Media/Publicity Secretary',icon:'campaign'      },
+      { key:'Organizing Secretary',         icon:'event_note'     },
+      { key:'Asst Organizing Secretary',    icon:'event_note'     },
+      { key:'Welfare Secretary',            icon:'volunteer_activism' },
+      { key:'Asst. Welfare Secretary',      icon:'volunteer_activism' },
+      { key:'Academic/Magazine Secretary',  icon:'library_books'  },
+    ],
+    finance: [
+      { key:'Financial Secretary', icon:'receipt_long' },
+      { key:'Treasurer',           icon:'savings'      },
+    ],
+    other: [
+      { key:'Music Director', icon:'music_note' },
+    ]
+  };
+
+  const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmtDate(ds) {
+    if (!ds) return '—';
+    const d = new Date(ds);
+    return d.getDate() + ' ' + MONTHS_SHORT[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  let allMembers    = [];
+  let positionDocs  = {}; // key → history doc from 'positions' collection
+  let assigningKey  = null;
+  let assigningMode = 'assign'; // 'assign' | 'transfer'
+
+  // ── Load members + position history in parallel ──
+  Promise.all([
+    db.collection('members').orderBy('name').get(),
+    db.collection('positions').get()
+  ]).then(([membersSnap, posSnap]) => {
+    allMembers = membersSnap.docs.map(d => ({id:d.id,...d.data()}))
+      .filter(m => m.position !== 'Associates' && m.isAssociate !== true);
+    posSnap.docs.forEach(d => { positionDocs[d.id] = {id:d.id,...d.data()}; });
+    renderAll();
+  });
+
+  // Live listener — re-render on any change
+  db.collection('members').onSnapshot(snap => {
+    allMembers = snap.docs.map(d=>({id:d.id,...d.data()}))
+      .filter(m => m.position !== 'Associates' && m.isAssociate !== true);
+    renderAll();
+  });
+  db.collection('positions').onSnapshot(snap => {
+    snap.docs.forEach(d => { positionDocs[d.id] = {id:d.id,...d.data()}; });
+    renderAll();
+  });
+
+  // ── Find current holder from members collection ──
+  function getCurrentHolder(positionKey) {
+    return allMembers.find(m => m.position === positionKey) || null;
+  }
+
+  function renderAll() {
+    renderGroup('gridExecutive',    POSITION_GROUPS.executive);
+    renderGroup('gridSecretariat',  POSITION_GROUPS.secretariat);
+    renderGroup('gridFinance',      POSITION_GROUPS.finance);
+    renderGroup('gridOther',        POSITION_GROUPS.other);
+    renderExofficials();
+  }
+
+  function renderGroup(gridId, positions) {
+    const grid = document.getElementById(gridId);
+    grid.innerHTML = positions.map(p => {
+      const holder  = getCurrentHolder(p.key);
+      const doc     = positionDocs[p.key] || {};
+      const history = doc.history || [];
+      const since   = holder ? (doc.assignedDate || null) : null;
+
+      const recentHistory = history.slice(-3).reverse();
+
+      // Footer buttons
+      let footerHtml = '';
+      if (isPrivileged) {
+        footerHtml = `<div class="pos-footer">`;
+        if (!holder) {
+          footerHtml += `<button class="btn-xs btn-xs-assign" onclick="openAssignModal('${p.key}','assign')">
+            <span class="material-symbols-outlined">person_add</span> Assign
+          </button>`;
+        } else {
+          footerHtml += `<button class="btn-xs btn-xs-transfer" onclick="openAssignModal('${p.key}','transfer')">
+            <span class="material-symbols-outlined">swap_horiz</span> Transfer
+          </button>
+          <button class="btn-xs btn-xs-clear" onclick="clearPosition('${p.key}')">
+            <span class="material-symbols-outlined">person_remove</span> Clear
+          </button>`;
+        }
+        if (history.length) {
+          footerHtml += `<button class="btn-xs btn-xs-history" onclick="openHistoryModal('${p.key}')">
+            <span class="material-symbols-outlined">history</span> History
+          </button>`;
+        }
+        footerHtml += `</div>`;
+      } else if (history.length) {
+        footerHtml = `<div class="pos-footer">
+          <button class="btn-xs btn-xs-history" onclick="openHistoryModal('${p.key}')">
+            <span class="material-symbols-outlined">history</span> History
+          </button>
+        </div>`;
+      }
+
+      return `
+        <div class="pos-card ${holder?'occupied':'vacant'}">
+          <div class="pos-card-body">
+            <div class="pos-icon ${holder?'':'vacant-icon'}">
+              <span class="material-symbols-outlined">${p.icon}</span>
+            </div>
+            <div class="pos-details">
+              <div class="pos-name">${p.key}</div>
+              <div class="pos-holder ${holder?'':'vacant-text'}">${holder ? holder.name : 'Vacant'}</div>
+              ${since && holder ? `<div class="pos-since">Since ${fmtDate(since)}</div>` : ''}
+            </div>
+            <div class="pos-status">
+              <span class="badge ${holder?'badge-active':'badge-vacant'}">${holder?'Active':'Vacant'}</span>
+            </div>
+          </div>
+          ${recentHistory.length && holder ? `
+          <div class="pos-history-preview">
+            ${recentHistory.map(h=>`
+              <div class="pos-history-preview-item">
+                ${h.name} &nbsp;·&nbsp; ${fmtDate(h.from)} – ${h.to?fmtDate(h.to):'present'}
+              </div>`).join('')}
+          </div>` : ''}
+          ${footerHtml}
+        </div>`;
+    }).join('');
+  }
+
+  // ── Ex-officials ──
+  function renderExofficials() {
+    const exoffs = allMembers.filter(m => m.position === 'Ex-official');
+    const section = document.getElementById('exoffSection');
+
+    if (!exoffs.length) {
+      section.innerHTML = `<div class="empty-notice">No ex-officials currently. ${isPrivileged?'Use the Add button to tag members.':''}</div>`;
+      return;
+    }
+
+    section.innerHTML = `<div class="exoff-list">${
+      exoffs.map(m => {
+        const init = (m.name||'?').charAt(0).toUpperCase();
+        const removeBtn = isPrivileged
+          ? `<button class="btn-xs btn-xs-remove" onclick="removeExofficial('${m.id}','${m.name}')">
+               <span class="material-symbols-outlined" style="font-size:.85rem;">remove_circle_outline</span> Remove
+             </button>`
+          : '';
+        return `
+          <div class="exoff-card">
+            <div class="exoff-avatar">${init}</div>
+            <div class="exoff-info">
+              <div class="exoff-name">${m.name}</div>
+              <div class="exoff-sub">${m.department||'—'} · ${m.level||'—'}</div>
+            </div>
+            ${removeBtn}
+          </div>`;
+      }).join('')
+    }</div>`;
+  }
+
+  // ── Assign / Transfer Modal ──
+  function openAssignModal(posKey, mode) {
+    if (!isPrivileged) return;
+    assigningKey  = posKey;
+    assigningMode = mode;
+
+    const holder  = getCurrentHolder(posKey);
+    const doc     = positionDocs[posKey] || {};
+
+    document.getElementById('assignModalTitle').textContent =
+      mode === 'assign' ? 'Assign Position' : 'Transfer Position';
+    document.getElementById('modalPosName').textContent = posKey;
+    document.getElementById('modalCurrentHolder').textContent =
+      holder ? 'Current holder: ' + holder.name : 'Currently vacant';
+
+    // Populate members — exclude current holder
+    const sel = document.getElementById('assignMemberSelect');
+    sel.innerHTML = '<option value="">— Choose a member —</option>' +
+      allMembers
+        .filter(m => m.id !== (holder?.id))
+        .map(m => `<option value="${m.id}|${encodeURIComponent(m.name)}">${m.name} · ${m.position||'Member'} · ${m.level||''}</option>`)
+        .join('');
+
+    document.getElementById('assignDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('btnConfirmAssign').textContent = mode === 'assign' ? 'Assign' : 'Transfer';
+    document.getElementById('assignModal').classList.add('show');
+  }
+
+  function closeAssignModal() { document.getElementById('assignModal').classList.remove('show'); }
+
+  async function confirmAssign() {
+    if (!isPrivileged) return;
+    const val  = document.getElementById('assignMemberSelect').value;
+    const date = document.getElementById('assignDate').value;
+    if (!val) { showToast('Please select a member.', 'error'); return; }
+
+    const [newMemberId, encodedName] = val.split('|');
+    const newMemberName = decodeURIComponent(encodedName);
+    const btn = document.getElementById('btnConfirmAssign');
+    btn.disabled = true; btn.textContent = 'Saving…';
+
+    const oldHolder = getCurrentHolder(assigningKey);
+    const doc       = positionDocs[assigningKey] || {};
+    const history   = [...(doc.history || [])];
+    const today     = date || new Date().toISOString().split('T')[0];
+
+    try {
+      const batch = db.batch();
+
+      // 1. Close out previous holder in history
+      if (oldHolder && history.length) {
+        const last = history[history.length - 1];
+        if (!last.to) last.to = today;
+      }
+
+      // 2. Add new history entry
+      history.push({ name: newMemberName, memberId: newMemberId, from: today, to: null });
+
+      // 3. Update position doc
+      const posRef = db.collection('positions').doc(assigningKey);
+      batch.set(posRef, {
+        currentHolder:    newMemberName,
+        currentMemberId:  newMemberId,
+        assignedDate:     today,
+        history,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+
+      // 4. Update new member's position field
+      batch.update(db.collection('members').doc(newMemberId), { position: assigningKey });
+
+      // 5. If transfer — revert old holder to "Member"
+      if (assigningMode === 'transfer' && oldHolder) {
+        batch.update(db.collection('members').doc(oldHolder.id), { position: 'Member' });
+      }
+
+      await batch.commit();
+
+      const action = assigningMode === 'assign' ? 'position_assigned' : 'position_transferred';
+      await logAudit(action, `${assigningKey} ${assigningMode === 'assign'?'assigned to':'transferred to'} ${newMemberName}${oldHolder?' from '+oldHolder.name:''}`);
+      if (isAdmin) await notifySuperAdmin(`${userName} ${assigningMode === 'assign'?'assigned':'transferred'} ${assigningKey} to ${newMemberName}`, 'member');
+
+      closeAssignModal();
+      showToast(`${assigningKey} ${assigningMode === 'assign'?'assigned to':'transferred to'} ${newMemberName}!`, 'success');
+    } catch(err) {
+      showToast('Error: ' + err.message, 'error');
+    }
+    btn.disabled = false;
+    btn.textContent = assigningMode === 'assign' ? 'Assign' : 'Transfer';
+  }
+
+  async function clearPosition(posKey) {
+    if (!isPrivileged) return;
+    const holder = getCurrentHolder(posKey);
+    if (!holder) return;
+    if (!confirm(`Remove ${holder.name} from ${posKey}? Their position will revert to Member.`)) return;
+
+    const doc     = positionDocs[posKey] || {};
+    const history = [...(doc.history || [])];
+    const today   = new Date().toISOString().split('T')[0];
+
+    if (history.length) {
+      const last = history[history.length - 1];
+      if (!last.to) last.to = today;
+    }
+
+    try {
+      const batch = db.batch();
+      batch.set(db.collection('positions').doc(posKey), {
+        currentHolder: null, currentMemberId: null,
+        assignedDate: null, history,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+      batch.update(db.collection('members').doc(holder.id), { position: 'Member' });
+      await batch.commit();
+
+      await logAudit('position_cleared', `${posKey} cleared — ${holder.name} reverted to Member`);
+      if (isAdmin) await notifySuperAdmin(`${userName} cleared ${posKey} from ${holder.name}`, 'member');
+      showToast(`${posKey} cleared. ${holder.name} is now a Member.`, 'info');
+    } catch(err) { showToast('Error: ' + err.message, 'error'); }
+  }
+
+  // ── History Modal ──
+  function openHistoryModal(posKey) {
+    const doc     = positionDocs[posKey] || {};
+    const history = [...(doc.history || [])].reverse();
+    document.getElementById('historyModalTitle').textContent = posKey + ' — History';
+    document.getElementById('historyListFull').innerHTML = history.length
+      ? history.map(h => {
+          const init = (h.name||'?').charAt(0).toUpperCase();
+          const isCurrent = !h.to;
+          return `
+            <div class="history-row">
+              <div class="history-row-avatar">${init}</div>
+              <div class="history-row-info">
+                <div class="history-row-name">${h.name}</div>
+                <div class="history-row-dates">${fmtDate(h.from)} → ${h.to ? fmtDate(h.to) : 'Present'}</div>
+              </div>
+              ${isCurrent ? '<span class="badge badge-active">Current</span>' : ''}
+            </div>`;
+        }).join('')
+      : '<div style="text-align:center;color:#bbb;padding:1.5rem;">No history recorded yet.</div>';
+    document.getElementById('historyModal').classList.add('show');
+  }
+  function closeHistoryModal() { document.getElementById('historyModal').classList.remove('show'); }
+
+  // ── Ex-officials ──
+  function openExoffModal() {
+    const sel = document.getElementById('exoffMemberSelect');
+    sel.innerHTML = '<option value="">— Choose a member —</option>' +
+      allMembers
+        .filter(m => m.position !== 'Ex-official')
+        .map(m => `<option value="${m.id}|${encodeURIComponent(m.name)}">${m.name} · ${m.position||'Member'} · ${m.level||''}</option>`)
+        .join('');
+    document.getElementById('exoffDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('exoffModal').classList.add('show');
+  }
+  function closeExoffModal() { document.getElementById('exoffModal').classList.remove('show'); }
+
+  async function confirmAddExoff() {
+    const val = document.getElementById('exoffMemberSelect').value;
+    if (!val) { showToast('Please select a member.','error'); return; }
+    const [memberId, encodedName] = val.split('|');
+    const memberName = decodeURIComponent(encodedName);
+    const btn = document.getElementById('btnConfirmExoff');
+    btn.disabled = true; btn.textContent = 'Saving…';
+
+    try {
+      await db.collection('members').doc(memberId).update({ position: 'Ex-official' });
+      await logAudit('exofficial_added', `${memberName} tagged as Ex-official`);
+      if (isAdmin) await notifySuperAdmin(`${userName} tagged ${memberName} as Ex-official`, 'member');
+      closeExoffModal();
+      showToast(memberName + ' tagged as Ex-official.', 'success');
+    } catch(err) { showToast('Error: '+err.message,'error'); }
+    btn.disabled = false; btn.textContent = 'Add Ex-official';
+  }
+
+  async function removeExofficial(memberId, memberName) {
+    if (!confirm(`Remove Ex-official status from ${memberName}? They will revert to Member.`)) return;
+    try {
+      await db.collection('members').doc(memberId).update({ position: 'Member' });
+      await logAudit('exofficial_removed', `${memberName} removed from Ex-official`);
+      showToast(memberName + ' removed from Ex-officials.', 'info');
+    } catch(err) { showToast('Error: '+err.message,'error'); }
+  }
+
+  async function notifySuperAdmin(message, type) {
+    try {
+      const snap = await db.collection('users').where('role','==','superadmin').limit(1).get();
+      if (snap.empty) return;
+      await db.collection('notifications').add({
+        toUserId: snap.docs[0].id, message, type, read: false,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } catch(e) {}
+  }
+
+  async function logAudit(action, description) {
+    try {
+      await db.collection('audit_logs').add({
+        action, description,
+        performedBy: userName, performedByRole: role, userId,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } catch(e) {}
+  }
+
+  function doLogout() {
+    auth.signOut().then(() => { localStorage.clear(); window.location.href = 'auth.html'; });
+  }
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast show ' + type;
+    setTimeout(() => t.className = 'toast', 2800);
+  }
+
+  document.getElementById('assignModal').addEventListener('click', function(e){ if(e.target===this) closeAssignModal(); });
+  document.getElementById('historyModal').addEventListener('click', function(e){ if(e.target===this) closeHistoryModal(); });
+  document.getElementById('exoffModal').addEventListener('click',   function(e){ if(e.target===this) closeExoffModal(); });
+
+  const sidebarEl = document.getElementById('sidebar');
+  const overlayEl = document.getElementById('overlay');
+  document.getElementById('hamburger').addEventListener('click', ()=>{ sidebarEl.classList.toggle('open'); overlayEl.classList.toggle('show'); });
+  function closeSidebar() { sidebarEl.classList.remove('open'); overlayEl.classList.remove('show'); }
+</script>
+</body>
+</html>
