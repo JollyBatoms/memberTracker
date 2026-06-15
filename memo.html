@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GECC Uniport — Memo Settings</title>
+  <title>GECC Uniport — Memo</title>
   <link rel="manifest" href="manifest.json" />
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --blue:#0066cc; --green:#28a745; --red:#dc3545; --sidebar-w:240px; }
@@ -13,10 +14,11 @@
 
     .admin-bar { display:none; position:fixed; top:0; left:0; right:0; height:28px; background:#0066cc; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; color:#fff; letter-spacing:.08em; text-transform:uppercase; z-index:200; }
     .admin-bar.show { display:flex; }
-    .admin-bar span { opacity:.7; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
+    .admin-bar.super-bar { background:linear-gradient(90deg,#0066cc,#6c63ff); }
+    .admin-bar span { opacity:.8; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
 
     .sidebar { position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh; background:#fff; border-right:1px solid #dde3ec; display:flex; flex-direction:column; z-index:100; transition:transform .3s; }
-    .sidebar.admin-offset { top:28px; height:calc(100vh - 28px); }
+    .sidebar.offset { top:28px; height:calc(100vh - 28px); }
     .sidebar-brand { display:flex; align-items:center; gap:.7rem; padding:1rem 1.1rem; border-bottom:1px solid #dde3ec; cursor:pointer; }
     .brand-logos { display:flex; align-items:center; gap:.3rem; }
     .brand-logo { width:30px; height:30px; border-radius:50%; overflow:hidden; border:1px solid #dde3ec; }
@@ -29,13 +31,14 @@
     .nav-item { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; color:#555; font-size:.85rem; font-weight:600; text-decoration:none; border-left:3px solid transparent; transition:color .2s,background .2s,border-color .2s; }
     .nav-item:hover { color:#0066cc; background:#f0f5ff; }
     .nav-item.active { color:#0066cc; background:#eef4ff; border-left-color:#0066cc; }
-    .nav-item .icon { width:18px; text-align:center; font-size:.95rem; }
+    .nav-item .icon { width:20px; text-align:center; flex-shrink:0; }
+    .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; font-size:1.15rem; line-height:1; }
     .nav-bottom { border-top:1px solid #dde3ec; padding:.5rem 0; }
     .btn-logout { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; width:100%; background:none; border:none; color:#dc3545; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; cursor:pointer; transition:background .2s; }
     .btn-logout:hover { background:#fff5f5; }
 
     .topbar { display:none; position:fixed; top:0; left:0; right:0; height:54px; background:#fff; border-bottom:1px solid #dde3ec; align-items:center; justify-content:space-between; padding:0 1rem; z-index:99; }
-    .topbar.admin-offset { top:28px; }
+    .topbar.offset { top:28px; }
     .topbar-brand { display:flex; align-items:center; gap:.5rem; font-family:'Merriweather',serif; font-size:.8rem; font-weight:700; color:#0066cc; cursor:pointer; }
     .topbar-brand .brand-logo { width:26px; height:26px; }
     .hamburger { background:none; border:none; cursor:pointer; color:#555; padding:.3rem; display:flex; flex-direction:column; gap:5px; }
@@ -44,68 +47,94 @@
     .overlay.show { display:block; }
 
     .main { margin-left:var(--sidebar-w); min-height:100vh; }
-    .main.admin-offset { margin-top:28px; }
+    .main.offset { margin-top:28px; }
     .main-bar { height:4px; background:#0066cc; }
-    .content { padding:2rem 1.8rem 3rem; max-width:640px; }
+    .main-bar.super-bar { background:linear-gradient(90deg,#0066cc,#6c63ff); }
+    .content { padding:1.8rem; max-width:700px; }
 
-    .page-header { margin-bottom:1.6rem; }
-    .page-header h1 { font-family:'Merriweather',serif; font-size:1.2rem; font-weight:700; margin-bottom:.3rem; }
-    .page-header p { font-size:.85rem; color:#777; }
+    .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.5rem; flex-wrap:wrap; gap:.8rem; }
+    .page-header h1 { font-family:'Merriweather',serif; font-size:1.2rem; font-weight:700; }
+    .page-sub { font-size:.82rem; color:#888; margin-bottom:1.6rem; }
 
-    .session-banner { display:flex; align-items:center; gap:.6rem; background:#eef4ff; border:1px solid #c5d9f5; border-radius:6px; padding:.75rem 1rem; margin-bottom:1.8rem; font-size:.85rem; color:#444; }
-    .session-banner strong { color:#0066cc; }
+    /* Access denied */
+    .access-denied { background:#fff0f0; border:1px solid #f5c0c5; border-radius:8px; padding:2rem; text-align:center; }
+    .access-denied .icon-big { font-size:2.5rem; color:#dc3545; margin-bottom:.8rem; }
+    .access-denied h3 { font-family:'Merriweather',serif; font-size:1rem; color:#dc3545; margin-bottom:.4rem; }
+    .access-denied p { font-size:.84rem; color:#888; }
 
-    .form-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.8rem; box-shadow:0 1px 6px rgba(0,0,0,.05); }
-    .form-card-title { font-size:.7rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#aaa; margin-bottom:1.4rem; }
-    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.1rem; }
-    .form-group { display:flex; flex-direction:column; gap:.4rem; }
-    .form-group label { font-size:.75rem; font-weight:700; color:#444; letter-spacing:.04em; }
-    .form-group input, .form-group select { padding:.72rem .85rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.9rem; color:#1a1a1a; background:#fff; outline:none; transition:border-color .2s,box-shadow .2s; appearance:none; }
-    .form-group input:focus, .form-group select:focus { border-color:#0066cc; box-shadow:0 0 0 3px rgba(0,102,204,.1); }
-    .form-group input.invalid, .form-group select.invalid { border-color:#dc3545; }
+    /* Current session display */
+    .session-display { background:linear-gradient(135deg,#0066cc,#6c63ff); border-radius:10px; padding:1.4rem 1.6rem; color:#fff; margin-bottom:1.6rem; }
+    .session-display-label { font-size:.68rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; opacity:.75; margin-bottom:.4rem; }
+    .session-display-value { font-size:1.4rem; font-weight:700; margin-bottom:.2rem; }
+    .session-display-sub { font-size:.8rem; opacity:.8; }
+    .session-display-week { display:inline-block; background:rgba(255,255,255,.2); border-radius:20px; padding:.25rem .85rem; font-size:.78rem; font-weight:700; margin-top:.6rem; }
+
+    /* Form cards */
+    .form-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.4rem; margin-bottom:1.2rem; box-shadow:0 1px 4px rgba(0,0,0,.04); }
+    .form-card-title { font-size:.7rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#aaa; margin-bottom:1.1rem; display:flex; align-items:center; gap:.4rem; }
+    .form-card-title .material-symbols-outlined { color:#0066cc; font-size:1rem; }
+
+    .form-group { display:flex; flex-direction:column; gap:.35rem; margin-bottom:.9rem; }
+    .form-group:last-child { margin-bottom:0; }
+    .form-group label { font-size:.72rem; font-weight:700; color:#444; }
+    .form-group input, .form-group select {
+      padding:.68rem .85rem; border:1.5px solid #ccd4df; border-radius:5px;
+      font-family:'Open Sans',sans-serif; font-size:.88rem; color:#1a1a1a;
+      background:#fff; outline:none; transition:border-color .2s; appearance:none;
+    }
+    .form-group input:focus, .form-group select:focus { border-color:#0066cc; }
+    .form-group input:disabled, .form-group select:disabled { background:#f7f9fc; color:#aaa; cursor:not-allowed; }
+    .form-hint { font-size:.7rem; color:#aaa; margin-top:.2rem; }
     .select-wrap { position:relative; }
     .select-wrap::after { content:''; position:absolute; right:.85rem; top:50%; transform:translateY(-50%); border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid #888; pointer-events:none; }
-    .field-err { font-size:.72rem; color:#dc3545; display:none; }
-    .field-err.show { display:block; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
 
-    .form-actions { display:flex; gap:.8rem; margin-top:1.6rem; flex-wrap:wrap; }
-    .btn-save { padding:.8rem 2rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.88rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; border:none; border-radius:5px; cursor:pointer; transition:background .2s,transform .15s; }
-    .btn-save:hover { background:#0052a3; transform:translateY(-1px); }
-    .btn-save:disabled { opacity:.6; cursor:not-allowed; transform:none; }
-    .btn-clear { padding:.8rem 1.4rem; background:transparent; color:#666; font-family:'Open Sans',sans-serif; font-size:.88rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; border:1.5px solid #ccd4df; border-radius:5px; cursor:pointer; transition:border-color .2s,color .2s; }
-    .btn-clear:hover { border-color:#0066cc; color:#0066cc; }
+    /* Week counter display */
+    .week-display { background:#eef4ff; border:1px solid #c5d9f5; border-radius:6px; padding:.75rem 1rem; display:flex; align-items:center; justify-content:space-between; }
+    .week-display-label { font-size:.78rem; color:#555; font-weight:600; }
+    .week-display-value { font-size:1.2rem; font-weight:700; color:#0066cc; }
 
-    .loading { text-align:center; padding:2rem; color:#aaa; font-size:.88rem; }
+    /* Semester history */
+    .history-list { display:flex; flex-direction:column; gap:.6rem; margin-top:.8rem; }
+    .history-item { background:#f7f9fc; border:1px solid #edf0f4; border-radius:6px; padding:.75rem 1rem; display:flex; align-items:center; justify-content:space-between; gap:.8rem; }
+    .history-item-info { flex:1; }
+    .history-item-session { font-size:.85rem; font-weight:700; color:#1a1a1a; }
+    .history-item-detail { font-size:.73rem; color:#888; margin-top:.15rem; }
+    .history-item-badge { font-size:.65rem; font-weight:700; padding:.18rem .6rem; border-radius:20px; background:#eef4ff; color:#0066cc; white-space:nowrap; }
+
+    .btn-primary { display:inline-flex; align-items:center; gap:.4rem; padding:.7rem 1.3rem; background:#0066cc; color:#fff; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; transition:background .2s; margin-top:1rem; }
+    .btn-primary:hover { background:#0052a3; }
+    .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
+
+    .warning-box { background:#fff8e1; border:1px solid #ffc107; border-radius:6px; padding:.8rem 1rem; font-size:.8rem; color:#856404; margin-top:.8rem; display:flex; align-items:flex-start; gap:.5rem; line-height:1.5; }
+    .warning-box .material-symbols-outlined { font-size:1rem; flex-shrink:0; margin-top:.1rem; }
 
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
     .toast.success { background:#28a745; }
-    .toast.error { background:#dc3545; }
+    .toast.error   { background:#dc3545; }
+    .toast.info    { background:#0066cc; }
 
     @media(max-width:768px) {
       .sidebar { transform:translateX(-100%); }
       .sidebar.open { transform:translateX(0); }
       .topbar { display:flex; }
       .main { margin-left:0; padding-top:54px; }
-      .main.admin-offset { margin-top:28px; padding-top:54px; }
-      .topbar.admin-offset { top:28px; }
-      .content { padding:1.5rem 1rem 3rem; }
-      .form-grid { grid-template-columns:1fr; }
+      .main.offset { margin-top:28px; padding-top:54px; }
+      .topbar.offset { top:28px; }
+      .content { padding:1rem .9rem 3rem; }
+      .form-row { grid-template-columns:1fr; }
     }
   </style>
 </head>
 <body>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
-<div class="admin-bar" id="adminBar">
-  🔐 ADMIN MODE <span>Full access enabled</span>
-</div>
+<div class="admin-bar" id="adminBar"><span id="adminBarText"></span></div>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand" onclick="window.location.href='index.html'">
@@ -115,22 +144,26 @@
     </div>
     <div class="brand-text">
       <span class="brand-name">GECC Uniport</span>
-      <span class="brand-sub">Member Portal</span>
+      <span class="brand-sub" id="portalLabel">Admin Portal</span>
     </div>
   </div>
   <nav class="nav-section">
     <div class="nav-label">Menu</div>
-    <a class="nav-item active" href="memo.html"><span class="icon">⚙️</span> Memo</a>
-    <a class="nav-item" href="dashboard.html"><span class="icon">📊</span> Dashboard</a>
-    <a class="nav-item" href="members.html"><span class="icon">👥</span> Members</a>
-    <a class="nav-item" href="past-members.html"><span class="icon">📜</span> Past Members</a>
-    <a class="nav-item" href="attendance.html"><span class="icon">✓</span> Attendance</a>
-    <a class="nav-item" href="finance.html"><span class="icon">💰</span> Finance</a>
-    <a class="nav-item" href="events.html"><span class="icon">📅</span> Events</a>
-    <a class="nav-item" href="positions.html"><span class="icon">🎯</span> Positions</a>
+    <a class="nav-item active" href="memo.html"><span class="material-symbols-outlined icon">settings</span> Memo</a>
+    <a class="nav-item" href="dashboard.html"><span class="material-symbols-outlined icon">dashboard</span> Dashboard</a>
+    <a class="nav-item" href="members.html"><span class="material-symbols-outlined icon">group</span> Members</a>
+    <a class="nav-item" href="past-members.html"><span class="material-symbols-outlined icon">history</span> Past Members</a>
+    <a class="nav-item" href="attendance.html"><span class="material-symbols-outlined icon">check_circle</span> Attendance</a>
+    <a id="navFinance" class="nav-item" href="finance.html" style="display:none"><span class="material-symbols-outlined icon">account_balance_wallet</span> Finance</a>
+    <a class="nav-item" href="events.html"><span class="material-symbols-outlined icon">calendar_month</span> Events</a>
+    <a class="nav-item" href="positions.html"><span class="material-symbols-outlined icon">military_tech</span> Positions</a>
+    <a class="nav-item" href="hub.html"><span class="material-symbols-outlined icon">hub</span> Fellowship Hub</a>
+    <a class="nav-item" href="notifications.html"><span class="material-symbols-outlined icon">notifications</span> Notifications</a>
+    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="material-symbols-outlined icon">manage_accounts</span> User Management</a>
+    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="material-symbols-outlined icon">fact_check</span> Audit Logs</a>
   </nav>
   <div class="nav-bottom">
-    <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
+    <button class="btn-logout" onclick="doLogout()"><span class="material-symbols-outlined icon">logout</span> Logout</button>
   </div>
 </aside>
 
@@ -147,193 +180,283 @@
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
 <div class="main" id="mainWrap">
-  <div class="main-bar"></div>
+  <div class="main-bar" id="mainBar"></div>
   <div class="content">
 
     <div class="page-header">
-      <h1>⚙️ Memo Settings</h1>
-      <p>Configure the current academic session and semester.</p>
+      <h1>Session Settings</h1>
+    </div>
+    <div class="page-sub">Configure the academic calendar. These settings drive the dashboard week counter, FYB tagging, and session labels across the entire platform.</div>
+
+    <!-- Access denied for members -->
+    <div id="accessDenied" style="display:none">
+      <div class="access-denied">
+        <div class="icon-big"><span class="material-symbols-outlined" style="font-size:2.5rem;">lock</span></div>
+        <h3>Access Restricted</h3>
+        <p>This section is only available to Admins and the Super Admin.</p>
+      </div>
     </div>
 
-    <div class="session-banner">
-      📋 Current: <strong id="bannerText">Loading…</strong>
-    </div>
+    <!-- Main content — privileged only -->
+    <div id="mainContent" style="display:none">
 
-    <div class="form-card">
-      <div class="form-card-title">Session Configuration</div>
-      <div class="form-grid">
+      <!-- Current session display -->
+      <div class="session-display" id="sessionDisplay">
+        <div class="session-display-label">Current Academic Session</div>
+        <div class="session-display-value" id="dispSession">—</div>
+        <div class="session-display-sub" id="dispSemester">—</div>
+        <div class="session-display-week" id="dispWeek">Week —</div>
+      </div>
+
+      <!-- Session settings form -->
+      <div class="form-card">
+        <div class="form-card-title">
+          <span class="material-symbols-outlined">calendar_today</span>
+          Academic Session
+        </div>
 
         <div class="form-group">
           <label>Academic Session *</label>
-          <input type="text" id="fSession" placeholder="e.g. 2025/2026" maxlength="12" />
-          <span class="field-err" id="fSessionErr">Session is required</span>
+          <input type="text" id="fSession" placeholder="e.g. 2024/2025"/>
+          <div class="form-hint">Format: YYYY/YYYY — the ending year determines FYB graduation.</div>
         </div>
 
-        <div class="form-group">
-          <label>Semester *</label>
-          <div class="select-wrap">
-            <select id="fSemester">
-              <option value="">— Select —</option>
-              <option value="1st">1st Semester</option>
-              <option value="2nd">2nd Semester</option>
-            </select>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Current Semester *</label>
+            <div class="select-wrap">
+              <select id="fSemester">
+                <option value="">— Select —</option>
+                <option value="1st">1st Semester</option>
+                <option value="2nd">2nd Semester</option>
+              </select>
+            </div>
           </div>
-          <span class="field-err" id="fSemesterErr">Semester is required</span>
+          <div class="form-group">
+            <label>Semester Start Date *</label>
+            <input type="date" id="fStartDate"/>
+            <div class="form-hint">Used to calculate current fellowship week.</div>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>Start Date *</label>
-          <input type="date" id="fStart" />
-          <span class="field-err" id="fStartErr">Start date is required</span>
+        <!-- Live week counter -->
+        <div class="week-display" id="weekDisplay" style="display:none">
+          <div class="week-display-label">Current Fellowship Week</div>
+          <div class="week-display-value" id="weekCount">—</div>
         </div>
 
-        <div class="form-group">
-          <label>End Date *</label>
-          <input type="date" id="fEnd" />
-          <span class="field-err" id="fEndErr">End date is required</span>
+        <div class="warning-box" id="semesterWarning" style="display:none">
+          <span class="material-symbols-outlined">warning</span>
+          <span>You are setting <strong>2nd Semester</strong>. At the end of this semester, the Super Admin will be prompted to confirm graduation of Final Year (FYB) members.</span>
         </div>
 
+        <button class="btn-primary" id="btnSave" onclick="saveSettings()">
+          <span class="material-symbols-outlined">save</span> Save Settings
+        </button>
       </div>
 
-      <div class="form-actions">
-        <button class="btn-save" id="btnSave" onclick="saveMemo()">Save &amp; Continue</button>
-        <button class="btn-clear" onclick="clearForm()">Clear</button>
+      <!-- Session history -->
+      <div class="form-card">
+        <div class="form-card-title">
+          <span class="material-symbols-outlined">history</span>
+          Session History
+        </div>
+        <div id="sessionHistory">
+          <div style="font-size:.82rem;color:#bbb;text-align:center;padding:.8rem;">Loading…</div>
+        </div>
       </div>
+
     </div>
-
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  // Auth guard — admin only
-  const role = localStorage.getItem('userRole');
+  const role     = localStorage.getItem('userRole');
+  const userId   = localStorage.getItem('userId') || '';
+  const userName = localStorage.getItem('userName') || 'Unknown';
   if (!role) { window.location.href = 'auth.html'; }
-  else if (role !== 'admin') {
-    alert('Access denied. Admins only.');
-    window.location.href = 'dashboard.html';
+
+  const isMember     = role === 'member';
+  const isAdmin      = role === 'admin';
+  const isSuperAdmin = role === 'superadmin';
+  const isPrivileged = isAdmin || isSuperAdmin;
+
+  // ── Members cannot access memo ──
+  if (isMember) { window.location.href = 'dashboard.html'; }
+
+  // ── Admin bar ──
+  const adminBar = document.getElementById('adminBar');
+  adminBar.classList.add('show');
+  if (isAdmin) {
+    document.getElementById('adminBarText').innerHTML = '🔐 ADMIN MODE <span>· Full access enabled</span>';
+    document.getElementById('portalLabel').textContent = 'Admin Portal';
+  } else {
+    adminBar.classList.add('super-bar');
+    document.getElementById('mainBar').classList.add('super-bar');
+    document.getElementById('adminBarText').innerHTML = '👑 SUPER ADMIN MODE <span>· Full system access</span>';
+    document.getElementById('portalLabel').textContent = 'Super Admin Portal';
   }
 
-  // Admin UI
-  document.getElementById('adminBar').classList.add('show');
-  document.getElementById('sidebar').classList.add('admin-offset');
-  document.getElementById('topbar').classList.add('admin-offset');
-  document.getElementById('mainWrap').classList.add('admin-offset');
+  document.getElementById('sidebar').classList.add('offset');
+  document.getElementById('topbar').classList.add('offset');
+  document.getElementById('mainWrap').classList.add('offset');
 
-  // Load existing memo from Firestore
-  db.collection('settings').doc('memo').get().then(doc => {
-    if (doc.exists) {
-      const d = doc.data();
-      document.getElementById('fSession').value  = d.session   || '';
-      document.getElementById('fSemester').value = d.semester  || '';
-      document.getElementById('fStart').value    = d.startDate || '';
-      document.getElementById('fEnd').value      = d.endDate   || '';
-      setBanner(d);
-    } else {
-      document.getElementById('bannerText').textContent = 'No session configured yet';
-    }
-  }).catch(() => {
-    document.getElementById('bannerText').textContent = 'No session configured yet';
+  if (isPrivileged) {
+    document.getElementById('navFinance').style.display  = 'flex';
+    document.getElementById('navUserMgmt').style.display = 'flex';
+    document.getElementById('mainContent').style.display = 'block';
+  }
+  if (isSuperAdmin) {
+    document.getElementById('navAudit').style.display = 'flex';
+  }
+
+  // ── Week calculation ──
+  function calcWeek(startDate) {
+    if (!startDate) return null;
+    const start = new Date(startDate);
+    const now   = new Date();
+    const diff  = Math.floor((now - start) / (7 * 24 * 60 * 60 * 1000));
+    return Math.max(1, diff + 1);
+  }
+
+  // ── Live week preview on date change ──
+  document.getElementById('fStartDate').addEventListener('change', updateWeekPreview);
+  document.getElementById('fSemester').addEventListener('change', () => {
+    const sem = document.getElementById('fSemester').value;
+    document.getElementById('semesterWarning').style.display = sem === '2nd' ? 'flex' : 'none';
+    updateWeekPreview();
   });
 
-  function setBanner(d) {
-    document.getElementById('bannerText').textContent =
-      (d.session && d.semester)
-        ? d.session + ' · ' + d.semester + ' Semester'
-        : 'No session configured yet';
+  function updateWeekPreview() {
+    const date = document.getElementById('fStartDate').value;
+    if (!date) { document.getElementById('weekDisplay').style.display = 'none'; return; }
+    const week = calcWeek(date);
+    document.getElementById('weekCount').textContent = 'Week ' + week;
+    document.getElementById('weekDisplay').style.display = 'flex';
   }
 
-  function saveMemo() {
-    let valid = true;
-    const fields = [
-      ['fSession','fSessionErr'],
-      ['fSemester','fSemesterErr'],
-      ['fStart','fStartErr'],
-      ['fEnd','fEndErr']
-    ];
-    fields.forEach(([fid,eid]) => {
-      document.getElementById(fid).classList.remove('invalid');
-      document.getElementById(eid).classList.remove('show');
-      if (!document.getElementById(fid).value.trim()) {
-        document.getElementById(fid).classList.add('invalid');
-        document.getElementById(eid).classList.add('show');
-        valid = false;
-      }
-    });
+  // ── Load existing settings ──
+  let sessionHistory = [];
 
-    const start = document.getElementById('fStart').value;
-    const end   = document.getElementById('fEnd').value;
-    if (start && end && end <= start) {
-      document.getElementById('fEnd').classList.add('invalid');
-      document.getElementById('fEndErr').textContent = 'End date must be after start date';
-      document.getElementById('fEndErr').classList.add('show');
-      valid = false;
+  db.collection('settings').doc('memo').onSnapshot(snap => {
+    if (!snap.exists) return;
+    const d = snap.data();
+
+    // Fill form
+    document.getElementById('fSession').value   = d.session  || '';
+    document.getElementById('fSemester').value  = d.semester || '';
+    document.getElementById('fStartDate').value = d.startDate|| '';
+    updateWeekPreview();
+
+    // Show semester warning if 2nd
+    if (d.semester === '2nd') {
+      document.getElementById('semesterWarning').style.display = 'flex';
     }
 
-    if (!valid) return;
+    // Update display card
+    const week = calcWeek(d.startDate);
+    document.getElementById('dispSession').textContent  = d.session  || '—';
+    document.getElementById('dispSemester').textContent = d.semester ? d.semester + ' Semester' : '—';
+    document.getElementById('dispWeek').textContent     = week ? 'Week ' + week : 'Week —';
+
+    // Session history
+    sessionHistory = d.history || [];
+    renderHistory(sessionHistory);
+  });
+
+  function renderHistory(history) {
+    const el = document.getElementById('sessionHistory');
+    if (!history.length) {
+      el.innerHTML = '<div style="font-size:.82rem;color:#bbb;text-align:center;padding:.8rem;">No previous sessions recorded.</div>';
+      return;
+    }
+    const reversed = [...history].reverse();
+    el.innerHTML = `<div class="history-list">${
+      reversed.map((h, i) => `
+        <div class="history-item">
+          <div class="history-item-info">
+            <div class="history-item-session">${h.session}</div>
+            <div class="history-item-detail">${h.semester} Semester · Started ${h.startDate||'—'} · Saved by ${h.savedBy||'Admin'}</div>
+          </div>
+          ${i === 0 ? '<span class="history-item-badge">Latest</span>' : ''}
+        </div>`).join('')
+    }</div>`;
+  }
+
+  // ── Save settings ──
+  async function saveSettings() {
+    const session   = document.getElementById('fSession').value.trim();
+    const semester  = document.getElementById('fSemester').value;
+    const startDate = document.getElementById('fStartDate').value;
+
+    if (!session || !semester || !startDate) {
+      showToast('Please fill all fields.', 'error'); return;
+    }
+
+    // Validate session format
+    if (!/^\d{4}\/\d{4}$/.test(session)) {
+      showToast('Session format must be YYYY/YYYY e.g. 2024/2025', 'error'); return;
+    }
 
     const btn = document.getElementById('btnSave');
-    btn.disabled = true;
-    btn.textContent = 'Saving…';
+    btn.disabled = true; btn.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span> Saving…';
 
-    const data = {
-      session:   document.getElementById('fSession').value.trim(),
-      semester:  document.getElementById('fSemester').value,
-      startDate: start,
-      endDate:   end,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
+    // Add current to history before overwriting
+    const newEntry = { session, semester, startDate, savedBy: userName, savedAt: new Date().toISOString() };
+    const updatedHistory = [...sessionHistory];
 
-    db.collection('settings').doc('memo').set(data)
-      .then(() => {
-        setBanner(data);
-        showToast('Settings saved!', 'success');
-        setTimeout(() => window.location.href = 'dashboard.html', 1000);
-      })
-      .catch(err => {
-        showToast('Error saving: ' + err.message, 'error');
-        btn.disabled = false;
-        btn.textContent = 'Save & Continue';
+    // Only add to history if it's a different session/semester
+    const last = updatedHistory[updatedHistory.length - 1];
+    if (!last || last.session !== session || last.semester !== semester) {
+      updatedHistory.push(newEntry);
+    } else {
+      // Update last entry
+      updatedHistory[updatedHistory.length - 1] = newEntry;
+    }
+
+    try {
+      await db.collection('settings').doc('memo').set({
+        session, semester, startDate,
+        history: updatedHistory,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedBy: userName
       });
+
+      await logAudit('memo_updated', `Session settings updated: ${session} · ${semester} Semester · Start: ${startDate}`);
+      showToast('Settings saved!', 'success');
+    } catch(err) {
+      showToast('Error: ' + err.message, 'error');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<span class="material-symbols-outlined">save</span> Save Settings';
   }
 
-  function clearForm() {
-    ['fSession','fSemester','fStart','fEnd'].forEach(id => {
-      document.getElementById(id).value = '';
-      document.getElementById(id).classList.remove('invalid');
-    });
-    ['fSessionErr','fSemesterErr','fStartErr','fEndErr'].forEach(id => {
-      document.getElementById(id).classList.remove('show');
-    });
-  }
-
-  function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast show ' + type;
-    setTimeout(() => t.className = 'toast', 2500);
+  async function logAudit(action, description) {
+    try {
+      await db.collection('audit_logs').add({
+        action, description,
+        performedBy: userName, performedByRole: role, userId,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } catch(e) {}
   }
 
   function doLogout() {
-  auth.signOut().then(() => {
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userEmail');
-    window.location.href = 'auth.html';
-  });
+    auth.signOut().then(() => { localStorage.clear(); window.location.href = 'auth.html'; });
+  }
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast show ' + type;
+    setTimeout(() => t.className = 'toast', 2800);
   }
 
-  const sidebar   = document.getElementById('sidebar');
-  const overlay   = document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click', () => {
-    sidebar.classList.toggle('open');
-    overlay.classList.toggle('show');
-  });
-  function closeSidebar() {
-    sidebar.classList.remove('open');
-    overlay.classList.remove('show');
-  }
+  const sidebarEl = document.getElementById('sidebar');
+  const overlayEl = document.getElementById('overlay');
+  document.getElementById('hamburger').addEventListener('click', ()=>{ sidebarEl.classList.toggle('open'); overlayEl.classList.toggle('show'); });
+  function closeSidebar() { sidebarEl.classList.remove('open'); overlayEl.classList.remove('show'); }
 </script>
-
 </body>
 </html>
