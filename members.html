@@ -896,14 +896,21 @@
     const btn = document.getElementById('btnSave');
     btn.disabled = true; btn.textContent = 'Saving…';
 
-    // ── Upload photo to Firebase Storage (same pattern as events.html) ──
+    // ── Upload photo to Cloudinary ──
     let finalPhotoUrl = currentPhotoUrl;
     if (selectedPhotoFile) {
       try {
         document.getElementById('photoUploading').style.display = 'block';
-        const storageRef = storage.ref('member_photos/' + Date.now() + '_' + selectedPhotoFile.name);
-        const uploadTask = await storageRef.put(selectedPhotoFile);
-        finalPhotoUrl = await uploadTask.ref.getDownloadURL();
+        const formData = new FormData();
+        formData.append('file', selectedPhotoFile);
+        formData.append('upload_preset', 'gecc-uniport');
+        const res = await fetch('https://api.cloudinary.com/v1_1/df5pitgrp/image/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (!data.secure_url) throw new Error(data.error?.message || 'Upload failed');
+        finalPhotoUrl = data.secure_url;
         document.getElementById('photoUploading').style.display = 'none';
       } catch(err) {
         document.getElementById('photoUploading').style.display = 'none';
@@ -911,7 +918,7 @@
         btn.disabled = false; btn.textContent = editingId ? 'Update Member' : 'Save Member';
         return;
       }
-    }
+  }
 
     const data = {
       name:        document.getElementById('fName').value.trim(),
