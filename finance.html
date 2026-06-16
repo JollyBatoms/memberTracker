@@ -6,6 +6,7 @@
   <title>GECC Uniport — Finance</title>
   <link rel="manifest" href="manifest.json" />
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --blue:#0066cc; --green:#28a745; --red:#dc3545; --orange:#fd7e14; --sidebar-w:240px; }
@@ -13,9 +14,11 @@
 
     .admin-bar { display:none; position:fixed; top:0; left:0; right:0; height:28px; background:#0066cc; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; color:#fff; letter-spacing:.08em; text-transform:uppercase; z-index:200; }
     .admin-bar.show { display:flex; }
-    .admin-bar span { opacity:.7; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
+    .admin-bar.super-bar { background:linear-gradient(90deg,#0066cc,#6c63ff); }
+    .admin-bar span { opacity:.8; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
+
     .sidebar { position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh; background:#fff; border-right:1px solid #dde3ec; display:flex; flex-direction:column; z-index:100; transition:transform .3s; }
-    .sidebar.admin-offset { top:28px; height:calc(100vh - 28px); }
+    .sidebar.offset { top:28px; height:calc(100vh - 28px); }
     .sidebar-brand { display:flex; align-items:center; gap:.7rem; padding:1rem 1.1rem; border-bottom:1px solid #dde3ec; cursor:pointer; }
     .brand-logos { display:flex; align-items:center; gap:.3rem; }
     .brand-logo { width:30px; height:30px; border-radius:50%; overflow:hidden; border:1px solid #dde3ec; }
@@ -28,113 +31,152 @@
     .nav-item { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; color:#555; font-size:.85rem; font-weight:600; text-decoration:none; border-left:3px solid transparent; transition:color .2s,background .2s,border-color .2s; }
     .nav-item:hover { color:#0066cc; background:#f0f5ff; }
     .nav-item.active { color:#0066cc; background:#eef4ff; border-left-color:#0066cc; }
-    .nav-item .icon { width:18px; text-align:center; font-size:.95rem; }
+    .nav-item .icon { width:20px; text-align:center; flex-shrink:0; }
+    .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; font-size:1.15rem; line-height:1; }
     .nav-bottom { border-top:1px solid #dde3ec; padding:.5rem 0; }
     .btn-logout { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; width:100%; background:none; border:none; color:#dc3545; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; cursor:pointer; transition:background .2s; }
     .btn-logout:hover { background:#fff5f5; }
+
     .topbar { display:none; position:fixed; top:0; left:0; right:0; height:54px; background:#fff; border-bottom:1px solid #dde3ec; align-items:center; justify-content:space-between; padding:0 1rem; z-index:99; }
-    .topbar.admin-offset { top:28px; }
+    .topbar.offset { top:28px; }
     .topbar-brand { display:flex; align-items:center; gap:.5rem; font-family:'Merriweather',serif; font-size:.8rem; font-weight:700; color:#0066cc; cursor:pointer; }
+    .topbar-brand .brand-logo { width:26px; height:26px; }
     .hamburger { background:none; border:none; cursor:pointer; color:#555; padding:.3rem; display:flex; flex-direction:column; gap:5px; }
     .hamburger span { display:block; width:22px; height:2px; background:currentColor; border-radius:2px; }
     .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:98; }
     .overlay.show { display:block; }
+
     .main { margin-left:var(--sidebar-w); min-height:100vh; }
-    .main.admin-offset { margin-top:28px; }
+    .main.offset { margin-top:28px; }
     .main-bar { height:4px; background:#0066cc; }
+    .main-bar.super-bar { background:linear-gradient(90deg,#0066cc,#6c63ff); }
     .content { padding:1.8rem; }
+
     .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; flex-wrap:wrap; gap:.8rem; }
     .page-header h1 { font-family:'Merriweather',serif; font-size:1.2rem; font-weight:700; }
+    .header-actions { display:flex; gap:.6rem; flex-wrap:wrap; }
+
+    /* Access restricted */
+    .access-box { background:#fff8e1; border:1px solid #ffc107; border-radius:8px; padding:1.5rem; text-align:center; }
+    .access-box .material-symbols-outlined { font-size:2.5rem; color:#f57f17; display:block; margin-bottom:.7rem; }
+    .access-box h3 { font-family:'Merriweather',serif; font-size:.95rem; color:#664d03; margin-bottom:.4rem; }
+    .access-box p { font-size:.82rem; color:#856404; }
+
     .btn { display:inline-flex; align-items:center; gap:.4rem; padding:.5rem 1rem; border-radius:6px; font-family:'Open Sans',sans-serif; font-size:.8rem; font-weight:700; cursor:pointer; border:none; transition:background .2s; text-decoration:none; }
     .btn-primary { background:#0066cc; color:#fff; }
     .btn-primary:hover { background:#0052a3; }
+    .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
     .btn-outline { background:#fff; color:#0066cc; border:1.5px solid #0066cc; }
     .btn-outline:hover { background:#eef4ff; }
     .btn-green { background:#28a745; color:#fff; }
+    .btn-green:hover { background:#1e7e34; }
     .btn-red { background:#dc3545; color:#fff; }
+    .btn-red:hover { background:#b02a37; }
     .btn-sm { padding:.35rem .75rem; font-size:.75rem; }
 
-    .bank-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1rem; }
+    /* Bank cards */
+    .bank-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1.2rem; }
     .bank-card { background:#fff; border:1px solid #dde3ec; border-radius:10px; padding:1.3rem 1.4rem; box-shadow:0 1px 4px rgba(0,0,0,.05); position:relative; overflow:hidden; cursor:pointer; transition:box-shadow .2s,border-color .2s,transform .15s; }
     .bank-card:hover { box-shadow:0 4px 16px rgba(0,0,0,.1); border-color:#b0c4e0; transform:translateY(-2px); }
     .bank-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; }
-    .bank-card.uba::before { background:#cc0000; }
+    .bank-card.uba::before     { background:#cc0000; }
     .bank-card.palmpay::before { background:#00c853; }
-    .bank-card.cash::before { background:#fd7e14; }
-    .bank-card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.6rem; }
-    .bank-name { font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#888; }
+    .bank-card.cash::before    { background:#fd7e14; }
+    .bank-card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.5rem; }
+    .bank-name { font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#888; display:flex; align-items:center; gap:.35rem; }
+    .bank-name .material-symbols-outlined { font-size:1rem; }
     .bank-acct { font-size:.7rem; color:#bbb; margin-bottom:.5rem; font-family:monospace; letter-spacing:.06em; }
     .bank-balance { font-size:1.75rem; font-weight:700; color:#1a1a1a; line-height:1; }
     .bank-sub { font-size:.68rem; color:#aaa; margin-top:.3rem; }
-    .bank-hint { font-size:.68rem; color:#0066cc; margin-top:.6rem; }
+    .bank-action-hint { font-size:.68rem; color:#0066cc; margin-top:.6rem; display:flex; align-items:center; gap:.2rem; }
+    .bank-action-hint .material-symbols-outlined { font-size:.85rem; }
+    .bank-manage-tag { font-size:.62rem; font-weight:700; padding:.18rem .5rem; border-radius:20px; }
+    .uba     .bank-manage-tag { background:#fdecea; color:#cc0000; }
+    .palmpay .bank-manage-tag { background:#e8f5e9; color:#00a854; }
+    .cash    .bank-manage-tag { background:#fff3e0; color:#e65100; }
 
+    /* Summary */
     .finance-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.4rem; }
     .summary-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.2rem 1.1rem; box-shadow:0 1px 4px rgba(0,0,0,.04); }
-    .summary-label { font-size:.7rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#999; margin-bottom:.4rem; }
-    .summary-value { font-size:1.6rem; font-weight:700; line-height:1; margin-bottom:.2rem; }
-    .summary-sub { font-size:.72rem; color:#aaa; }
-    .summary-card.income .summary-value { color:#28a745; }
+    .summary-label { font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#999; margin-bottom:.4rem; display:flex; align-items:center; gap:.3rem; }
+    .summary-label .material-symbols-outlined { font-size:.9rem; }
+    .summary-value { font-size:1.55rem; font-weight:700; line-height:1; margin-bottom:.2rem; }
+    .summary-sub { font-size:.7rem; color:#aaa; }
+    .summary-card.income  .summary-value { color:#28a745; }
     .summary-card.expense .summary-value { color:#dc3545; }
     .summary-card.balance .summary-value { color:#0066cc; }
-    .summary-card.dues .summary-value { color:#fd7e14; }
+    .summary-card.dues    .summary-value { color:#fd7e14; }
 
+    /* Filter */
     .filter-bar { display:flex; gap:.7rem; margin-bottom:1.2rem; flex-wrap:wrap; align-items:center; }
-    .filter-select { padding:.45rem .8rem; border:1.5px solid #dde3ec; border-radius:6px; font-family:'Open Sans',sans-serif; font-size:.8rem; background:#fff; color:#333; cursor:pointer; outline:none; }
+    .filter-select { padding:.48rem .8rem; border:1.5px solid #dde3ec; border-radius:6px; font-family:'Open Sans',sans-serif; font-size:.8rem; background:#fff; color:#333; cursor:pointer; outline:none; appearance:none; }
     .filter-select:focus { border-color:#0066cc; }
     .filter-label { font-size:.8rem; font-weight:700; color:#555; }
 
-    .tab-bar { display:flex; background:#fff; border:1px solid #dde3ec; border-radius:8px; overflow:hidden; margin-bottom:1.4rem; }
-    .tab-btn { flex:1; padding:.75rem .5rem; background:none; border:none; font-family:'Open Sans',sans-serif; font-size:.8rem; font-weight:700; color:#888; cursor:pointer; border-bottom:3px solid transparent; transition:color .2s,border-color .2s,background .2s; text-align:center; }
+    /* Tabs */
+    .tab-bar { display:flex; background:#fff; border:1px solid #dde3ec; border-radius:8px; overflow:hidden; margin-bottom:1.4rem; overflow-x:auto; }
+    .tab-btn { flex:1; padding:.75rem .5rem; background:none; border:none; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; color:#888; cursor:pointer; border-bottom:3px solid transparent; transition:color .2s,border-color .2s,background .2s; text-align:center; white-space:nowrap; display:flex; align-items:center; justify-content:center; gap:.3rem; }
+    .tab-btn .material-symbols-outlined { font-size:1rem; }
     .tab-btn.active { color:#0066cc; border-bottom-color:#0066cc; background:#f5f9ff; }
     .tab-btn:hover:not(.active) { background:#f7f9fc; color:#555; }
     .tab-panel { display:none; }
     .tab-panel.active { display:block; }
 
+    /* Table card */
     .table-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.04); margin-bottom:1.2rem; }
     .table-card-header { display:flex; align-items:center; justify-content:space-between; padding:.85rem 1.1rem; border-bottom:1px solid #edf0f4; flex-wrap:wrap; gap:.5rem; }
-    .table-card-title { font-size:.78rem; font-weight:700; color:#555; letter-spacing:.06em; text-transform:uppercase; }
+    .table-card-title { font-size:.75rem; font-weight:700; color:#555; letter-spacing:.06em; text-transform:uppercase; display:flex; align-items:center; gap:.4rem; }
+    .table-card-title .material-symbols-outlined { font-size:1rem; color:#0066cc; }
     .data-table { width:100%; border-collapse:collapse; font-size:.82rem; }
-    .data-table th { text-align:left; font-size:.65rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#aaa; padding:.7rem 1.1rem; border-bottom:1px solid #edf0f4; background:#fafbfc; }
+    .data-table th { text-align:left; font-size:.65rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#aaa; padding:.7rem 1.1rem; border-bottom:1px solid #edf0f4; background:#fafbfc; white-space:nowrap; }
     .data-table td { padding:.75rem 1.1rem; color:#333; border-bottom:1px solid #f5f5f5; vertical-align:middle; }
     .data-table tr:last-child td { border-bottom:none; }
     .data-table tr:hover td { background:#f9fbff; }
     .empty-row td { text-align:center; color:#bbb; padding:2rem; font-size:.85rem; }
 
     .badge { display:inline-block; font-size:.65rem; font-weight:700; padding:.2rem .6rem; border-radius:20px; }
-    .badge-income { background:#eafaf0; color:#1e7e34; }
-    .badge-expense { background:#fdecea; color:#c62828; }
-    .badge-tithe { background:#e8f5e9; color:#2e7d32; }
+    .badge-income   { background:#eafaf0; color:#1e7e34; }
+    .badge-expense  { background:#fdecea; color:#c62828; }
+    .badge-tithe    { background:#e8f5e9; color:#2e7d32; }
     .badge-offering { background:#e3f2fd; color:#1565c0; }
-    .badge-levy { background:#fff3e0; color:#e65100; }
+    .badge-levy     { background:#fff3e0; color:#e65100; }
     .badge-donation { background:#f3e5f5; color:#6a1b9a; }
-    .badge-welfare { background:#fce4ec; color:#880e4f; }
-    .badge-event { background:#e8eaf6; color:#283593; }
+    .badge-welfare  { background:#fce4ec; color:#880e4f; }
+    .badge-event    { background:#e8eaf6; color:#283593; }
     .badge-outreach { background:#e0f2f1; color:#004d40; }
-    .badge-misc { background:#f5f5f5; color:#616161; }
-    .badge-paid { background:#eafaf0; color:#1e7e34; }
-    .badge-unpaid { background:#fdecea; color:#c62828; }
-    .badge-partial { background:#fff8e1; color:#f57f17; }
+    .badge-misc     { background:#f5f5f5; color:#616161; }
+    .badge-paid     { background:#eafaf0; color:#1e7e34; }
+    .badge-unpaid   { background:#fdecea; color:#c62828; }
+    .badge-partial  { background:#fff8e1; color:#f57f17; }
 
     .amount-positive { color:#28a745; font-weight:700; }
     .amount-negative { color:#dc3545; font-weight:700; }
 
+    .locked-badge { display:inline-flex; align-items:center; gap:.3rem; background:#f5f5f5; color:#888; font-size:.65rem; font-weight:700; padding:.18rem .5rem; border-radius:20px; border:1px solid #dde3ec; }
+    .locked-badge .material-symbols-outlined { font-size:.75rem; }
+
+    /* Dues */
     .dues-member-name { font-weight:700; font-size:.85rem; }
-    .dues-member-sub { font-size:.72rem; color:#888; }
-    .pay-status-btn { padding:.3rem .8rem; border-radius:5px; font-size:.72rem; font-weight:700; cursor:pointer; border:1.5px solid; white-space:nowrap; }
-    .pay-status-btn.paid { background:#eafaf0; color:#1e7e34; border-color:#a8d5b5; }
-    .pay-status-btn.unpaid { background:#fdecea; color:#c62828; border-color:#f5b7b1; }
+    .dues-member-sub  { font-size:.72rem; color:#888; }
+    .pay-status-btn { padding:.3rem .8rem; border-radius:5px; font-size:.72rem; font-weight:700; cursor:pointer; border:1.5px solid; white-space:nowrap; font-family:'Open Sans',sans-serif; }
+    .pay-status-btn.paid    { background:#eafaf0; color:#1e7e34; border-color:#a8d5b5; }
+    .pay-status-btn.unpaid  { background:#fdecea; color:#c62828; border-color:#f5b7b1; }
     .pay-status-btn.partial { background:#fff8e1; color:#f57f17; border-color:#ffe082; }
     .part-amount-input { width:100px; padding:.3rem .5rem; border:1.5px solid #dde3ec; border-radius:4px; font-size:.78rem; font-family:'Open Sans',sans-serif; outline:none; }
     .part-amount-input:focus { border-color:#0066cc; }
     .part-done-btn { padding:.3rem .65rem; background:#0066cc; color:#fff; border:none; border-radius:4px; font-size:.72rem; font-weight:700; cursor:pointer; }
 
+    /* Upload area */
     .upload-area { border:2px dashed #dde3ec; border-radius:6px; padding:1.2rem; text-align:center; cursor:pointer; transition:border-color .2s,background .2s; }
     .upload-area:hover { border-color:#0066cc; background:#f5f9ff; }
+    .upload-area .material-symbols-outlined { font-size:2rem; color:#aaa; display:block; margin-bottom:.4rem; }
     .upload-area input { display:none; }
 
+    /* Reports */
     .report-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.2rem; }
     .report-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.3rem; box-shadow:0 1px 4px rgba(0,0,0,.04); }
-    .report-card-title { font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#aaa; margin-bottom:1rem; }
+    .report-card-title { font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#aaa; margin-bottom:1rem; display:flex; align-items:center; gap:.35rem; }
+    .report-card-title .material-symbols-outlined { font-size:.9rem; color:#0066cc; }
     .breakdown-item { display:flex; align-items:center; justify-content:space-between; padding:.5rem 0; border-bottom:1px solid #f5f5f5; }
     .breakdown-item:last-child { border-bottom:none; }
     .breakdown-label { font-size:.82rem; color:#444; display:flex; align-items:center; gap:.5rem; }
@@ -152,33 +194,35 @@
     .prog-bar { height:7px; background:#edf0f4; border-radius:4px; overflow:hidden; }
     .prog-fill { height:100%; border-radius:4px; transition:width .6s; }
 
+    /* Modals */
     .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:500; align-items:flex-start; justify-content:center; padding:1.5rem 1rem; overflow-y:auto; }
     .modal-overlay.show { display:flex; }
     .modal { background:#fff; border-radius:10px; padding:1.8rem; width:100%; max-width:480px; box-shadow:0 8px 32px rgba(0,0,0,.2); margin:auto; }
     .modal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.4rem; }
-    .modal-title { font-family:'Merriweather',serif; font-size:1rem; font-weight:700; color:#1a1a1a; }
+    .modal-title { font-family:'Merriweather',serif; font-size:1rem; font-weight:700; color:#1a1a1a; display:flex; align-items:center; gap:.5rem; }
+    .modal-title .material-symbols-outlined { color:#0066cc; font-size:1.1rem; }
     .modal-close { background:none; border:none; font-size:1.6rem; cursor:pointer; color:#888; line-height:1; }
     .form-group { margin-bottom:1rem; }
     .form-label { display:block; font-size:.78rem; font-weight:700; color:#555; margin-bottom:.4rem; }
     .form-label .optional { font-weight:400; color:#aaa; font-size:.72rem; }
-    .form-input { width:100%; padding:.55rem .8rem; border:1.5px solid #dde3ec; border-radius:6px; font-family:'Open Sans',sans-serif; font-size:.85rem; color:#1a1a1a; outline:none; transition:border-color .2s; background:#fff; }
+    .form-input { width:100%; padding:.58rem .85rem; border:1.5px solid #dde3ec; border-radius:6px; font-family:'Open Sans',sans-serif; font-size:.85rem; color:#1a1a1a; outline:none; transition:border-color .2s; background:#fff; appearance:none; }
     .form-input:focus { border-color:#0066cc; }
     .form-row { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
     .form-actions { display:flex; gap:.7rem; justify-content:flex-end; margin-top:1.4rem; }
+    .select-wrap { position:relative; }
+    .select-wrap::after { content:''; position:absolute; right:.85rem; top:50%; transform:translateY(-50%); border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid #888; pointer-events:none; }
 
     .member-checkbox-list { max-height:200px; overflow-y:auto; border:1.5px solid #dde3ec; border-radius:6px; padding:.4rem; }
     .member-checkbox-item { display:flex; align-items:center; gap:.6rem; padding:.4rem .5rem; border-radius:4px; cursor:pointer; }
     .member-checkbox-item:hover { background:#f5f9ff; }
-    .member-checkbox-item input { width:15px; height:15px; cursor:pointer; }
+    .member-checkbox-item input { width:15px; height:15px; cursor:pointer; accent-color:#0066cc; }
     .member-checkbox-item label { font-size:.82rem; cursor:pointer; flex:1; }
     .member-checkbox-item .sub { font-size:.7rem; color:#888; }
-
-    .locked-badge { display:inline-flex; align-items:center; gap:.3rem; background:#fff8e1; color:#f57f17; font-size:.68rem; font-weight:700; padding:.18rem .5rem; border-radius:20px; border:1px solid #ffe082; }
 
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
     .toast.show { opacity:1; transform:translateY(0); }
     .toast.success { background:#28a745; }
-    .toast.error { background:#dc3545; }
+    .toast.error   { background:#dc3545; }
     .toast.warning { background:#fd7e14; }
     .loading { text-align:center; padding:2rem; color:#aaa; font-size:.85rem; }
 
@@ -188,14 +232,14 @@
       .sidebar.open { transform:translateX(0); }
       .topbar { display:flex; }
       .main { margin-left:0; padding-top:54px; }
-      .main.admin-offset { margin-top:28px; padding-top:54px; }
-      .topbar.admin-offset { top:28px; }
+      .main.offset { margin-top:28px; padding-top:54px; }
+      .topbar.offset { top:28px; }
       .content { padding:1rem .9rem 3rem; }
       .finance-summary { grid-template-columns:1fr 1fr; }
       .bank-row { grid-template-columns:1fr; }
       .report-grid { grid-template-columns:1fr; }
       .form-row { grid-template-columns:1fr; }
-      .tab-btn { font-size:.7rem; padding:.65rem .3rem; }
+      .tab-btn { font-size:.7rem; padding:.6rem .3rem; }
       #duesTopGrid { grid-template-columns:1fr; }
     }
   </style>
@@ -208,7 +252,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script src="firebase-config.js"></script>
 
-<div class="admin-bar" id="adminBar">🔐 ADMIN MODE <span>Full access enabled</span></div>
+<div class="admin-bar" id="adminBar"><span id="adminBarText"></span></div>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand" onclick="window.location.href='index.html'">
@@ -218,23 +262,26 @@
     </div>
     <div class="brand-text">
       <span class="brand-name">GECC Uniport</span>
-      <span class="brand-sub">Member Portal</span>
+      <span class="brand-sub" id="portalLabel">Admin Portal</span>
     </div>
   </div>
   <nav class="nav-section">
     <div class="nav-label">Menu</div>
-    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="icon">⚙️</span> Memo</a>
-    <a class="nav-item" href="dashboard.html"><span class="icon">📊</span> Dashboard</a>
-    <a class="nav-item" href="members.html"><span class="icon">👥</span> Members</a>
-    <a class="nav-item" href="past-members.html"><span class="icon">📜</span> Past Members</a>
-    <a class="nav-item" href="attendance.html"><span class="icon">✓</span> Attendance</a>
-    <a class="nav-item active" href="finance.html"><span class="icon">💰</span> Finance</a>
-    <a class="nav-item" href="events.html"><span class="icon">📅</span> Events</a>
-    <a class="nav-item" href="positions.html"><span class="icon">🎯</span> Positions</a>
-    
+    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="material-symbols-outlined icon">settings</span> Memo</a>
+    <a class="nav-item" href="dashboard.html"><span class="material-symbols-outlined icon">dashboard</span> Dashboard</a>
+    <a class="nav-item" href="members.html"><span class="material-symbols-outlined icon">group</span> Members</a>
+    <a class="nav-item" href="past-members.html"><span class="material-symbols-outlined icon">history</span> Past Members</a>
+    <a class="nav-item" href="attendance.html"><span class="material-symbols-outlined icon">check_circle</span> Attendance</a>
+    <a class="nav-item active" href="finance.html"><span class="material-symbols-outlined icon">account_balance_wallet</span> Finance</a>
+    <a class="nav-item" href="events.html"><span class="material-symbols-outlined icon">calendar_month</span> Events</a>
+    <a class="nav-item" href="positions.html"><span class="material-symbols-outlined icon">military_tech</span> Positions</a>
+    <a class="nav-item" href="hub.html"><span class="material-symbols-outlined icon">hub</span> Fellowship Hub</a>
+    <a class="nav-item" href="notifications.html"><span class="material-symbols-outlined icon">notifications</span> Notifications</a>
+    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="material-symbols-outlined icon">manage_accounts</span> User Management</a>
+    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="material-symbols-outlined icon">fact_check</span> Audit Logs</a>
   </nav>
   <div class="nav-bottom">
-    <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
+    <button class="btn-logout" onclick="doLogout()"><span class="material-symbols-outlined icon">logout</span> Logout</button>
   </div>
 </aside>
 
@@ -251,230 +298,270 @@
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
 <div class="main" id="mainWrap">
-  <div class="main-bar"></div>
+  <div class="main-bar" id="mainBar"></div>
   <div class="content">
 
     <div class="page-header">
-      <h1>💰 Finance</h1>
-      <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
-        <button class="btn btn-outline btn-sm" onclick="exportCSV()">↓ Export CSV</button>
-        <button class="btn btn-primary btn-sm" id="addRecordBtn" onclick="openAddModal()">+ Add Record</button>
+      <h1>Finance</h1>
+      <div class="header-actions" id="headerActions" style="display:none">
+        <button class="btn btn-outline btn-sm" onclick="exportCSV()">
+          <span class="material-symbols-outlined" style="font-size:.9rem;">download</span> Export
+        </button>
+        <button class="btn btn-primary btn-sm" id="addRecordBtn" onclick="openAddModal()">
+          <span class="material-symbols-outlined" style="font-size:.9rem;">add</span> Add Record
+        </button>
       </div>
     </div>
 
-    <!-- Bank Cards -->
-    <div class="bank-row">
-      <div class="bank-card uba" onclick="openBankDetail('UBA')">
-        <div class="bank-card-header">
-          <span class="bank-name">🏦 UBA</span>
-          <span style="font-size:.65rem;background:#fdecea;color:#cc0000;padding:.2rem .5rem;border-radius:20px;font-weight:700;">TAP TO MANAGE</span>
-        </div>
-        <div class="bank-acct">2069626773</div>
-        <div class="bank-balance" id="ubaBalance">—</div>
-        <div class="bank-sub">Available Balance</div>
-        <div class="bank-hint">⇄ Transfer · View History</div>
-      </div>
-      <div class="bank-card palmpay" onclick="openBankDetail('PalmPay')">
-        <div class="bank-card-header">
-          <span class="bank-name">📱 PalmPay</span>
-          <span style="font-size:.65rem;background:#e8f5e9;color:#00a854;padding:.2rem .5rem;border-radius:20px;font-weight:700;">TAP TO MANAGE</span>
-        </div>
-        <div class="bank-acct">9035206283</div>
-        <div class="bank-balance" id="palmpayBalance">—</div>
-        <div class="bank-sub">Available Balance</div>
-        <div class="bank-hint">⇄ Transfer · View History</div>
-      </div>
-      <div class="bank-card cash" onclick="openBankDetail('Cash')">
-        <div class="bank-card-header">
-          <span class="bank-name">💵 Cash</span>
-          <span style="font-size:.65rem;background:#fff3e0;color:#e65100;padding:.2rem .5rem;border-radius:20px;font-weight:700;">TAP TO MANAGE</span>
-        </div>
-        <div class="bank-acct">Physical Cash</div>
-        <div class="bank-balance" id="cashBalance">—</div>
-        <div class="bank-sub">Cash on Hand</div>
-        <div class="bank-hint">⇄ Deposit · View History</div>
+    <!-- Access restricted panel — shown when no finance permission -->
+    <div id="accessBox" style="display:none">
+      <div class="access-box">
+        <span class="material-symbols-outlined">lock</span>
+        <h3>Finance Access Restricted</h3>
+        <p>You do not have permission to view finance records. Contact the Super Admin to request access.</p>
       </div>
     </div>
 
-    <!-- Summary Cards -->
-    <div class="finance-summary">
-      <div class="summary-card income">
-        <div class="summary-label">Total Income</div>
-        <div class="summary-value" id="sumIncome">—</div>
-        <div class="summary-sub">this period</div>
-      </div>
-      <div class="summary-card expense">
-        <div class="summary-label">Total Expenditure</div>
-        <div class="summary-value" id="sumExpense">—</div>
-        <div class="summary-sub">this period</div>
-      </div>
-      <div class="summary-card balance">
-        <div class="summary-label">Net Balance</div>
-        <div class="summary-value" id="sumBalance">—</div>
-        <div class="summary-sub">income − expenditure</div>
-      </div>
-      <div class="summary-card dues">
-        <div class="summary-label">Dues Collected</div>
-        <div class="summary-value" id="sumDues">—</div>
-        <div class="summary-sub" id="sumDuesSub">from levies</div>
-      </div>
-    </div>
+    <!-- Finance content — shown when permitted -->
+    <div id="financeContent" style="display:none">
 
-    <!-- Filter -->
-    <div class="filter-bar">
-      <span class="filter-label">Filter:</span>
-      <select class="filter-select" id="filterMonth" onchange="applyFilter()">
-        <option value="">All Months</option>
-        <option value="1">January</option><option value="2">February</option>
-        <option value="3">March</option><option value="4">April</option>
-        <option value="5">May</option><option value="6">June</option>
-        <option value="7">July</option><option value="8">August</option>
-        <option value="9">September</option><option value="10">October</option>
-        <option value="11">November</option><option value="12">December</option>
-      </select>
-      <select class="filter-select" id="filterYear" onchange="applyFilter()">
-        <option value="">All Years</option>
-      </select>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('income',this)">📥 Income</button>
-      <button class="tab-btn" onclick="switchTab('expenditure',this)">📤 Expenditure</button>
-      <button class="tab-btn" onclick="switchTab('dues',this)">💳 Dues & Levies</button>
-      <button class="tab-btn" onclick="switchTab('reports',this)">📊 Reports</button>
-    </div>
-
-    <!-- INCOME TAB -->
-    <div class="tab-panel active" id="tab-income">
-      <div class="table-card">
-        <div class="table-card-header">
-          <span class="table-card-title">📥 Income Records</span>
-          <button class="btn btn-green btn-sm" onclick="openAddModal('income')">+ Add Income</button>
-        </div>
-        <div style="overflow-x:auto;">
-          <table class="data-table">
-            <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Bank</th><th>Amount</th><th>Receipt</th><th></th></tr></thead>
-            <tbody id="incomeBody"><tr class="empty-row"><td colspan="7">Loading…</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- EXPENDITURE TAB -->
-    <div class="tab-panel" id="tab-expenditure">
-      <div class="table-card">
-        <div class="table-card-header">
-          <span class="table-card-title">📤 Expenditure Records</span>
-          <button class="btn btn-red btn-sm" onclick="openAddModal('expenditure')">+ Add Expenditure</button>
-        </div>
-        <div style="overflow-x:auto;">
-          <table class="data-table">
-            <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Bank</th><th>Amount</th><th>Receipt</th><th></th></tr></thead>
-            <tbody id="expenditureBody"><tr class="empty-row"><td colspan="7">Loading…</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- DUES TAB -->
-    <div class="tab-panel" id="tab-dues">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;" id="duesTopGrid">
-        <!-- Fellowship Levies -->
-        <div class="table-card">
-          <div class="table-card-header">
-            <span class="table-card-title">🏛️ Fellowship Levies</span>
-            <button class="btn btn-primary btn-sm" onclick="openLevyModal('fellowship')">+ Add Levy</button>
+      <!-- Bank Cards -->
+      <div class="bank-row">
+        <div class="bank-card uba" onclick="openBankDetail('UBA')">
+          <div class="bank-card-header">
+            <span class="bank-name"><span class="material-symbols-outlined">account_balance</span> UBA</span>
+            <span class="bank-manage-tag">Tap to manage</span>
           </div>
-          <div style="overflow-x:auto;">
-            <table class="data-table">
-              <thead><tr><th>Levy Name</th><th>Amount</th><th>Applies To</th><th>Actions</th></tr></thead>
-              <tbody id="fellowshipLevyBody"><tr class="empty-row"><td colspan="4">No levies yet</td></tr></tbody>
-            </table>
-          </div>
+          <div class="bank-acct">2069626773</div>
+          <div class="bank-balance" id="ubaBalance">—</div>
+          <div class="bank-sub">Available Balance</div>
+          <div class="bank-action-hint"><span class="material-symbols-outlined">swap_horiz</span> Transfer · View History</div>
         </div>
-        <!-- External Levies -->
-        <div class="table-card">
-          <div class="table-card-header">
-            <span class="table-card-title">🌐 External Levies</span>
-            <button class="btn btn-primary btn-sm" onclick="openLevyModal('external')">+ Add Levy</button>
+        <div class="bank-card palmpay" onclick="openBankDetail('PalmPay')">
+          <div class="bank-card-header">
+            <span class="bank-name"><span class="material-symbols-outlined">smartphone</span> PalmPay</span>
+            <span class="bank-manage-tag">Tap to manage</span>
           </div>
-          <div style="overflow-x:auto;">
-            <table class="data-table">
-              <thead><tr><th>Levy Name</th><th>Amount</th><th>Paid To</th><th>Status</th><th>Actions</th></tr></thead>
-              <tbody id="externalLevyBody"><tr class="empty-row"><td colspan="5">No external levies yet</td></tr></tbody>
-            </table>
+          <div class="bank-acct">9035206283</div>
+          <div class="bank-balance" id="palmpayBalance">—</div>
+          <div class="bank-sub">Available Balance</div>
+          <div class="bank-action-hint"><span class="material-symbols-outlined">swap_horiz</span> Transfer · View History</div>
+        </div>
+        <div class="bank-card cash" onclick="openBankDetail('Cash')">
+          <div class="bank-card-header">
+            <span class="bank-name"><span class="material-symbols-outlined">payments</span> Cash</span>
+            <span class="bank-manage-tag">Tap to manage</span>
           </div>
+          <div class="bank-acct">Physical Cash</div>
+          <div class="bank-balance" id="cashBalance">—</div>
+          <div class="bank-sub">Cash on Hand</div>
+          <div class="bank-action-hint"><span class="material-symbols-outlined">swap_horiz</span> Deposit · View History</div>
         </div>
       </div>
 
-      <!-- Member Payment Tracking — levy filter only -->
-      <div class="table-card">
-        <div class="table-card-header">
-          <span class="table-card-title">👤 Member Payment Tracking</span>
+      <!-- Summary Cards -->
+      <div class="finance-summary">
+        <div class="summary-card income">
+          <div class="summary-label"><span class="material-symbols-outlined">trending_up</span> Total Income</div>
+          <div class="summary-value" id="sumIncome">—</div>
+          <div class="summary-sub">this period</div>
         </div>
-        <div style="padding:.8rem 1.1rem;border-bottom:1px solid #edf0f4;">
-          <select class="filter-select" id="levyFilter" onchange="loadMemberDues()" style="min-width:220px;">
-            <option value="">— Select Levy to View Members —</option>
+        <div class="summary-card expense">
+          <div class="summary-label"><span class="material-symbols-outlined">trending_down</span> Total Expenditure</div>
+          <div class="summary-value" id="sumExpense">—</div>
+          <div class="summary-sub">this period</div>
+        </div>
+        <div class="summary-card balance">
+          <div class="summary-label"><span class="material-symbols-outlined">account_balance_wallet</span> Net Balance</div>
+          <div class="summary-value" id="sumBalance">—</div>
+          <div class="summary-sub">income − expenditure</div>
+        </div>
+        <div class="summary-card dues">
+          <div class="summary-label"><span class="material-symbols-outlined">credit_card</span> Dues Collected</div>
+          <div class="summary-value" id="sumDues">—</div>
+          <div class="summary-sub" id="sumDuesSub">from levies</div>
+        </div>
+      </div>
+
+      <!-- Filter -->
+      <div class="filter-bar">
+        <span class="filter-label">Filter by period:</span>
+        <div class="select-wrap">
+          <select class="filter-select" id="filterMonth" onchange="applyFilter()">
+            <option value="">All Months</option>
+            <option value="1">January</option><option value="2">February</option>
+            <option value="3">March</option><option value="4">April</option>
+            <option value="5">May</option><option value="6">June</option>
+            <option value="7">July</option><option value="8">August</option>
+            <option value="9">September</option><option value="10">October</option>
+            <option value="11">November</option><option value="12">December</option>
           </select>
         </div>
-        <div style="overflow-x:auto;">
-          <table class="data-table">
-            <thead><tr><th>Member</th><th>Level / Dept</th><th>Amount Due</th><th>Status</th><th>Date Paid</th><th>Actions</th></tr></thead>
-            <tbody id="memberDuesBody"><tr class="empty-row"><td colspan="6">Select a levy above to view members</td></tr></tbody>
-          </table>
+        <div class="select-wrap">
+          <select class="filter-select" id="filterYear" onchange="applyFilter()">
+            <option value="">All Years</option>
+          </select>
         </div>
       </div>
-    </div>
 
-    <!-- REPORTS TAB -->
-    <div class="tab-panel" id="tab-reports">
-      <div class="net-balance-box">
-        <div class="net-balance-label">Net Balance</div>
-        <div class="net-balance-value" id="reportBalance">—</div>
-        <div class="net-balance-sub" id="reportPeriodLabel">This Period</div>
+      <!-- Tabs -->
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('income',this)">
+          <span class="material-symbols-outlined">arrow_downward</span> Income
+        </button>
+        <button class="tab-btn" onclick="switchTab('expenditure',this)">
+          <span class="material-symbols-outlined">arrow_upward</span> Expenditure
+        </button>
+        <button class="tab-btn" onclick="switchTab('dues',this)">
+          <span class="material-symbols-outlined">credit_card</span> Dues & Levies
+        </button>
+        <button class="tab-btn" onclick="switchTab('reports',this)">
+          <span class="material-symbols-outlined">bar_chart</span> Reports
+        </button>
       </div>
-      <div class="report-grid">
-        <div class="report-card">
-          <div class="report-card-title">📥 Income Breakdown</div>
-          <div id="incomeBreakdown"><div class="loading">Loading…</div></div>
-          <div style="margin-top:1rem;padding-top:.8rem;border-top:1px solid #edf0f4;display:flex;justify-content:space-between;">
-            <span style="font-size:.82rem;font-weight:700;color:#555;">TOTAL INCOME</span>
-            <span class="amount-positive" id="reportTotalIncome">—</span>
+
+      <!-- INCOME TAB -->
+      <div class="tab-panel active" id="tab-income">
+        <div class="table-card">
+          <div class="table-card-header">
+            <span class="table-card-title">
+              <span class="material-symbols-outlined">arrow_downward</span> Income Records
+            </span>
+            <button class="btn btn-green btn-sm" id="btnAddIncome" onclick="openAddModal('income')" style="display:none">
+              <span class="material-symbols-outlined" style="font-size:.9rem;">add</span> Add Income
+            </button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Bank</th><th>Amount</th><th>Receipt</th><th id="thDelIncome" style="display:none"></th></tr></thead>
+              <tbody id="incomeBody"><tr class="empty-row"><td colspan="7">Loading…</td></tr></tbody>
+            </table>
           </div>
         </div>
-        <div class="report-card">
-          <div class="report-card-title">📤 Expenditure Breakdown</div>
-          <div id="expenditureBreakdown"><div class="loading">Loading…</div></div>
-          <div style="margin-top:1rem;padding-top:.8rem;border-top:1px solid #edf0f4;display:flex;justify-content:space-between;">
-            <span style="font-size:.82rem;font-weight:700;color:#555;">TOTAL EXPENSES</span>
-            <span class="amount-negative" id="reportTotalExpense">—</span>
+      </div>
+
+      <!-- EXPENDITURE TAB -->
+      <div class="tab-panel" id="tab-expenditure">
+        <div class="table-card">
+          <div class="table-card-header">
+            <span class="table-card-title">
+              <span class="material-symbols-outlined">arrow_upward</span> Expenditure Records
+            </span>
+            <button class="btn btn-red btn-sm" id="btnAddExpense" onclick="openAddModal('expenditure')" style="display:none">
+              <span class="material-symbols-outlined" style="font-size:.9rem;">add</span> Add Expenditure
+            </button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Bank</th><th>Amount</th><th>Receipt</th><th id="thDelExpense" style="display:none"></th></tr></thead>
+              <tbody id="expenditureBody"><tr class="empty-row"><td colspan="7">Loading…</td></tr></tbody>
+            </table>
           </div>
         </div>
-        <div class="report-card">
-          <div class="report-card-title">📈 Income vs Expenditure</div>
-          <div id="incomeExpenseProgress"></div>
-        </div>
-        <div class="report-card">
-          <div class="report-card-title">🏦 Fellowship Purse</div>
-          <div id="bankReportDetail"><div class="loading">Loading…</div></div>
-        </div>
-        <div class="report-card" style="grid-column:1/-1;">
-          <div class="report-card-title">💳 Dues Collection Summary</div>
-          <div id="duesSummaryReport"><div class="loading">Loading…</div></div>
-        </div>
       </div>
-      <div class="table-card">
-        <div class="table-card-header"><span class="table-card-title">📅 Monthly Trend</span></div>
-        <div style="overflow-x:auto;">
-          <table class="data-table">
-            <thead><tr><th>Month</th><th>Income</th><th>Expenditure</th><th>Net</th></tr></thead>
-            <tbody id="monthlyTrendBody"><tr class="empty-row"><td colspan="4">Loading…</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
 
+      <!-- DUES TAB -->
+      <div class="tab-panel" id="tab-dues">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;" id="duesTopGrid">
+          <div class="table-card">
+            <div class="table-card-header">
+              <span class="table-card-title"><span class="material-symbols-outlined">domain</span> Fellowship Levies</span>
+              <button class="btn btn-primary btn-sm" id="btnAddFLevy" onclick="openLevyModal('fellowship')" style="display:none">
+                <span class="material-symbols-outlined" style="font-size:.9rem;">add</span> Add Levy
+              </button>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead><tr><th>Name</th><th>Amount</th><th>Applies To</th><th id="thFLevyAction" style="display:none"></th></tr></thead>
+                <tbody id="fellowshipLevyBody"><tr class="empty-row"><td colspan="4">No levies yet</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="table-card">
+            <div class="table-card-header">
+              <span class="table-card-title"><span class="material-symbols-outlined">public</span> External Levies</span>
+              <button class="btn btn-primary btn-sm" id="btnAddELevy" onclick="openLevyModal('external')" style="display:none">
+                <span class="material-symbols-outlined" style="font-size:.9rem;">add</span> Add Levy
+              </button>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead><tr><th>Name</th><th>Amount</th><th>Paid To</th><th>Status</th><th id="thELevyAction" style="display:none"></th></tr></thead>
+                <tbody id="externalLevyBody"><tr class="empty-row"><td colspan="5">No external levies yet</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <span class="table-card-title"><span class="material-symbols-outlined">people</span> Member Payment Tracking</span>
+          </div>
+          <div style="padding:.8rem 1.1rem;border-bottom:1px solid #edf0f4;">
+            <select class="filter-select" id="levyFilter" onchange="loadMemberDues()" style="min-width:240px;">
+              <option value="">— Select Levy to View Members —</option>
+            </select>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Member</th><th>Level / Dept</th><th>Amount Due</th><th>Status</th><th>Date Paid</th><th id="thDuesAction" style="display:none">Actions</th></tr></thead>
+              <tbody id="memberDuesBody"><tr class="empty-row"><td colspan="6">Select a levy above to view members</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- REPORTS TAB -->
+      <div class="tab-panel" id="tab-reports">
+        <div class="net-balance-box">
+          <div class="net-balance-label">Net Balance</div>
+          <div class="net-balance-value" id="reportBalance">—</div>
+          <div class="net-balance-sub" id="reportPeriodLabel">This Period</div>
+        </div>
+        <div class="report-grid">
+          <div class="report-card">
+            <div class="report-card-title"><span class="material-symbols-outlined">arrow_downward</span> Income Breakdown</div>
+            <div id="incomeBreakdown"><div class="loading">Loading…</div></div>
+            <div style="margin-top:1rem;padding-top:.8rem;border-top:1px solid #edf0f4;display:flex;justify-content:space-between;">
+              <span style="font-size:.82rem;font-weight:700;color:#555;">TOTAL INCOME</span>
+              <span class="amount-positive" id="reportTotalIncome">—</span>
+            </div>
+          </div>
+          <div class="report-card">
+            <div class="report-card-title"><span class="material-symbols-outlined">arrow_upward</span> Expenditure Breakdown</div>
+            <div id="expenditureBreakdown"><div class="loading">Loading…</div></div>
+            <div style="margin-top:1rem;padding-top:.8rem;border-top:1px solid #edf0f4;display:flex;justify-content:space-between;">
+              <span style="font-size:.82rem;font-weight:700;color:#555;">TOTAL EXPENSES</span>
+              <span class="amount-negative" id="reportTotalExpense">—</span>
+            </div>
+          </div>
+          <div class="report-card">
+            <div class="report-card-title"><span class="material-symbols-outlined">show_chart</span> Income vs Expenditure</div>
+            <div id="incomeExpenseProgress"></div>
+          </div>
+          <div class="report-card">
+            <div class="report-card-title"><span class="material-symbols-outlined">account_balance</span> Fellowship Purse</div>
+            <div id="bankReportDetail"><div class="loading">Loading…</div></div>
+          </div>
+          <div class="report-card" style="grid-column:1/-1;">
+            <div class="report-card-title"><span class="material-symbols-outlined">credit_card</span> Dues Collection Summary</div>
+            <div id="duesSummaryReport"><div class="loading">Loading…</div></div>
+          </div>
+        </div>
+        <div class="table-card">
+          <div class="table-card-header">
+            <span class="table-card-title"><span class="material-symbols-outlined">calendar_month</span> Monthly Trend</span>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Month</th><th>Income</th><th>Expenditure</th><th>Net</th></tr></thead>
+              <tbody id="monthlyTrendBody"><tr class="empty-row"><td colspan="4">Loading…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end financeContent -->
   </div>
 </div>
 
@@ -487,7 +574,7 @@
     </div>
     <div id="bankDetailContent"></div>
     <div style="margin-top:1.2rem;text-align:center;">
-      <button class="btn btn-outline" onclick="closeModal('bankDetailModal')">← Back</button>
+      <button class="btn btn-outline" onclick="closeModal('bankDetailModal')">Close</button>
     </div>
   </div>
 </div>
@@ -496,15 +583,19 @@
 <div class="modal-overlay" id="addModal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" id="addModalTitle">Add Record</div>
+      <div class="modal-title" id="addModalTitle">
+        <span class="material-symbols-outlined">add_circle</span> Add Record
+      </div>
       <button class="modal-close" onclick="closeModal('addModal')">×</button>
     </div>
     <div class="form-group">
       <label class="form-label">Type</label>
-      <select class="form-input" id="recordType" onchange="updateCategoryOptions()">
-        <option value="income">Income</option>
-        <option value="expenditure">Expenditure</option>
-      </select>
+      <div class="select-wrap">
+        <select class="form-input" id="recordType" onchange="updateCategoryOptions()">
+          <option value="income">Income</option>
+          <option value="expenditure">Expenditure</option>
+        </select>
+      </div>
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -518,19 +609,23 @@
     </div>
     <div class="form-group">
       <label class="form-label">Category</label>
-      <select class="form-input" id="recordCategory" onchange="document.getElementById('customCatGroup').style.display=this.value==='Custom'?'block':'none'"></select>
+      <div class="select-wrap">
+        <select class="form-input" id="recordCategory" onchange="document.getElementById('customCatGroup').style.display=this.value==='Custom'?'block':'none'"></select>
+      </div>
     </div>
-    <div class="form-group" id="customCatGroup" style="display:none;">
+    <div class="form-group" id="customCatGroup" style="display:none">
       <label class="form-label">Custom Category Name</label>
       <input type="text" class="form-input" id="customCategory" placeholder="Enter category name"/>
     </div>
     <div class="form-group">
       <label class="form-label" id="bankLabel">Bank Received Into</label>
-      <select class="form-input" id="recordBank">
-        <option value="UBA">🏦 UBA — 2069626773</option>
-        <option value="PalmPay">📱 PalmPay — 9035206283</option>
-        <option value="Cash">💵 Cash</option>
-      </select>
+      <div class="select-wrap">
+        <select class="form-input" id="recordBank">
+          <option value="UBA">UBA — 2069626773</option>
+          <option value="PalmPay">PalmPay — 9035206283</option>
+          <option value="Cash">Cash</option>
+        </select>
+      </div>
     </div>
     <div class="form-group">
       <label class="form-label">Occasion / Description</label>
@@ -539,8 +634,8 @@
     <div class="form-group">
       <label class="form-label">Receipt <span class="optional">(optional — image or PDF)</span></label>
       <div class="upload-area" onclick="document.getElementById('receiptFile').click()">
-        <div style="font-size:1.8rem;margin-bottom:.4rem;">📎</div>
-        <div id="uploadText" style="font-size:.78rem;color:#888;">Tap to attach receipt (image or PDF)</div>
+        <span class="material-symbols-outlined">attach_file</span>
+        <div id="uploadText" style="font-size:.78rem;color:#888;">Tap to attach receipt</div>
         <input type="file" id="receiptFile" accept="image/*,.pdf" onchange="handleFileSelect(this)"/>
       </div>
     </div>
@@ -559,7 +654,9 @@
 <div class="modal-overlay" id="levyModal">
   <div class="modal" style="max-width:500px;">
     <div class="modal-header">
-      <div class="modal-title" id="levyModalTitle">Add Levy</div>
+      <div class="modal-title" id="levyModalTitle">
+        <span class="material-symbols-outlined">add_circle</span> Add Levy
+      </div>
       <button class="modal-close" onclick="closeModal('levyModal')">×</button>
     </div>
     <div class="form-group">
@@ -576,32 +673,27 @@
         <input type="date" class="form-input" id="levyDueDate"/>
       </div>
     </div>
-
-    <!-- Who pays this levy — only for fellowship type -->
     <div class="form-group" id="levyTargetGroup">
       <label class="form-label">Who Pays This Levy?</label>
-      <select class="form-input" id="levyTarget" onchange="handleLevyTargetChange()">
-        <option value="all">All Members</option>
-        <option value="executives">Executives Only</option>
-        <option value="members">Non-Executive Members</option>
-        <option value="brothers">Brothers Only</option>
-        <option value="sisters">Sisters Only</option>
-        <option value="select">Select Specific Members</option>
-      </select>
+      <div class="select-wrap">
+        <select class="form-input" id="levyTarget" onchange="handleLevyTargetChange()">
+          <option value="all">All Members</option>
+          <option value="executives">Executives Only</option>
+          <option value="members">Non-Executive Members</option>
+          <option value="brothers">Brothers Only</option>
+          <option value="sisters">Sisters Only</option>
+          <option value="select">Select Specific Members</option>
+        </select>
+      </div>
     </div>
-
-    <!-- Specific member selection — shows when "select" is chosen -->
-    <div class="form-group" id="levySpecificMembersGroup" style="display:none;">
+    <div class="form-group" id="levySpecificMembersGroup" style="display:none">
       <label class="form-label">Select Members</label>
       <div class="member-checkbox-list" id="levyMemberCheckboxList"></div>
     </div>
-
-    <!-- External levy fields -->
-    <div class="form-group" id="externalLevyGroup" style="display:none;">
+    <div class="form-group" id="externalLevyGroup" style="display:none">
       <label class="form-label">Paid To (Organization)</label>
       <input type="text" class="form-input" id="levyPaidTo" placeholder="e.g. National Body, Zonal…"/>
     </div>
-
     <div class="form-group">
       <label class="form-label">Description <span class="optional">(optional)</span></label>
       <input type="text" class="form-input" id="levyDesc" placeholder="What is this levy for?"/>
@@ -617,12 +709,12 @@
 <div class="modal-overlay" id="receiptModal">
   <div class="modal" style="max-width:560px;">
     <div class="modal-header">
-      <div class="modal-title">📎 Receipt</div>
+      <div class="modal-title"><span class="material-symbols-outlined">attach_file</span> Receipt</div>
       <button class="modal-close" onclick="closeModal('receiptModal')">×</button>
     </div>
     <div id="receiptContent" style="text-align:center;min-height:120px;display:flex;align-items:center;justify-content:center;"></div>
     <div style="margin-top:1.2rem;text-align:center;">
-      <button class="btn btn-outline" onclick="closeModal('receiptModal')">← Back</button>
+      <button class="btn btn-outline" onclick="closeModal('receiptModal')">Close</button>
     </div>
   </div>
 </div>
@@ -630,34 +722,119 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const role = localStorage.getItem('userRole');
+  const role     = localStorage.getItem('userRole');
+  const userId   = localStorage.getItem('userId') || '';
+  const userName = localStorage.getItem('userName') || 'Unknown';
   if (!role) { window.location.href = 'auth.html'; }
-  if (role !== 'admin') { window.location.href = 'dashboard.html'; }
 
-  document.getElementById('adminBar').classList.add('show');
-  document.getElementById('sidebar').classList.add('admin-offset');
-  document.getElementById('topbar').classList.add('admin-offset');
-  document.getElementById('mainWrap').classList.add('admin-offset');
-  document.getElementById('navMemo').style.display = 'flex';
+  const isMember     = role === 'member';
+  const isAdmin      = role === 'admin';
+  const isSuperAdmin = role === 'superadmin';
+  const isPrivileged = isAdmin || isSuperAdmin;
 
+  // Members have no access to finance at all
+  if (isMember) { window.location.href = 'dashboard.html'; }
+
+  // ── Admin bar ──
+  const adminBar = document.getElementById('adminBar');
+  adminBar.classList.add('show');
+  if (isAdmin) {
+    document.getElementById('adminBarText').innerHTML = '🔐 ADMIN MODE <span>· Full access enabled</span>';
+    document.getElementById('portalLabel').textContent = 'Admin Portal';
+  } else {
+    adminBar.classList.add('super-bar');
+    document.getElementById('mainBar').classList.add('super-bar');
+    document.getElementById('adminBarText').innerHTML = '👑 SUPER ADMIN MODE <span>· Full system access</span>';
+    document.getElementById('portalLabel').textContent = 'Super Admin Portal';
+  }
+
+  document.getElementById('sidebar').classList.add('offset');
+  document.getElementById('topbar').classList.add('offset');
+  document.getElementById('mainWrap').classList.add('offset');
+  document.getElementById('navMemo').style.display    = 'flex';
+  document.getElementById('navUserMgmt').style.display = 'flex';
+  if (isSuperAdmin) document.getElementById('navAudit').style.display = 'flex';
+
+  // ── Finance permission check ──
+  // Super Admin always has full access
+  // Admin needs financePerms set by Super Admin
+  let canView   = isSuperAdmin;
+  let canCreate = isSuperAdmin;
+  let canEdit   = isSuperAdmin;
+  let canExport = isSuperAdmin;
+
+  async function checkPermissionsAndLoad() {
+    if (isAdmin) {
+      try {
+        const userDoc = await db.collection('users').doc(userId).get();
+        if (userDoc.exists) {
+          const perms = userDoc.data().financePerms || {};
+          canView   = !!perms.view;
+          canCreate = !!perms.create;
+          canEdit   = !!perms.edit;
+          canExport = !!perms.export;
+        }
+      } catch(e) { canView = false; }
+    }
+
+    if (!canView) {
+      document.getElementById('accessBox').style.display = 'block';
+      return;
+    }
+
+    // Show finance content
+    document.getElementById('financeContent').style.display = 'block';
+
+    // Show action buttons based on permissions
+    if (canCreate) {
+      document.getElementById('headerActions').style.display   = 'flex';
+      document.getElementById('btnAddIncome').style.display    = 'inline-flex';
+      document.getElementById('btnAddExpense').style.display   = 'inline-flex';
+      document.getElementById('btnAddFLevy').style.display     = 'inline-flex';
+      document.getElementById('btnAddELevy').style.display     = 'inline-flex';
+    }
+    if (canEdit) {
+      document.getElementById('thDelIncome').style.display  = 'table-cell';
+      document.getElementById('thDelExpense').style.display = 'table-cell';
+      document.getElementById('thFLevyAction').style.display = 'table-cell';
+      document.getElementById('thELevyAction').style.display = 'table-cell';
+      document.getElementById('thDuesAction').style.display  = 'table-cell';
+    }
+    if (canExport) {
+      document.getElementById('headerActions').style.display = 'flex';
+    }
+
+    await loadAll();
+  }
+
+  checkPermissionsAndLoad();
+
+  // ── Data ──
   let allRecords = [], allTransfers = [], allLevies = [], allMembers = [];
   let currentLevyType = 'fellowship', selectedFile = null;
 
-  const INCOME_CATS = ['Offering','Tithe','Donation','Welfare','Contribution','Executives Levy','Genco Levy','Individual Levy'];
+  const INCOME_CATS  = ['Offering','Tithe','Donation','Welfare','Contribution','Executives Levy','Genco Levy','Individual Levy'];
   const EXPENSE_CATS = ['Events','Stationery','Welfare','Outreach','Transportation','External Levy','Miscellaneous'];
-  const CAT_COLORS = {
+  const CAT_COLORS   = {
     'Offering':'#1565c0','Tithe':'#2e7d32','Donation':'#6a1b9a','Welfare':'#880e4f',
     'Contribution':'#e65100','Executives Levy':'#bf360c','Genco Levy':'#f57f17',
     'Individual Levy':'#558b2f','Events':'#283593','Stationery':'#4527a0',
     'Outreach':'#004d40','Transportation':'#1b5e20','External Levy':'#b71c1c','Miscellaneous':'#616161'
   };
-  const MONTHS_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const MONTHS_FULL  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const EXEC_POSITIONS = ['President','Vice President','General Secretary','Assistant General Secretary',
-    'Financial Secretary','Treasurer','PRO','Welfare Officer','Follow up Secretary','Ex-official','Bible Study Secretary'];
+  const EXEC_POSITIONS = [
+    'President','Vice President','General Secretary','Asst. General Secretary',
+    'Financial Secretary','Treasurer','Bible Study Secretary','Asst Bible Study Secretary',
+    'Evangelism Secretary','Follow up Secretary','Prayer Secretary','Asst Prayer Secretary',
+    'Media/Publicity Secretary','Asst Media/Publicity Secretary','Organizing Secretary',
+    'Asst Organizing Secretary','Welfare Secretary','Asst. Welfare Secretary',
+    'Academic/Magazine Secretary','Music Director','Ex-official'
+  ];
 
   function fmt(n) { return '₦' + Number(n||0).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   function fmtDate(ds) { const d=new Date(ds); return d.getDate()+' '+MONTHS_SHORT[d.getMonth()]+' '+d.getFullYear(); }
+
   function isWithin24h(createdAt) {
     if (!createdAt) return false;
     return (Date.now() - new Date(createdAt).getTime()) < 24*60*60*1000;
@@ -673,63 +850,47 @@
   }
 
   function bankTag(bank) {
-    const s={UBA:'color:#cc0000',PalmPay:'color:#00a854',Cash:'color:#fd7e14'};
+    const s = {UBA:'color:#cc0000',PalmPay:'color:#00a854',Cash:'color:#fd7e14'};
     return `<span style="font-size:.75rem;font-weight:700;${s[bank]||'color:#888'}">${bank||'—'}</span>`;
   }
 
-  // Get which members should pay a levy based on its target setting
   function getMembersForLevy(levy) {
     if (!levy) return [];
     const target = levy.target || 'all';
-    if (target === 'all') return allMembers;
+    if (target === 'all')        return allMembers;
     if (target === 'executives') return allMembers.filter(m=>EXEC_POSITIONS.includes(m.position));
-    if (target === 'members') return allMembers.filter(m=>!EXEC_POSITIONS.includes(m.position));
-    if (target === 'brothers') return allMembers.filter(m=>(m.gender||'').toLowerCase()==='male');
-    if (target === 'sisters') return allMembers.filter(m=>(m.gender||'').toLowerCase()==='female');
-    if (target === 'select') {
-      const ids = levy.specificMemberIds || [];
-      return allMembers.filter(m=>ids.includes(m.id));
-    }
+    if (target === 'members')    return allMembers.filter(m=>!EXEC_POSITIONS.includes(m.position));
+    if (target === 'brothers')   return allMembers.filter(m=>(m.gender||'').toLowerCase()==='male');
+    if (target === 'sisters')    return allMembers.filter(m=>(m.gender||'').toLowerCase()==='female');
+    if (target === 'select')     return allMembers.filter(m=>(levy.specificMemberIds||[]).includes(m.id));
     return allMembers;
   }
 
   function targetLabel(target) {
-    const map = {
-      all:'All Members', executives:'Executives', members:'Non-Exec Members',
-      brothers:'Brothers', sisters:'Sisters', select:'Selected Members'
-    };
+    const map = { all:'All Members', executives:'Executives', members:'Non-Exec Members', brothers:'Brothers', sisters:'Sisters', select:'Selected Members' };
     return map[target] || 'All Members';
   }
 
   function getBankBalance(bankName) {
-    const inc = allRecords.filter(r=>r.type==='income'&&r.bank===bankName).reduce((s,r)=>s+Number(r.amount||0),0);
-    const exp = allRecords.filter(r=>r.type==='expenditure'&&r.bank===bankName).reduce((s,r)=>s+Number(r.amount||0),0);
-    const tIn = allTransfers.filter(t=>t.to===bankName).reduce((s,t)=>s+Number(t.amount||0),0);
+    const inc  = allRecords.filter(r=>r.type==='income'&&r.bank===bankName).reduce((s,r)=>s+Number(r.amount||0),0);
+    const exp  = allRecords.filter(r=>r.type==='expenditure'&&r.bank===bankName).reduce((s,r)=>s+Number(r.amount||0),0);
+    const tIn  = allTransfers.filter(t=>t.to===bankName).reduce((s,t)=>s+Number(t.amount||0),0);
     const tOut = allTransfers.filter(t=>t.from===bankName).reduce((s,t)=>s+Number(t.amount||0),0);
     return inc - exp + tIn - tOut;
   }
 
   function updateBankCards() {
     const uba=getBankBalance('UBA'), pp=getBankBalance('PalmPay'), cash=getBankBalance('Cash');
-    document.getElementById('ubaBalance').textContent = fmt(uba);
+    document.getElementById('ubaBalance').textContent     = fmt(uba);
     document.getElementById('palmpayBalance').textContent = fmt(pp);
-    document.getElementById('cashBalance').textContent = fmt(cash);
+    document.getElementById('cashBalance').textContent    = fmt(cash);
     const el = document.getElementById('bankReportDetail');
     if (el) {
       const total = uba+pp+cash;
       el.innerHTML = `
-        <div class="breakdown-item">
-          <div class="breakdown-label"><div class="breakdown-dot" style="background:#cc0000"></div>UBA (2069626773)</div>
-          <div class="breakdown-amount" style="color:#cc0000">${fmt(uba)}</div>
-        </div>
-        <div class="breakdown-item">
-          <div class="breakdown-label"><div class="breakdown-dot" style="background:#00a854"></div>PalmPay (9035206283)</div>
-          <div class="breakdown-amount" style="color:#00a854">${fmt(pp)}</div>
-        </div>
-        <div class="breakdown-item">
-          <div class="breakdown-label"><div class="breakdown-dot" style="background:#fd7e14"></div>Cash on Hand</div>
-          <div class="breakdown-amount" style="color:#fd7e14">${fmt(cash)}</div>
-        </div>
+        <div class="breakdown-item"><div class="breakdown-label"><div class="breakdown-dot" style="background:#cc0000"></div>UBA (2069626773)</div><div class="breakdown-amount" style="color:#cc0000">${fmt(uba)}</div></div>
+        <div class="breakdown-item"><div class="breakdown-label"><div class="breakdown-dot" style="background:#00a854"></div>PalmPay (9035206283)</div><div class="breakdown-amount" style="color:#00a854">${fmt(pp)}</div></div>
+        <div class="breakdown-item"><div class="breakdown-label"><div class="breakdown-dot" style="background:#fd7e14"></div>Cash on Hand</div><div class="breakdown-amount" style="color:#fd7e14">${fmt(cash)}</div></div>
         <div style="margin-top:.8rem;padding-top:.8rem;border-top:2px solid #edf0f4;display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:.82rem;font-weight:700;color:#555;">TOTAL FELLOWSHIP PURSE</span>
           <span style="font-size:1rem;font-weight:700;color:#0066cc;">${fmt(total)}</span>
@@ -742,7 +903,7 @@
     const yearSel = document.getElementById('filterYear');
     for (let y=now.getFullYear(); y>=2020; y--) yearSel.innerHTML += `<option value="${y}">${y}</option>`;
     document.getElementById('filterMonth').value = String(now.getMonth()+1);
-    document.getElementById('filterYear').value = String(now.getFullYear());
+    document.getElementById('filterYear').value  = String(now.getFullYear());
 
     const [recSnap,transSnap,leviesSnap,membersSnap] = await Promise.all([
       db.collection('finance_records').orderBy('date','desc').get(),
@@ -751,10 +912,10 @@
       db.collection('members').get()
     ]);
 
-    allRecords = recSnap.docs.map(d=>({id:d.id,...d.data()}));
+    allRecords   = recSnap.docs.map(d=>({id:d.id,...d.data()}));
     allTransfers = transSnap.docs.map(d=>({id:d.id,...d.data()}));
-    allLevies = leviesSnap.docs.map(d=>({id:d.id,...d.data()}));
-    allMembers = membersSnap.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.position!=='Associates');
+    allLevies    = leviesSnap.docs.map(d=>({id:d.id,...d.data()}));
+    allMembers   = membersSnap.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.position!=='Associates'&&m.isAssociate!==true);
 
     updateBankCards();
     applyFilter();
@@ -763,38 +924,38 @@
   }
 
   function getFilteredRecords() {
-    const month=document.getElementById('filterMonth').value;
-    const year=document.getElementById('filterYear').value;
+    const month = document.getElementById('filterMonth').value;
+    const year  = document.getElementById('filterYear').value;
     return allRecords.filter(r=>{
-      const d=new Date(r.date);
-      if (year && d.getFullYear()!==parseInt(year)) return false;
-      if (month && (d.getMonth()+1)!==parseInt(month)) return false;
+      const d = new Date(r.date);
+      if (year  && d.getFullYear()!==parseInt(year))     return false;
+      if (month && (d.getMonth()+1)!==parseInt(month))  return false;
       return true;
     });
   }
 
   function applyFilter() {
-    const records=getFilteredRecords();
-    const income=records.filter(r=>r.type==='income');
-    const expense=records.filter(r=>r.type==='expenditure');
-    const totalIn=income.reduce((s,r)=>s+Number(r.amount||0),0);
-    const totalEx=expense.reduce((s,r)=>s+Number(r.amount||0),0);
-    const balance=totalIn-totalEx;
+    const records = getFilteredRecords();
+    const income  = records.filter(r=>r.type==='income');
+    const expense = records.filter(r=>r.type==='expenditure');
+    const totalIn = income.reduce((s,r)=>s+Number(r.amount||0),0);
+    const totalEx = expense.reduce((s,r)=>s+Number(r.amount||0),0);
+    const balance = totalIn - totalEx;
 
     let totalDues=0, duesPaidCount=0;
     allLevies.filter(l=>l.levyType==='fellowship').forEach(levy=>{
       const levyMembers = getMembersForLevy(levy);
       (levy.payments||[]).forEach(p=>{
         if (!levyMembers.find(m=>m.id===p.memberId)) return;
-        if (p.status==='paid') { totalDues+=Number(levy.amount||0); duesPaidCount++; }
+        if (p.status==='paid')    { totalDues+=Number(levy.amount||0); duesPaidCount++; }
         else if (p.status==='partial') { totalDues+=Number(p.partialAmount||0); duesPaidCount++; }
       });
     });
 
-    document.getElementById('sumIncome').textContent = totalIn>0?fmt(totalIn):'—';
+    document.getElementById('sumIncome').textContent  = totalIn>0?fmt(totalIn):'—';
     document.getElementById('sumExpense').textContent = totalEx>0?fmt(totalEx):'—';
     document.getElementById('sumBalance').textContent = (totalIn>0||totalEx>0)?fmt(balance):'—';
-    document.getElementById('sumDues').textContent = totalDues>0?fmt(totalDues):'—';
+    document.getElementById('sumDues').textContent    = totalDues>0?fmt(totalDues):'—';
     document.getElementById('sumDuesSub').textContent = duesPaidCount>0?`${duesPaidCount} member${duesPaidCount!==1?'s':''} paid`:'no payments yet';
 
     renderIncomeTable(income);
@@ -803,56 +964,60 @@
   }
 
   function deleteBtn(id, createdAt) {
+    if (!canEdit) return '';
     if (isWithin24h(createdAt)) {
-      return `<button onclick="deleteRecord('${id}')" style="background:#fdecea;color:#c62828;border:none;border-radius:4px;cursor:pointer;padding:.28rem .6rem;font-size:.72rem;font-weight:700;">🗑</button>`;
+      return `<button onclick="deleteRecord('${id}')" style="background:#fdecea;color:#c62828;border:none;border-radius:4px;cursor:pointer;padding:.28rem .55rem;font-size:.72rem;font-weight:700;display:inline-flex;align-items:center;gap:.2rem;">
+        <span class="material-symbols-outlined" style="font-size:.85rem;">delete</span>
+      </button>`;
     }
-    return `<span class="locked-badge" title="Records cannot be deleted after 24 hours">🔒 Locked</span>`;
+    return `<span class="locked-badge"><span class="material-symbols-outlined">lock</span> Locked</span>`;
   }
 
   function receiptCell(r) {
     if (r.receiptUrl) {
-      return `<span style="color:#28a745;font-weight:700;cursor:pointer;font-size:.78rem;" onclick="viewReceipt('${r.receiptUrl}','${r.receiptType||'image'}')">✅ Yes</span>`;
+      return `<span style="color:#28a745;font-weight:700;cursor:pointer;font-size:.78rem;display:inline-flex;align-items:center;gap:.2rem;" onclick="viewReceipt('${r.receiptUrl}','${r.receiptType||'image'}')">
+        <span class="material-symbols-outlined" style="font-size:.9rem;">task_alt</span> Yes
+      </span>`;
     }
     return '<span style="color:#ccc;font-size:.75rem;">—</span>';
   }
 
   function renderIncomeTable(records) {
-    const tbody=document.getElementById('incomeBody');
-    tbody.innerHTML=records.length?records.map(r=>`<tr>
+    const tbody = document.getElementById('incomeBody');
+    tbody.innerHTML = records.length ? records.map(r=>`<tr>
       <td style="white-space:nowrap;">${fmtDate(r.date)}</td>
       <td>${catBadge(r.category,'income')}</td>
       <td>${r.description||'—'}</td>
       <td>${bankTag(r.bank)}</td>
       <td class="amount-positive" style="white-space:nowrap;">${fmt(r.amount)}</td>
       <td>${receiptCell(r)}</td>
-      <td>${deleteBtn(r.id,r.createdAt)}</td>
-    </tr>`).join(''):'<tr class="empty-row"><td colspan="7">No income records for this period</td></tr>';
+      ${canEdit?`<td>${deleteBtn(r.id,r.createdAt)}</td>`:''}
+    </tr>`).join('') : '<tr class="empty-row"><td colspan="7">No income records for this period</td></tr>';
   }
 
   function renderExpenditureTable(records) {
-    const tbody=document.getElementById('expenditureBody');
-    tbody.innerHTML=records.length?records.map(r=>`<tr>
+    const tbody = document.getElementById('expenditureBody');
+    tbody.innerHTML = records.length ? records.map(r=>`<tr>
       <td style="white-space:nowrap;">${fmtDate(r.date)}</td>
       <td>${catBadge(r.category,'expenditure')}</td>
       <td>${r.description||'—'}</td>
       <td>${bankTag(r.bank)}</td>
       <td class="amount-negative" style="white-space:nowrap;">${fmt(r.amount)}</td>
       <td>${receiptCell(r)}</td>
-      <td>${deleteBtn(r.id,r.createdAt)}</td>
-    </tr>`).join(''):'<tr class="empty-row"><td colspan="7">No expenditure records for this period</td></tr>';
+      ${canEdit?`<td>${deleteBtn(r.id,r.createdAt)}</td>`:''}
+    </tr>`).join('') : '<tr class="empty-row"><td colspan="7">No expenditure records for this period</td></tr>';
   }
 
   function renderReports(income,expense,totalIn,totalEx,balance) {
-    document.getElementById('reportBalance').textContent=(totalIn>0||totalEx>0)?fmt(balance):'—';
-    document.getElementById('reportTotalIncome').textContent=totalIn>0?fmt(totalIn):'—';
-    document.getElementById('reportTotalExpense').textContent=totalEx>0?fmt(totalEx):'—';
+    document.getElementById('reportBalance').textContent     = (totalIn>0||totalEx>0)?fmt(balance):'—';
+    document.getElementById('reportTotalIncome').textContent  = totalIn>0?fmt(totalIn):'—';
+    document.getElementById('reportTotalExpense').textContent = totalEx>0?fmt(totalEx):'—';
 
-    const month=document.getElementById('filterMonth').value;
-    const year=document.getElementById('filterYear').value;
+    const month=document.getElementById('filterMonth').value, year=document.getElementById('filterYear').value;
     let periodLabel='All Time';
     if (month&&year) periodLabel=MONTHS_FULL[parseInt(month)-1]+' '+year;
-    else if (year) periodLabel='Year '+year;
-    else if (month) periodLabel=MONTHS_FULL[parseInt(month)-1];
+    else if (year)   periodLabel='Year '+year;
+    else if (month)  periodLabel=MONTHS_FULL[parseInt(month)-1];
     document.getElementById('reportPeriodLabel').textContent=periodLabel;
 
     const inCats={};
@@ -926,13 +1091,12 @@
         const pct=total?Math.round(paid/total*100):0;
         const collected=(levy.payments||[]).reduce((s,p)=>{
           if (!levyMembers.find(m=>m.id===p.memberId)) return s;
-          if (p.status==='paid') return s+Number(levy.amount||0);
+          if (p.status==='paid')    return s+Number(levy.amount||0);
           if (p.status==='partial') return s+Number(p.partialAmount||0);
           return s;},0);
         return `<div style="background:#f7f9fc;border:1px solid #edf0f4;border-radius:6px;padding:.9rem;">
           <div style="font-size:.8rem;font-weight:700;color:#333;margin-bottom:.2rem;">${levy.name}</div>
-          <div style="font-size:.7rem;color:#888;margin-bottom:.2rem;">${fmt(levy.amount)}/member · <em>${targetLabel(levy.target)}</em></div>
-          <div style="font-size:.7rem;color:#888;margin-bottom:.6rem;">${total} member${total!==1?'s':''} expected</div>
+          <div style="font-size:.7rem;color:#888;margin-bottom:.6rem;">${fmt(levy.amount)}/member · ${targetLabel(levy.target)} · ${total} expected</div>
           <div class="progress-row">
             <div class="progress-label-row">
               <span style="font-size:.7rem;color:#555;">${paid} paid · ${partial} partial · ${total-paid-partial} unpaid</span>
@@ -946,18 +1110,16 @@
 
   function renderLevies() {
     const fellowship=allLevies.filter(l=>l.levyType==='fellowship');
-    const external=allLevies.filter(l=>l.levyType==='external');
+    const external  =allLevies.filter(l=>l.levyType==='external');
 
     document.getElementById('fellowshipLevyBody').innerHTML=fellowship.length?fellowship.map(l=>`<tr>
       <td><strong>${l.name}</strong><br><span style="font-size:.7rem;color:#888;">${l.description||''}</span></td>
       <td class="amount-positive">${fmt(l.amount)}</td>
       <td><span style="font-size:.72rem;background:#eef4ff;color:#0066cc;padding:.15rem .5rem;border-radius:20px;font-weight:700;">${targetLabel(l.target)}</span></td>
-      <td>
-        <div style="display:flex;gap:.5rem;align-items:center;">
-          <button class="btn btn-outline btn-sm" onclick="viewLevyPayments('${l.id}')">View Payments</button>
-          ${isWithin24h(l.createdAt)?`<button onclick="deleteLevy('${l.id}')" style="background:#fdecea;color:#c62828;border:none;border-radius:4px;cursor:pointer;padding:.3rem .55rem;font-size:.75rem;">🗑</button>`:`<span class="locked-badge">🔒</span>`}
-        </div>
-      </td>
+      ${canEdit?`<td><div style="display:flex;gap:.5rem;align-items:center;">
+        <button class="btn btn-outline btn-sm" onclick="viewLevyPayments('${l.id}')">View Payments</button>
+        ${isWithin24h(l.createdAt)?`<button onclick="deleteLevy('${l.id}')" style="background:#fdecea;color:#c62828;border:none;border-radius:4px;cursor:pointer;padding:.3rem .55rem;font-size:.75rem;"><span class="material-symbols-outlined" style="font-size:.85rem;">delete</span></button>`:`<span class="locked-badge"><span class="material-symbols-outlined">lock</span></span>`}
+      </div></td>`:'<td><button class="btn btn-outline btn-sm" onclick="viewLevyPayments(\''+l.id+'\')">View Payments</button></td>'}
     </tr>`).join(''):'<tr class="empty-row"><td colspan="4">No fellowship levies yet</td></tr>';
 
     document.getElementById('externalLevyBody').innerHTML=external.length?external.map(l=>`<tr>
@@ -965,12 +1127,10 @@
       <td class="amount-negative">${fmt(l.amount)}</td>
       <td>${l.paidTo||'—'}</td>
       <td><span class="badge ${l.paid?'badge-paid':'badge-unpaid'}">${l.paid?'Paid':'Unpaid'}</span></td>
-      <td>
-        <div style="display:flex;gap:.5rem;align-items:center;">
-          <button onclick="toggleExternalPaid('${l.id}',${!l.paid})" style="background:${l.paid?'#fdecea':'#eafaf0'};color:${l.paid?'#c62828':'#1e7e34'};border:none;border-radius:4px;cursor:pointer;padding:.3rem .7rem;font-size:.72rem;font-weight:700;">${l.paid?'Mark Unpaid':'Mark Paid'}</button>
-          ${isWithin24h(l.createdAt)?`<button onclick="deleteLevy('${l.id}')" style="background:#fdecea;color:#c62828;border:none;border-radius:4px;cursor:pointer;padding:.3rem .55rem;font-size:.75rem;margin-left:.4rem;">🗑</button>`:`<span class="locked-badge">🔒</span>`}
-        </div>
-      </td>
+      ${canEdit?`<td><div style="display:flex;gap:.5rem;align-items:center;">
+        <button onclick="toggleExternalPaid('${l.id}',${!l.paid})" style="background:${l.paid?'#fdecea':'#eafaf0'};color:${l.paid?'#c62828':'#1e7e34'};border:none;border-radius:4px;cursor:pointer;padding:.3rem .7rem;font-size:.72rem;font-weight:700;">${l.paid?'Mark Unpaid':'Mark Paid'}</button>
+        ${isWithin24h(l.createdAt)?`<button onclick="deleteLevy('${l.id}')" style="background:#fdecea;color:#c62828;border:none;border-radius:4px;cursor:pointer;padding:.3rem .55rem;font-size:.75rem;"><span class="material-symbols-outlined" style="font-size:.85rem;">delete</span></button>`:`<span class="locked-badge"><span class="material-symbols-outlined">lock</span></span>`}
+      </div></td>`:'<td></td>'}
     </tr>`).join(''):'<tr class="empty-row"><td colspan="5">No external levies yet</td></tr>';
   }
 
@@ -988,48 +1148,44 @@
 
   function loadMemberDues() {
     const levyId=document.getElementById('levyFilter').value;
-    const tbody=document.getElementById('memberDuesBody');
+    const tbody =document.getElementById('memberDuesBody');
     if (!levyId) { tbody.innerHTML='<tr class="empty-row"><td colspan="6">Select a levy above to view members</td></tr>'; return; }
     const levy=allLevies.find(l=>l.id===levyId);
     if (!levy) return;
-
-    // Get only the members this levy applies to
-    const members=getMembersForLevy(levy);
+    const members =getMembersForLevy(levy);
     const payments=levy.payments||[];
-
-    if (!members.length) {
-      tbody.innerHTML='<tr class="empty-row"><td colspan="6">No members found for this levy group</td></tr>';
-      return;
-    }
+    if (!members.length) { tbody.innerHTML='<tr class="empty-row"><td colspan="6">No members for this levy group</td></tr>'; return; }
 
     tbody.innerHTML=members.map(m=>{
       const pay=payments.find(p=>p.memberId===m.id);
-      const status=pay?pay.status:'unpaid';
-      const datePaid=pay&&pay.datePaid?fmtDate(pay.datePaid):'—';
+      const status   =pay?pay.status:'unpaid';
+      const datePaid =pay&&pay.datePaid?fmtDate(pay.datePaid):'—';
       const partialAmt=pay&&pay.partialAmount?fmt(pay.partialAmount):'';
 
       let actionCell='';
-      if (status==='paid') {
-        actionCell=`<button class="pay-status-btn paid" onclick="setMemberPayment('${levy.id}','${m.id}','unpaid')">✓ Paid · Undo</button>`;
-      } else if (status==='partial') {
-        actionCell=`<div style="display:flex;flex-direction:column;gap:.3rem;">
-          <span style="font-size:.7rem;color:#f57f17;font-weight:700;">◑ Partial: ${partialAmt}</span>
-          <div style="display:flex;gap:.3rem;">
-            <button class="pay-status-btn paid" onclick="setMemberPayment('${levy.id}','${m.id}','paid')">Mark Full</button>
-            <button class="pay-status-btn unpaid" onclick="setMemberPayment('${levy.id}','${m.id}','unpaid')">Reset</button>
-          </div>
-        </div>`;
-      } else {
-        actionCell=`<div style="display:flex;flex-direction:column;gap:.4rem;">
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
-            <button class="pay-status-btn paid" onclick="setMemberPayment('${levy.id}','${m.id}','paid')">✓ Mark Paid</button>
-            <button class="pay-status-btn partial" onclick="togglePartialInput('${m.id}')">◑ Part Pay</button>
-          </div>
-          <div id="partial_${m.id}" style="display:none;gap:.4rem;align-items:center;">
-            <input type="number" class="part-amount-input" id="partAmt_${m.id}" placeholder="Amount" min="0" step="0.01"/>
-            <button class="part-done-btn" onclick="savePartialPayment('${levy.id}','${m.id}')">Done</button>
-          </div>
-        </div>`;
+      if (canEdit) {
+        if (status==='paid') {
+          actionCell=`<button class="pay-status-btn paid" onclick="setMemberPayment('${levy.id}','${m.id}','unpaid')">Paid · Undo</button>`;
+        } else if (status==='partial') {
+          actionCell=`<div style="display:flex;flex-direction:column;gap:.3rem;">
+            <span style="font-size:.7rem;color:#f57f17;font-weight:700;">Partial: ${partialAmt}</span>
+            <div style="display:flex;gap:.3rem;">
+              <button class="pay-status-btn paid" onclick="setMemberPayment('${levy.id}','${m.id}','paid')">Mark Full</button>
+              <button class="pay-status-btn unpaid" onclick="setMemberPayment('${levy.id}','${m.id}','unpaid')">Reset</button>
+            </div>
+          </div>`;
+        } else {
+          actionCell=`<div style="display:flex;flex-direction:column;gap:.4rem;">
+            <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+              <button class="pay-status-btn paid" onclick="setMemberPayment('${levy.id}','${m.id}','paid')">Mark Paid</button>
+              <button class="pay-status-btn partial" onclick="togglePartialInput('${m.id}')">Part Pay</button>
+            </div>
+            <div id="partial_${m.id}" style="display:none;gap:.4rem;align-items:center;">
+              <input type="number" class="part-amount-input" id="partAmt_${m.id}" placeholder="Amount" min="0" step="0.01"/>
+              <button class="part-done-btn" onclick="savePartialPayment('${levy.id}','${m.id}')">Done</button>
+            </div>
+          </div>`;
+        }
       }
 
       return `<tr>
@@ -1038,7 +1194,7 @@
         <td>${fmt(levy.amount)}</td>
         <td><span class="badge badge-${status}">${status==='paid'?'Paid':status==='partial'?'Partial':'Unpaid'}</span></td>
         <td style="font-size:.78rem;">${datePaid}</td>
-        <td>${actionCell}</td>
+        ${canEdit?`<td>${actionCell}</td>`:''}
       </tr>`;}).join('');
   }
 
@@ -1048,30 +1204,23 @@
   }
 
   async function savePartialPayment(levyId,memberId) {
-    const input=document.getElementById(`partAmt_${memberId}`);
-    const amount=parseFloat(input.value);
+    const amount=parseFloat(document.getElementById(`partAmt_${memberId}`).value);
     if (!amount||amount<=0) { showToast('Enter a valid partial amount','error'); return; }
     await updatePaymentStatus(levyId,memberId,'partial',amount);
   }
 
-  async function setMemberPayment(levyId,memberId,status) {
-    await updatePaymentStatus(levyId,memberId,status,null);
-  }
+  async function setMemberPayment(levyId,memberId,status) { await updatePaymentStatus(levyId,memberId,status,null); }
 
   async function updatePaymentStatus(levyId,memberId,status,partialAmount) {
     const levy=allLevies.find(l=>l.id===levyId); if (!levy) return;
     const payments=[...(levy.payments||[])];
     const idx=payments.findIndex(p=>p.memberId===memberId);
-    const payObj={
-      memberId,status,
-      datePaid:(status==='paid'||status==='partial')?new Date().toISOString().split('T')[0]:null,
-      partialAmount:status==='partial'?partialAmount:null
-    };
+    const payObj={ memberId,status, datePaid:(status==='paid'||status==='partial')?new Date().toISOString().split('T')[0]:null, partialAmount:status==='partial'?partialAmount:null };
     if (idx>=0) payments[idx]=payObj; else payments.push(payObj);
     await db.collection('finance_levies').doc(levyId).update({payments});
     levy.payments=payments;
-    loadMemberDues();
-    applyFilter();
+    loadMemberDues(); applyFilter();
+    await logAudit('finance_dues_updated', `Updated dues payment for member in levy: ${levy.name}`);
     showToast('Payment updated!','success');
   }
 
@@ -1079,37 +1228,32 @@
     await db.collection('finance_levies').doc(levyId).update({paid});
     const levy=allLevies.find(l=>l.id===levyId); if (levy) levy.paid=paid;
     renderLevies();
+    await logAudit('finance_external_levy_updated', `External levy marked as ${paid?'paid':'unpaid'}`);
     showToast(`Levy marked as ${paid?'paid':'unpaid'}!`,'success');
   }
 
-  // --- Levy Modal ---
+  // ── Levy Modal ──
   function openLevyModal(type) {
+    if (!canCreate) { showToast('You do not have permission to create levies.','error'); return; }
     currentLevyType=type;
-    document.getElementById('levyModalTitle').textContent=type==='fellowship'?'🏛️ Add Fellowship Levy':'🌐 Add External Levy';
+    document.getElementById('levyModalTitle').innerHTML=`<span class="material-symbols-outlined">add_circle</span> ${type==='fellowship'?'Add Fellowship Levy':'Add External Levy'}`;
     ['levyName','levyAmount','levyDueDate','levyDesc','levyPaidTo'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('levyTarget').value='all';
     document.getElementById('levySpecificMembersGroup').style.display='none';
-    document.getElementById('externalLevyGroup').style.display=type==='external'?'block':'none';
-    document.getElementById('levyTargetGroup').style.display=type==='fellowship'?'block':'none';
+    document.getElementById('externalLevyGroup').style.display   =type==='external'?'block':'none';
+    document.getElementById('levyTargetGroup').style.display     =type==='fellowship'?'block':'none';
     document.getElementById('levyModal').classList.add('show');
   }
 
   function handleLevyTargetChange() {
     const val=document.getElementById('levyTarget').value;
-    const specificGroup=document.getElementById('levySpecificMembersGroup');
+    document.getElementById('levySpecificMembersGroup').style.display=val==='select'?'block':'none';
     if (val==='select') {
-      specificGroup.style.display='block';
-      // Populate member checkboxes
       document.getElementById('levyMemberCheckboxList').innerHTML=allMembers.map(m=>`
         <div class="member-checkbox-item">
           <input type="checkbox" id="lm_${m.id}" value="${m.id}"/>
-          <label for="lm_${m.id}">
-            ${m.name}
-            <span class="sub">${m.position||'Member'} · ${m.level||''}</span>
-          </label>
+          <label for="lm_${m.id}">${m.name}<span class="sub"> · ${m.position||'Member'} · ${m.level||''}</span></label>
         </div>`).join('');
-    } else {
-      specificGroup.style.display='none';
     }
   }
 
@@ -1128,14 +1272,14 @@
 
     btn.textContent='Saving…'; btn.disabled=true;
     await db.collection('finance_levies').add({
-      name,amount:parseFloat(amount),
-      dueDate:document.getElementById('levyDueDate').value,
-      description:document.getElementById('levyDesc').value.trim(),
-      levyType:currentLevyType,
-      target,specificMemberIds,
-      paidTo:currentLevyType==='external'?document.getElementById('levyPaidTo').value.trim():null,
-      paid:false,payments:[],createdAt:new Date().toISOString()
+      name, amount:parseFloat(amount),
+      dueDate: document.getElementById('levyDueDate').value,
+      description: document.getElementById('levyDesc').value.trim(),
+      levyType: currentLevyType, target, specificMemberIds,
+      paidTo: currentLevyType==='external'?document.getElementById('levyPaidTo').value.trim():null,
+      paid:false, payments:[], createdAt:new Date().toISOString()
     });
+    await logAudit('finance_levy_created', `Created ${currentLevyType} levy: ${name} — ₦${amount}`);
     showToast('Levy created!','success');
     closeModal('levyModal'); btn.textContent='Save Levy'; btn.disabled=false;
     await loadAll();
@@ -1143,26 +1287,28 @@
 
   async function deleteLevy(id) {
     const levy=allLevies.find(l=>l.id===id);
-    if (!levy||!isWithin24h(levy.createdAt)) { showToast('This levy can no longer be deleted (24h limit)','error'); return; }
+    if (!levy||!isWithin24h(levy.createdAt)) { showToast('This levy can no longer be deleted','error'); return; }
     if (!confirm('Delete this levy?')) return;
     await db.collection('finance_levies').doc(id).delete();
     allLevies=allLevies.filter(l=>l.id!==id);
     renderLevies(); populateLevyFilter();
+    await logAudit('finance_levy_deleted', `Deleted levy: ${levy.name}`);
     showToast('Levy deleted','success');
   }
 
-  // --- Add Record ---
+  // ── Add Record ──
   function openAddModal(type='income') {
-    document.getElementById('recordType').value=type;
-    document.getElementById('recordDate').value=new Date().toISOString().split('T')[0];
-    document.getElementById('recordAmount').value='';
-    document.getElementById('recordDesc').value='';
-    document.getElementById('recordNotes').value='';
-    document.getElementById('uploadText').innerHTML='Tap to attach receipt (image or PDF)';
-    document.getElementById('receiptFile').value='';
+    if (!canCreate) { showToast('You do not have permission to create records.','error'); return; }
+    document.getElementById('recordType').value   = type;
+    document.getElementById('recordDate').value   = new Date().toISOString().split('T')[0];
+    document.getElementById('recordAmount').value = '';
+    document.getElementById('recordDesc').value   = '';
+    document.getElementById('recordNotes').value  = '';
+    document.getElementById('uploadText').innerHTML = 'Tap to attach receipt';
+    document.getElementById('receiptFile').value  = '';
     document.getElementById('customCatGroup').style.display='none';
-    document.getElementById('addModalTitle').textContent=type==='income'?'📥 Add Income':'📤 Add Expenditure';
-    document.getElementById('bankLabel').textContent=type==='income'?'Bank Received Into':'Bank Used From';
+    document.getElementById('addModalTitle').innerHTML = `<span class="material-symbols-outlined">add_circle</span> ${type==='income'?'Add Income':'Add Expenditure'}`;
+    document.getElementById('bankLabel').textContent   = type==='income'?'Bank Received Into':'Bank Used From';
     selectedFile=null;
     updateCategoryOptions();
     document.getElementById('addModal').classList.add('show');
@@ -1180,13 +1326,14 @@
     const el=document.getElementById('uploadText');
     if (selectedFile) {
       const size=selectedFile.size<1024*1024?(selectedFile.size/1024).toFixed(1)+' KB':(selectedFile.size/1024/1024).toFixed(1)+' MB';
-      el.innerHTML=`<strong style="color:#28a745;">✅ ${selectedFile.name}</strong><br><span style="font-size:.7rem;color:#888;">${size} · Tap to change</span>`;
+      el.innerHTML=`<strong style="color:#28a745;">${selectedFile.name}</strong><br><span style="font-size:.7rem;color:#888;">${size} · Tap to change</span>`;
     } else {
-      el.innerHTML='Tap to attach receipt (image or PDF)';
+      el.innerHTML='Tap to attach receipt';
     }
   }
 
   async function saveRecord() {
+    if (!canCreate) { showToast('Permission denied.','error'); return; }
     const btn=document.getElementById('saveRecordBtn');
     const type=document.getElementById('recordType').value;
     const date=document.getElementById('recordDate').value;
@@ -1200,16 +1347,15 @@
 
     btn.textContent='Saving…'; btn.disabled=true;
 
-    let receiptUrl=null,receiptType=null;
+    // Receipt upload — path maintained for later fix
+    let receiptUrl=null, receiptType=null;
     if (selectedFile) {
       try {
-        const storageRef=firebase.storage().ref();
-        const fileRef=storageRef.child(`receipts/${Date.now()}_${selectedFile.name}`);
-        const snapshot=await fileRef.put(selectedFile);
-        receiptUrl=await snapshot.ref.getDownloadURL();
-        receiptType=selectedFile.type.includes('pdf')?'pdf':'image';
+        const ref = storage.ref(`receipts/${Date.now()}_${selectedFile.name}`);
+        const snap = await ref.put(selectedFile);
+        receiptUrl = await snap.ref.getDownloadURL();
+        receiptType = selectedFile.type.includes('pdf') ? 'pdf' : 'image';
       } catch(e) {
-        console.error('Upload error:',e);
         showToast('Receipt upload failed — saved without it','error');
       }
     }
@@ -1219,56 +1365,49 @@
       receiptUrl,receiptType,createdAt:new Date().toISOString()
     });
 
+    await logAudit('finance_record_added', `Added ${type} record: ${category} — ₦${amount} via ${bank}`);
     showToast('Record saved!','success');
-    closeModal('addModal');
-    btn.textContent='Save Record'; btn.disabled=false; selectedFile=null;
+    closeModal('addModal'); btn.textContent='Save Record'; btn.disabled=false; selectedFile=null;
     await loadAll();
   }
 
   async function deleteRecord(id) {
+    if (!canEdit) { showToast('Permission denied.','error'); return; }
     const record=allRecords.find(r=>r.id===id);
     if (!record||!isWithin24h(record.createdAt)) { showToast('Records cannot be deleted after 24 hours','error'); return; }
     if (!confirm('Delete this record?')) return;
     await db.collection('finance_records').doc(id).delete();
     allRecords=allRecords.filter(r=>r.id!==id);
     applyFilter(); updateBankCards();
+    await logAudit('finance_record_deleted', `Deleted finance record: ${id}`);
     showToast('Record deleted','success');
   }
 
-  // --- Bank Detail ---
+  // ── Bank Detail ──
   function openBankDetail(bankName) {
     const balance=getBankBalance(bankName);
     const colors={UBA:'#cc0000',PalmPay:'#00a854',Cash:'#fd7e14'};
-    const icons={UBA:'🏦',PalmPay:'📱',Cash:'💵'};
-    const accts={UBA:'2069626773',PalmPay:'9035206283',Cash:'Physical Cash'};
-    const color=colors[bankName];
+    const icons ={UBA:'account_balance',PalmPay:'smartphone',Cash:'payments'};
+    const accts ={UBA:'2069626773',PalmPay:'9035206283',Cash:'Physical Cash'};
+    const color =colors[bankName];
     const otherBanks=['UBA','PalmPay','Cash'].filter(b=>b!==bankName);
 
-    const bankTxns=allRecords.filter(r=>r.bank===bankName);
-    const bankTransfers=allTransfers.filter(t=>t.from===bankName||t.to===bankName);
     const allTxns=[
-      ...bankTxns.map(r=>({...r,txnType:r.type})),
-      ...bankTransfers.map(t=>({...t,txnType:'transfer'}))
+      ...allRecords.filter(r=>r.bank===bankName).map(r=>({...r,txnType:r.type})),
+      ...allTransfers.filter(t=>t.from===bankName||t.to===bankName).map(t=>({...t,txnType:'transfer'}))
     ].sort((a,b)=>new Date(b.date)-new Date(a.date));
 
-    document.getElementById('bankDetailTitle').textContent=`${icons[bankName]} ${bankName}`;
-    document.getElementById('bankDetailContent').innerHTML=`
-      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;padding-bottom:1rem;border-bottom:1px solid #edf0f4;">
-        <div style="width:48px;height:48px;border-radius:50%;background:${color}20;display:flex;align-items:center;justify-content:center;font-size:1.4rem;">${icons[bankName]}</div>
-        <div>
-          <div style="font-family:'Merriweather',serif;font-size:1rem;font-weight:700;">${bankName}</div>
-          <div style="font-size:.7rem;color:#aaa;font-family:monospace;">${accts[bankName]}</div>
-          <div style="font-size:1.4rem;font-weight:700;color:${color};margin-top:.2rem;">${fmt(balance)}</div>
-        </div>
-      </div>
+    document.getElementById('bankDetailTitle').innerHTML=`<span class="material-symbols-outlined" style="color:${color};font-size:1.1rem;">${icons[bankName]}</span> ${bankName}`;
+
+    const transferSection = canCreate ? `
       <div style="background:#f7f9fc;border:1px solid #edf0f4;border-radius:8px;padding:1rem;margin-bottom:1.2rem;">
         <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:.9rem;">
-          ⇄ ${bankName==='Cash'?'Deposit Cash Into Bank':'Transfer Funds'}
+          ${bankName==='Cash'?'Deposit Cash Into Bank':'Transfer Funds'}
         </div>
         <div style="display:flex;flex-direction:column;gap:.75rem;">
           <div>
             <label style="display:block;font-size:.75rem;font-weight:700;color:#555;margin-bottom:.35rem;">Transfer To</label>
-            <select class="form-input" id="qTransferTo">${otherBanks.map(b=>`<option value="${b}">${icons[b]} ${b}</option>`).join('')}</select>
+            <select class="form-input" id="qTransferTo">${otherBanks.map(b=>`<option value="${b}">${b}</option>`).join('')}</select>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
             <div>
@@ -1285,53 +1424,65 @@
             <input type="text" class="form-input" id="qTransferDesc" placeholder="${bankName==='Cash'?'e.g. Cash deposit into UBA…':'e.g. Interbank transfer…'}"/>
           </div>
           <button onclick="saveQuickTransfer('${bankName}')" style="background:${color};color:#fff;border:none;border-radius:6px;padding:.6rem 1.2rem;font-family:'Open Sans',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;align-self:flex-start;">
-            Confirm Transfer →
+            Confirm Transfer
           </button>
         </div>
+      </div>` : '';
+
+    document.getElementById('bankDetailContent').innerHTML=`
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;padding-bottom:1rem;border-bottom:1px solid #edf0f4;">
+        <div style="width:48px;height:48px;border-radius:50%;background:${color}20;display:flex;align-items:center;justify-content:center;">
+          <span class="material-symbols-outlined" style="color:${color};font-size:1.4rem;">${icons[bankName]}</span>
+        </div>
+        <div>
+          <div style="font-family:'Merriweather',serif;font-size:1rem;font-weight:700;">${bankName}</div>
+          <div style="font-size:.7rem;color:#aaa;font-family:monospace;">${accts[bankName]}</div>
+          <div style="font-size:1.4rem;font-weight:700;color:${color};margin-top:.2rem;">${fmt(balance)}</div>
+        </div>
       </div>
+      ${transferSection}
       <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:.7rem;">
         Transaction History (${allTxns.length})
       </div>
       ${allTxns.length?`
-      <div style="max-height:260px;overflow-y:auto;border:1px solid #edf0f4;border-radius:6px;">
+      <div style="max-height:280px;overflow-y:auto;border:1px solid #edf0f4;border-radius:6px;">
         ${allTxns.map(t=>{
-          let label='',amtHtml='',icon='';
-          if (t.txnType==='income') {
-            label=t.category||'Income'; amtHtml=`<span style="color:#28a745;font-weight:700;">+${fmt(t.amount)}</span>`; icon='📥';
-          } else if (t.txnType==='expenditure') {
-            label=t.category||'Expense'; amtHtml=`<span style="color:#dc3545;font-weight:700;">−${fmt(t.amount)}</span>`; icon='📤';
-          } else {
+          let label='',amtHtml='',iconName='';
+          if (t.txnType==='income')       { label=t.category||'Income';    amtHtml=`<span style="color:#28a745;font-weight:700;">+${fmt(t.amount)}</span>`; iconName='arrow_downward'; }
+          else if (t.txnType==='expenditure') { label=t.category||'Expense'; amtHtml=`<span style="color:#dc3545;font-weight:700;">−${fmt(t.amount)}</span>`; iconName='arrow_upward'; }
+          else {
             const isIn=t.to===bankName;
             label=isIn?`From ${t.from}`:`To ${t.to}`;
             amtHtml=isIn?`<span style="color:#28a745;font-weight:700;">+${fmt(t.amount)}</span>`:`<span style="color:#dc3545;font-weight:700;">−${fmt(t.amount)}</span>`;
-            icon='⇄';
+            iconName='swap_horiz';
           }
           return `<div style="display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem;border-bottom:1px solid #f5f5f5;">
             <div style="display:flex;align-items:center;gap:.6rem;">
-              <span style="font-size:.95rem;">${icon}</span>
+              <span class="material-symbols-outlined" style="font-size:1rem;color:#888;">${iconName}</span>
               <div>
                 <div style="font-size:.82rem;font-weight:700;color:#333;">${label}</div>
                 <div style="font-size:.7rem;color:#aaa;">${fmtDate(t.date)}${t.description?' · '+t.description:''}</div>
               </div>
             </div>
             <div>${amtHtml}</div>
-          </div>`;
-        }).join('')}
+          </div>`;}).join('')}
       </div>`:'<div style="text-align:center;color:#bbb;font-size:.82rem;padding:1.2rem;border:1px solid #edf0f4;border-radius:6px;">No transactions yet</div>'}`;
 
     document.getElementById('bankDetailModal').classList.add('show');
   }
 
   async function saveQuickTransfer(fromBank) {
+    if (!canCreate) { showToast('Permission denied.','error'); return; }
     const to=document.getElementById('qTransferTo').value;
     const amount=parseFloat(document.getElementById('qTransferAmt').value);
     const date=document.getElementById('qTransferDate').value;
     const description=document.getElementById('qTransferDesc').value.trim();
     if (!amount||amount<=0) { showToast('Enter a valid amount','error'); return; }
-    if (fromBank===to) { showToast('Cannot transfer to the same account','error'); return; }
+    if (fromBank===to)      { showToast('Cannot transfer to the same account','error'); return; }
     const bal=getBankBalance(fromBank);
     if (amount>bal) { showToast(`Insufficient balance in ${fromBank}. Available: ${fmt(bal)}`,'error'); return; }
     await db.collection('finance_transfers').add({from:fromBank,to,amount,date,description,createdAt:new Date().toISOString()});
+    await logAudit('finance_transfer', `Transferred ${fmt(amount)} from ${fromBank} to ${to}`);
     showToast(`${fmt(amount)} transferred from ${fromBank} to ${to}!`,'success');
     closeModal('bankDetailModal');
     await loadAll();
@@ -1352,6 +1503,7 @@
   }
 
   function exportCSV() {
+    if (!canExport) { showToast('You do not have export permission.','error'); return; }
     const records=getFilteredRecords();
     const rows=[['Date','Type','Category','Bank','Description','Amount','Notes']];
     records.forEach(r=>rows.push([r.date,r.type,r.category,r.bank||'',r.description||'',r.amount,r.notes||'']));
@@ -1361,6 +1513,7 @@
     a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
     a.download=`GECC_Finance_${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
+    logAudit('finance_exported', `Finance records exported as CSV`);
   }
 
   function switchTab(name,btn) {
@@ -1368,27 +1521,37 @@
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
     document.getElementById('tab-'+name).classList.add('active');
     btn.classList.add('active');
-    document.getElementById('addRecordBtn').style.display=(name==='dues'||name==='reports')?'none':'inline-flex';
+    const addBtn = document.getElementById('addRecordBtn');
+    if (addBtn) addBtn.style.display=(name==='dues'||name==='reports')?'none':'inline-flex';
   }
 
   function closeModal(id) { document.getElementById(id).classList.remove('show'); }
   document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');}));
 
-  function doLogout() {
-    auth.signOut().then(()=>{localStorage.removeItem('userRole');localStorage.removeItem('userEmail');window.location.href='auth.html';});
+  async function logAudit(action, description) {
+    try {
+      await db.collection('audit_logs').add({
+        action, description,
+        performedBy: userName, performedByRole: role, userId,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } catch(e) {}
   }
 
-  const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click',()=>{sidebar.classList.toggle('open');overlay.classList.toggle('show');});
-  function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('show');}
-
-  function showToast(msg,type){
-    const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;
+  function doLogout() {
+    auth.signOut().then(()=>{ localStorage.clear(); window.location.href='auth.html'; });
+  }
+  function showToast(msg,type) {
+    const t=document.getElementById('toast');
+    t.textContent=msg; t.className='toast show '+type;
     setTimeout(()=>t.className='toast',2800);
   }
 
+  const sidebarEl=document.getElementById('sidebar'), overlayEl=document.getElementById('overlay');
+  document.getElementById('hamburger').addEventListener('click',()=>{ sidebarEl.classList.toggle('open'); overlayEl.classList.toggle('show'); });
+  function closeSidebar(){ sidebarEl.classList.remove('open'); overlayEl.classList.remove('show'); }
+
   updateCategoryOptions();
-  loadAll();
 </script>
 </body>
-  </html>
+        </html>
