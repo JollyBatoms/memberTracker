@@ -381,7 +381,7 @@
         <div class="compose-top">
           <div class="user-avatar" id="composeAvatarEl" style="background:linear-gradient(135deg,#0066cc,#6c63ff);">U</div>
           <div class="compose-trigger" onclick="openCompose()" id="composeTrigger">
-            What's on your heart, <span id="composeName">friend</span>?
+            What's on your mind?, <span id="composeName">friend</span>?
           </div>
         </div>
 
@@ -872,7 +872,7 @@ function renderPost(post) {
           <span class="material-symbols-outlined">${myReact==='like'?'thumb_up':'thumb_up'}</span>
           Like${likeC?' ('+likeC+')':''}
         </button>
-        <button class="footer-btn ${myReact==='love'?'reacted':''}" onclick="reactPost('${post.id}','pray')">
+        <button class="footer-btn ${myReact===''?'reacted':''}" onclick="reactPost('${post.id}','love')">
           <span class="material-symbols-outlined">volunteer_activism</span>
           Pray${prayC?' ('+prayC+')':''}
         </button>
