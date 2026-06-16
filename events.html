@@ -505,14 +505,21 @@
     const btn = document.getElementById('btnSave');
     btn.disabled = true; btn.textContent = 'Saving…';
 
-    // ── Upload image to Firebase Storage ──
+// ── Upload image to Cloudinary ──
     let finalImageUrl = currentImageUrl;
     if (selectedImageFile) {
       try {
         document.getElementById('imgUploading').style.display = 'block';
-        const ref = storage.ref('event_images/' + Date.now() + '_' + selectedImageFile.name);
-        const snap = await ref.put(selectedImageFile);
-        finalImageUrl = await snap.ref.getDownloadURL();
+        const formData = new FormData();
+        formData.append('file', selectedImageFile);
+        formData.append('upload_preset', 'gecc-uniport');
+        const res = await fetch('https://api.cloudinary.com/v1_1/df5pitgrp/image/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (!data.secure_url) throw new Error(data.error?.message || 'Upload failed');
+        finalImageUrl = data.secure_url;
         document.getElementById('imgUploading').style.display = 'none';
       } catch(err) {
         document.getElementById('imgUploading').style.display = 'none';
@@ -522,6 +529,7 @@
       }
     }
 
+  
     const data = {
       title:       document.getElementById('fTitle').value.trim(),
       date:        document.getElementById('fDate').value,
