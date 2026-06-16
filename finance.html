@@ -1347,18 +1347,28 @@
 
     btn.textContent='Saving…'; btn.disabled=true;
 
-    // Receipt upload — path maintained for later fix
+// Receipt upload via Cloudinary
     let receiptUrl=null, receiptType=null;
     if (selectedFile) {
       try {
-        const ref = storage.ref(`receipts/${Date.now()}_${selectedFile.name}`);
-        const snap = await ref.put(selectedFile);
-        receiptUrl = await snap.ref.getDownloadURL();
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        formData.append('upload_preset', 'gecc-uniport');
+        const resourceType = selectedFile.type.includes('pdf') ? 'raw' : 'image';
+        const res = await fetch(`https://api.cloudinary.com/v1_1/df5pitgrp/${resourceType}/upload`, {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (!data.secure_url) throw new Error(data.error?.message || 'Upload failed');
+        receiptUrl = data.secure_url;
         receiptType = selectedFile.type.includes('pdf') ? 'pdf' : 'image';
       } catch(e) {
         showToast('Receipt upload failed — saved without it','error');
       }
     }
+
+    
 
     await db.collection('finance_records').add({
       type,date,amount:parseFloat(amount),category,bank,description,notes,
