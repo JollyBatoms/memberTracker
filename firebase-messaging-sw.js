@@ -7,8 +7,8 @@ firebase.initializeApp({
   authDomain: "gecc-uniport.firebaseapp.com",
   projectId: "gecc-uniport",
   storageBucket: "gecc-uniport.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  messagingSenderId: "565729305146",
+  appId: "1:565729305146:web:2973acd0293903725acb03"
 });
 
 const messaging = firebase.messaging();
