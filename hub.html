@@ -3,256 +3,121 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GECC Uniport — Fellowship Hub</title>
+  <title>GECC Uniport — Sign In</title>
   <link rel="manifest" href="manifest.json" />
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --blue:#0066cc; --green:#28a745; --red:#dc3545; --sidebar-w:240px; }
-    html, body { height:100%; font-family:'Open Sans',sans-serif; background:#f0f2f5; color:#1a1a1a; }
+    html, body { height: 100%; font-family: 'Open Sans', sans-serif; background: #f0f2f5; color: #1a1a1a; }
 
-    .admin-bar { display:none; position:fixed; top:0; left:0; right:0; height:28px; background:#0066cc; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; color:#fff; letter-spacing:.08em; text-transform:uppercase; z-index:200; }
-    .admin-bar.show { display:flex; }
-    .admin-bar.member-bar { background:#28a745; }
-    .admin-bar.super-bar  { background:linear-gradient(90deg,#0066cc,#6c63ff); }
-    .admin-bar span { opacity:.8; font-weight:400; margin-left:.5rem; text-transform:none; letter-spacing:0; }
+    .auth-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem 1rem; }
+    .auth-box { background: #fff; border-radius: 14px; box-shadow: 0 4px 32px rgba(0,0,0,.12); width: 100%; max-width: 420px; overflow: hidden; }
 
-    .sidebar { position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh; background:#fff; border-right:1px solid #dde3ec; display:flex; flex-direction:column; z-index:100; transition:transform .3s; }
-    .sidebar.offset { top:28px; height:calc(100vh - 28px); }
-    .sidebar-brand { display:flex; align-items:center; gap:.7rem; padding:1rem 1.1rem; border-bottom:1px solid #dde3ec; cursor:pointer; }
-    .brand-logos { display:flex; align-items:center; gap:.3rem; }
-    .brand-logo { width:30px; height:30px; border-radius:50%; overflow:hidden; border:1px solid #dde3ec; }
-    .brand-logo img { width:100%; height:100%; object-fit:contain; }
-    .brand-text { display:flex; flex-direction:column; line-height:1.25; }
-    .brand-name { font-family:'Merriweather',serif; font-size:.75rem; font-weight:700; color:#0066cc; }
-    .brand-sub  { font-size:.6rem; color:#999; letter-spacing:.06em; text-transform:uppercase; }
-    .nav-section { flex:1; overflow-y:auto; padding:.6rem 0; }
-    .nav-label { font-size:.6rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#aaa; padding:.6rem 1.1rem .25rem; }
-    .nav-item { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; color:#555; font-size:.85rem; font-weight:600; text-decoration:none; border-left:3px solid transparent; transition:color .2s,background .2s,border-color .2s; }
-    .nav-item:hover  { color:#0066cc; background:#f0f5ff; }
-    .nav-item.active { color:#0066cc; background:#eef4ff; border-left-color:#0066cc; }
-    .nav-item .icon { width:20px; text-align:center; flex-shrink:0; }
-    .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; font-size:1.15rem; line-height:1; }
-    .nav-bottom { border-top:1px solid #dde3ec; padding:.5rem 0; }
-    .btn-logout { display:flex; align-items:center; gap:.65rem; padding:.6rem 1.1rem; width:100%; background:none; border:none; color:#dc3545; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; cursor:pointer; }
-    .btn-logout:hover { background:#fff5f5; }
+    .auth-header { background: linear-gradient(135deg, #0066cc, #6c63ff); padding: 2rem 1.5rem 1.8rem; text-align: center; }
+    .auth-header-logos { display: flex; align-items: center; justify-content: center; gap: .6rem; margin-bottom: 1rem; }
+    .auth-logo { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; border: 2.5px solid rgba(255,255,255,.6); background: #fff; }
+    .auth-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .auth-header h1 { font-family: 'Merriweather', serif; font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: .3rem; }
+    .auth-header p  { font-size: .78rem; color: rgba(255,255,255,.8); }
 
-    .topbar { display:none; position:fixed; top:0; left:0; right:0; height:54px; background:#fff; border-bottom:1px solid #dde3ec; align-items:center; justify-content:space-between; padding:0 1rem; z-index:99; }
-    .topbar.offset { top:28px; }
-    .topbar-brand { display:flex; align-items:center; gap:.5rem; font-family:'Merriweather',serif; font-size:.8rem; font-weight:700; color:#0066cc; cursor:pointer; }
-    .topbar-brand .brand-logo { width:26px; height:26px; }
-    .hamburger { background:none; border:none; cursor:pointer; color:#555; padding:.3rem; display:flex; flex-direction:column; gap:5px; }
-    .hamburger span { display:block; width:22px; height:2px; background:currentColor; border-radius:2px; }
-    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:98; }
-    .overlay.show { display:block; }
+    .auth-tabs { display: flex; border-bottom: 1px solid #edf0f4; }
+    .auth-tab { flex: 1; padding: .85rem; font-family: 'Open Sans', sans-serif; font-size: .88rem; font-weight: 700; color: #888; background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; transition: color .2s, border-color .2s; }
+    .auth-tab.active { color: #0066cc; border-bottom-color: #0066cc; }
 
-    .main { margin-left:var(--sidebar-w); min-height:100vh; }
-    .main.offset { margin-top:28px; }
-    .main-bar { height:4px; background:#0066cc; }
-    .main-bar.member-bar { background:#28a745; }
-    .main-bar.super-bar  { background:linear-gradient(90deg,#0066cc,#6c63ff); }
+    .auth-body { padding: 1.6rem 1.5rem 2rem; }
+    .auth-panel { display: none; }
+    .auth-panel.active { display: block; }
 
-    .hub-layout { display:flex; gap:1.2rem; padding:1.2rem 1.4rem; max-width:1100px; margin:0 auto; }
+    .form-group { margin-bottom: 1rem; }
+    .form-label { display: block; font-size: .75rem; font-weight: 700; color: #444; margin-bottom: .4rem; }
+    .input-wrap { position: relative; }
+    .input-wrap .field-icon { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; color: #aaa; pointer-events: none; }
+    .form-input { width: 100%; padding: .72rem .9rem .72rem 2.7rem; border: 1.5px solid #dde3ec; border-radius: 8px; font-family: 'Open Sans', sans-serif; font-size: .9rem; color: #1a1a1a; background: #f7f9fc; outline: none; transition: border-color .2s, background .2s; }
+    .form-input:focus { border-color: #0066cc; background: #fff; }
+    .form-input.invalid { border-color: #dc3545; }
+    .form-input.no-icon { padding-left: .9rem; }
+    .password-wrap .form-input { padding-right: 2.8rem; }
+    .toggle-pw { position: absolute; right: .85rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #aaa; display: flex; align-items: center; }
+    .toggle-pw:hover { color: #555; }
 
-    /* Left sidebar — filters */
-    .hub-left { width:200px; flex-shrink:0; }
-    .hub-left-sticky { position:sticky; top:calc(28px + 1.2rem); }
-    .hub-nav-title { font-size:.68rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#aaa; margin-bottom:.6rem; padding:0 .5rem; }
-    .hub-nav-item { display:flex; align-items:center; gap:.6rem; padding:.6rem .75rem; border-radius:8px; font-size:.85rem; font-weight:600; color:#444; cursor:pointer; transition:background .15s,color .15s; margin-bottom:.15rem; border:none; background:none; width:100%; font-family:'Open Sans',sans-serif; }
-    .hub-nav-item:hover  { background:#e4e6eb; color:#0066cc; }
-    .hub-nav-item.active { background:#dde8fb; color:#0066cc; font-weight:700; }
-    .hub-nav-item .material-symbols-outlined { font-size:1.1rem; }
-    .hub-nav-divider { height:1px; background:#dde3ec; margin:.6rem 0; }
+    .field-err { font-size: .72rem; color: #dc3545; margin-top: .3rem; display: none; }
+    .field-err.show { display: block; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
 
-    /* Center feed */
-    .hub-center { flex:1; min-width:0; max-width:600px; }
+    .select-wrap { position: relative; }
+    .select-wrap::after { content: ''; position: absolute; right: .85rem; top: 50%; transform: translateY(-50%); border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid #888; pointer-events: none; }
+    .select-wrap .field-icon { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; color: #aaa; pointer-events: none; z-index:1; }
+    .form-select { width: 100%; padding: .72rem .9rem .72rem 2.7rem; border: 1.5px solid #dde3ec; border-radius: 8px; font-family: 'Open Sans', sans-serif; font-size: .88rem; color: #1a1a1a; background: #f7f9fc; outline: none; appearance: none; transition: border-color .2s; cursor: pointer; }
+    .form-select:focus { border-color: #0066cc; background: #fff; }
+    .form-select.invalid { border-color: #dc3545; }
 
-    /* Right sidebar — trending/info */
-    .hub-right { width:240px; flex-shrink:0; }
-    .hub-right-sticky { position:sticky; top:calc(28px + 1.2rem); }
-    .hub-widget { background:#fff; border-radius:10px; border:1px solid #dde3ec; padding:1rem; margin-bottom:1rem; box-shadow:0 1px 3px rgba(0,0,0,.04); }
-    .hub-widget-title { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:#aaa; margin-bottom:.8rem; }
-    .trending-item { display:flex; align-items:center; gap:.6rem; padding:.4rem 0; border-bottom:1px solid #f0f0f0; cursor:pointer; }
-    .trending-item:last-child { border-bottom:none; }
-    .trending-num { font-size:.72rem; font-weight:700; color:#aaa; width:18px; flex-shrink:0; }
-    .trending-tag  { font-size:.82rem; font-weight:700; color:#0066cc; }
-    .trending-count { font-size:.7rem; color:#aaa; }
+    .avatar-section { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; padding: .9rem; background: #f7f9fc; border: 1.5px dashed #dde3ec; border-radius: 8px; cursor: pointer; transition: border-color .2s; }
+    .avatar-section:hover { border-color: #0066cc; background: #f0f5ff; }
+    .avatar-preview { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg,#0066cc,#6c63ff); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; border: 2px solid #dde3ec; }
+    .avatar-preview img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .avatar-preview .avatar-ph { display: flex; align-items: center; justify-content: center; }
+    .avatar-text .title { font-size: .84rem; font-weight: 700; color: #333; }
+    .avatar-text .sub   { font-size: .72rem; color: #888; margin-top: .15rem; }
+    .avatar-uploading   { font-size: .72rem; color: #0066cc; font-weight: 700; margin-top: .25rem; display: none; }
 
-    /* Compose */
-    .compose-card { background:#fff; border-radius:10px; border:1px solid #dde3ec; margin-bottom:1rem; box-shadow:0 1px 4px rgba(0,0,0,.04); overflow:hidden; }
-    .compose-top { display:flex; align-items:flex-start; gap:.75rem; padding:1rem 1rem .7rem; }
-    .user-avatar { width:40px; height:40px; border-radius:50%; object-fit:cover; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:700; color:#fff; }
-    .compose-trigger { flex:1; padding:.7rem 1rem; border:1.5px solid #dde3ec; border-radius:22px; font-family:'Open Sans',sans-serif; font-size:.9rem; color:#888; background:#f0f2f5; cursor:text; transition:border-color .2s; }
-    .compose-trigger:hover { border-color:#0066cc; background:#f5f8ff; }
+    .alert { border-radius: 7px; padding: .8rem 1rem; font-size: .84rem; margin-bottom: 1rem; display: none; line-height: 1.5; }
+    .alert.show { display: block; }
+    .alert-error   { background: #fdecea; color: #c62828; border: 1px solid #f5b7b1; }
+    .alert-info    { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+    .alert-success { background: #eafaf0; color: #1e7e34; border: 1px solid #a3d9b1; }
 
-    /* Compose expanded */
-    .compose-expanded { display:none; }
-    .compose-expanded.open { display:block; }
-    .compose-textarea { width:100%; padding:.75rem 1rem; border:none; border-top:1px solid #f0f0f0; font-family:'Open Sans',sans-serif; font-size:.92rem; color:#1a1a1a; background:#fff; resize:none; outline:none; min-height:80px; line-height:1.6; }
-    .compose-title-input { width:100%; padding:.55rem 1rem; border:none; border-top:1px solid #f0f0f0; font-family:'Merriweather',serif; font-size:.95rem; font-weight:700; color:#1a1a1a; background:#fff; outline:none; }
-    .compose-title-input::placeholder { font-family:'Open Sans',sans-serif; font-weight:400; color:#bbb; }
+    .btn-primary { width: 100%; padding: .82rem; background: #0066cc; color: #fff; font-family: 'Open Sans', sans-serif; font-size: .92rem; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: background .2s; display: flex; align-items: center; justify-content: center; gap: .5rem; }
+    .btn-primary:hover    { background: #0052a3; }
+    .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
 
-    .compose-img-preview { display:none; position:relative; margin:0 1rem .7rem; border-radius:8px; overflow:hidden; border:1px solid #dde3ec; }
-    .compose-img-preview img { width:100%; max-height:320px; object-fit:cover; display:block; }
-    .compose-img-remove { position:absolute; top:.5rem; right:.5rem; background:rgba(0,0,0,.6); color:#fff; border:none; border-radius:50%; width:30px; height:30px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:.9rem; transition:background .2s; }
-    .compose-img-remove:hover { background:rgba(220,53,69,.85); }
+    .pending-screen, .blocked-screen { display: none; text-align: center; padding: 2rem 1.5rem; }
+    .pending-screen.show, .blocked-screen.show { display: block; }
+    .screen-icon { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+    .screen-icon.orange { background: #fff8e1; }
+    .screen-icon.red    { background: #fdecea; }
+    .screen-icon .material-symbols-outlined { font-size: 2.2rem; }
+    .screen-icon.orange .material-symbols-outlined { color: #f57f17; }
+    .screen-icon.red    .material-symbols-outlined { color: #dc3545; }
+    .screen-h2 { font-family: 'Merriweather', serif; font-size: 1rem; font-weight: 700; margin-bottom: .6rem; }
+    .screen-p  { font-size: .84rem; color: #666; line-height: 1.6; margin-bottom: 1rem; }
+    .pending-email { font-size: .78rem; background: #f7f9fc; border: 1px solid #dde3ec; border-radius: 6px; padding: .6rem .9rem; color: #333; font-family: monospace; }
+    .btn-signout { margin-top: 1.2rem; width: 100%; padding: .72rem; background: none; color: #dc3545; border: 1.5px solid #dc3545; font-family: 'Open Sans', sans-serif; font-size: .88rem; font-weight: 700; border-radius: 8px; cursor: pointer; transition: background .2s; display: flex; align-items: center; justify-content: center; gap: .4rem; }
+    .btn-signout:hover { background: #fff0f0; }
 
-    .compose-file-preview { display:none; align-items:center; gap:.6rem; margin:0 1rem .7rem; background:#eef4ff; border:1px solid #c5d9f5; border-radius:6px; padding:.65rem .9rem; }
-    .compose-file-name { font-size:.82rem; font-weight:700; color:#0066cc; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    .compose-file-remove { background:none; border:none; color:#dc3545; cursor:pointer; flex-shrink:0; display:flex; align-items:center; }
+    .steps { display: flex; align-items: center; margin-bottom: 1.4rem; }
+    .step  { display: flex; align-items: center; gap: .4rem; }
+    .step-dot { width: 28px; height: 28px; border-radius: 50%; background: #dde3ec; color: #888; font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .3s,color .3s; }
+    .step-dot.active   { background: #0066cc; color: #fff; }
+    .step-dot.complete { background: #28a745; color: #fff; }
+    .step-label { font-size: .72rem; font-weight: 700; color: #aaa; }
+    .step-label.active   { color: #0066cc; }
+    .step-label.complete { color: #28a745; }
+    .step-line { flex: 1; height: 2px; background: #dde3ec; margin: 0 .5rem; transition: background .3s; }
+    .step-line.complete { background: #28a745; }
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+    .step-nav { display: flex; gap: .6rem; margin-top: 1.2rem; }
+    .btn-back { flex: 1; padding: .72rem; background: none; border: 1.5px solid #dde3ec; color: #555; font-family: 'Open Sans', sans-serif; font-size: .88rem; font-weight: 700; border-radius: 8px; cursor: pointer; }
+    .btn-back:hover { background: #f7f9fc; }
+    .btn-next { flex: 2; padding: .72rem; background: #0066cc; color: #fff; border: none; font-family: 'Open Sans', sans-serif; font-size: .88rem; font-weight: 700; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: .4rem; }
+    .btn-next:hover    { background: #0052a3; }
+    .btn-next:disabled { opacity: .6; cursor: not-allowed; }
 
-    .compose-type-row { display:flex; align-items:center; gap:.6rem; padding:.5rem 1rem; border-top:1px solid #f0f0f0; }
-    .compose-type-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:#aaa; }
-    .compose-type-select { padding:.35rem .75rem; border:1.5px solid #dde3ec; border-radius:20px; font-family:'Open Sans',sans-serif; font-size:.8rem; font-weight:700; color:#444; background:#fff; cursor:pointer; outline:none; appearance:none; }
+    .pw-strength-wrap { margin-top: .5rem; display: none; }
+    .pw-strength-bar  { height: 4px; background: #edf0f4; border-radius: 2px; overflow: hidden; margin-bottom: .25rem; }
+    .pw-strength-fill { height: 100%; width: 0%; border-radius: 2px; transition: width .3s,background .3s; }
 
-    .upload-progress-bar { display:none; height:3px; background:#eef4ff; }
-    .upload-progress-fill { height:100%; background:#0066cc; width:0%; transition:width .3s; }
-    .upload-label { display:none; font-size:.75rem; color:#0066cc; font-weight:600; padding:.4rem 1rem; background:#eef4ff; }
+    .forgot-box { margin-top: 1.2rem; background: #f7f9fc; border: 1px solid #dde3ec; border-radius: 8px; padding: 1rem; display: none; }
+    .forgot-box.show { display: block; }
 
-    .compose-actions { display:flex; align-items:center; justify-content:space-between; padding:.65rem 1rem; border-top:1px solid #f0f0f0; }
-    .compose-media-btns { display:flex; gap:.2rem; }
-    .media-btn { display:flex; align-items:center; gap:.3rem; padding:.4rem .7rem; border:none; background:none; border-radius:6px; font-family:'Open Sans',sans-serif; font-size:.8rem; font-weight:700; color:#606770; cursor:pointer; transition:background .15s,color .15s; }
-    .media-btn:hover { background:#f0f2f5; color:#0066cc; }
-    .media-btn .material-symbols-outlined { font-size:1.1rem; }
-    .btn-post { padding:.55rem 1.3rem; background:#0066cc; color:#fff; border:none; border-radius:6px; font-family:'Open Sans',sans-serif; font-size:.85rem; font-weight:700; cursor:pointer; transition:background .2s; }
-    .btn-post:hover { background:#0052a3; }
-    .btn-post:disabled { opacity:.55; cursor:not-allowed; }
-    .btn-cancel-compose { padding:.55rem .9rem; background:none; border:1.5px solid #dde3ec; color:#555; border-radius:6px; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; cursor:pointer; }
+    .auth-footer { text-align: center; padding: 1rem; border-top: 1px solid #edf0f4; }
+    .auth-footer p { font-size: .75rem; color: #aaa; }
 
-    /* Pending banner */
-    .pending-banner { background:#fff8e1; border:1px solid #ffc107; border-radius:10px; padding:.75rem 1rem; margin-bottom:1rem; display:flex; align-items:center; justify-content:space-between; gap:.8rem; }
-    .pending-banner-text { font-size:.82rem; font-weight:700; color:#664d03; display:flex; align-items:center; gap:.4rem; }
-    .pending-banner-text .material-symbols-outlined { font-size:1rem; color:#ffc107; }
-    .pending-banner-btn { padding:.38rem .85rem; background:#ffc107; color:#1a1a1a; border:none; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; cursor:pointer; }
-
-    /* Post cards */
-    .post-card { background:#fff; border-radius:10px; border:1px solid #dde3ec; margin-bottom:1rem; box-shadow:0 1px 3px rgba(0,0,0,.04); overflow:hidden; transition:box-shadow .2s; }
-    .post-card:hover { box-shadow:0 3px 12px rgba(0,0,0,.09); }
-    .post-card.pending-card { border-left:3px solid #fd7e14; }
-    .post-card.pinned-card  { border-top:3px solid #0066cc; }
-
-    .post-header { display:flex; align-items:flex-start; justify-content:space-between; padding:.9rem 1rem .5rem; gap:.5rem; }
-    .post-author-wrap { display:flex; align-items:center; gap:.65rem; }
-    .post-avatar { width:42px; height:42px; border-radius:50%; object-fit:cover; display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:700; color:#fff; flex-shrink:0; }
-    .post-author-info { flex:1; }
-    .post-name { font-size:.9rem; font-weight:700; color:#1a1a1a; line-height:1.2; }
-    .post-meta { font-size:.72rem; color:#aaa; margin-top:.1rem; display:flex; align-items:center; gap:.4rem; flex-wrap:wrap; }
-
-    .post-badges { display:flex; gap:.3rem; flex-wrap:wrap; margin-top:.25rem; }
-    .badge { display:inline-flex; align-items:center; gap:.2rem; font-size:.62rem; font-weight:700; padding:.16rem .55rem; border-radius:20px; }
-    .badge .material-symbols-outlined { font-size:.72rem; }
-    .badge-pin    { background:#eef4ff; color:#0066cc; }
-    .badge-pending{ background:#fff4e6; color:#c45f00; }
-    .badge-sa     { background:linear-gradient(135deg,#0066cc,#6c63ff); color:#fff; }
-    .badge-admin  { background:#eef4ff; color:#0066cc; }
-
-    /* Post type tag */
-    .post-type-tag { display:inline-flex; align-items:center; gap:.3rem; font-size:.68rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:.22rem .7rem; border-radius:4px; margin:0 1rem .5rem; }
-    .post-type-tag .material-symbols-outlined { font-size:.82rem; }
-    .tag-bible        { background:#e8f5e9; color:#2e7d32; }
-    .tag-sermon       { background:#eef4ff; color:#0066cc; }
-    .tag-announcement { background:#e3f2fd; color:#1565c0; }
-    .tag-testimony    { background:#f3e5f5; color:#6a1b9a; }
-    .tag-devotional   { background:#fff3e0; color:#e65100; }
-    .tag-literature   { background:#fce4ec; color:#880e4f; }
-    .tag-prayer       { background:#f1f8e9; color:#33691e; }
-    .tag-ebook        { background:#e8eaf6; color:#283593; }
-    .tag-resource     { background:#f5f5f5; color:#616161; }
-
-    .post-title { padding:.1rem 1rem .25rem; font-family:'Merriweather',serif; font-size:.95rem; font-weight:700; color:#1a1a1a; }
-    .post-body  { padding:.15rem 1rem .6rem; }
-    .post-text  { font-size:.88rem; color:#333; line-height:1.7; white-space:pre-wrap; word-break:break-word; }
-    .post-text.clamped { display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden; white-space:normal; }
-    .read-more-btn { font-size:.8rem; color:#0066cc; font-weight:700; background:none; border:none; cursor:pointer; padding:.3rem 0 0; display:block; }
-
-    .post-image { width:100%; max-height:500px; object-fit:cover; display:block; cursor:pointer; }
-    .post-attachment { margin:.2rem 1rem .6rem; padding:.75rem .9rem; background:#f7f9fc; border:1px solid #dde3ec; border-radius:8px; display:flex; align-items:center; gap:.65rem; }
-    .attach-icon .material-symbols-outlined { font-size:1.4rem; color:#0066cc; }
-    .attach-info { flex:1; min-width:0; }
-    .attach-name { font-size:.84rem; font-weight:700; color:#333; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block; }
-    .attach-size { font-size:.7rem; color:#aaa; }
-    .attach-dl { display:inline-flex; align-items:center; gap:.2rem; font-size:.78rem; color:#0066cc; font-weight:700; text-decoration:none; padding:.3rem .7rem; border:1px solid #0066cc; border-radius:5px; transition:background .15s; flex-shrink:0; }
-    .attach-dl:hover { background:#eef4ff; }
-    .attach-dl .material-symbols-outlined { font-size:.9rem; }
-
-    .pending-notice { display:flex; align-items:center; gap:.5rem; padding:.55rem 1rem; background:#fff8f0; border-top:1px solid #ffe0b2; font-size:.78rem; color:#c45f00; font-weight:600; }
-    .pending-notice .material-symbols-outlined { font-size:.9rem; }
-
-    /* Reaction bar */
-    .reaction-counts { display:flex; align-items:center; gap:.8rem; padding:.45rem 1rem; border-top:1px solid #f0f0f0; }
-    .reaction-count-item { font-size:.78rem; color:#606770; display:flex; align-items:center; gap:.25rem; }
-
-    .post-footer { display:flex; align-items:center; padding:.35rem .6rem; border-top:1px solid #f0f0f0; gap:.2rem; }
-    .footer-btn { flex:1; display:flex; align-items:center; justify-content:center; gap:.4rem; padding:.6rem .4rem; border:none; background:none; border-radius:8px; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; color:#606770; cursor:pointer; transition:background .15s,color .15s; }
-    .footer-btn:hover { background:#f0f2f5; color:#0066cc; }
-    .footer-btn.reacted { color:#0066cc; }
-    .footer-btn.saved   { color:#28a745; }
-    .footer-btn .material-symbols-outlined { font-size:1.1rem; }
-
-    /* Comments */
-    .comments-wrap { border-top:1px solid #f0f0f0; padding:.9rem 1rem; display:none; }
-    .comments-wrap.open { display:block; }
-    .comment-input-row { display:flex; align-items:flex-start; gap:.6rem; margin-bottom:.9rem; }
-    .comment-avatar { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.82rem; font-weight:700; color:#fff; flex-shrink:0; }
-    .comment-input-box { flex:1; position:relative; }
-    .comment-input { width:100%; padding:.55rem .9rem; padding-right:2.8rem; border:1.5px solid #dde3ec; border-radius:22px; font-family:'Open Sans',sans-serif; font-size:.85rem; background:#f0f2f5; outline:none; resize:none; min-height:38px; max-height:120px; overflow-y:auto; transition:border-color .2s,background .2s; line-height:1.45; }
-    .comment-input:focus { border-color:#0066cc; background:#fff; }
-    .comment-send { position:absolute; right:.5rem; bottom:.4rem; background:none; border:none; cursor:pointer; color:#0066cc; display:flex; align-items:center; opacity:.45; transition:opacity .15s; }
-    .comment-send:hover { opacity:1; }
-    .comment-send .material-symbols-outlined { font-size:1.1rem; }
-
-    .comment-list { display:flex; flex-direction:column; gap:.6rem; }
-    .comment-item { display:flex; gap:.5rem; }
-    .comment-bubble { background:#f0f2f5; border-radius:0 16px 16px 16px; padding:.55rem .85rem; flex:1; min-width:0; }
-    .comment-author { font-size:.78rem; font-weight:700; color:#1a1a1a; margin-bottom:.1rem; }
-    .comment-text   { font-size:.84rem; color:#333; line-height:1.5; word-break:break-word; }
-    .comment-time   { font-size:.68rem; color:#aaa; margin-top:.2rem; }
-    .comment-empty  { font-size:.8rem; color:#bbb; text-align:center; padding:.5rem; }
-
-    .load-more-comments { font-size:.78rem; color:#0066cc; font-weight:700; background:none; border:none; cursor:pointer; padding:.3rem 0; display:block; }
-
-    /* Post menu */
-    .post-menu-wrap { position:relative; flex-shrink:0; }
-    .post-menu-btn { background:none; border:none; color:#aaa; cursor:pointer; padding:.35rem .5rem; border-radius:50%; transition:background .15s; display:flex; align-items:center; }
-    .post-menu-btn:hover { background:#f0f2f5; color:#555; }
-    .post-menu-btn .material-symbols-outlined { font-size:1.2rem; }
-    .post-dropdown { display:none; position:absolute; right:0; top:calc(100% + 4px); z-index:50; background:#fff; border:1px solid #dde3ec; border-radius:10px; min-width:170px; box-shadow:0 4px 20px rgba(0,0,0,.13); overflow:hidden; }
-    .post-dropdown.show { display:block; }
-    .post-dropdown-item { display:flex; align-items:center; gap:.55rem; width:100%; padding:.65rem 1rem; font-family:'Open Sans',sans-serif; font-size:.84rem; font-weight:600; background:none; border:none; border-bottom:1px solid #f5f5f5; color:#333; cursor:pointer; transition:background .15s; text-align:left; }
-    .post-dropdown-item:last-child { border-bottom:none; }
-    .post-dropdown-item:hover { background:#f7f9fc; }
-    .post-dropdown-item.danger { color:#dc3545; }
-    .post-dropdown-item.danger:hover { background:#fff0f0; }
-    .post-dropdown-item .material-symbols-outlined { font-size:1rem; }
-
-    /* Image lightbox */
-    .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,.92); z-index:900; align-items:center; justify-content:center; }
-    .lightbox.show { display:flex; }
-    .lightbox img { max-width:95vw; max-height:95vh; object-fit:contain; border-radius:6px; }
-    .lightbox-close { position:absolute; top:1rem; right:1rem; background:rgba(255,255,255,.15); border:none; color:#fff; border-radius:50%; width:40px; height:40px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.2rem; transition:background .15s; }
-    .lightbox-close:hover { background:rgba(255,255,255,.3); }
-
-    .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; }
-    .empty-state .material-symbols-outlined { font-size:3rem; display:block; margin-bottom:.7rem; color:#dde3ec; }
-
-    .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:8px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; max-width:320px; }
-    .toast.show { opacity:1; transform:translateY(0); }
-    .toast.success { background:#28a745; }
-    .toast.error   { background:#dc3545; }
-    .toast.info    { background:#0066cc; }
-
-    @media(max-width:900px) { .hub-right { display:none; } }
-    @media(max-width:768px) {
-      .sidebar { transform:translateX(-100%); }
-      .sidebar.open { transform:translateX(0); }
-      .topbar { display:flex; }
-      .main { margin-left:0; padding-top:54px; }
-      .main.offset { margin-top:28px; padding-top:54px; }
-      .topbar.offset { top:28px; }
-      .hub-layout { padding:.8rem .75rem 3rem; gap:.75rem; }
-      .hub-left { display:none; }
-      .hub-center { max-width:100%; }
+    @media(max-width:480px) {
+      .auth-box { border-radius: 0; min-height: 100vh; }
+      .auth-wrap { padding: 0; align-items: flex-start; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
     }
   </style>
 </head>
@@ -263,965 +128,794 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 
-<div class="admin-bar" id="adminBar"><span id="adminBarText"></span></div>
+<div class="auth-wrap">
+  <div class="auth-box">
 
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-brand" onclick="window.location.href='index.html'">
-    <div class="brand-logos">
-      <div class="brand-logo"><img src="gecc-logo.jpg" alt="GECC"/></div>
-      <div class="brand-logo"><img src="uniport-logo.jpg" alt="Uniport"/></div>
-    </div>
-    <div class="brand-text">
-      <span class="brand-name">GECC Uniport</span>
-      <span class="brand-sub" id="portalLabel">Member Portal</span>
-    </div>
-  </div>
-  <nav class="nav-section">
-    <div class="nav-label">Menu</div>
-    <a id="navMemo" class="nav-item" href="memo.html" style="display:none"><span class="material-symbols-outlined icon">settings</span> Memo</a>
-    <a class="nav-item" href="dashboard.html"><span class="material-symbols-outlined icon">dashboard</span> Dashboard</a>
-    <a class="nav-item" href="members.html"><span class="material-symbols-outlined icon">group</span> Members</a>
-    <a class="nav-item" href="past-members.html"><span class="material-symbols-outlined icon">history</span> Past Members</a>
-    <a class="nav-item" href="attendance.html"><span class="material-symbols-outlined icon">check_circle</span> Attendance</a>
-    <a id="navFinance" class="nav-item" href="finance.html" style="display:none"><span class="material-symbols-outlined icon">account_balance_wallet</span> Finance</a>
-    <a class="nav-item" href="events.html"><span class="material-symbols-outlined icon">calendar_month</span> Events</a>
-    <a class="nav-item" href="positions.html"><span class="material-symbols-outlined icon">military_tech</span> Positions</a>
-    <a class="nav-item active" href="hub.html"><span class="material-symbols-outlined icon">hub</span> Fellowship Hub</a>
-    <a class="nav-item" href="notifications.html"><span class="material-symbols-outlined icon">notifications</span> Notifications</a>
-    <a id="navUserMgmt" class="nav-item" href="user-management.html" style="display:none"><span class="material-symbols-outlined icon">manage_accounts</span> User Management</a>
-    <a id="navAudit" class="nav-item" href="audit-logs.html" style="display:none"><span class="material-symbols-outlined icon">fact_check</span> Audit Logs</a>
-  </nav>
-  <div class="nav-bottom">
-    <button class="btn-logout" onclick="doLogout()"><span class="material-symbols-outlined icon">logout</span> Logout</button>
-  </div>
-</aside>
-
-<div class="topbar" id="topbar">
-  <div class="topbar-brand" onclick="window.location.href='index.html'">
-    <div class="brand-logos">
-      <div class="brand-logo"><img src="gecc-logo.jpg" alt="GECC"/></div>
-      <div class="brand-logo"><img src="uniport-logo.jpg" alt="Uniport"/></div>
-    </div>
-    &nbsp;GECC Uniport
-  </div>
-  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
-</div>
-<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-
-<div class="main" id="mainWrap">
-  <div class="main-bar" id="mainBar"></div>
-
-  <div class="hub-layout">
-
-    <!-- Left nav -->
-    <div class="hub-left">
-      <div class="hub-left-sticky">
-        <div class="hub-nav-title">Browse</div>
-        <button class="hub-nav-item active" data-filter="all" onclick="setFilter(this)">
-          <span class="material-symbols-outlined">home</span> All Posts
-        </button>
-        <button class="hub-nav-item" data-filter="bible" onclick="setFilter(this)">
-          <span class="material-symbols-outlined">menu_book</span> Bible Study
-        </button>
-        <button class="hub-nav-item" data-filter="sermon" onclick="setFilter(this)">
-          <span class="material-symbols-outlined">record_voice_over</span> Sermons
-        </button>
-        <button class="hub-nav-item" data-filter="announcement" onclick="setFilter(this)">
-          <span class="material-symbols-outlined">campaign</span> Announcements
-        </button>
-        <button class="hub-nav-item" data-filter="testimony" onclick="setFilter(this)">
-          <span class="material-symbols-outlined">stars</span> Testimonies
-        </button>
-        <button class="hub-nav-item" data-filter="devotional" onclick="setFilter(this)">
-          <span class="material-symbols-outlined">auto_stories</span> Devotionals
-        </button>
-        <button class="hub-nav-item" data-filter="prayer" onclick="setFilter(this)">
-          <span class="material-symbols-outlined">self_improvement</span> Prayer
-        </button>
-        <button class="hub-nav-item" data-filter="literature" onclick="setFilter(this)">
-          <span class="material-symbols-outlined">library_books</span> Literature
-        </button>
-        <button class="hub-nav-item" data-filter="ebook" onclick="setFilter(this)">
-          <span class="material-symbols-outlined">import_contacts</span> E-Books
-        </button>
-        <button class="hub-nav-item" data-filter="resource" onclick="setFilter(this)">
-          <span class="material-symbols-outlined">attach_file</span> Resources
-        </button>
-        <div class="hub-nav-divider"></div>
-        <button class="hub-nav-item" data-filter="saved" onclick="setFilter(this)">
-          <span class="material-symbols-outlined">bookmark</span> Saved
-        </button>
-        <button class="hub-nav-item" data-filter="mine" onclick="setFilter(this)">
-          <span class="material-symbols-outlined">person</span> My Posts
-        </button>
-        <div id="pendingNavItem" style="display:none">
-          <div class="hub-nav-divider"></div>
-          <button class="hub-nav-item" data-filter="pending" onclick="setFilter(this)">
-            <span class="material-symbols-outlined">pending</span> Pending
-            <span id="pendingNavCount" style="margin-left:auto;background:#fd7e14;color:#fff;font-size:.65rem;padding:.1rem .45rem;border-radius:20px;">0</span>
-          </button>
-        </div>
+    <div class="auth-header">
+      <div class="auth-header-logos">
+        <div class="auth-logo"><img src="gecc-logo.jpg" alt="GECC"/></div>
+        <div class="auth-logo"><img src="uniport-logo.jpg" alt="Uniport"/></div>
       </div>
+      <h1>GECC Uniport</h1>
+      <p>Digital Fellowship Platform</p>
     </div>
 
-    <!-- Center feed -->
-    <div class="hub-center">
+    <div class="auth-tabs" id="authTabs">
+      <button class="auth-tab active" id="tabLogin"    onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab"        id="tabRegister" onclick="switchTab('register')">Create Account</button>
+    </div>
 
-      <!-- Pending banner for privileged -->
-      <div class="pending-banner" id="pendingBanner" style="display:none">
-        <div class="pending-banner-text">
-          <span class="material-symbols-outlined">pending</span>
-          <span id="pendingBannerText">Posts awaiting approval</span>
-        </div>
-        <button class="pending-banner-btn" onclick="setFilter(document.querySelector('[data-filter=pending]'))">Review</button>
-      </div>
+    <div class="auth-body">
 
-      <!-- Compose card -->
-      <div class="compose-card" id="composeCard">
-        <div class="compose-top">
-          <div class="user-avatar" id="composeAvatarEl" style="background:linear-gradient(135deg,#0066cc,#6c63ff);">U</div>
-          <div class="compose-trigger" onclick="openCompose()" id="composeTrigger">
-            What's on your mind?, <span id="composeName">friend</span>?
+      <!-- ── LOGIN ── -->
+      <div class="auth-panel active" id="panelLogin">
+        <div class="alert alert-error" id="loginErr"></div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <div class="input-wrap">
+            <span class="material-symbols-outlined field-icon">mail</span>
+            <input type="email" class="form-input" id="loginEmail" placeholder="yourname@email.com" autocomplete="email"/>
           </div>
         </div>
 
-        <!-- Expanded compose -->
-        <div class="compose-expanded" id="composeExpanded">
-          <input type="text" class="compose-title-input" id="composeTitle" placeholder="Title (optional)"/>
-          <textarea class="compose-textarea" id="composeText" placeholder="Share a Bible study, testimony, announcement, or encouragement…" rows="4" oninput="autoGrow(this)"></textarea>
-
-          <div class="compose-img-preview" id="composeImgPreview">
-            <img id="composeImgEl" src="" alt="preview"/>
-            <button class="compose-img-remove" onclick="removeComposeImage()">
-              <span class="material-symbols-outlined" style="font-size:.9rem;">close</span>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-wrap password-wrap">
+            <span class="material-symbols-outlined field-icon">lock</span>
+            <input type="password" class="form-input" id="loginPw" placeholder="••••••••" autocomplete="current-password"/>
+            <button class="toggle-pw" type="button" onclick="togglePw('loginPw',this)">
+              <span class="material-symbols-outlined">visibility</span>
             </button>
           </div>
+        </div>
 
-          <div class="compose-file-preview" id="composeFilePreview">
-            <span class="material-symbols-outlined" style="color:#0066cc;font-size:1.2rem;">attach_file</span>
-            <span class="compose-file-name" id="composeFileName"></span>
-            <button class="compose-file-remove" onclick="removeComposeFile()">
-              <span class="material-symbols-outlined" style="font-size:1rem;">close</span>
+        <div style="text-align:right;margin-bottom:1rem;">
+          <button onclick="toggleForgot()" style="background:none;border:none;color:#0066cc;font-size:.8rem;font-weight:700;cursor:pointer;">Forgot password?</button>
+        </div>
+
+        <button class="btn-primary" id="btnLogin" onclick="doLogin()">
+          <span class="material-symbols-outlined">login</span> Sign In
+        </button>
+
+        <div class="forgot-box" id="forgotBox">
+          <p style="font-size:.82rem;font-weight:700;color:#333;margin-bottom:.7rem;">Reset your password</p>
+          <div class="input-wrap" style="margin-bottom:.7rem;">
+            <span class="material-symbols-outlined field-icon">mail</span>
+            <input type="email" class="form-input" id="forgotEmail" placeholder="Enter your email"/>
+          </div>
+          <div style="display:flex;gap:.5rem;">
+            <button onclick="sendReset()" style="flex:2;padding:.62rem;background:#0066cc;color:#fff;border:none;border-radius:6px;font-family:'Open Sans',sans-serif;font-size:.84rem;font-weight:700;cursor:pointer;">Send Reset Link</button>
+            <button onclick="toggleForgot()" style="flex:1;padding:.62rem;background:none;border:1.5px solid #dde3ec;color:#555;border-radius:6px;font-family:'Open Sans',sans-serif;font-size:.84rem;font-weight:700;cursor:pointer;">Cancel</button>
+          </div>
+          <div class="alert alert-success" id="resetOk"  style="margin-top:.7rem;"></div>
+          <div class="alert alert-error"   id="resetErr" style="margin-top:.7rem;"></div>
+        </div>
+      </div>
+
+      <!-- ── PENDING ── -->
+      <div class="pending-screen" id="pendingScreen">
+        <div class="screen-icon orange"><span class="material-symbols-outlined">hourglass_top</span></div>
+        <div class="screen-h2">Account Pending Approval</div>
+        <p class="screen-p">Your registration was successful! The Super Admin will review and approve your account. You will be notified once approved.</p>
+        <div class="pending-email" id="pendingEmailEl"></div>
+        <button class="btn-signout" onclick="doSignOut()">
+          <span class="material-symbols-outlined">logout</span> Sign out
+        </button>
+      </div>
+
+      <!-- ── BLOCKED ── -->
+      <div class="blocked-screen" id="blockedScreen">
+        <div class="screen-icon red"><span class="material-symbols-outlined">block</span></div>
+        <div class="screen-h2" style="color:#dc3545;">Account Restricted</div>
+        <p class="screen-p" id="blockedMsg">Your account has been suspended. Contact the fellowship admin.</p>
+        <button class="btn-signout" onclick="doSignOut()">
+          <span class="material-symbols-outlined">logout</span> Sign out
+        </button>
+      </div>
+
+      <!-- ── REGISTER ── -->
+      <div class="auth-panel" id="panelRegister">
+
+        <div class="steps">
+          <div class="step"><div class="step-dot active" id="dot1">1</div><div class="step-label active" id="lbl1">Personal</div></div>
+          <div class="step-line" id="line1"></div>
+          <div class="step"><div class="step-dot" id="dot2">2</div><div class="step-label" id="lbl2">Academic</div></div>
+          <div class="step-line" id="line2"></div>
+          <div class="step"><div class="step-dot" id="dot3">3</div><div class="step-label" id="lbl3">Account</div></div>
+        </div>
+
+        <div class="alert alert-error" id="regErr"></div>
+
+        <!-- Step 1 -->
+        <div class="step-panel active" id="step1">
+          <div class="avatar-section" onclick="document.getElementById('avatarInput').click()">
+            <div class="avatar-preview" id="avatarPreview">
+              <div class="avatar-ph"><span class="material-symbols-outlined" style="color:#fff;font-size:1.6rem;">add_a_photo</span></div>
+              <img id="avatarImg" src="" alt=""/>
+            </div>
+            <div class="avatar-text">
+              <div class="title">Profile Photo</div>
+              <div class="sub">Tap to upload your photo (optional)</div>
+              <div class="avatar-uploading" id="avatarUploading">Uploading to Cloudinary…</div>
+            </div>
+            <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="handleAvatarSelect(event)"/>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">First Name *</label>
+              <div class="input-wrap">
+                <span class="material-symbols-outlined field-icon">person</span>
+                <input type="text" class="form-input" id="rFirst" placeholder="e.g. Emeka"/>
+              </div>
+              <div class="field-err" id="errFirst">Required</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name *</label>
+              <div class="input-wrap">
+                <span class="material-symbols-outlined field-icon">person</span>
+                <input type="text" class="form-input" id="rLast" placeholder="e.g. Eze"/>
+              </div>
+              <div class="field-err" id="errLast">Required</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Gender *</label>
+            <div class="select-wrap">
+              <span class="material-symbols-outlined field-icon">wc</span>
+              <select class="form-select" id="rGender">
+                <option value="">— Select —</option>
+                <option>Male</option><option>Female</option>
+              </select>
+            </div>
+            <div class="field-err" id="errGender">Required</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <div class="input-wrap">
+              <span class="material-symbols-outlined field-icon">phone</span>
+              <input type="tel" class="form-input" id="rPhone" placeholder="08012345678"/>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">State of Origin</label>
+            <div class="select-wrap">
+              <span class="material-symbols-outlined field-icon">location_on</span>
+              <select class="form-select" id="rState">
+                <option value="">— Select —</option>
+                <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option>
+                <option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option>
+                <option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option>
+                <option>Ekiti</option><option>Enugu</option><option>FCT</option><option>Gombe</option>
+                <option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option>
+                <option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+                <option>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option>
+                <option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option>
+                <option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option>
+                <option>Zamfara</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="step-nav">
+            <button class="btn-next" onclick="goStep(2)">
+              Next <span class="material-symbols-outlined">arrow_forward</span>
             </button>
           </div>
+        </div>
 
-          <div class="compose-type-row">
-            <span class="compose-type-label">Post type:</span>
-            <select class="compose-type-select" id="composeType">
-              <option value="bible">Bible Study</option>
-              <option value="sermon">Sermon Notes</option>
-              <option value="announcement">Announcement</option>
-              <option value="testimony">Testimony</option>
-              <option value="devotional">Devotional</option>
-              <option value="prayer">Prayer Guide</option>
-              <option value="literature">Literature</option>
-              <option value="ebook">E-Book</option>
-              <option value="resource">Resource</option>
-            </select>
-          </div>
-
-          <div class="upload-label" id="uploadLabel">Uploading…</div>
-          <div class="upload-progress-bar" id="uploadProgressBar">
-            <div class="upload-progress-fill" id="uploadProgressFill"></div>
-          </div>
-
-          <div class="compose-actions">
-            <div class="compose-media-btns">
-              <label class="media-btn">
-                <span class="material-symbols-outlined">image</span> Photo
-                <input type="file" id="composeImageInput" accept="image/*" style="display:none" onchange="handleComposeImage(event)"/>
-              </label>
-              <label class="media-btn">
-                <span class="material-symbols-outlined">attach_file</span> File
-                <input type="file" id="composeFileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.epub" style="display:none" onchange="handleComposeFile(event)"/>
-              </label>
+        <!-- Step 2 -->
+        <div class="step-panel" id="step2">
+          <div class="form-group">
+            <label class="form-label">Department *</label>
+            <div class="input-wrap">
+              <span class="material-symbols-outlined field-icon">school</span>
+              <input type="text" class="form-input" id="rDept" placeholder="e.g. Computer Science"/>
             </div>
-            <div style="display:flex;gap:.5rem;">
-              <button class="btn-cancel-compose" onclick="closeCompose()">Cancel</button>
-              <button class="btn-post" id="btnPost" onclick="submitPost()">Post</button>
+            <div class="field-err" id="errDept">Required</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Faculty</label>
+            <div class="select-wrap">
+              <span class="material-symbols-outlined field-icon">account_balance</span>
+              <select class="form-select" id="rFaculty">
+                <option value="">— Select —</option>
+                <option>Agriculture</option><option>Allied Health Sciences</option>
+                <option>Basic Medical Sciences</option><option>Clinical Sciences</option>
+                <option>Communication &amp; Media Studies</option><option>Computing</option>
+                <option>Dentistry</option><option>Education</option><option>Engineering</option>
+                <option>Humanities</option><option>Law</option><option>Management Sciences</option>
+                <option>Pharmaceutical Sciences</option><option>Science</option>
+                <option>SSLT</option><option>Social Sciences</option>
+              </select>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Feed -->
-      <div id="feedContainer">
-        <div class="empty-state">
-          <span class="material-symbols-outlined">hourglass_empty</span>
-          <p>Loading posts…</p>
-        </div>
-      </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Level *</label>
+              <div class="select-wrap">
+                <span class="material-symbols-outlined field-icon">bar_chart</span>
+                <select class="form-select" id="rLevel">
+                  <option value="">— Level —</option>
+                  <option>100L</option><option>200L</option><option>300L</option>
+                  <option>400L</option><option>500L</option><option>600L</option><option>700L</option>
+                </select>
+              </div>
+              <div class="field-err" id="errLevel">Required</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Year Started *</label>
+              <div class="input-wrap">
+                <span class="material-symbols-outlined field-icon">calendar_today</span>
+                <input type="number" class="form-input" id="rYearStart" placeholder="e.g. 2023" min="2000" max="2099"/>
+              </div>
+              <div class="field-err" id="errYearStart">Required</div>
+            </div>
+          </div>
 
+          <div class="form-group">
+            <label class="form-label">Year Leaving *</label>
+            <div class="input-wrap">
+              <span class="material-symbols-outlined field-icon">event</span>
+              <input type="number" class="form-input" id="rYearLeave" placeholder="e.g. 2027" min="2000" max="2099"/>
+            </div>
+            <div class="field-err" id="errYearLeave">Required — used for FYB tracking</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Date of Birth (optional)</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;">
+              <div class="select-wrap">
+                <select class="form-select no-icon" id="rDobDay" style="padding-left:.9rem;">
+                  <option value="">Day</option>
+                  <script>for(let i=1;i<=31;i++) document.write(`<option value="${i}">${i}</option>`);</script>
+                </select>
+              </div>
+              <div class="select-wrap">
+                <select class="form-select no-icon" id="rDobMonth" style="padding-left:.9rem;">
+                  <option value="">Month</option>
+                  <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
+                  <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
+                  <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+                  <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+                </select>
+              </div>
+              <input type="number" class="form-input no-icon" id="rDobYear" placeholder="Year" min="1980" max="2010"/>
+            </div>
+          </div>
+
+          <div class="step-nav">
+            <button class="btn-back" onclick="goStep(1)">Back</button>
+            <button class="btn-next" onclick="goStep(3)">
+              Next <span class="material-symbols-outlined">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-panel" id="step3">
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <div class="input-wrap">
+              <span class="material-symbols-outlined field-icon">mail</span>
+              <input type="email" class="form-input" id="rEmail" placeholder="yourname@email.com" autocomplete="email"/>
+            </div>
+            <div class="field-err" id="errEmail">Valid email required</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password *</label>
+            <div class="input-wrap password-wrap">
+              <span class="material-symbols-outlined field-icon">lock</span>
+              <input type="password" class="form-input" id="rPw" placeholder="Min 8 characters" autocomplete="new-password" oninput="checkPwStrength(this.value)"/>
+              <button class="toggle-pw" type="button" onclick="togglePw('rPw',this)">
+                <span class="material-symbols-outlined">visibility</span>
+              </button>
+            </div>
+            <div class="field-err" id="errPw">Minimum 8 characters required</div>
+            <div class="pw-strength-wrap" id="pwStrWrap">
+              <div class="pw-strength-bar"><div class="pw-strength-fill" id="pwStrFill"></div></div>
+              <span id="pwStrLabel" style="font-size:.7rem;font-weight:700;"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Confirm Password *</label>
+            <div class="input-wrap password-wrap">
+              <span class="material-symbols-outlined field-icon">lock</span>
+              <input type="password" class="form-input" id="rPwConf" placeholder="Re-enter password" autocomplete="new-password"/>
+              <button class="toggle-pw" type="button" onclick="togglePw('rPwConf',this)">
+                <span class="material-symbols-outlined">visibility</span>
+              </button>
+            </div>
+            <div class="field-err" id="errPwConf">Passwords do not match</div>
+          </div>
+
+          <div class="step-nav">
+            <button class="btn-back" onclick="goStep(2)">Back</button>
+            <button class="btn-next" id="btnReg" onclick="doRegister()">
+              <span class="material-symbols-outlined">how_to_reg</span> Create Account
+            </button>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Right sidebar -->
-    <div class="hub-right">
-      <div class="hub-right-sticky">
-        <div class="hub-widget">
-          <div class="hub-widget-title">About Fellowship Hub</div>
-          <p style="font-size:.82rem;color:#555;line-height:1.6;">A space to share Bible studies, testimonies, announcements and spiritual resources with the GECC Uniport family.</p>
-        </div>
-        <div class="hub-widget" id="trendingWidget">
-          <div class="hub-widget-title">Trending Types</div>
-          <div id="trendingList"></div>
-        </div>
-        <div class="hub-widget" id="statsWidget">
-          <div class="hub-widget-title">Community Stats</div>
-          <div id="statsList"></div>
-        </div>
-      </div>
+    <div class="auth-footer">
+      <p>GECC Uniport &copy; <span id="yr"></span></p>
     </div>
-
   </div>
 </div>
-
-<!-- Image lightbox -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()">
-    <span class="material-symbols-outlined">close</span>
-  </button>
-  <img id="lightboxImg" src="" alt=""/>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script>
-// ── Cloudinary config ──
-const CLOUDINARY_CLOUD = 'df5pitgrp';
-const CLOUDINARY_PRESET = 'gecc-uniport';
+  document.getElementById('yr').textContent = new Date().getFullYear();
 
-// ── Role setup ──
-const role     = localStorage.getItem('userRole')  || 'member';
-const userId   = localStorage.getItem('userId')    || '';
-const userName = localStorage.getItem('userName')  || 'User';
-if (!role || !userId) { window.location.href = 'auth.html'; }
+  // ── Cloudinary ──
+  const CLD_CLOUD  = 'df5pitgrp';
+  const CLD_PRESET = 'gecc-uniport';
 
-const isMember     = role === 'member';
-const isAdmin      = role === 'admin';
-const isSuperAdmin = role === 'superadmin';
-const isPrivileged = isAdmin || isSuperAdmin;
+  // ── Block back-button after logout ──
+  // Push a dummy state so back button can't return to protected pages
+  if (performance.navigation.type !== 1) {
+    history.pushState(null, '', location.href);
+  }
+  window.addEventListener('popstate', () => {
+    history.pushState(null, '', location.href);
+  });
 
-// ── Admin bar ──
-const adminBar = document.getElementById('adminBar');
-adminBar.classList.add('show');
-if (isMember) {
-  adminBar.classList.add('member-bar');
-  document.getElementById('mainBar').classList.add('member-bar');
-  document.getElementById('adminBarText').innerHTML = '🟢 MEMBER MODE <span>· Fellowship Hub</span>';
-  document.getElementById('portalLabel').textContent = 'Member Portal';
-} else if (isAdmin) {
-  document.getElementById('adminBarText').innerHTML = '🔐 ADMIN MODE <span>· Full access enabled</span>';
-  document.getElementById('portalLabel').textContent = 'Admin Portal';
-} else {
-  adminBar.classList.add('super-bar');
-  document.getElementById('mainBar').classList.add('super-bar');
-  document.getElementById('adminBarText').innerHTML = '👑 SUPER ADMIN MODE <span>· Full system access</span>';
-  document.getElementById('portalLabel').textContent = 'Super Admin Portal';
-}
+  // ── If already logged in and active, redirect ──
+  // (only after the page finishes loading, handled in onAuthStateChanged below)
+  let authChecked = false;
 
-document.getElementById('sidebar').classList.add('offset');
-document.getElementById('topbar').classList.add('offset');
-document.getElementById('mainWrap').classList.add('offset');
+  auth.onAuthStateChanged(async user => {
+    if (authChecked) return;
+    authChecked = true;
+    if (!user) return;
 
-if (isPrivileged) {
-  document.getElementById('navMemo').style.display     = 'flex';
-  document.getElementById('navFinance').style.display  = 'flex';
-  document.getElementById('navUserMgmt').style.display = 'flex';
-  document.getElementById('pendingNavItem').style.display = 'block';
-}
-if (isSuperAdmin) {
-  document.getElementById('navAudit').style.display = 'flex';
-}
+    try {
+      const doc = await db.collection('users').doc(user.uid).get();
+      if (!doc.exists) { auth.signOut(); return; }
+      const d = doc.data();
 
-// ── Avatar & name ──
-const initials = userName.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase() || 'U';
-const avatarColors = ['linear-gradient(135deg,#0066cc,#6c63ff)','linear-gradient(135deg,#28a745,#17a2b8)',
-  'linear-gradient(135deg,#fd7e14,#dc3545)','linear-gradient(135deg,#6f42c1,#e83e8c)','linear-gradient(135deg,#20c997,#0066cc)'];
-const myAvatarColor = avatarColors[userId.charCodeAt(0) % avatarColors.length];
-document.getElementById('composeAvatarEl').textContent = initials;
-document.getElementById('composeAvatarEl').style.background = myAvatarColor;
-document.getElementById('composeName').textContent = userName.split(' ')[0] || 'friend';
-
-// ── Compose state ──
-let composeImageFile = null;
-let composeOtherFile = null;
-let composeOpen = false;
-
-function openCompose() {
-  if (composeOpen) return;
-  composeOpen = true;
-  document.getElementById('composeExpanded').classList.add('open');
-  document.getElementById('composeTrigger').style.display = 'none';
-  document.getElementById('composeText').focus();
-}
-
-function closeCompose() {
-  composeOpen = false;
-  document.getElementById('composeExpanded').classList.remove('open');
-  document.getElementById('composeTrigger').style.display = 'block';
-  document.getElementById('composeText').value = '';
-  document.getElementById('composeTitle').value = '';
-  document.getElementById('composeText').style.height = '';
-  removeComposeImage();
-  removeComposeFile();
-}
-
-function autoGrow(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 300) + 'px';
-}
-
-function handleComposeImage(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  removeComposeFile();
-  composeImageFile = file;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    document.getElementById('composeImgEl').src = ev.target.result;
-    document.getElementById('composeImgPreview').style.display = 'block';
-  };
-  reader.readAsDataURL(file);
-  e.target.value = '';
-}
-
-function removeComposeImage() {
-  composeImageFile = null;
-  document.getElementById('composeImgEl').src = '';
-  document.getElementById('composeImgPreview').style.display = 'none';
-}
-
-function handleComposeFile(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  removeComposeImage();
-  composeOtherFile = file;
-  document.getElementById('composeFileName').textContent = file.name;
-  document.getElementById('composeFilePreview').style.display = 'flex';
-  e.target.value = '';
-}
-
-function removeComposeFile() {
-  composeOtherFile = null;
-  document.getElementById('composeFileName').textContent = '';
-  document.getElementById('composeFilePreview').style.display = 'none';
-}
-
-// ── Cloudinary upload ──
-async function uploadToCloudinary(file, resourceType = 'image') {
-  const label = document.getElementById('uploadLabel');
-  const bar   = document.getElementById('uploadProgressBar');
-  const fill  = document.getElementById('uploadProgressFill');
-  label.style.display = 'block';
-  bar.style.display   = 'block';
-  fill.style.width    = '0%';
-
-  return new Promise((resolve, reject) => {
-    const url      = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/${resourceType}/upload`;
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', CLOUDINARY_PRESET);
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', url);
-
-    xhr.upload.onprogress = e => {
-      if (e.lengthComputable) {
-        const pct = Math.round(e.loaded / e.total * 100);
-        fill.style.width = pct + '%';
-        label.textContent = `Uploading… ${pct}%`;
+      if (d.status === 'active') {
+        saveAndRedirect(user.uid, d);
+      } else if (d.status === 'pending') {
+        hidePanels();
+        document.getElementById('pendingEmailEl').textContent = d.email || user.email;
+        document.getElementById('pendingScreen').classList.add('show');
+      } else {
+        hidePanels();
+        document.getElementById('blockedMsg').textContent =
+          `Your account has been ${d.status}. Contact the fellowship admin.`;
+        document.getElementById('blockedScreen').classList.add('show');
+        auth.signOut();
       }
+    } catch(e) { console.warn('Auth check error:', e); }
+  });
+
+  function saveAndRedirect(uid, d) {
+    localStorage.setItem('userRole',  d.role     || 'member');
+    localStorage.setItem('userId',    uid);
+    localStorage.setItem('userName',  d.name     || 'User');
+    localStorage.setItem('userEmail', d.email    || '');
+    localStorage.setItem('userPhoto', d.photoUrl || '');
+    // Replace current history entry so back can't return here
+    window.location.replace('dashboard.html');
+  }
+
+  // ── Tab switch ──
+  function switchTab(tab) {
+    ['panelLogin','panelRegister'].forEach(id => {
+      document.getElementById(id).classList.toggle('active', id === 'panel' + cap(tab));
+    });
+    ['tabLogin','tabRegister'].forEach(id => {
+      document.getElementById(id).classList.toggle('active', id === 'tab' + cap(tab));
+    });
+    document.getElementById('pendingScreen').classList.remove('show');
+    document.getElementById('blockedScreen').classList.remove('show');
+    document.getElementById('authTabs').style.display = 'flex';
+    clearAllAlerts();
+  }
+
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function hidePanels() {
+    document.getElementById('panelLogin').classList.remove('active');
+    document.getElementById('panelRegister').classList.remove('active');
+    document.getElementById('authTabs').style.display = 'none';
+  }
+
+  function clearAllAlerts() {
+    ['loginErr','regErr','resetOk','resetErr'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.classList.remove('show'); el.textContent = ''; }
+    });
+  }
+
+  function showAlert(id, msg, type='error') {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.className = `alert alert-${type} show`;
+  }
+
+  // ── Password toggle ──
+  function togglePw(id, btn) {
+    const inp  = document.getElementById(id);
+    const icon = btn.querySelector('.material-symbols-outlined');
+    if (inp.type === 'password') { inp.type = 'text'; icon.textContent = 'visibility_off'; }
+    else { inp.type = 'password'; icon.textContent = 'visibility'; }
+  }
+
+  // ── Password strength ──
+  function checkPwStrength(val) {
+    const wrap = document.getElementById('pwStrWrap');
+    const fill = document.getElementById('pwStrFill');
+    const lbl  = document.getElementById('pwStrLabel');
+    if (!val) { wrap.style.display = 'none'; return; }
+    wrap.style.display = 'block';
+    let score = 0;
+    if (val.length >= 8)          score++;
+    if (/[A-Z]/.test(val))        score++;
+    if (/[0-9]/.test(val))        score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const cfg = [
+      { w:'25%',  c:'#dc3545', l:'Weak'   },
+      { w:'50%',  c:'#fd7e14', l:'Fair'   },
+      { w:'75%',  c:'#ffc107', l:'Good'   },
+      { w:'100%', c:'#28a745', l:'Strong' },
+    ];
+    const s = cfg[score-1] || cfg[0];
+    fill.style.width = s.w; fill.style.background = s.c;
+    lbl.textContent  = s.l; lbl.style.color = s.c;
+  }
+
+  // ── Avatar ──
+  let avatarFile = null;
+  let avatarUrl  = '';
+
+  function handleAvatarSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    avatarFile = file;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const img = document.getElementById('avatarImg');
+      img.src = ev.target.result;
+      img.style.display = 'block';
+      document.getElementById('avatarPreview').querySelector('.avatar-ph').style.display = 'none';
     };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  }
 
-    xhr.onload = () => {
-      label.style.display = 'none';
-      bar.style.display   = 'none';
-      fill.style.width    = '0%';
-      try {
-        const data = JSON.parse(xhr.responseText);
-        if (data.secure_url) resolve(data.secure_url);
-        else reject(new Error(data.error?.message || 'Upload failed'));
-      } catch(e) { reject(e); }
+  async function uploadAvatar() {
+    if (!avatarFile) return '';
+    document.getElementById('avatarUploading').style.display = 'block';
+    try {
+      const fd = new FormData();
+      fd.append('file',          avatarFile);
+      fd.append('upload_preset', CLD_PRESET);
+      fd.append('folder',        'gecc_avatars');
+      const res  = await fetch(`https://api.cloudinary.com/v1_1/${CLD_CLOUD}/image/upload`, {
+        method: 'POST', body: fd
+      });
+      const data = await res.json();
+      if (!data.secure_url) throw new Error(data.error?.message || 'Upload failed');
+      return data.secure_url;
+    } catch(err) {
+      console.warn('Avatar upload failed:', err.message);
+      return '';
+    } finally {
+      document.getElementById('avatarUploading').style.display = 'none';
+    }
+  }
+
+  // ── Steps ──
+  let currentStep = 1;
+
+  function updateStepUI(step) {
+    for (let i = 1; i <= 3; i++) {
+      const dot = document.getElementById('dot' + i);
+      const lbl = document.getElementById('lbl' + i);
+      if (i < step) {
+        dot.className   = 'step-dot complete';
+        lbl.className   = 'step-label complete';
+        dot.innerHTML   = '<span class="material-symbols-outlined" style="font-size:.85rem;">check</span>';
+      } else if (i === step) {
+        dot.className   = 'step-dot active';
+        lbl.className   = 'step-label active';
+        dot.textContent = i;
+      } else {
+        dot.className   = 'step-dot';
+        lbl.className   = 'step-label';
+        dot.textContent = i;
+      }
+      if (i <= 2) {
+        document.getElementById('line' + i).className = 'step-line' + (step > i ? ' complete' : '');
+      }
+    }
+  }
+
+  function goStep(target) {
+    if (target > currentStep && !validateStep(currentStep)) return;
+    document.getElementById('step' + currentStep).classList.remove('active');
+    currentStep = target;
+    document.getElementById('step' + currentStep).classList.add('active');
+    updateStepUI(currentStep);
+    clearAllAlerts();
+  }
+
+  function validateStep(step) {
+    let valid = true;
+    const req = (fieldId, errId) => {
+      const val = document.getElementById(fieldId).value.trim();
+      document.getElementById(errId).classList.toggle('show', !val);
+      if (!val) valid = false;
     };
-
-    xhr.onerror = () => {
-      label.style.display = 'none';
-      bar.style.display   = 'none';
-      reject(new Error('Network error during upload'));
-    };
-
-    xhr.send(formData);
-  });
-}
-
-// ── Feed state ──
-let currentFilter = 'all';
-let allPosts      = [];
-let savedIds      = JSON.parse(localStorage.getItem('hubSavedPosts') || '[]');
-
-// ── Type config ──
-const TYPE_CFG = {
-  bible:        { icon:'menu_book',          cls:'tag-bible',        label:'Bible Study'    },
-  sermon:       { icon:'record_voice_over',  cls:'tag-sermon',       label:'Sermon'         },
-  announcement: { icon:'campaign',           cls:'tag-announcement', label:'Announcement'   },
-  testimony:    { icon:'stars',              cls:'tag-testimony',    label:'Testimony'      },
-  devotional:   { icon:'auto_stories',       cls:'tag-devotional',   label:'Devotional'     },
-  prayer:       { icon:'self_improvement',   cls:'tag-prayer',       label:'Prayer Guide'   },
-  literature:   { icon:'library_books',      cls:'tag-literature',   label:'Literature'     },
-  ebook:        { icon:'import_contacts',    cls:'tag-ebook',        label:'E-Book'         },
-  resource:     { icon:'attach_file',        cls:'tag-resource',     label:'Resource'       },
-};
-const getCfg = t => TYPE_CFG[t] || { icon:'hub', cls:'tag-resource', label:t };
-
-// ── Avatar helper ──
-function makeAvatar(name, uid, size=40) {
-  const init  = (name||'U').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-  const color = avatarColors[(uid||'a').charCodeAt(0) % avatarColors.length];
-  return `<div class="post-avatar" style="width:${size}px;height:${size}px;background:${color};font-size:${size*.4}px;">${init}</div>`;
-}
-
-// ── Time helper ──
-function timeAgo(ts) {
-  if (!ts) return '';
-  const d    = ts.toDate ? ts.toDate() : new Date(ts);
-  const diff = Math.floor((Date.now() - d.getTime()) / 1000);
-  if (diff < 60)     return 'Just now';
-  if (diff < 3600)   return Math.floor(diff/60) + 'm';
-  if (diff < 86400)  return Math.floor(diff/3600) + 'h';
-  if (diff < 604800) return Math.floor(diff/86400) + 'd';
-  return d.getDate() + ' ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
-}
-
-function escHtml(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-// ── Live feed ──
-db.collection('hub_posts').orderBy('createdAt','desc').onSnapshot(snap => {
-  allPosts = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-  updatePendingCount();
-  renderFeed();
-  renderTrending();
-  renderStats();
-});
-
-function updatePendingCount() {
-  const pendingPosts = allPosts.filter(p => p.status === 'pending');
-  const count = isPrivileged
-    ? pendingPosts.length
-    : pendingPosts.filter(p => p.authorId === userId).length;
-
-  document.getElementById('pendingNavCount').textContent = count;
-  if (isPrivileged && count > 0) {
-    document.getElementById('pendingBanner').style.display = 'flex';
-    document.getElementById('pendingBannerText').textContent = `${count} post${count!==1?'s':''} awaiting approval`;
-  } else {
-    document.getElementById('pendingBanner').style.display = 'none';
+    if (step === 1) { req('rFirst','errFirst'); req('rLast','errLast'); req('rGender','errGender'); }
+    if (step === 2) { req('rDept','errDept'); req('rLevel','errLevel'); req('rYearStart','errYearStart'); req('rYearLeave','errYearLeave'); }
+    return valid;
   }
-}
 
-// ── Filter ──
-function setFilter(btn) {
-  document.querySelectorAll('.hub-nav-item').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentFilter = btn.dataset.filter;
-  renderFeed();
-}
+  // ── LOGIN ──
+  async function doLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pw    = document.getElementById('loginPw').value;
+    clearAllAlerts();
 
-// ── Render feed ──
-function renderFeed() {
-  const isOwn = p => p.authorId === userId;
-  let visible = allPosts.filter(p => {
-    const published = p.status === 'published';
-    const pending   = p.status === 'pending';
+    if (!email) { showAlert('loginErr', 'Please enter your email address.'); return; }
+    if (!pw)    { showAlert('loginErr', 'Please enter your password.'); return; }
 
-    if (currentFilter === 'saved')   return savedIds.includes(p.id);
-    if (currentFilter === 'mine')    return isOwn(p);
-    if (currentFilter === 'pending') return pending && (isPrivileged || isOwn(p));
-    if (currentFilter === 'all') {
-      return published || (isPrivileged && pending) || (isOwn(p) && pending);
+    const btn = document.getElementById('btnLogin');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span> Signing in…';
+
+    try {
+      const cred    = await auth.signInWithEmailAndPassword(email, pw);
+      const userDoc = await db.collection('users').doc(cred.user.uid).get();
+
+      if (!userDoc.exists) {
+        await auth.signOut();
+        showAlert('loginErr', 'Account not found. Please create an account first.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-symbols-outlined">login</span> Sign In';
+        return;
+      }
+
+      const d      = userDoc.data();
+      const status = d.status || 'pending';
+
+      if (status === 'pending') {
+        hidePanels();
+        document.getElementById('pendingEmailEl').textContent = email;
+        document.getElementById('pendingScreen').classList.add('show');
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-symbols-outlined">login</span> Sign In';
+        return;
+      }
+
+      if (status === 'suspended' || status === 'blocked') {
+        await auth.signOut();
+        hidePanels();
+        document.getElementById('blockedMsg').textContent =
+          status === 'suspended'
+            ? 'Your account has been suspended. Contact the fellowship admin.'
+            : 'Your account has been blocked. Contact the fellowship admin.';
+        document.getElementById('blockedScreen').classList.add('show');
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-symbols-outlined">login</span> Sign In';
+        return;
+      }
+
+      // Active — save and go
+      saveAndRedirect(cred.user.uid, d);
+
+    } catch(err) {
+      // ── Friendly error messages ──
+      const map = {
+        'auth/user-not-found':
+          'No account found with this email. Please check or create an account.',
+        'auth/wrong-password':
+          'Incorrect password. Please try again.',
+        'auth/invalid-email':
+          'Invalid email address format.',
+        'auth/too-many-requests':
+          'Too many failed attempts. Please wait a few minutes and try again.',
+        'auth/invalid-credential':
+          'Wrong email or password. Please check and try again.',
+        'auth/network-request-failed':
+          'Network error. Please check your internet connection.',
+        'auth/user-disabled':
+          'This account has been disabled. Contact the fellowship admin.',
+      };
+      showAlert('loginErr', map[err.code] || 'Sign in failed: ' + err.message, 'error');
+      btn.disabled = false;
+      btn.innerHTML = '<span class="material-symbols-outlined">login</span> Sign In';
     }
-    return p.type === currentFilter && (published || (isPrivileged && pending) || (isOwn(p) && pending));
+  }
+
+  // ── Enter key on login ──
+  document.getElementById('loginPw').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
   });
 
-  // Pinned first
-  visible.sort((a,b) => {
-    if (a.pinned && !b.pinned) return -1;
-    if (!a.pinned && b.pinned) return 1;
-    return 0;
-  });
+  // ── REGISTER ──
+  async function doRegister() {
+    if (!validateStep(3)) return;
 
-  const container = document.getElementById('feedContainer');
-  if (!visible.length) {
-    container.innerHTML = `<div class="empty-state">
-      <span class="material-symbols-outlined">hub</span>
-      <p>${currentFilter === 'saved' ? 'No saved posts.' : currentFilter === 'mine' ? 'You have not posted yet.' : 'No posts here yet.'}</p>
-    </div>`;
-    return;
-  }
-  container.innerHTML = visible.map(p => renderPost(p)).join('');
-}
+    const email  = document.getElementById('rEmail').value.trim();
+    const pw     = document.getElementById('rPw').value;
+    const pwConf = document.getElementById('rPwConf').value;
+    clearAllAlerts();
 
-function renderPost(post) {
-  const cfg       = getCfg(post.type);
-  const isSaved   = savedIds.includes(post.id);
-  const isPending = post.status === 'pending';
-  const isPinned  = !!post.pinned;
-  const isOwn     = post.authorId === userId;
-  const content   = post.content || '';
-  const isLong    = content.length > 400;
-
-  const reactions  = post.reactions  || {};
-  const reactedBy  = post.reactedBy  || {};
-  const myReact    = reactedBy[userId];
-  const likeC = reactions.like || 0;
-  const prayC = reactions.pray || 0;
-  const fireC = reactions.fire || 0;
-  const totalReacts = likeC + prayC + fireC;
-
-  // Badges
-  const pinnedBadge   = isPinned  ? `<span class="badge badge-pin"><span class="material-symbols-outlined">push_pin</span> Pinned</span>` : '';
-  const pendingBadge  = isPending ? `<span class="badge badge-pending"><span class="material-symbols-outlined">schedule</span> Pending</span>` : '';
-  const roleBadge     = post.authorRole === 'superadmin'
-    ? `<span class="badge badge-sa">Super Admin</span>`
-    : post.authorRole === 'admin' ? `<span class="badge badge-admin">Admin</span>` : '';
-
-  // Menu
-  let menuItems = '';
-  if (isPrivileged && isPending) {
-    menuItems += `
-      <button class="post-dropdown-item" onclick="approvePost('${post.id}')"><span class="material-symbols-outlined">check_circle</span> Approve</button>
-      <button class="post-dropdown-item danger" onclick="rejectPost('${post.id}')"><span class="material-symbols-outlined">cancel</span> Reject</button>`;
-  }
-  if (isPrivileged) {
-    menuItems += isPinned
-      ? `<button class="post-dropdown-item" onclick="unpinPost('${post.id}')"><span class="material-symbols-outlined">push_pin</span> Unpin</button>`
-      : `<button class="post-dropdown-item" onclick="pinPost('${post.id}')"><span class="material-symbols-outlined">push_pin</span> Pin Post</button>`;
-  }
-  if (isOwn || isPrivileged) {
-    menuItems += `<button class="post-dropdown-item danger" onclick="deletePost('${post.id}')"><span class="material-symbols-outlined">delete</span> Delete</button>`;
-  }
-  menuItems += `<button class="post-dropdown-item" onclick="copyPostLink('${post.id}')"><span class="material-symbols-outlined">link</span> Copy Link</button>`;
-
-  return `
-    <div class="post-card ${isPending?'pending-card':''} ${isPinned?'pinned-card':''}" id="post-${post.id}">
-
-      <div class="post-header">
-        <div class="post-author-wrap">
-          ${makeAvatar(post.authorName, post.authorId)}
-          <div class="post-author-info">
-            <div class="post-name">${escHtml(post.authorName || 'Unknown')}</div>
-            <div class="post-meta">
-              <span>${timeAgo(post.createdAt)}</span>
-              ${post.edited ? '<span>· Edited</span>' : ''}
-            </div>
-            <div class="post-badges">${pinnedBadge}${pendingBadge}${roleBadge}</div>
-          </div>
-        </div>
-        ${menuItems ? `
-          <div class="post-menu-wrap">
-            <button class="post-menu-btn" onclick="toggleMenu(event,'${post.id}')">
-              <span class="material-symbols-outlined">more_horiz</span>
-            </button>
-            <div class="post-dropdown" id="menu-${post.id}">${menuItems}</div>
-          </div>` : ''}
-      </div>
-
-      <div class="post-type-tag ${cfg.cls}">
-        <span class="material-symbols-outlined">${cfg.icon}</span> ${cfg.label}
-      </div>
-
-      ${post.title ? `<div class="post-title">${escHtml(post.title)}</div>` : ''}
-
-      ${content ? `
-        <div class="post-body">
-          <div class="post-text ${isLong?'clamped':''}" id="text-${post.id}">${escHtml(content)}</div>
-          ${isLong ? `<button class="read-more-btn" id="rmb-${post.id}" onclick="expandText('${post.id}')">See more</button>` : ''}
-        </div>` : ''}
-
-      ${post.imageUrl ? `<img class="post-image" src="${post.imageUrl}" alt="post" loading="lazy" onclick="openLightbox('${post.imageUrl}')"/>` : ''}
-
-      ${post.attachmentUrl ? `
-        <div class="post-attachment">
-          <div class="attach-icon"><span class="material-symbols-outlined">description</span></div>
-          <div class="attach-info">
-            <span class="attach-name">${escHtml(post.attachmentName || 'Attachment')}</span>
-            <span class="attach-size">Tap to download</span>
-          </div>
-          <a class="attach-dl" href="${post.attachmentUrl}" target="_blank" download>
-            <span class="material-symbols-outlined">download</span> Download
-          </a>
-        </div>` : ''}
-
-      ${isPending ? `
-        <div class="pending-notice">
-          <span class="material-symbols-outlined">schedule</span>
-          Awaiting admin approval
-        </div>` : ''}
-
-      ${totalReacts > 0 ? `
-        <div class="reaction-counts">
-          ${likeC > 0 ? `<span class="reaction-count-item">👍 ${likeC}</span>` : ''}
-          ${prayC > 0 ? `<span class="reaction-count-item">🙏 ${prayC}</span>` : ''}
-          ${fireC > 0 ? `<span class="reaction-count-item">🔥 ${fireC}</span>` : ''}
-          <span style="margin-left:auto;font-size:.72rem;color:#aaa;">${post.commentCount||0} comment${(post.commentCount||0)!==1?'s':''}</span>
-        </div>` : ''}
-
-      <div class="post-footer">
-        <button class="footer-btn ${myReact==='like'?'reacted':''}" onclick="reactPost('${post.id}','like')">
-          <span class="material-symbols-outlined">${myReact==='like'?'thumb_up':'thumb_up'}</span>
-          Like${likeC?' ('+likeC+')':''}
-        </button>
-        <button class="footer-btn ${myReact==='pray'?'reacted':''}" onclick="reactPost('${post.id}','pray')">
-          <span class="material-symbols-outlined">volunteer_activism</span>
-          Pray${prayC?' ('+prayC+')':''}
-        </button>
-        <button class="footer-btn ${myReact==='fire'?'reacted':''}" onclick="reactPost('${post.id}','fire')">
-          <span class="material-symbols-outlined">local_fire_department</span>
-          Amen${fireC?' ('+fireC+')':''}
-        </button>
-        <button class="footer-btn" onclick="toggleComments('${post.id}')">
-          <span class="material-symbols-outlined">chat_bubble_outline</span>
-          Comment
-        </button>
-        <button class="footer-btn ${isSaved?'saved':''}" onclick="toggleSave('${post.id}')">
-          <span class="material-symbols-outlined">${isSaved?'bookmark':'bookmark_border'}</span>
-          ${isSaved?'Saved':'Save'}
-        </button>
-      </div>
-
-      <div class="comments-wrap" id="comments-${post.id}">
-        <div class="comment-input-row">
-          <div class="comment-avatar" style="background:${myAvatarColor}">${initials}</div>
-          <div class="comment-input-box">
-            <textarea
-              class="comment-input"
-              id="ci-${post.id}"
-              placeholder="Write a comment…"
-              rows="1"
-              oninput="autoGrow(this)"
-              onkeydown="commentEnter(event,'${post.id}')"
-            ></textarea>
-            <button class="comment-send" onclick="submitComment('${post.id}')">
-              <span class="material-symbols-outlined">send</span>
-            </button>
-          </div>
-        </div>
-        <div class="comment-list" id="cl-${post.id}">
-          <p class="comment-empty">Loading comments…</p>
-        </div>
-      </div>
-
-    </div>`;
-}
-
-// ── Submit post ──
-async function submitPost() {
-  const text  = (document.getElementById('composeText').value || '').trim();
-  const title = (document.getElementById('composeTitle').value || '').trim();
-  if (!text && !composeImageFile && !composeOtherFile) {
-    showToast('Write something or attach a file first.', 'error'); return;
-  }
-
-  const btn = document.getElementById('btnPost');
-  btn.disabled = true; btn.textContent = 'Posting…';
-
-  try {
-    let imageUrl       = '';
-    let attachmentUrl  = '';
-    let attachmentName = '';
-
-    // Upload image to Cloudinary
-    if (composeImageFile) {
-      imageUrl = await uploadToCloudinary(composeImageFile, 'image');
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      document.getElementById('errEmail').classList.add('show'); return;
     }
+    document.getElementById('errEmail').classList.remove('show');
 
-    // Upload file to Cloudinary as raw
-    if (composeOtherFile) {
-      attachmentUrl  = await uploadToCloudinary(composeOtherFile, 'raw');
-      attachmentName = composeOtherFile.name;
+    if (pw.length < 8) {
+      document.getElementById('errPw').classList.add('show'); return;
     }
+    document.getElementById('errPw').classList.remove('show');
 
-    const status = isPrivileged ? 'published' : 'pending';
-
-    await db.collection('hub_posts').add({
-      title,
-      content:        text,
-      type:           document.getElementById('composeType').value,
-      status,
-      authorId:       userId,
-      authorName:     userName,
-      authorRole:     role,
-      imageUrl,
-      attachmentUrl,
-      attachmentName,
-      reactions:      { like:0, pray:0, fire:0 },
-      reactedBy:      {},
-      commentCount:   0,
-      pinned:         false,
-      createdAt:      firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    if (!isPrivileged) {
-      await notifySuperAdmin(`New post awaiting approval from ${userName}.`, 'hub');
-      showToast('Post submitted — awaiting approval.', 'info');
-    } else {
-      await logAudit('hub_post_published', `Published: "${(title||text).substring(0,60)}"`);
-      showToast('Post published!', 'success');
+    if (pw !== pwConf) {
+      document.getElementById('errPwConf').classList.add('show'); return;
     }
+    document.getElementById('errPwConf').classList.remove('show');
 
-    closeCompose();
-  } catch(err) {
-    console.error('Post error:', err);
-    showToast('Failed: ' + err.message, 'error');
-  }
-  btn.disabled = false; btn.textContent = 'Post';
-}
+    const btn = document.getElementById('btnReg');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span> Creating account…';
 
-// ── Post actions ──
-function toggleMenu(e, id) {
-  e.stopPropagation();
-  const menu = document.getElementById('menu-' + id);
-  const open = menu.classList.contains('show');
-  document.querySelectorAll('.post-dropdown').forEach(d => d.classList.remove('show'));
-  if (!open) menu.classList.add('show');
-}
-document.addEventListener('click', () => {
-  document.querySelectorAll('.post-dropdown').forEach(d => d.classList.remove('show'));
-});
+    try {
+      // 1. Upload avatar first
+      avatarUrl = await uploadAvatar();
 
-function expandText(id) {
-  const el  = document.getElementById('text-' + id);
-  const btn = document.getElementById('rmb-' + id);
-  if (el) el.classList.remove('clamped');
-  if (btn) btn.style.display = 'none';
-}
+      const first    = document.getElementById('rFirst').value.trim();
+      const last     = document.getElementById('rLast').value.trim();
+      const fullName = first + ' ' + last;
 
-async function approvePost(id) {
-  await db.collection('hub_posts').doc(id).update({ status:'published' });
-  const post = allPosts.find(p => p.id === id);
-  if (post) await notifyUser(post.authorId, `Your post "${(post.title||post.content||'').substring(0,40)}" has been approved on the Fellowship Hub!`, 'hub');
-  await logAudit('hub_post_approved', `Approved post: ${id}`);
-  showToast('Post approved and published!', 'success');
-}
+      // 2. Create Firebase Auth account
+      const cred = await auth.createUserWithEmailAndPassword(email, pw);
+      const uid  = cred.user.uid;
 
-async function rejectPost(id) {
-  if (!confirm('Reject and delete this post?')) return;
-  const post = allPosts.find(p => p.id === id);
-  await db.collection('hub_posts').doc(id).delete();
-  if (post) await notifyUser(post.authorId, `Your post was not approved. Please review community guidelines.`, 'hub');
-  await logAudit('hub_post_rejected', `Rejected post: ${id}`);
-  showToast('Post rejected.', 'info');
-}
+      // 3. User data object
+      const userData = {
+        name:        fullName,
+        firstName:   first,
+        lastName:    last,
+        email,
+        gender:      document.getElementById('rGender').value,
+        phone:       document.getElementById('rPhone').value.trim(),
+        state:       document.getElementById('rState').value,
+        department:  document.getElementById('rDept').value.trim(),
+        faculty:     document.getElementById('rFaculty').value,
+        level:       document.getElementById('rLevel').value,
+        yearStart:   document.getElementById('rYearStart').value.trim(),
+        yearLeaving: document.getElementById('rYearLeave').value.trim(),
+        dob_day:     document.getElementById('rDobDay').value,
+        dob_month:   document.getElementById('rDobMonth').value,
+        dob_year:    document.getElementById('rDobYear').value,
+        photoUrl:    avatarUrl,   // Cloudinary URL or '' if skipped
+        role:        'member',
+        status:      'pending',
+        financePerms:{ view:false, create:false, edit:false, export:false },
+        createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+      };
 
-async function deletePost(id) {
-  if (!confirm('Delete this post permanently?')) return;
-  await db.collection('hub_posts').doc(id).delete();
-  // Delete subcollection comments (client-side batch)
-  try {
-    const cSnap = await db.collection('hub_posts').doc(id).collection('comments').get();
-    const batch = db.batch();
-    cSnap.docs.forEach(d => batch.delete(d.ref));
-    await batch.commit();
-  } catch(e) {}
-  await logAudit('hub_post_deleted', `Deleted post: ${id}`);
-  showToast('Post deleted.', 'success');
-}
+      // 4. Save to users collection
+      await db.collection('users').doc(uid).set(userData);
 
-async function pinPost(id) {
-  await db.collection('hub_posts').doc(id).update({ pinned: true });
-  showToast('Post pinned to top.', 'success');
-}
-async function unpinPost(id) {
-  await db.collection('hub_posts').doc(id).update({ pinned: false });
-  showToast('Post unpinned.', 'info');
-}
+      // 5. Also pre-populate members collection
+      await db.collection('members').doc(uid).set({
+        name:        fullName,
+        gender:      userData.gender,
+        phone:       userData.phone,
+        state:       userData.state,
+        department:  userData.department,
+        faculty:     userData.faculty,
+        level:       userData.level,
+        yearStart:   userData.yearStart,
+        yearLeaving: userData.yearLeaving,
+        dob_day:     userData.dob_day,
+        dob_month:   userData.dob_month,
+        dob_year:    userData.dob_year,
+        photo:       avatarUrl,
+        position:    'Member',
+        createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+      });
 
-function copyPostLink(id) {
-  const url = `${location.origin}${location.pathname}#post-${id}`;
-  navigator.clipboard.writeText(url).then(() => showToast('Link copied!', 'success')).catch(() => showToast('Could not copy link.', 'error'));
-}
+      // 6. Notify Super Admin
+      await notifySuperAdmin(
+        `New registration: ${fullName} (${email}) is awaiting approval.`,
+        'member'
+      );
 
-// ── Reactions ──
-async function reactPost(postId, type) {
-  const post = allPosts.find(p => p.id === postId);
-  if (!post) return;
-  const reactedBy = { ...(post.reactedBy || {}) };
-  const reactions = { ...(post.reactions || { like:0, pray:0, fire:0 }) };
-  const prev = reactedBy[userId];
-  if (prev) {
-    reactions[prev] = Math.max(0, (reactions[prev] || 1) - 1);
-  }
-  if (prev !== type) {
-    reactions[type] = (reactions[type] || 0) + 1;
-    reactedBy[userId] = type;
-  } else {
-    delete reactedBy[userId];
-  }
-  await db.collection('hub_posts').doc(postId).update({ reactions, reactedBy });
-}
+      // 7. Sign out immediately — pending approval
+      await auth.signOut();
 
-// ── Save ──
-function toggleSave(id) {
-  if (savedIds.includes(id)) savedIds = savedIds.filter(s => s !== id);
-  else savedIds.push(id);
-  localStorage.setItem('hubSavedPosts', JSON.stringify(savedIds));
-  renderFeed();
-  showToast(savedIds.includes(id) ? 'Post saved.' : 'Removed from saved.', 'info');
-}
+      // 8. Show pending screen
+      hidePanels();
+      document.getElementById('pendingEmailEl').textContent = email;
+      document.getElementById('pendingScreen').classList.add('show');
 
-// ── Comments ──
-function toggleComments(postId) {
-  const wrap = document.getElementById('comments-' + postId);
-  const open = wrap.classList.toggle('open');
-  if (open) loadComments(postId);
-}
-
-async function loadComments(postId) {
-  const list = document.getElementById('cl-' + postId);
-  if (!list) return;
-  try {
-    const snap = await db.collection('hub_posts').doc(postId)
-      .collection('comments').orderBy('createdAt','asc').limit(50).get();
-
-    if (!snap.docs.length) {
-      list.innerHTML = '<p class="comment-empty">No comments yet — be the first!</p>';
-      return;
+    } catch(err) {
+      const map = {
+        'auth/email-already-in-use':
+          'This email is already registered. Please sign in instead.',
+        'auth/invalid-email':
+          'Invalid email address format.',
+        'auth/weak-password':
+          'Password is too weak. Use at least 8 characters with numbers and symbols.',
+        'auth/network-request-failed':
+          'Network error. Please check your internet connection.',
+      };
+      showAlert('regErr', map[err.code] || 'Registration failed: ' + err.message, 'error');
+      btn.disabled = false;
+      btn.innerHTML = '<span class="material-symbols-outlined">how_to_reg</span> Create Account';
     }
-    list.innerHTML = snap.docs.map(d => {
-      const c    = d.data();
-      const init = (c.authorName||'U').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-      const col  = avatarColors[(c.authorId||'a').charCodeAt(0) % avatarColors.length];
-      return `
-        <div class="comment-item">
-          <div class="comment-avatar" style="width:34px;height:34px;font-size:.75rem;background:${col}">${init}</div>
-          <div class="comment-bubble">
-            <div class="comment-author">${escHtml(c.authorName || 'Unknown')}</div>
-            <div class="comment-text">${escHtml(c.text || '')}</div>
-            <div class="comment-time">${timeAgo(c.createdAt)}</div>
-          </div>
-        </div>`;
-    }).join('');
-  } catch(err) {
-    list.innerHTML = '<p class="comment-empty" style="color:#dc3545;">Could not load comments.</p>';
   }
-}
 
-function commentEnter(e, postId) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitComment(postId); }
-}
-
-async function submitComment(postId) {
-  const input = document.getElementById('ci-' + postId);
-  const text  = (input.value || '').trim();
-  if (!text) return;
-  input.value = ''; input.style.height = '';
-  try {
-    await db.collection('hub_posts').doc(postId).collection('comments').add({
-      text,
-      authorId:   userId,
-      authorName: userName,
-      createdAt:  firebase.firestore.FieldValue.serverTimestamp()
+  // ── Sign out ──
+  function doSignOut() {
+    auth.signOut().then(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+      // Replace history so back can't return to app
+      window.location.replace('auth.html');
     });
-    await db.collection('hub_posts').doc(postId).update({
-      commentCount: firebase.firestore.FieldValue.increment(1)
-    });
-    loadComments(postId);
-  } catch(err) {
-    showToast('Could not post comment: ' + err.message, 'error');
   }
-}
 
-// ── Right sidebar ──
-function renderTrending() {
-  const counts = {};
-  allPosts.filter(p=>p.status==='published').forEach(p => {
-    counts[p.type] = (counts[p.type]||0) + 1;
-  });
-  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  document.getElementById('trendingList').innerHTML = sorted.length
-    ? sorted.map(([type,count],i) => {
-        const cfg = getCfg(type);
-        return `<div class="trending-item" onclick="setFilter(document.querySelector('[data-filter=${type}]'))">
-          <span class="trending-num">#${i+1}</span>
-          <span class="trending-tag">${cfg.label}</span>
-          <span class="trending-count" style="margin-left:auto;">${count} post${count!==1?'s':''}</span>
-        </div>`;
-      }).join('')
-    : '<p style="font-size:.8rem;color:#bbb;">No posts yet.</p>';
-}
+  // ── Forgot password ──
+  function toggleForgot() {
+    const box = document.getElementById('forgotBox');
+    box.classList.toggle('show');
+    if (box.classList.contains('show')) {
+      document.getElementById('forgotEmail').value =
+        document.getElementById('loginEmail').value;
+      document.getElementById('forgotEmail').focus();
+    }
+  }
 
-function renderStats() {
-  const published = allPosts.filter(p=>p.status==='published').length;
-  const pending   = allPosts.filter(p=>p.status==='pending').length;
-  const members   = new Set(allPosts.map(p=>p.authorId)).size;
-  const totalReacts = allPosts.reduce((s,p)=>{
-    const r = p.reactions||{};
-    return s + (r.like||0) + (r.pray||0) + (r.fire||0);
-  }, 0);
-  document.getElementById('statsList').innerHTML = `
-    <div style="display:flex;flex-direction:column;gap:.5rem;">
-      <div style="display:flex;justify-content:space-between;font-size:.82rem;"><span style="color:#555;">Published posts</span><strong>${published}</strong></div>
-      <div style="display:flex;justify-content:space-between;font-size:.82rem;"><span style="color:#555;">Contributors</span><strong>${members}</strong></div>
-      <div style="display:flex;justify-content:space-between;font-size:.82rem;"><span style="color:#555;">Total reactions</span><strong>${totalReacts}</strong></div>
-      ${pending > 0 && isPrivileged ? `<div style="display:flex;justify-content:space-between;font-size:.82rem;"><span style="color:#c45f00;">Pending review</span><strong style="color:#c45f00;">${pending}</strong></div>` : ''}
-    </div>`;
-}
+  async function sendReset() {
+    const email = document.getElementById('forgotEmail').value.trim();
+    document.getElementById('resetOk').classList.remove('show');
+    document.getElementById('resetErr').classList.remove('show');
+    if (!email) { showAlert('resetErr', 'Enter your email address.', 'error'); return; }
+    try {
+      await auth.sendPasswordResetEmail(email);
+      showAlert('resetOk', 'Reset link sent! Check your email inbox.', 'success');
+    } catch(err) {
+      const map = {
+        'auth/user-not-found': 'No account found with this email. Please register first.',
+        'auth/invalid-email':  'Invalid email address.',
+      };
+      showAlert('resetErr', map[err.code] || err.message, 'error');
+    }
+  }
 
-// ── Lightbox ──
-function openLightbox(url) {
-  document.getElementById('lightboxImg').src = url;
-  document.getElementById('lightbox').classList.add('show');
-}
-function closeLightbox() { document.getElementById('lightbox').classList.remove('show'); }
-
-// ── Helpers ──
-async function notifySuperAdmin(message, type) {
-  try {
-    const snap = await db.collection('users').where('role','==','superadmin').limit(1).get();
-    if (snap.empty) return;
-    await db.collection('notifications').add({
-      toUserId: snap.docs[0].id, message, type, link:'/hub.html',
-      read: false, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-  } catch(e) {}
-}
-
-async function notifyUser(uid, message, type) {
-  try {
-    await db.collection('notifications').add({
-      toUserId: uid, message, type, link:'/hub.html',
-      read: false, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-  } catch(e) {}
-}
-
-async function logAudit(action, description) {
-  try {
-    await db.collection('audit_logs').add({
-      action, description,
-      performedBy: userName, performedByRole: role, userId,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    });
-  } catch(e) {}
-}
-
-function doLogout() {
-  auth.signOut().then(() => { localStorage.clear(); window.location.href = 'auth.html'; });
-}
-
-function showToast(msg, type) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'toast show ' + type;
-  setTimeout(() => t.className = 'toast', 3000);
-}
-
-const sidebarEl = document.getElementById('sidebar');
-const overlayEl = document.getElementById('overlay');
-document.getElementById('hamburger').addEventListener('click', () => {
-  sidebarEl.classList.toggle('open'); overlayEl.classList.toggle('show');
-});
-function closeSidebar() { sidebarEl.classList.remove('open'); overlayEl.classList.remove('show'); }
+  // ── Notify Super Admin ──
+  async function notifySuperAdmin(message, type) {
+    try {
+      const snap = await db.collection('users')
+        .where('role','==','superadmin')
+        .where('status','==','active')
+        .limit(1).get();
+      if (snap.empty) return;
+      await db.collection('notifications').add({
+        toUserId: snap.docs[0].id, message, type,
+        link: '/user-management.html', read: false,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } catch(e) { console.warn('Notify SA:', e); }
+  }
 </script>
 </body>
-</html>
+                                                                            </html>
