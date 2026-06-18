@@ -422,6 +422,32 @@
 <div class="toast" id="toast"></div>
 
 <script>
+
+  // ── TRUE LOGOUT — clears session and blocks back button ──
+function doLogout() {
+  auth.signOut().then(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+    // Replace current history entry so back leads to auth, not dashboard
+    window.location.replace('auth.html');
+  }).catch(err => {
+    // Force redirect even if signOut fails
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.replace('auth.html');
+  });
+}
+
+// ── Block back-button from returning to this page after logout ──
+history.pushState(null, '', location.href);
+window.addEventListener('popstate', () => {
+  const loggedIn = !!localStorage.getItem('userRole');
+  if (!loggedIn) {
+    window.location.replace('auth.html');
+  } else {
+    history.pushState(null, '', location.href);
+  }
+});
   // ── Role setup ──
   const role     = localStorage.getItem('userRole');
   const userId   = localStorage.getItem('userId') || '';
