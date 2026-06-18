@@ -11,123 +11,83 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; font-family: 'Open Sans', sans-serif; background: #f0f2f5; color: #1a1a1a; }
 
-    /* ── Layout ── */
     .auth-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem 1rem; }
     .auth-box { background: #fff; border-radius: 14px; box-shadow: 0 4px 32px rgba(0,0,0,.12); width: 100%; max-width: 420px; overflow: hidden; }
 
-    /* ── Brand header ── */
-    .auth-header { background: linear-gradient(135deg, #0066cc, #6c63ff); padding: 2rem 1.5rem 1.8rem; text-align: center; position: relative; }
+    .auth-header { background: linear-gradient(135deg, #0066cc, #6c63ff); padding: 2rem 1.5rem 1.8rem; text-align: center; }
     .auth-header-logos { display: flex; align-items: center; justify-content: center; gap: .6rem; margin-bottom: 1rem; }
     .auth-logo { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; border: 2.5px solid rgba(255,255,255,.6); background: #fff; }
     .auth-logo img { width: 100%; height: 100%; object-fit: contain; }
     .auth-header h1 { font-family: 'Merriweather', serif; font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: .3rem; }
     .auth-header p  { font-size: .78rem; color: rgba(255,255,255,.8); }
 
-    /* ── Tabs ── */
     .auth-tabs { display: flex; border-bottom: 1px solid #edf0f4; }
     .auth-tab { flex: 1; padding: .85rem; font-family: 'Open Sans', sans-serif; font-size: .88rem; font-weight: 700; color: #888; background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; transition: color .2s, border-color .2s; }
     .auth-tab.active { color: #0066cc; border-bottom-color: #0066cc; }
 
-    /* ── Body ── */
     .auth-body { padding: 1.6rem 1.5rem 2rem; }
-
     .auth-panel { display: none; }
     .auth-panel.active { display: block; }
 
-    /* ── Form fields ── */
     .form-group { margin-bottom: 1rem; }
     .form-label { display: block; font-size: .75rem; font-weight: 700; color: #444; margin-bottom: .4rem; }
     .input-wrap { position: relative; }
-    .input-wrap .material-symbols-outlined.field-icon {
-      position: absolute; left: .85rem; top: 50%; transform: translateY(-50%);
-      font-size: 1.1rem; color: #aaa; pointer-events: none;
-    }
-    .form-input {
-      width: 100%; padding: .72rem .9rem .72rem 2.7rem;
-      border: 1.5px solid #dde3ec; border-radius: 8px;
-      font-family: 'Open Sans', sans-serif; font-size: .9rem;
-      color: #1a1a1a; background: #f7f9fc;
-      outline: none; transition: border-color .2s, background .2s;
-    }
+    .input-wrap .field-icon { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; color: #aaa; pointer-events: none; }
+    .form-input { width: 100%; padding: .72rem .9rem .72rem 2.7rem; border: 1.5px solid #dde3ec; border-radius: 8px; font-family: 'Open Sans', sans-serif; font-size: .9rem; color: #1a1a1a; background: #f7f9fc; outline: none; transition: border-color .2s, background .2s; }
     .form-input:focus { border-color: #0066cc; background: #fff; }
     .form-input.invalid { border-color: #dc3545; }
     .form-input.no-icon { padding-left: .9rem; }
-
-    .password-wrap { position: relative; }
     .password-wrap .form-input { padding-right: 2.8rem; }
     .toggle-pw { position: absolute; right: .85rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #aaa; display: flex; align-items: center; }
     .toggle-pw:hover { color: #555; }
-    .toggle-pw .material-symbols-outlined { font-size: 1.1rem; }
 
     .field-err { font-size: .72rem; color: #dc3545; margin-top: .3rem; display: none; }
     .field-err.show { display: block; }
-
-    /* ── Row ── */
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
 
-    /* ── Select ── */
     .select-wrap { position: relative; }
     .select-wrap::after { content: ''; position: absolute; right: .85rem; top: 50%; transform: translateY(-50%); border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid #888; pointer-events: none; }
-    .select-wrap .material-symbols-outlined.field-icon { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; color: #aaa; pointer-events: none; z-index:1; }
+    .select-wrap .field-icon { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; color: #aaa; pointer-events: none; z-index:1; }
     .form-select { width: 100%; padding: .72rem .9rem .72rem 2.7rem; border: 1.5px solid #dde3ec; border-radius: 8px; font-family: 'Open Sans', sans-serif; font-size: .88rem; color: #1a1a1a; background: #f7f9fc; outline: none; appearance: none; transition: border-color .2s; cursor: pointer; }
     .form-select:focus { border-color: #0066cc; background: #fff; }
     .form-select.invalid { border-color: #dc3545; }
 
-    /* ── Avatar upload ── */
-    .avatar-section { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; padding: .9rem; background: #f7f9fc; border: 1.5px dashed #dde3ec; border-radius: 8px; cursor: pointer; transition: border-color .2s, background .2s; }
+    .avatar-section { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; padding: .9rem; background: #f7f9fc; border: 1.5px dashed #dde3ec; border-radius: 8px; cursor: pointer; transition: border-color .2s; }
     .avatar-section:hover { border-color: #0066cc; background: #f0f5ff; }
-    .avatar-preview { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #0066cc, #6c63ff); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; border: 2px solid #dde3ec; }
+    .avatar-preview { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg,#0066cc,#6c63ff); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; border: 2px solid #dde3ec; }
     .avatar-preview img { width: 100%; height: 100%; object-fit: cover; display: none; }
-    .avatar-preview .avatar-initials { font-size: 1.3rem; font-weight: 700; color: #fff; }
+    .avatar-preview .avatar-ph { display: flex; align-items: center; justify-content: center; }
     .avatar-text .title { font-size: .84rem; font-weight: 700; color: #333; }
     .avatar-text .sub   { font-size: .72rem; color: #888; margin-top: .15rem; }
-    .avatar-uploading   { font-size: .72rem; color: #0066cc; font-weight: 700; margin-top: .2rem; display: none; }
+    .avatar-uploading   { font-size: .72rem; color: #0066cc; font-weight: 700; margin-top: .25rem; display: none; }
 
-    /* ── Divider ── */
-    .divider { display: flex; align-items: center; gap: .8rem; margin: 1.1rem 0; }
-    .divider-line { flex: 1; height: 1px; background: #edf0f4; }
-    .divider-text { font-size: .72rem; font-weight: 700; color: #bbb; text-transform: uppercase; letter-spacing: .06em; }
+    .alert { border-radius: 7px; padding: .8rem 1rem; font-size: .84rem; margin-bottom: 1rem; display: none; line-height: 1.5; }
+    .alert.show { display: block; }
+    .alert-error   { background: #fdecea; color: #c62828; border: 1px solid #f5b7b1; }
+    .alert-info    { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+    .alert-success { background: #eafaf0; color: #1e7e34; border: 1px solid #a3d9b1; }
 
-    /* ── Buttons ── */
     .btn-primary { width: 100%; padding: .82rem; background: #0066cc; color: #fff; font-family: 'Open Sans', sans-serif; font-size: .92rem; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: background .2s; display: flex; align-items: center; justify-content: center; gap: .5rem; }
     .btn-primary:hover    { background: #0052a3; }
     .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
-    .btn-primary .material-symbols-outlined { font-size: 1.1rem; }
 
-    /* ── Error/info alert ── */
-    .alert { border-radius: 7px; padding: .8rem 1rem; font-size: .82rem; margin-bottom: 1rem; display: none; line-height: 1.5; }
-    .alert.show { display: block; }
-    .alert-error { background: #fdecea; color: #c62828; border: 1px solid #f5b7b1; }
-    .alert-info  { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
-    .alert-success { background: #eafaf0; color: #1e7e34; border: 1px solid #a3d9b1; }
-
-    /* ── Pending screen ── */
-    .pending-screen { display: none; text-align: center; padding: 2rem 1.5rem; }
-    .pending-screen.show { display: block; }
-    .pending-icon { width: 72px; height: 72px; background: #fff8e1; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
-    .pending-icon .material-symbols-outlined { font-size: 2.2rem; color: #f57f17; }
-    .pending-screen h2 { font-family: 'Merriweather', serif; font-size: 1rem; font-weight: 700; margin-bottom: .6rem; }
-    .pending-screen p  { font-size: .84rem; color: #666; line-height: 1.6; margin-bottom: 1rem; }
-    .pending-screen .pending-email { font-size: .78rem; background: #f7f9fc; border: 1px solid #dde3ec; border-radius: 6px; padding: .6rem .9rem; color: #333; font-family: monospace; }
-    .btn-signout { margin-top: 1.2rem; width: 100%; padding: .7rem; background: none; color: #dc3545; border: 1.5px solid #dc3545; font-family: 'Open Sans', sans-serif; font-size: .88rem; font-weight: 700; border-radius: 8px; cursor: pointer; transition: background .2s; }
+    .pending-screen, .blocked-screen { display: none; text-align: center; padding: 2rem 1.5rem; }
+    .pending-screen.show, .blocked-screen.show { display: block; }
+    .screen-icon { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+    .screen-icon.orange { background: #fff8e1; }
+    .screen-icon.red    { background: #fdecea; }
+    .screen-icon .material-symbols-outlined { font-size: 2.2rem; }
+    .screen-icon.orange .material-symbols-outlined { color: #f57f17; }
+    .screen-icon.red    .material-symbols-outlined { color: #dc3545; }
+    .screen-h2 { font-family: 'Merriweather', serif; font-size: 1rem; font-weight: 700; margin-bottom: .6rem; }
+    .screen-p  { font-size: .84rem; color: #666; line-height: 1.6; margin-bottom: 1rem; }
+    .pending-email { font-size: .78rem; background: #f7f9fc; border: 1px solid #dde3ec; border-radius: 6px; padding: .6rem .9rem; color: #333; font-family: monospace; }
+    .btn-signout { margin-top: 1.2rem; width: 100%; padding: .72rem; background: none; color: #dc3545; border: 1.5px solid #dc3545; font-family: 'Open Sans', sans-serif; font-size: .88rem; font-weight: 700; border-radius: 8px; cursor: pointer; transition: background .2s; display: flex; align-items: center; justify-content: center; gap: .4rem; }
     .btn-signout:hover { background: #fff0f0; }
 
-    /* ── Blocked screen ── */
-    .blocked-screen { display: none; text-align: center; padding: 2rem 1.5rem; }
-    .blocked-screen.show { display: block; }
-    .blocked-icon { width: 72px; height: 72px; background: #fdecea; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
-    .blocked-icon .material-symbols-outlined { font-size: 2.2rem; color: #dc3545; }
-    .blocked-screen h2 { font-family: 'Merriweather', serif; font-size: 1rem; color: #dc3545; margin-bottom: .6rem; }
-    .blocked-screen p  { font-size: .84rem; color: #666; line-height: 1.6; margin-bottom: 1rem; }
-
-    /* ── Footer ── */
-    .auth-footer { text-align: center; padding: 1rem; border-top: 1px solid #edf0f4; }
-    .auth-footer p { font-size: .75rem; color: #aaa; }
-
-    /* ── Steps indicator (register) ── */
     .steps { display: flex; align-items: center; margin-bottom: 1.4rem; }
-    .step { display: flex; align-items: center; gap: .4rem; }
-    .step-dot { width: 28px; height: 28px; border-radius: 50%; background: #dde3ec; color: #888; font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .3s, color .3s; }
+    .step  { display: flex; align-items: center; gap: .4rem; }
+    .step-dot { width: 28px; height: 28px; border-radius: 50%; background: #dde3ec; color: #888; font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .3s,color .3s; }
     .step-dot.active   { background: #0066cc; color: #fff; }
     .step-dot.complete { background: #28a745; color: #fff; }
     .step-label { font-size: .72rem; font-weight: 700; color: #aaa; }
@@ -135,18 +95,26 @@
     .step-label.complete { color: #28a745; }
     .step-line { flex: 1; height: 2px; background: #dde3ec; margin: 0 .5rem; transition: background .3s; }
     .step-line.complete { background: #28a745; }
-
     .step-panel { display: none; }
     .step-panel.active { display: block; }
-
     .step-nav { display: flex; gap: .6rem; margin-top: 1.2rem; }
-    .btn-back { flex: 1; padding: .75rem; background: none; border: 1.5px solid #dde3ec; color: #555; font-family: 'Open Sans', sans-serif; font-size: .88rem; font-weight: 700; border-radius: 8px; cursor: pointer; transition: background .2s; }
+    .btn-back { flex: 1; padding: .72rem; background: none; border: 1.5px solid #dde3ec; color: #555; font-family: 'Open Sans', sans-serif; font-size: .88rem; font-weight: 700; border-radius: 8px; cursor: pointer; }
     .btn-back:hover { background: #f7f9fc; }
-    .btn-next { flex: 2; padding: .75rem; background: #0066cc; color: #fff; border: none; font-family: 'Open Sans', sans-serif; font-size: .88rem; font-weight: 700; border-radius: 8px; cursor: pointer; transition: background .2s; display: flex; align-items: center; justify-content: center; gap: .4rem; }
-    .btn-next:hover { background: #0052a3; }
+    .btn-next { flex: 2; padding: .72rem; background: #0066cc; color: #fff; border: none; font-family: 'Open Sans', sans-serif; font-size: .88rem; font-weight: 700; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: .4rem; }
+    .btn-next:hover    { background: #0052a3; }
     .btn-next:disabled { opacity: .6; cursor: not-allowed; }
 
-    @media(max-width: 480px) {
+    .pw-strength-wrap { margin-top: .5rem; display: none; }
+    .pw-strength-bar  { height: 4px; background: #edf0f4; border-radius: 2px; overflow: hidden; margin-bottom: .25rem; }
+    .pw-strength-fill { height: 100%; width: 0%; border-radius: 2px; transition: width .3s,background .3s; }
+
+    .forgot-box { margin-top: 1.2rem; background: #f7f9fc; border: 1px solid #dde3ec; border-radius: 8px; padding: 1rem; display: none; }
+    .forgot-box.show { display: block; }
+
+    .auth-footer { text-align: center; padding: 1rem; border-top: 1px solid #edf0f4; }
+    .auth-footer p { font-size: .75rem; color: #aaa; }
+
+    @media(max-width:480px) {
       .auth-box { border-radius: 0; min-height: 100vh; }
       .auth-wrap { padding: 0; align-items: flex-start; }
       .form-row { grid-template-columns: 1fr; gap: 0; }
@@ -163,7 +131,6 @@
 <div class="auth-wrap">
   <div class="auth-box">
 
-    <!-- Brand header -->
     <div class="auth-header">
       <div class="auth-header-logos">
         <div class="auth-logo"><img src="gecc-logo.jpg" alt="GECC"/></div>
@@ -173,17 +140,15 @@
       <p>Digital Fellowship Platform</p>
     </div>
 
-    <!-- Tabs -->
     <div class="auth-tabs" id="authTabs">
-      <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
-      <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Create Account</button>
+      <button class="auth-tab active" id="tabLogin"    onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab"        id="tabRegister" onclick="switchTab('register')">Create Account</button>
     </div>
 
     <div class="auth-body">
 
-      <!-- ══════════ LOGIN PANEL ══════════ -->
+      <!-- ── LOGIN ── -->
       <div class="auth-panel active" id="panelLogin">
-
         <div class="alert alert-error" id="loginErr"></div>
 
         <div class="form-group">
@@ -198,100 +163,81 @@
           <label class="form-label">Password</label>
           <div class="input-wrap password-wrap">
             <span class="material-symbols-outlined field-icon">lock</span>
-            <input type="password" class="form-input" id="loginPw" placeholder="••••••••" autocomplete="current-password"
-              onkeydown="if(event.key==='Enter')doLogin()"/>
-            <button class="toggle-pw" onclick="togglePw('loginPw',this)" type="button">
+            <input type="password" class="form-input" id="loginPw" placeholder="••••••••" autocomplete="current-password"/>
+            <button class="toggle-pw" type="button" onclick="togglePw('loginPw',this)">
               <span class="material-symbols-outlined">visibility</span>
             </button>
           </div>
         </div>
 
         <div style="text-align:right;margin-bottom:1rem;">
-          <button onclick="openForgot()" style="background:none;border:none;color:#0066cc;font-size:.8rem;font-weight:700;cursor:pointer;">Forgot password?</button>
+          <button onclick="toggleForgot()" style="background:none;border:none;color:#0066cc;font-size:.8rem;font-weight:700;cursor:pointer;">Forgot password?</button>
         </div>
 
         <button class="btn-primary" id="btnLogin" onclick="doLogin()">
           <span class="material-symbols-outlined">login</span> Sign In
         </button>
 
-        <!-- Forgot password inline -->
-        <div id="forgotSection" style="display:none;margin-top:1.2rem;background:#f7f9fc;border:1px solid #dde3ec;border-radius:8px;padding:1rem;">
-          <p style="font-size:.8rem;font-weight:700;color:#333;margin-bottom:.6rem;">Reset your password</p>
+        <div class="forgot-box" id="forgotBox">
+          <p style="font-size:.82rem;font-weight:700;color:#333;margin-bottom:.7rem;">Reset your password</p>
           <div class="input-wrap" style="margin-bottom:.7rem;">
             <span class="material-symbols-outlined field-icon">mail</span>
             <input type="email" class="form-input" id="forgotEmail" placeholder="Enter your email"/>
           </div>
           <div style="display:flex;gap:.5rem;">
-            <button onclick="sendReset()" style="flex:2;padding:.6rem;background:#0066cc;color:#fff;border:none;border-radius:6px;font-family:'Open Sans',sans-serif;font-size:.84rem;font-weight:700;cursor:pointer;">Send Reset Link</button>
-            <button onclick="closeForgot()" style="flex:1;padding:.6rem;background:none;border:1.5px solid #dde3ec;color:#555;border-radius:6px;font-family:'Open Sans',sans-serif;font-size:.84rem;font-weight:700;cursor:pointer;">Cancel</button>
+            <button onclick="sendReset()" style="flex:2;padding:.62rem;background:#0066cc;color:#fff;border:none;border-radius:6px;font-family:'Open Sans',sans-serif;font-size:.84rem;font-weight:700;cursor:pointer;">Send Reset Link</button>
+            <button onclick="toggleForgot()" style="flex:1;padding:.62rem;background:none;border:1.5px solid #dde3ec;color:#555;border-radius:6px;font-family:'Open Sans',sans-serif;font-size:.84rem;font-weight:700;cursor:pointer;">Cancel</button>
           </div>
-          <div class="alert alert-success" id="resetSuccess" style="margin-top:.7rem;"></div>
-          <div class="alert alert-error"   id="resetErr"     style="margin-top:.7rem;"></div>
+          <div class="alert alert-success" id="resetOk"  style="margin-top:.7rem;"></div>
+          <div class="alert alert-error"   id="resetErr" style="margin-top:.7rem;"></div>
         </div>
-
       </div>
 
-      <!-- ══════════ PENDING SCREEN ══════════ -->
+      <!-- ── PENDING ── -->
       <div class="pending-screen" id="pendingScreen">
-        <div class="pending-icon"><span class="material-symbols-outlined">hourglass_top</span></div>
-        <h2>Account Pending Approval</h2>
-        <p>Your registration was successful. Your account is awaiting approval from the Super Admin. You will be notified once approved.</p>
-        <div class="pending-email" id="pendingEmailDisplay"></div>
+        <div class="screen-icon orange"><span class="material-symbols-outlined">hourglass_top</span></div>
+        <div class="screen-h2">Account Pending Approval</div>
+        <p class="screen-p">Your registration was successful! The Super Admin will review and approve your account. You will be notified once approved.</p>
+        <div class="pending-email" id="pendingEmailEl"></div>
         <button class="btn-signout" onclick="doSignOut()">
-          <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle;">logout</span>
-          Sign out
+          <span class="material-symbols-outlined">logout</span> Sign out
         </button>
       </div>
 
-      <!-- ══════════ BLOCKED SCREEN ══════════ -->
+      <!-- ── BLOCKED ── -->
       <div class="blocked-screen" id="blockedScreen">
-        <div class="blocked-icon"><span class="material-symbols-outlined">block</span></div>
-        <h2>Account Restricted</h2>
-        <p id="blockedMsg">Your account has been suspended or blocked. Please contact the fellowship admin for assistance.</p>
+        <div class="screen-icon red"><span class="material-symbols-outlined">block</span></div>
+        <div class="screen-h2" style="color:#dc3545;">Account Restricted</div>
+        <p class="screen-p" id="blockedMsg">Your account has been suspended. Contact the fellowship admin.</p>
         <button class="btn-signout" onclick="doSignOut()">
-          <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle;">logout</span>
-          Sign out
+          <span class="material-symbols-outlined">logout</span> Sign out
         </button>
       </div>
 
-      <!-- ══════════ REGISTER PANEL ══════════ -->
+      <!-- ── REGISTER ── -->
       <div class="auth-panel" id="panelRegister">
 
-        <!-- Steps indicator -->
         <div class="steps">
-          <div class="step">
-            <div class="step-dot active" id="dot1">1</div>
-            <div class="step-label active" id="lbl1">Personal</div>
-          </div>
+          <div class="step"><div class="step-dot active" id="dot1">1</div><div class="step-label active" id="lbl1">Personal</div></div>
           <div class="step-line" id="line1"></div>
-          <div class="step">
-            <div class="step-dot" id="dot2">2</div>
-            <div class="step-label" id="lbl2">Academic</div>
-          </div>
+          <div class="step"><div class="step-dot" id="dot2">2</div><div class="step-label" id="lbl2">Academic</div></div>
           <div class="step-line" id="line2"></div>
-          <div class="step">
-            <div class="step-dot" id="dot3">3</div>
-            <div class="step-label" id="lbl3">Account</div>
-          </div>
+          <div class="step"><div class="step-dot" id="dot3">3</div><div class="step-label" id="lbl3">Account</div></div>
         </div>
 
         <div class="alert alert-error" id="regErr"></div>
 
-        <!-- ── Step 1: Personal ── -->
+        <!-- Step 1 -->
         <div class="step-panel active" id="step1">
-
-          <!-- Avatar upload -->
           <div class="avatar-section" onclick="document.getElementById('avatarInput').click()">
             <div class="avatar-preview" id="avatarPreview">
-              <img id="avatarPreviewImg" src="" alt=""/>
-              <span class="avatar-initials" id="avatarInitials">
-                <span class="material-symbols-outlined" style="font-size:1.5rem;">add_a_photo</span>
-              </span>
+              <div class="avatar-ph"><span class="material-symbols-outlined" style="color:#fff;font-size:1.6rem;">add_a_photo</span></div>
+              <img id="avatarImg" src="" alt=""/>
             </div>
             <div class="avatar-text">
               <div class="title">Profile Photo</div>
               <div class="sub">Tap to upload your photo (optional)</div>
-              <div class="avatar-uploading" id="avatarUploading">Uploading…</div>
+              <div class="avatar-uploading" id="avatarUploading">Uploading to Cloudinary…</div>
             </div>
             <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="handleAvatarSelect(event)"/>
           </div>
@@ -301,17 +247,17 @@
               <label class="form-label">First Name *</label>
               <div class="input-wrap">
                 <span class="material-symbols-outlined field-icon">person</span>
-                <input type="text" class="form-input" id="rFirstName" placeholder="e.g. Chukwuemeka"/>
+                <input type="text" class="form-input" id="rFirst" placeholder="e.g. Emeka"/>
               </div>
-              <div class="field-err" id="errFirst">First name required</div>
+              <div class="field-err" id="errFirst">Required</div>
             </div>
             <div class="form-group">
               <label class="form-label">Last Name *</label>
               <div class="input-wrap">
                 <span class="material-symbols-outlined field-icon">person</span>
-                <input type="text" class="form-input" id="rLastName" placeholder="e.g. Eze"/>
+                <input type="text" class="form-input" id="rLast" placeholder="e.g. Eze"/>
               </div>
-              <div class="field-err" id="errLast">Last name required</div>
+              <div class="field-err" id="errLast">Required</div>
             </div>
           </div>
 
@@ -320,9 +266,8 @@
             <div class="select-wrap">
               <span class="material-symbols-outlined field-icon">wc</span>
               <select class="form-select" id="rGender">
-                <option value="">— Select gender —</option>
-                <option>Male</option>
-                <option>Female</option>
+                <option value="">— Select —</option>
+                <option>Male</option><option>Female</option>
               </select>
             </div>
             <div class="field-err" id="errGender">Required</div>
@@ -332,7 +277,7 @@
             <label class="form-label">Phone Number</label>
             <div class="input-wrap">
               <span class="material-symbols-outlined field-icon">phone</span>
-              <input type="tel" class="form-input" id="rPhone" placeholder="e.g. 08012345678"/>
+              <input type="tel" class="form-input" id="rPhone" placeholder="08012345678"/>
             </div>
           </div>
 
@@ -341,19 +286,16 @@
             <div class="select-wrap">
               <span class="material-symbols-outlined field-icon">location_on</span>
               <select class="form-select" id="rState">
-                <option value="">— Select state —</option>
-                <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option>
-                <option>Anambra</option><option>Bauchi</option><option>Bayelsa</option>
-                <option>Benue</option><option>Borno</option><option>Cross River</option>
-                <option>Delta</option><option>Ebonyi</option><option>Edo</option>
-                <option>Ekiti</option><option>Enugu</option><option>FCT</option>
-                <option>Gombe</option><option>Imo</option><option>Jigawa</option>
-                <option>Kaduna</option><option>Kano</option><option>Katsina</option>
-                <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
-                <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
-                <option>Ogun</option><option>Ondo</option><option>Osun</option>
-                <option>Oyo</option><option>Plateau</option><option>Rivers</option>
-                <option>Sokoto</option><option>Taraba</option><option>Yobe</option>
+                <option value="">— Select —</option>
+                <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option>
+                <option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option>
+                <option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option>
+                <option>Ekiti</option><option>Enugu</option><option>FCT</option><option>Gombe</option>
+                <option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option>
+                <option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+                <option>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option>
+                <option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option>
+                <option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option>
                 <option>Zamfara</option>
               </select>
             </div>
@@ -366,16 +308,15 @@
           </div>
         </div>
 
-        <!-- ── Step 2: Academic ── -->
+        <!-- Step 2 -->
         <div class="step-panel" id="step2">
-
           <div class="form-group">
             <label class="form-label">Department *</label>
             <div class="input-wrap">
               <span class="material-symbols-outlined field-icon">school</span>
               <input type="text" class="form-input" id="rDept" placeholder="e.g. Computer Science"/>
             </div>
-            <div class="field-err" id="errDept">Department required</div>
+            <div class="field-err" id="errDept">Required</div>
           </div>
 
           <div class="form-group">
@@ -383,30 +324,21 @@
             <div class="select-wrap">
               <span class="material-symbols-outlined field-icon">account_balance</span>
               <select class="form-select" id="rFaculty">
-                <option value="">— Select faculty —</option>
-                <option>Agriculture</option>
-                <option>Allied Health Sciences</option>
-                <option>Basic Medical Sciences</option>
-                <option>Clinical Sciences</option>
-                <option>Communication &amp; Media Studies</option>
-                <option>Computing</option>
-                <option>Dentistry</option>
-                <option>Education</option>
-                <option>Engineering</option>
-                <option>Humanities</option>
-                <option>Law</option>
-                <option>Management Sciences</option>
-                <option>Pharmaceutical Sciences</option>
-                <option>Science</option>
-                <option>SSLT</option>
-                <option>Social Sciences</option>
+                <option value="">— Select —</option>
+                <option>Agriculture</option><option>Allied Health Sciences</option>
+                <option>Basic Medical Sciences</option><option>Clinical Sciences</option>
+                <option>Communication &amp; Media Studies</option><option>Computing</option>
+                <option>Dentistry</option><option>Education</option><option>Engineering</option>
+                <option>Humanities</option><option>Law</option><option>Management Sciences</option>
+                <option>Pharmaceutical Sciences</option><option>Science</option>
+                <option>SSLT</option><option>Social Sciences</option>
               </select>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label">Current Level *</label>
+              <label class="form-label">Level *</label>
               <div class="select-wrap">
                 <span class="material-symbols-outlined field-icon">bar_chart</span>
                 <select class="form-select" id="rLevel">
@@ -434,7 +366,6 @@
               <input type="number" class="form-input" id="rYearLeave" placeholder="e.g. 2027" min="2000" max="2099"/>
             </div>
             <div class="field-err" id="errYearLeave">Required — used for FYB tracking</div>
-            <p style="font-size:.7rem;color:#aaa;margin-top:.3rem;">This helps track your final year status in the fellowship.</p>
           </div>
 
           <div class="form-group">
@@ -467,9 +398,8 @@
           </div>
         </div>
 
-        <!-- ── Step 3: Account ── -->
+        <!-- Step 3 -->
         <div class="step-panel" id="step3">
-
           <div class="form-group">
             <label class="form-label">Email Address *</label>
             <div class="input-wrap">
@@ -483,18 +413,15 @@
             <label class="form-label">Password *</label>
             <div class="input-wrap password-wrap">
               <span class="material-symbols-outlined field-icon">lock</span>
-              <input type="password" class="form-input" id="rPw" placeholder="Min 8 characters" autocomplete="new-password"/>
-              <button class="toggle-pw" onclick="togglePw('rPw',this)" type="button">
+              <input type="password" class="form-input" id="rPw" placeholder="Min 8 characters" autocomplete="new-password" oninput="checkPwStrength(this.value)"/>
+              <button class="toggle-pw" type="button" onclick="togglePw('rPw',this)">
                 <span class="material-symbols-outlined">visibility</span>
               </button>
             </div>
-            <div class="field-err" id="errPw">Min 8 characters</div>
-            <!-- Password strength -->
-            <div id="pwStrengthWrap" style="margin-top:.5rem;display:none;">
-              <div style="height:4px;background:#edf0f4;border-radius:2px;overflow:hidden;margin-bottom:.25rem;">
-                <div id="pwStrengthBar" style="height:100%;width:0%;border-radius:2px;transition:width .3s,background .3s;"></div>
-              </div>
-              <span id="pwStrengthLabel" style="font-size:.7rem;font-weight:700;"></span>
+            <div class="field-err" id="errPw">Minimum 8 characters required</div>
+            <div class="pw-strength-wrap" id="pwStrWrap">
+              <div class="pw-strength-bar"><div class="pw-strength-fill" id="pwStrFill"></div></div>
+              <span id="pwStrLabel" style="font-size:.7rem;font-weight:700;"></span>
             </div>
           </div>
 
@@ -502,32 +429,28 @@
             <label class="form-label">Confirm Password *</label>
             <div class="input-wrap password-wrap">
               <span class="material-symbols-outlined field-icon">lock</span>
-              <input type="password" class="form-input" id="rPwConfirm" placeholder="Re-enter password" autocomplete="new-password"/>
-              <button class="toggle-pw" onclick="togglePw('rPwConfirm',this)" type="button">
+              <input type="password" class="form-input" id="rPwConf" placeholder="Re-enter password" autocomplete="new-password"/>
+              <button class="toggle-pw" type="button" onclick="togglePw('rPwConf',this)">
                 <span class="material-symbols-outlined">visibility</span>
               </button>
             </div>
-            <div class="field-err" id="errPwConfirm">Passwords do not match</div>
+            <div class="field-err" id="errPwConf">Passwords do not match</div>
           </div>
 
           <div class="step-nav">
             <button class="btn-back" onclick="goStep(2)">Back</button>
-            <button class="btn-next" id="btnRegister" onclick="doRegister()">
+            <button class="btn-next" id="btnReg" onclick="doRegister()">
               <span class="material-symbols-outlined">how_to_reg</span> Create Account
             </button>
           </div>
         </div>
 
       </div>
-      <!-- end register panel -->
-
     </div>
-    <!-- end auth-body -->
 
     <div class="auth-footer">
-      <p>GECC Uniport Digital Fellowship Platform &copy; <span id="yr"></span></p>
+      <p>GECC Uniport &copy; <span id="yr"></span></p>
     </div>
-
   </div>
 </div>
 
@@ -535,85 +458,138 @@
   document.getElementById('yr').textContent = new Date().getFullYear();
 
   // ── Cloudinary ──
-  const CLOUDINARY_CLOUD  = 'df5pitgrp';
-  const CLOUDINARY_PRESET = 'gecc-uniport';
+  const CLD_CLOUD  = 'df5pitgrp';
+  const CLD_PRESET = 'gecc-uniport';
 
-  // ── State ──
-  let currentStep     = 1;
-  let avatarFile      = null;
-  let avatarUrl       = '';
+  // ── Block back-button after logout ──
+  // Push a dummy state so back button can't return to protected pages
+  if (performance.navigation.type !== 1) {
+    history.pushState(null, '', location.href);
+  }
+  window.addEventListener('popstate', () => {
+    history.pushState(null, '', location.href);
+  });
+
+  // ── If already logged in and active, redirect ──
+  // (only after the page finishes loading, handled in onAuthStateChanged below)
+  let authChecked = false;
+
+  auth.onAuthStateChanged(async user => {
+    if (authChecked) return;
+    authChecked = true;
+    if (!user) return;
+
+    try {
+      const doc = await db.collection('users').doc(user.uid).get();
+      if (!doc.exists) { auth.signOut(); return; }
+      const d = doc.data();
+
+      if (d.status === 'active') {
+        saveAndRedirect(user.uid, d);
+      } else if (d.status === 'pending') {
+        hidePanels();
+        document.getElementById('pendingEmailEl').textContent = d.email || user.email;
+        document.getElementById('pendingScreen').classList.add('show');
+      } else {
+        hidePanels();
+        document.getElementById('blockedMsg').textContent =
+          `Your account has been ${d.status}. Contact the fellowship admin.`;
+        document.getElementById('blockedScreen').classList.add('show');
+        auth.signOut();
+      }
+    } catch(e) { console.warn('Auth check error:', e); }
+  });
+
+  function saveAndRedirect(uid, d) {
+    localStorage.setItem('userRole',  d.role     || 'member');
+    localStorage.setItem('userId',    uid);
+    localStorage.setItem('userName',  d.name     || 'User');
+    localStorage.setItem('userEmail', d.email    || '');
+    localStorage.setItem('userPhoto', d.photoUrl || '');
+    // Replace current history entry so back can't return here
+    window.location.replace('dashboard.html');
+  }
 
   // ── Tab switch ──
   function switchTab(tab) {
-    document.getElementById('panelLogin').classList.toggle('active', tab === 'login');
-    document.getElementById('panelRegister').classList.toggle('active', tab === 'register');
+    ['panelLogin','panelRegister'].forEach(id => {
+      document.getElementById(id).classList.toggle('active', id === 'panel' + cap(tab));
+    });
+    ['tabLogin','tabRegister'].forEach(id => {
+      document.getElementById(id).classList.toggle('active', id === 'tab' + cap(tab));
+    });
     document.getElementById('pendingScreen').classList.remove('show');
     document.getElementById('blockedScreen').classList.remove('show');
-    document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
-    document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
     document.getElementById('authTabs').style.display = 'flex';
-    clearAlerts();
+    clearAllAlerts();
   }
 
-  function clearAlerts() {
-    ['loginErr','regErr','resetSuccess','resetErr'].forEach(id => {
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function hidePanels() {
+    document.getElementById('panelLogin').classList.remove('active');
+    document.getElementById('panelRegister').classList.remove('active');
+    document.getElementById('authTabs').style.display = 'none';
+  }
+
+  function clearAllAlerts() {
+    ['loginErr','regErr','resetOk','resetErr'].forEach(id => {
       const el = document.getElementById(id);
       if (el) { el.classList.remove('show'); el.textContent = ''; }
     });
   }
 
-  function showAlert(id, msg) {
+  function showAlert(id, msg, type='error') {
     const el = document.getElementById(id);
     el.textContent = msg;
-    el.classList.add('show');
+    el.className = `alert alert-${type} show`;
   }
 
   // ── Password toggle ──
-  function togglePw(inputId, btn) {
-    const input = document.getElementById(inputId);
-    const icon  = btn.querySelector('.material-symbols-outlined');
-    if (input.type === 'password') { input.type = 'text'; icon.textContent = 'visibility_off'; }
-    else { input.type = 'password'; icon.textContent = 'visibility'; }
+  function togglePw(id, btn) {
+    const inp  = document.getElementById(id);
+    const icon = btn.querySelector('.material-symbols-outlined');
+    if (inp.type === 'password') { inp.type = 'text'; icon.textContent = 'visibility_off'; }
+    else { inp.type = 'password'; icon.textContent = 'visibility'; }
   }
 
   // ── Password strength ──
-  document.getElementById('rPw').addEventListener('input', function() {
-    const val  = this.value;
-    const wrap = document.getElementById('pwStrengthWrap');
-    const bar  = document.getElementById('pwStrengthBar');
-    const lbl  = document.getElementById('pwStrengthLabel');
+  function checkPwStrength(val) {
+    const wrap = document.getElementById('pwStrWrap');
+    const fill = document.getElementById('pwStrFill');
+    const lbl  = document.getElementById('pwStrLabel');
     if (!val) { wrap.style.display = 'none'; return; }
     wrap.style.display = 'block';
     let score = 0;
-    if (val.length >= 8) score++;
-    if (/[A-Z]/.test(val)) score++;
-    if (/[0-9]/.test(val)) score++;
+    if (val.length >= 8)          score++;
+    if (/[A-Z]/.test(val))        score++;
+    if (/[0-9]/.test(val))        score++;
     if (/[^A-Za-z0-9]/.test(val)) score++;
-    const levels = [
-      { pct:'25%', color:'#dc3545', label:'Weak' },
-      { pct:'50%', color:'#fd7e14', label:'Fair' },
-      { pct:'75%', color:'#ffc107', label:'Good' },
-      { pct:'100%',color:'#28a745', label:'Strong' },
+    const cfg = [
+      { w:'25%',  c:'#dc3545', l:'Weak'   },
+      { w:'50%',  c:'#fd7e14', l:'Fair'   },
+      { w:'75%',  c:'#ffc107', l:'Good'   },
+      { w:'100%', c:'#28a745', l:'Strong' },
     ];
-    const lvl = levels[score - 1] || levels[0];
-    bar.style.width      = lvl.pct;
-    bar.style.background = lvl.color;
-    lbl.textContent      = lvl.label;
-    lbl.style.color      = lvl.color;
-  });
+    const s = cfg[score-1] || cfg[0];
+    fill.style.width = s.w; fill.style.background = s.c;
+    lbl.textContent  = s.l; lbl.style.color = s.c;
+  }
 
   // ── Avatar ──
+  let avatarFile = null;
+  let avatarUrl  = '';
+
   function handleAvatarSelect(e) {
     const file = e.target.files[0];
     if (!file) return;
     avatarFile = file;
     const reader = new FileReader();
     reader.onload = ev => {
-      const img  = document.getElementById('avatarPreviewImg');
-      const init = document.getElementById('avatarInitials');
-      img.src   = ev.target.result;
+      const img = document.getElementById('avatarImg');
+      img.src = ev.target.result;
       img.style.display = 'block';
-      init.style.display = 'none';
+      document.getElementById('avatarPreview').querySelector('.avatar-ph').style.display = 'none';
     };
     reader.readAsDataURL(file);
     e.target.value = '';
@@ -623,311 +599,309 @@
     if (!avatarFile) return '';
     document.getElementById('avatarUploading').style.display = 'block';
     try {
-      const formData = new FormData();
-      formData.append('file',           avatarFile);
-      formData.append('upload_preset',  CLOUDINARY_PRESET);
-      const res  = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
-        method: 'POST', body: formData
+      const fd = new FormData();
+      fd.append('file',          avatarFile);
+      fd.append('upload_preset', CLD_PRESET);
+      fd.append('folder',        'gecc_avatars');
+      const res  = await fetch(`https://api.cloudinary.com/v1_1/${CLD_CLOUD}/image/upload`, {
+        method: 'POST', body: fd
       });
       const data = await res.json();
       if (!data.secure_url) throw new Error(data.error?.message || 'Upload failed');
       return data.secure_url;
     } catch(err) {
-      console.warn('Avatar upload failed:', err);
+      console.warn('Avatar upload failed:', err.message);
       return '';
     } finally {
       document.getElementById('avatarUploading').style.display = 'none';
     }
   }
 
-  // ── Step navigation ──
-  function updateStepIndicator(step) {
+  // ── Steps ──
+  let currentStep = 1;
+
+  function updateStepUI(step) {
     for (let i = 1; i <= 3; i++) {
       const dot = document.getElementById('dot' + i);
       const lbl = document.getElementById('lbl' + i);
-      if (i < step)  { dot.className = 'step-dot complete'; lbl.className = 'step-label complete'; dot.innerHTML = '<span class="material-symbols-outlined" style="font-size:.85rem;">check</span>'; }
-      else if (i === step) { dot.className = 'step-dot active'; lbl.className = 'step-label active'; dot.textContent = i; }
-      else { dot.className = 'step-dot'; lbl.className = 'step-label'; dot.textContent = i; }
-    }
-    for (let i = 1; i <= 2; i++) {
-      document.getElementById('line' + i).className = 'step-line' + (step > i ? ' complete' : '');
+      if (i < step) {
+        dot.className   = 'step-dot complete';
+        lbl.className   = 'step-label complete';
+        dot.innerHTML   = '<span class="material-symbols-outlined" style="font-size:.85rem;">check</span>';
+      } else if (i === step) {
+        dot.className   = 'step-dot active';
+        lbl.className   = 'step-label active';
+        dot.textContent = i;
+      } else {
+        dot.className   = 'step-dot';
+        lbl.className   = 'step-label';
+        dot.textContent = i;
+      }
+      if (i <= 2) {
+        document.getElementById('line' + i).className = 'step-line' + (step > i ? ' complete' : '');
+      }
     }
   }
 
-  function goStep(step) {
-    if (step > currentStep && !validateStep(currentStep)) return;
+  function goStep(target) {
+    if (target > currentStep && !validateStep(currentStep)) return;
     document.getElementById('step' + currentStep).classList.remove('active');
-    currentStep = step;
+    currentStep = target;
     document.getElementById('step' + currentStep).classList.add('active');
-    updateStepIndicator(step);
-    clearAlerts();
+    updateStepUI(currentStep);
+    clearAllAlerts();
   }
 
   function validateStep(step) {
     let valid = true;
-    const setErr = (id, show) => {
-      document.getElementById(id).classList.toggle('show', show);
-      const inputId = id.replace('err','r') + (id === 'errFirst' ? 'FirstName' : id === 'errLast' ? 'LastName' : '');
+    const req = (fieldId, errId) => {
+      const val = document.getElementById(fieldId).value.trim();
+      document.getElementById(errId).classList.toggle('show', !val);
+      if (!val) valid = false;
     };
-
-    if (step === 1) {
-      const first  = document.getElementById('rFirstName').value.trim();
-      const last   = document.getElementById('rLastName').value.trim();
-      const gender = document.getElementById('rGender').value;
-      if (!first)  { document.getElementById('errFirst').classList.add('show');  valid = false; }
-      else           document.getElementById('errFirst').classList.remove('show');
-      if (!last)   { document.getElementById('errLast').classList.add('show');   valid = false; }
-      else           document.getElementById('errLast').classList.remove('show');
-      if (!gender) { document.getElementById('errGender').classList.add('show'); valid = false; }
-      else           document.getElementById('errGender').classList.remove('show');
-    }
-
-    if (step === 2) {
-      const dept      = document.getElementById('rDept').value.trim();
-      const level     = document.getElementById('rLevel').value;
-      const yearStart = document.getElementById('rYearStart').value.trim();
-      const yearLeave = document.getElementById('rYearLeave').value.trim();
-      if (!dept)      { document.getElementById('errDept').classList.add('show');      valid = false; }
-      else              document.getElementById('errDept').classList.remove('show');
-      if (!level)     { document.getElementById('errLevel').classList.add('show');     valid = false; }
-      else              document.getElementById('errLevel').classList.remove('show');
-      if (!yearStart) { document.getElementById('errYearStart').classList.add('show'); valid = false; }
-      else              document.getElementById('errYearStart').classList.remove('show');
-      if (!yearLeave) { document.getElementById('errYearLeave').classList.add('show'); valid = false; }
-      else              document.getElementById('errYearLeave').classList.remove('show');
-    }
-
+    if (step === 1) { req('rFirst','errFirst'); req('rLast','errLast'); req('rGender','errGender'); }
+    if (step === 2) { req('rDept','errDept'); req('rLevel','errLevel'); req('rYearStart','errYearStart'); req('rYearLeave','errYearLeave'); }
     return valid;
   }
 
-  // ── Login ──
+  // ── LOGIN ──
   async function doLogin() {
     const email = document.getElementById('loginEmail').value.trim();
     const pw    = document.getElementById('loginPw').value;
-    const btn   = document.getElementById('btnLogin');
-    clearAlerts();
+    clearAllAlerts();
 
-    if (!email || !pw) { showAlert('loginErr', 'Please enter your email and password.'); return; }
+    if (!email) { showAlert('loginErr', 'Please enter your email address.'); return; }
+    if (!pw)    { showAlert('loginErr', 'Please enter your password.'); return; }
 
-    btn.disabled = true; btn.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span> Signing in…';
+    const btn = document.getElementById('btnLogin');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span> Signing in…';
 
     try {
-      const cred = await auth.signInWithEmailAndPassword(email, pw);
-      const uid  = cred.user.uid;
+      const cred    = await auth.signInWithEmailAndPassword(email, pw);
+      const userDoc = await db.collection('users').doc(cred.user.uid).get();
 
-      // Fetch user doc from Firestore
-      const userDoc = await db.collection('users').doc(uid).get();
       if (!userDoc.exists) {
         await auth.signOut();
-        showAlert('loginErr', 'Account not found. Please register first.');
-        btn.disabled = false; btn.innerHTML = '<span class="material-symbols-outlined">login</span> Sign In';
+        showAlert('loginErr', 'Account not found. Please create an account first.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-symbols-outlined">login</span> Sign In';
         return;
       }
 
-      const userData = userDoc.data();
-      const status   = userData.status || 'pending';
+      const d      = userDoc.data();
+      const status = d.status || 'pending';
 
-      // Check status
       if (status === 'pending') {
-        showPendingScreen(email);
-        return;
-      }
-      if (status === 'suspended') {
-        showBlockedScreen('Your account has been suspended. Please contact the fellowship admin.');
-        return;
-      }
-      if (status === 'blocked') {
-        showBlockedScreen('Your account has been blocked. Please contact the fellowship admin.');
+        hidePanels();
+        document.getElementById('pendingEmailEl').textContent = email;
+        document.getElementById('pendingScreen').classList.add('show');
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-symbols-outlined">login</span> Sign In';
         return;
       }
 
-      // Active — save to localStorage and redirect
-      localStorage.setItem('userRole',  userData.role  || 'member');
-      localStorage.setItem('userId',    uid);
-      localStorage.setItem('userName',  userData.name  || cred.user.displayName || 'User');
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userPhoto', userData.photoUrl || '');
+      if (status === 'suspended' || status === 'blocked') {
+        await auth.signOut();
+        hidePanels();
+        document.getElementById('blockedMsg').textContent =
+          status === 'suspended'
+            ? 'Your account has been suspended. Contact the fellowship admin.'
+            : 'Your account has been blocked. Contact the fellowship admin.';
+        document.getElementById('blockedScreen').classList.add('show');
+        btn.disabled = false;
+        btn.innerHTML = '<span class="material-symbols-outlined">login</span> Sign In';
+        return;
+      }
 
-      window.location.href = 'dashboard.html';
+      // Active — save and go
+      saveAndRedirect(cred.user.uid, d);
 
     } catch(err) {
-      const msg = {
-        'auth/user-not-found':     'No account found with this email.',
-        'auth/wrong-password':     'Incorrect password. Please try again.',
-        'auth/invalid-email':      'Invalid email address.',
-        'auth/too-many-requests':  'Too many attempts. Please wait and try again.',
-        'auth/invalid-credential': 'Invalid email or password.',
-      }[err.code] || err.message;
-      showAlert('loginErr', msg);
-      btn.disabled = false; btn.innerHTML = '<span class="material-symbols-outlined">login</span> Sign In';
+      // ── Friendly error messages ──
+      const map = {
+        'auth/user-not-found':
+          'No account found with this email. Please check or create an account.',
+        'auth/wrong-password':
+          'Incorrect password. Please try again.',
+        'auth/invalid-email':
+          'Invalid email address format.',
+        'auth/too-many-requests':
+          'Too many failed attempts. Please wait a few minutes and try again.',
+        'auth/invalid-credential':
+          'Wrong email or password. Please check and try again.',
+        'auth/network-request-failed':
+          'Network error. Please check your internet connection.',
+        'auth/user-disabled':
+          'This account has been disabled. Contact the fellowship admin.',
+      };
+      showAlert('loginErr', map[err.code] || 'Sign in failed: ' + err.message, 'error');
+      btn.disabled = false;
+      btn.innerHTML = '<span class="material-symbols-outlined">login</span> Sign In';
     }
   }
 
-  // ── Register ──
+  // ── Enter key on login ──
+  document.getElementById('loginPw').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  // ── REGISTER ──
   async function doRegister() {
     if (!validateStep(3)) return;
 
     const email  = document.getElementById('rEmail').value.trim();
     const pw     = document.getElementById('rPw').value;
-    const pwConf = document.getElementById('rPwConfirm').value;
-    clearAlerts();
+    const pwConf = document.getElementById('rPwConf').value;
+    clearAllAlerts();
 
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       document.getElementById('errEmail').classList.add('show'); return;
-    } else document.getElementById('errEmail').classList.remove('show');
+    }
+    document.getElementById('errEmail').classList.remove('show');
 
     if (pw.length < 8) {
       document.getElementById('errPw').classList.add('show'); return;
-    } else document.getElementById('errPw').classList.remove('show');
+    }
+    document.getElementById('errPw').classList.remove('show');
 
     if (pw !== pwConf) {
-      document.getElementById('errPwConfirm').classList.add('show'); return;
-    } else document.getElementById('errPwConfirm').classList.remove('show');
+      document.getElementById('errPwConf').classList.add('show'); return;
+    }
+    document.getElementById('errPwConf').classList.remove('show');
 
-    const btn = document.getElementById('btnRegister');
-    btn.disabled = true; btn.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span> Creating account…';
+    const btn = document.getElementById('btnReg');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span> Creating account…';
 
     try {
-      // Upload avatar to Cloudinary first (if any)
+      // 1. Upload avatar first
       avatarUrl = await uploadAvatar();
 
-      const firstName = document.getElementById('rFirstName').value.trim();
-      const lastName  = document.getElementById('rLastName').value.trim();
-      const fullName  = firstName + ' ' + lastName;
+      const first    = document.getElementById('rFirst').value.trim();
+      const last     = document.getElementById('rLast').value.trim();
+      const fullName = first + ' ' + last;
 
-      // Create Firebase Auth user
+      // 2. Create Firebase Auth account
       const cred = await auth.createUserWithEmailAndPassword(email, pw);
       const uid  = cred.user.uid;
 
-      // Save to Firestore users collection
+      // 3. User data object
       const userData = {
-        name:       fullName,
-        firstName,
-        lastName,
+        name:        fullName,
+        firstName:   first,
+        lastName:    last,
         email,
-        gender:     document.getElementById('rGender').value,
-        phone:      document.getElementById('rPhone').value.trim(),
-        state:      document.getElementById('rState').value,
-        department: document.getElementById('rDept').value.trim(),
-        faculty:    document.getElementById('rFaculty').value,
-        level:      document.getElementById('rLevel').value,
-        yearStart:  document.getElementById('rYearStart').value.trim(),
-        yearLeaving:document.getElementById('rYearLeave').value.trim(),
-        dob_day:    document.getElementById('rDobDay').value,
-        dob_month:  document.getElementById('rDobMonth').value,
-        dob_year:   document.getElementById('rDobYear').value,
-        photoUrl:   avatarUrl,
-        role:       'member',
-        status:     'pending',
-        financePerms: { view: false, create: false, edit: false, export: false },
-        createdAt:  firebase.firestore.FieldValue.serverTimestamp()
+        gender:      document.getElementById('rGender').value,
+        phone:       document.getElementById('rPhone').value.trim(),
+        state:       document.getElementById('rState').value,
+        department:  document.getElementById('rDept').value.trim(),
+        faculty:     document.getElementById('rFaculty').value,
+        level:       document.getElementById('rLevel').value,
+        yearStart:   document.getElementById('rYearStart').value.trim(),
+        yearLeaving: document.getElementById('rYearLeave').value.trim(),
+        dob_day:     document.getElementById('rDobDay').value,
+        dob_month:   document.getElementById('rDobMonth').value,
+        dob_year:    document.getElementById('rDobYear').value,
+        photoUrl:    avatarUrl,   // Cloudinary URL or '' if skipped
+        role:        'member',
+        status:      'pending',
+        financePerms:{ view:false, create:false, edit:false, export:false },
+        createdAt:   firebase.firestore.FieldValue.serverTimestamp()
       };
 
+      // 4. Save to users collection
       await db.collection('users').doc(uid).set(userData);
 
-      // Also add to members collection pre-populated
+      // 5. Also pre-populate members collection
       await db.collection('members').doc(uid).set({
-        name:       fullName,
-        gender:     userData.gender,
-        phone:      userData.phone,
-        state:      userData.state,
-        department: userData.department,
-        faculty:    userData.faculty,
-        level:      userData.level,
-        yearStart:  userData.yearStart,
-        yearLeaving:userData.yearLeaving,
-        dob_day:    userData.dob_day,
-        dob_month:  userData.dob_month,
-        dob_year:   userData.dob_year,
-        photo:      avatarUrl,
-        position:   'Member',
-        createdAt:  firebase.firestore.FieldValue.serverTimestamp()
+        name:        fullName,
+        gender:      userData.gender,
+        phone:       userData.phone,
+        state:       userData.state,
+        department:  userData.department,
+        faculty:     userData.faculty,
+        level:       userData.level,
+        yearStart:   userData.yearStart,
+        yearLeaving: userData.yearLeaving,
+        dob_day:     userData.dob_day,
+        dob_month:   userData.dob_month,
+        dob_year:    userData.dob_year,
+        photo:       avatarUrl,
+        position:    'Member',
+        createdAt:   firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      // Notify Super Admin
+      // 6. Notify Super Admin
       await notifySuperAdmin(
-        `New member registration: ${fullName} (${email}) is awaiting approval.`,
+        `New registration: ${fullName} (${email}) is awaiting approval.`,
         'member'
       );
 
-      // Sign out immediately — they're pending
+      // 7. Sign out immediately — pending approval
       await auth.signOut();
-      showPendingScreen(email);
+
+      // 8. Show pending screen
+      hidePanels();
+      document.getElementById('pendingEmailEl').textContent = email;
+      document.getElementById('pendingScreen').classList.add('show');
 
     } catch(err) {
-      const msg = {
-        'auth/email-already-in-use': 'This email is already registered. Try signing in.',
-        'auth/invalid-email':        'Invalid email address.',
-        'auth/weak-password':        'Password is too weak. Use at least 8 characters.',
-      }[err.code] || err.message;
-      showAlert('regErr', msg);
+      const map = {
+        'auth/email-already-in-use':
+          'This email is already registered. Please sign in instead.',
+        'auth/invalid-email':
+          'Invalid email address format.',
+        'auth/weak-password':
+          'Password is too weak. Use at least 8 characters with numbers and symbols.',
+        'auth/network-request-failed':
+          'Network error. Please check your internet connection.',
+      };
+      showAlert('regErr', map[err.code] || 'Registration failed: ' + err.message, 'error');
       btn.disabled = false;
       btn.innerHTML = '<span class="material-symbols-outlined">how_to_reg</span> Create Account';
     }
   }
 
-  // ── Pending / Blocked screens ──
-  function showPendingScreen(email) {
-    document.getElementById('authTabs').style.display = 'none';
-    document.getElementById('panelLogin').classList.remove('active');
-    document.getElementById('panelRegister').classList.remove('active');
-    document.getElementById('blockedScreen').classList.remove('show');
-    document.getElementById('pendingEmailDisplay').textContent = email;
-    document.getElementById('pendingScreen').classList.add('show');
-    const btn = document.getElementById('btnLogin');
-    if (btn) { btn.disabled = false; btn.innerHTML = '<span class="material-symbols-outlined">login</span> Sign In'; }
-  }
-
-  function showBlockedScreen(msg) {
-    auth.signOut();
-    document.getElementById('authTabs').style.display = 'none';
-    document.getElementById('panelLogin').classList.remove('active');
-    document.getElementById('panelRegister').classList.remove('active');
-    document.getElementById('pendingScreen').classList.remove('show');
-    document.getElementById('blockedMsg').textContent = msg;
-    document.getElementById('blockedScreen').classList.add('show');
-    const btn = document.getElementById('btnLogin');
-    if (btn) { btn.disabled = false; btn.innerHTML = '<span class="material-symbols-outlined">login</span> Sign In'; }
-  }
-
+  // ── Sign out ──
   function doSignOut() {
     auth.signOut().then(() => {
       localStorage.clear();
-      document.getElementById('pendingScreen').classList.remove('show');
-      document.getElementById('blockedScreen').classList.remove('show');
-      document.getElementById('authTabs').style.display = 'flex';
-      document.getElementById('panelLogin').classList.add('active');
-      document.getElementById('tabLogin').classList.add('active');
-      document.getElementById('tabRegister').classList.remove('active');
+      sessionStorage.clear();
+      // Replace history so back can't return to app
+      window.location.replace('auth.html');
     });
   }
 
   // ── Forgot password ──
-  function openForgot() {
-    document.getElementById('forgotSection').style.display = 'block';
-    document.getElementById('forgotEmail').value = document.getElementById('loginEmail').value;
-    document.getElementById('forgotEmail').focus();
-  }
-  function closeForgot() { document.getElementById('forgotSection').style.display = 'none'; }
-
-  async function sendReset() {
-    const email = document.getElementById('forgotEmail').value.trim();
-    document.getElementById('resetSuccess').classList.remove('show');
-    document.getElementById('resetErr').classList.remove('show');
-    if (!email) { showAlert('resetErr', 'Enter your email address.'); return; }
-    try {
-      await auth.sendPasswordResetEmail(email);
-      showAlert('resetSuccess', 'Reset link sent! Check your email inbox.');
-    } catch(err) {
-      const msg = {
-        'auth/user-not-found':  'No account found with this email.',
-        'auth/invalid-email':   'Invalid email address.',
-      }[err.code] || err.message;
-      showAlert('resetErr', msg);
+  function toggleForgot() {
+    const box = document.getElementById('forgotBox');
+    box.classList.toggle('show');
+    if (box.classList.contains('show')) {
+      document.getElementById('forgotEmail').value =
+        document.getElementById('loginEmail').value;
+      document.getElementById('forgotEmail').focus();
     }
   }
 
-  // ── Notify Super Admin on new registration ──
+  async function sendReset() {
+    const email = document.getElementById('forgotEmail').value.trim();
+    document.getElementById('resetOk').classList.remove('show');
+    document.getElementById('resetErr').classList.remove('show');
+    if (!email) { showAlert('resetErr', 'Enter your email address.', 'error'); return; }
+    try {
+      await auth.sendPasswordResetEmail(email);
+      showAlert('resetOk', 'Reset link sent! Check your email inbox.', 'success');
+    } catch(err) {
+      const map = {
+        'auth/user-not-found': 'No account found with this email. Please register first.',
+        'auth/invalid-email':  'Invalid email address.',
+      };
+      showAlert('resetErr', map[err.code] || err.message, 'error');
+    }
+  }
+
+  // ── Notify Super Admin ──
   async function notifySuperAdmin(message, type) {
     try {
       const snap = await db.collection('users')
@@ -940,35 +914,8 @@
         link: '/user-management.html', read: false,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-    } catch(e) { console.warn('Notify SA error:', e); }
+    } catch(e) { console.warn('Notify SA:', e); }
   }
-
-  // ── Auto-login if already active ──
-  auth.onAuthStateChanged(async user => {
-    if (!user) return;
-    try {
-      const doc = await db.collection('users').doc(user.uid).get();
-      if (!doc.exists) return;
-      const d = doc.data();
-      if (d.status === 'active') {
-        localStorage.setItem('userRole',  d.role  || 'member');
-        localStorage.setItem('userId',    user.uid);
-        localStorage.setItem('userName',  d.name  || 'User');
-        localStorage.setItem('userEmail', d.email || user.email);
-        localStorage.setItem('userPhoto', d.photoUrl || '');
-        window.location.href = 'dashboard.html';
-      } else if (d.status === 'pending') {
-        showPendingScreen(d.email || user.email);
-      } else if (d.status === 'suspended' || d.status === 'blocked') {
-        showBlockedScreen(`Your account has been ${d.status}. Please contact the fellowship admin.`);
-      }
-    } catch(e) { console.warn('Auth state error:', e); }
-  });
-
-  // ── Keyboard: Enter on login ──
-  document.getElementById('loginPw').addEventListener('keydown', e => {
-    if (e.key === 'Enter') doLogin();
-  });
 </script>
 </body>
 </html>
