@@ -63,19 +63,17 @@
     .btn-outline:hover { background:#eef4ff; }
     .btn-secondary { padding:.6rem 1.1rem; background:transparent; color:#555; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:1.5px solid #ccd4df; border-radius:5px; cursor:pointer; }
     .btn-danger { padding:.6rem 1.1rem; background:#dc3545; color:#fff; font-family:'Open Sans',sans-serif; font-size:.82rem; font-weight:700; border:none; border-radius:5px; cursor:pointer; }
+    .btn-danger:disabled { opacity:.6; cursor:not-allowed; }
 
-    /* Graduation banner */
     .grad-banner { display:none; background:linear-gradient(135deg,#fff8e1,#fff3cd); border:1.5px solid #ffc107; border-radius:8px; padding:1rem 1.2rem; margin-bottom:1.2rem; }
     .grad-banner.show { display:block; }
     .grad-banner-title { font-size:.88rem; font-weight:700; color:#856404; margin-bottom:.3rem; }
     .grad-banner-msg { font-size:.78rem; color:#664d03; margin-bottom:.8rem; line-height:1.5; }
     .grad-banner-actions { display:flex; gap:.6rem; flex-wrap:wrap; }
 
-    /* View-only notice */
     .view-notice { background:#f0f5ff; border:1px solid #c5d9f5; border-radius:6px; padding:.7rem 1rem; font-size:.8rem; color:#0066cc; font-weight:600; margin-bottom:1rem; display:none; }
     .view-notice.show { display:block; }
 
-    /* Stats cards */
     .stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.4rem; }
     .stat-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:1.1rem 1rem; box-shadow:0 1px 4px rgba(0,0,0,.04); }
     .stat-label { font-size:.65rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#aaa; margin-bottom:.4rem; }
@@ -85,7 +83,6 @@
     .stat-card.orange .stat-value { color:#fd7e14; }
     .stat-card.green .stat-value { color:#28a745; }
 
-    /* Toolbar */
     .toolbar { display:flex; align-items:center; gap:.7rem; margin-bottom:1.2rem; flex-wrap:wrap; }
     .search-wrap { position:relative; flex:1; min-width:180px; }
     .search-wrap input { width:100%; padding:.6rem .9rem .6rem 2.2rem; border:1.5px solid #dde3ec; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.85rem; outline:none; transition:border-color .2s; background:#fff; }
@@ -95,7 +92,6 @@
     .filter-btn { padding:.45rem .9rem; font-family:'Open Sans',sans-serif; font-size:.78rem; font-weight:700; border:1.5px solid #dde3ec; border-radius:20px; background:#fff; color:#555; cursor:pointer; transition:all .2s; }
     .filter-btn.active { border-color:#0066cc; color:#0066cc; background:#eef4ff; }
 
-    /* Member list */
     .members-list { display:flex; flex-direction:column; gap:.7rem; }
     .member-card { background:#fff; border:1px solid #dde3ec; border-radius:8px; padding:.9rem 1rem; display:flex; align-items:center; gap:.9rem; box-shadow:0 1px 3px rgba(0,0,0,.04); transition:box-shadow .2s,border-color .2s; cursor:pointer; }
     .member-card:hover { box-shadow:0 3px 10px rgba(0,0,0,.09); border-color:#b0c8f0; }
@@ -122,7 +118,6 @@
     .empty-state { text-align:center; padding:3rem 1rem; color:#bbb; }
     .empty-state .big { font-size:2.5rem; margin-bottom:.6rem; }
 
-    /* Modal */
     .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:500; align-items:flex-start; justify-content:center; padding:1rem; overflow-y:auto; }
     .modal-overlay.show { display:flex; }
     .modal { background:#fff; border-radius:8px; width:100%; max-width:520px; box-shadow:0 8px 32px rgba(0,0,0,.18); margin:auto; }
@@ -148,16 +143,14 @@
     .select-wrap { position:relative; }
     .select-wrap::after { content:''; position:absolute; right:.8rem; top:50%; transform:translateY(-50%); border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid #888; pointer-events:none; }
     .dob-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:.5rem; }
+    .dob-row input, .dob-row select { padding:.65rem .85rem; border:1.5px solid #ccd4df; border-radius:5px; font-family:'Open Sans',sans-serif; font-size:.87rem; background:#fff; outline:none; appearance:none; width:100%; }
 
-    /* Photo upload */
     .photo-upload-area { border:2px dashed #ccd4df; border-radius:8px; padding:1.2rem; text-align:center; cursor:pointer; position:relative; transition:border-color .2s,background .2s; overflow:hidden; }
     .photo-upload-area:hover { border-color:#0066cc; background:#f5f9ff; }
-    .photo-upload-area input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
-    .photo-upload-area img { width:70px; height:70px; border-radius:50%; object-fit:cover; margin:0 auto .4rem; display:block; border:2px solid #edf0f4; }
+    .photo-upload-area input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; padding:0; border:none; }
     .photo-upload-hint { font-size:.75rem; color:#888; }
     .photo-uploading { font-size:.75rem; color:#0066cc; font-weight:600; margin-top:.3rem; display:none; }
 
-    /* Profile bottom sheet */
     .sheet-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:600; }
     .sheet-overlay.show { display:block; }
     .profile-sheet { position:fixed; bottom:0; left:0; right:0; background:#fff; border-radius:16px 16px 0 0; padding:1.2rem 1.4rem 2.5rem; z-index:700; transform:translateY(100%); transition:transform .3s cubic-bezier(.4,0,.2,1); max-height:88vh; overflow-y:auto; }
@@ -170,7 +163,7 @@
     .profile-pos { font-size:.78rem; color:#888; margin-top:.15rem; }
     .profile-details { display:grid; grid-template-columns:1fr 1fr; gap:.7rem 1rem; margin-bottom:1rem; }
     .profile-field .lbl { font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#aaa; margin-bottom:.15rem; }
-    .profile-field .val { font-size:.85rem; font-weight:600; color:#333; }
+    .profile-field .val { font-size:.85rem; font-weight:600; color:#333; word-break:break-word; }
     .profile-footer { display:flex; gap:.6rem; padding-top:1rem; border-top:1px solid #edf0f4; flex-wrap:wrap; }
 
     .toast { position:fixed; bottom:1.5rem; right:1.5rem; padding:.8rem 1.3rem; border-radius:6px; font-size:.85rem; font-weight:700; color:#fff; z-index:999; transform:translateY(12px); opacity:0; transition:opacity .3s,transform .3s; pointer-events:none; }
@@ -261,7 +254,6 @@
 
     <div class="view-notice" id="viewNotice">👁 View-only mode. Contact an admin to make changes.</div>
 
-    <!-- Graduation banner — Super Admin only, end of 2nd semester -->
     <div class="grad-banner" id="gradBanner">
       <div class="grad-banner-title">🎓 Graduation Confirmation Required</div>
       <div class="grad-banner-msg" id="gradBannerMsg">Final-year members are ready to be graduated to Associates. Review the list and confirm to proceed. This action cannot be undone.</div>
@@ -271,7 +263,6 @@
       </div>
     </div>
 
-    <!-- Stats -->
     <div class="stats-grid">
       <div class="stat-card blue">
         <div class="stat-label">Total Active</div>
@@ -293,7 +284,7 @@
     <div class="toolbar">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Search by name, dept, level…" oninput="renderMembers()"/>
+        <input type="text" id="searchInput" placeholder="Search by name, dept, level, position…" oninput="renderMembers()"/>
       </div>
       <div class="filter-btns">
         <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">All</button>
@@ -319,7 +310,6 @@
       <button class="modal-close" onclick="closeModal()">×</button>
     </div>
     <div class="modal-body">
-      <!-- Photo upload -->
       <div class="form-group full" style="margin-bottom:.9rem;">
         <label>Passport Photo (optional)</label>
         <div class="photo-upload-area" id="photoUploadArea">
@@ -328,7 +318,7 @@
             <div style="font-size:2rem;margin-bottom:.3rem;">📷</div>
             <div class="photo-upload-hint">Tap to upload passport photo</div>
           </div>
-          <img id="photoPreview" style="display:none;width:70px;height:70px;border-radius:50%;object-fit:cover;margin:0 auto .4rem;display:none;border:2px solid #edf0f4;" alt="preview"/>
+          <img id="photoPreview" style="display:none;width:70px;height:70px;border-radius:50%;object-fit:cover;margin:0 auto .4rem;border:2px solid #edf0f4;" alt="preview"/>
         </div>
         <div class="photo-uploading" id="photoUploading">⏳ Uploading photo…</div>
       </div>
@@ -345,8 +335,8 @@
           <div class="select-wrap">
             <select id="fGender">
               <option value="">— Select —</option>
-              <option>Male</option>
-              <option>Female</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
             </select>
           </div>
           <span class="field-err" id="fGenderErr">Required</span>
@@ -422,20 +412,8 @@
         <div class="form-group">
           <label>Position</label>
           <div class="select-wrap">
-            <select id="fPosition">
-              <option value="Member">Member</option>
-              <option>President</option><option>Vice President</option>
-              <option>General Secretary</option><option>Asst. General Secretary</option>
-              <option>Bible Study Secretary</option><option>Asst Bible Study Secretary</option>
-              <option>Evangelism Secretary</option><option>Follow up Secretary</option>
-              <option>Prayer Secretary</option><option>Asst Prayer Secretary</option>
-              <option>Media/Publicity Secretary</option><option>Asst Media/Publicity Secretary</option>
-              <option>Organizing Secretary</option><option>Asst Organizing Secretary</option>
-              <option>Welfare Secretary</option><option>Asst. Welfare Secretary</option>
-              <option>Academic/Magazine Secretary</option><option>Music Director</option>
-              <option>Financial Secretary</option><option>Treasurer</option>
-              <option>Ex-official</option>
-            </select>
+            <!-- Options are generated from the POSITIONS list in the script below -->
+            <select id="fPosition"></select>
           </div>
         </div>
 
@@ -455,10 +433,7 @@
           <label>Date of Birth (optional)</label>
           <div class="dob-row">
             <div class="select-wrap">
-              <select id="fDobDay">
-                <option value="">Day</option>
-                <script>for(let i=1;i<=31;i++) document.write(`<option value="${i}">${i}</option>`);</script>
-              </select>
+              <select id="fDobDay"><option value="">Day</option></select>
             </div>
             <div class="select-wrap">
               <select id="fDobMonth">
@@ -560,51 +535,85 @@
     document.getElementById('navAudit').style.display = 'flex';
   }
 
-  // ── State ──
-  const AV  = ['av-0','av-1','av-2','av-3','av-4'];
-  const EXEC_POSITIONS = [
-    'President','Vice President','General Secretary','Asst. General Secretary',
-    'Financial Secretary','Treasurer','Bible Study Secretary','Asst Bible Study Secretary',
-    'Evangelism Secretary','Follow up Secretary','Prayer Secretary','Asst Prayer Secretary',
-    'Media/Publicity Secretary','Asst Media/Publicity Secretary','Organizing Secretary',
-    'Asst Organizing Secretary','Welfare Secretary','Asst. Welfare Secretary',
-    'Academic/Magazine Secretary','Music Director','Ex-official'
-  ];
+  // ── Constants ──
+  const AV = ['av-0','av-1','av-2','av-3','av-4'];
   const MONTHS_SHORT = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-  let allMembers   = [];
-  let memoData     = {};
+  // Single source of truth for positions (dropdown is built from this).
+  // Anyone whose position is NOT "Member" counts as a leader, so adding a
+  // new position here is all you need to do.
+  const POSITIONS = [
+    'Member',
+    'President', 'Vice President',
+    'General Secretary', 'Asst. General Secretary',
+    'Financial Secretary', 'Treasurer',
+    'Bible Study Secretary', 'Asst Bible Study Secretary',
+    'Evangelism Secretary', 'Follow up Secretary',
+    'Prayer Secretary', 'Asst Prayer Secretary',
+    'Media/Publicity Secretary', 'Asst Media/Publicity Secretary',
+    'Organizing Secretary', 'Asst Organizing Secretary',
+    'Welfare Secretary', 'Asst. Welfare Secretary',
+    'Partnership Secretary',
+    'Academic/Magazine Secretary',
+    'Music Director',
+    'Drama Coordinator',
+    'Brothers Coordinator',
+    'Year One Coordinator',
+    'Ex-official 1', 'Ex-official 2', 'Ex-official 3'
+  ];
+
+  // Build dropdowns
+  (function buildDropdowns() {
+    const pos = document.getElementById('fPosition');
+    pos.innerHTML = POSITIONS.map(p => `<option value="${p}">${p}</option>`).join('');
+    const day = document.getElementById('fDobDay');
+    for (let i = 1; i <= 31; i++) day.insertAdjacentHTML('beforeend', `<option value="${i}">${i}</option>`);
+  })();
+
+  // ── State ──
+  let allMembers = [];
+  let memoData = {};
   let currentFilter = 'all';
-  let editingId     = null;
+  let editingId = null;
   let selectedPhotoFile = null;
-  let currentPhotoUrl   = '';
+  let currentPhotoUrl = '';
   let gradBannerDismissed = false;
 
-  // ── Load memo + members ──
-  Promise.all([
-    db.collection('settings').doc('memo').get(),
-    db.collection('members').orderBy('name').get()
-  ]).then(([memoSnap, membersSnap]) => {
-    if (memoSnap.exists) memoData = memoSnap.data();
+  // ── Helpers ──
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+  function cleanPos(m) { return (m.position || '').replace(/\s+/g, ' ').trim(); }
+  function isLeader(m) {
+    const p = cleanPos(m).toLowerCase();
+    return p !== '' && p !== 'member' && p !== 'associates' && p !== 'associate';
+  }
 
-    db.collection('members').orderBy('name').onSnapshot(snap => {
-      allMembers = snap.docs.map(d => ({id:d.id,...d.data()}))
-        .filter(m => m.position !== 'Associates' && m.isAssociate !== true);
-      updateStats();
-      renderMembers();
-      checkGraduationBanner();
-    });
+  // ── Load data (memo and members are independent so one failing can't block the other) ──
+  db.collection('settings').doc('memo').onSnapshot(snap => {
+    memoData = snap.exists ? snap.data() : {};
+    updateStats(); renderMembers(); checkGraduationBanner();
+  }, err => console.log('Memo load error:', err));
+
+  db.collection('members').orderBy('name').onSnapshot(snap => {
+    allMembers = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(m => m.position !== 'Associates' && m.isAssociate !== true);
+    updateStats(); renderMembers(); checkGraduationBanner();
+  }, err => {
+    document.getElementById('membersList').innerHTML =
+      `<div class="empty-state"><div class="big">⚠️</div><p>Could not load members: ${esc(err.message)}</p></div>`;
   });
 
   // ── FYB logic ──
-  // A member is FYB if their yearLeaving matches the current academic year from memo
   function getCurrentGradYear() {
-    // Academic year format e.g. "2024/2025" — use the ending year
     if (!memoData.session) return null;
     const parts = memoData.session.split('/');
-    return parseInt(parts[parts.length - 1]);
+    const y = parseInt(parts[parts.length - 1]);
+    return isNaN(y) ? null : y;
   }
-
   function isFYB(m) {
     const gradYear = getCurrentGradYear();
     if (!gradYear) return false;
@@ -614,42 +623,36 @@
   function updateStats() {
     document.getElementById('stTotal').textContent   = allMembers.length;
     document.getElementById('stFinal').textContent   = allMembers.filter(isFYB).length;
-    document.getElementById('stLeaders').textContent = allMembers.filter(m=>EXEC_POSITIONS.includes(m.position)).length;
+    document.getElementById('stLeaders').textContent = allMembers.filter(isLeader).length;
   }
 
   // ── Graduation banner ──
-  // Show to Super Admin at end of 2nd semester when FYB members exist
   function checkGraduationBanner() {
     if (!isSuperAdmin || gradBannerDismissed) return;
     const fybs = allMembers.filter(isFYB);
-    if (!fybs.length) return;
-    // Show if semester is 2nd
+    if (!fybs.length) { document.getElementById('gradBanner').classList.remove('show'); return; }
     if (memoData.semester && memoData.semester.toLowerCase().includes('2')) {
       document.getElementById('gradBannerMsg').textContent =
         `${fybs.length} final-year member(s) are ready to graduate this session (${memoData.session||''}). Review and confirm to move them to Past Members.`;
       document.getElementById('gradBanner').classList.add('show');
     }
   }
-
   function dismissGradBanner() {
     gradBannerDismissed = true;
     document.getElementById('gradBanner').classList.remove('show');
   }
-
   function openGradConfirm() {
     const fybs = allMembers.filter(isFYB);
-    const list = document.getElementById('gradList');
-    list.innerHTML = fybs.map((m,i) => `
+    document.getElementById('gradList').innerHTML = fybs.map((m,i) => `
       <div style="display:flex;align-items:center;gap:.7rem;padding:.6rem .8rem;background:#f7f9fc;border:1px solid #edf0f4;border-radius:6px;">
-        <div class="member-avatar-ph ${AV[i%AV.length]}" style="width:36px;height:36px;font-size:.85rem;">${(m.name||'?').charAt(0)}</div>
+        <div class="member-avatar-ph ${AV[i%AV.length]}" style="width:36px;height:36px;font-size:.85rem;">${esc((m.name||'?').charAt(0))}</div>
         <div>
-          <div style="font-size:.85rem;font-weight:700;">${m.name}</div>
-          <div style="font-size:.72rem;color:#888;">${m.position||'Member'} · ${m.level||''} · ${m.department||''}</div>
+          <div style="font-size:.85rem;font-weight:700;">${esc(m.name)}</div>
+          <div style="font-size:.72rem;color:#888;">${esc(cleanPos(m)||'Member')} · ${esc(m.level||'')} · ${esc(m.department||'')}</div>
         </div>
       </div>`).join('');
     document.getElementById('gradModal').classList.add('show');
   }
-
   function closeGradModal() { document.getElementById('gradModal').classList.remove('show'); }
 
   async function confirmGraduation() {
@@ -657,19 +660,15 @@
     if (!fybs.length) return;
     const btn = document.getElementById('btnConfirmGrad');
     btn.disabled = true; btn.textContent = 'Processing…';
-
     try {
       const batch = db.batch();
       for (const m of fybs) {
-        // Move to past_members collection
-        const pastRef = db.collection('past_members').doc(m.id);
-        batch.set(pastRef, {
+        batch.set(db.collection('past_members').doc(m.id), {
           ...m,
           isAssociate: true,
           graduatedSession: memoData.session || '',
           graduatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-        // Remove from members
         batch.delete(db.collection('members').doc(m.id));
       }
       await batch.commit();
@@ -677,7 +676,7 @@
       closeGradModal();
       dismissGradBanner();
       showToast(`🎓 ${fybs.length} member(s) graduated to Associates!`, 'success');
-    } catch(err) {
+    } catch (err) {
       showToast('Error: ' + err.message, 'error');
     }
     btn.disabled = false; btn.textContent = '✓ Confirm Graduation';
@@ -685,26 +684,26 @@
 
   // ── Render ──
   function setFilter(btn) {
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentFilter = btn.dataset.filter;
     renderMembers();
   }
 
   function renderMembers() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    let filtered = allMembers.filter(m => {
+    const q = document.getElementById('searchInput').value.toLowerCase().trim();
+    const filtered = allMembers.filter(m => {
       const matchQ = !q ||
         (m.name||'').toLowerCase().includes(q) ||
         (m.department||'').toLowerCase().includes(q) ||
-        (m.level||'').toString().toLowerCase().includes(q) ||
-        (m.position||'').toLowerCase().includes(q) ||
+        String(m.level||'').toLowerCase().includes(q) ||
+        cleanPos(m).toLowerCase().includes(q) ||
         (m.faculty||'').toLowerCase().includes(q);
       if (!matchQ) return false;
-      if (currentFilter === 'fyb')     return isFYB(m);
-      if (currentFilter === 'leaders') return EXEC_POSITIONS.includes(m.position);
+      if (currentFilter === 'fyb')      return isFYB(m);
+      if (currentFilter === 'leaders')  return isLeader(m);
       if (currentFilter === 'brothers') return m.gender === 'Male';
-      if (currentFilter === 'sisters') return m.gender === 'Female';
+      if (currentFilter === 'sisters')  return m.gender === 'Female';
       return true;
     });
 
@@ -715,28 +714,28 @@
     }
 
     list.innerHTML = filtered.map((m, i) => {
-      const init = (m.name||'?').charAt(0).toUpperCase();
+      const init  = (m.name||'?').charAt(0).toUpperCase();
       const avCls = AV[i % AV.length];
       const fyb   = isFYB(m);
-      const isLeader = EXEC_POSITIONS.includes(m.position);
+      const leader = isLeader(m);
 
       const avatarHtml = m.photo
-        ? `<img class="member-avatar" src="${m.photo}" alt="${m.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-           <div class="member-avatar-ph ${avCls}" style="display:none">${init}</div>`
-        : `<div class="member-avatar-ph ${avCls}">${init}</div>`;
+        ? `<img class="member-avatar" src="${esc(m.photo)}" alt="${esc(m.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+           <div class="member-avatar-ph ${avCls}" style="display:none">${esc(init)}</div>`
+        : `<div class="member-avatar-ph ${avCls}">${esc(init)}</div>`;
 
       const badges = [
-        fyb       ? `<span class="badge badge-fyb">🎓 FYB</span>` : '',
-        isLeader  ? `<span class="badge badge-blue">${m.position}</span>` : '<span class="badge badge-green">Member</span>',
+        fyb ? `<span class="badge badge-fyb">🎓 FYB</span>` : '',
+        leader ? `<span class="badge badge-blue">${esc(cleanPos(m))}</span>` : `<span class="badge badge-green">Member</span>`,
         m.gender === 'Female' ? `<span class="badge badge-purple">Sister</span>` : `<span class="badge badge-orange">Brother</span>`
       ].filter(Boolean).join('');
 
       return `
-        <div class="member-card ${fyb?'fyb-card':''}" onclick="openProfile('${m.id}')">
+        <div class="member-card ${fyb?'fyb-card':''}" onclick="openProfile('${esc(m.id)}')">
           ${avatarHtml}
           <div class="member-info">
-            <div class="member-name">${m.name||'—'}</div>
-            <div class="member-sub">${m.level||'—'} · ${m.department||'—'} · ${m.faculty||'—'}</div>
+            <div class="member-name">${esc(m.name||'—')}</div>
+            <div class="member-sub">${esc(m.level||'—')} · ${esc(m.department||'—')} · ${esc(m.faculty||'—')}</div>
             <div class="member-badges">${badges}</div>
           </div>
           <div class="member-arrow">›</div>
@@ -748,35 +747,38 @@
   function openProfile(id) {
     const m = allMembers.find(x => x.id === id);
     if (!m) return;
-    const init = (m.name||'?').charAt(0).toUpperCase();
-    const idx  = allMembers.indexOf(m);
-    const avCls = AV[idx % AV.length];
+    const init  = (m.name||'?').charAt(0).toUpperCase();
+    const avCls = AV[allMembers.indexOf(m) % AV.length];
     const fyb   = isFYB(m);
 
     const avatarHtml = m.photo
-      ? `<img class="profile-avatar" src="${m.photo}" alt="${m.name}">`
-      : `<div class="profile-avatar-ph ${avCls}">${init}</div>`;
+      ? `<img class="profile-avatar" src="${esc(m.photo)}" alt="${esc(m.name)}">`
+      : `<div class="profile-avatar-ph ${avCls}">${esc(init)}</div>`;
 
     document.getElementById('profileTop').innerHTML = `
       ${avatarHtml}
       <div>
-        <div class="profile-name">${m.name||'—'} ${fyb?'<span class="badge badge-fyb">🎓 FYB</span>':''}</div>
-        <div class="profile-pos">${m.position||'Member'} · Level ${m.level||'—'}</div>
+        <div class="profile-name">${esc(m.name||'—')} ${fyb?'<span class="badge badge-fyb">🎓 FYB</span>':''}</div>
+        <div class="profile-pos">${esc(cleanPos(m)||'Member')} · Level ${esc(m.level||'—')}</div>
       </div>`;
 
+    const bday = (m.dob_day && m.dob_month)
+      ? `${esc(m.dob_day)} ${MONTHS_SHORT[parseInt(m.dob_month)]||''}${m.dob_year ? ' ' + esc(m.dob_year) : ''}`
+      : '—';
+
     document.getElementById('profileDetails').innerHTML = `
-      <div class="profile-field"><div class="lbl">Department</div><div class="val">${m.department||'—'}</div></div>
-      <div class="profile-field"><div class="lbl">Faculty</div><div class="val">${m.faculty||'—'}</div></div>
-      <div class="profile-field"><div class="lbl">Gender</div><div class="val">${m.gender||'—'}</div></div>
-      <div class="profile-field"><div class="lbl">State</div><div class="val">${m.state||'—'}</div></div>
-      <div class="profile-field"><div class="lbl">Phone</div><div class="val">${m.phone||'—'}</div></div>
-      <div class="profile-field"><div class="lbl">Birthday</div><div class="val">${m.dob_day&&m.dob_month?m.dob_day+' '+MONTHS_SHORT[parseInt(m.dob_month)]+(m.dob_year?' '+m.dob_year:''):'—'}</div></div>
-      <div class="profile-field"><div class="lbl">Year Started</div><div class="val">${m.yearStart||'—'}</div></div>
-      <div class="profile-field"><div class="lbl">Year Leaving</div><div class="val">${m.yearLeaving||'—'}</div></div>`;
+      <div class="profile-field"><div class="lbl">Department</div><div class="val">${esc(m.department||'—')}</div></div>
+      <div class="profile-field"><div class="lbl">Faculty</div><div class="val">${esc(m.faculty||'—')}</div></div>
+      <div class="profile-field"><div class="lbl">Gender</div><div class="val">${esc(m.gender||'—')}</div></div>
+      <div class="profile-field"><div class="lbl">State</div><div class="val">${esc(m.state||'—')}</div></div>
+      <div class="profile-field"><div class="lbl">Phone</div><div class="val">${esc(m.phone||'—')}</div></div>
+      <div class="profile-field"><div class="lbl">Birthday</div><div class="val">${bday}</div></div>
+      <div class="profile-field"><div class="lbl">Year Started</div><div class="val">${esc(m.yearStart||'—')}</div></div>
+      <div class="profile-field"><div class="lbl">Year Leaving</div><div class="val">${esc(m.yearLeaving||'—')}</div></div>`;
 
     document.getElementById('profileFooter').innerHTML = isPrivileged
-      ? `<button class="btn-primary" onclick="closeProfile();openEditModal('${m.id}')">✏ Edit</button>
-         <button class="btn-secondary" onclick="closeProfile();deleteMember('${m.id}','${m.name}')">🗑 Delete</button>`
+      ? `<button class="btn-primary" onclick="closeProfile();openEditModal('${esc(m.id)}')">✏ Edit</button>
+         <button class="btn-secondary" onclick="closeProfile();deleteMember('${esc(m.id)}')">🗑 Delete</button>`
       : '';
 
     document.getElementById('sheetOverlay').classList.add('show');
@@ -807,6 +809,13 @@
     document.getElementById('modalTitle').textContent = 'Edit Member';
     document.getElementById('btnSave').textContent = 'Update Member';
 
+    // If the saved position isn't in the list (old data), add it so it isn't lost
+    const pos = cleanPos(m) || 'Member';
+    const posSel = document.getElementById('fPosition');
+    if (![...posSel.options].some(o => o.value === pos)) {
+      posSel.insertAdjacentHTML('beforeend', `<option value="${esc(pos)}">${esc(pos)}</option>`);
+    }
+
     document.getElementById('fName').value      = m.name||'';
     document.getElementById('fGender').value    = m.gender||'';
     document.getElementById('fLevel').value     = m.level||'';
@@ -814,7 +823,7 @@
     document.getElementById('fFaculty').value   = m.faculty||'';
     document.getElementById('fPhone').value     = m.phone||'';
     document.getElementById('fState').value     = m.state||'';
-    document.getElementById('fPosition').value  = m.position||'Member';
+    posSel.value                                = pos;
     document.getElementById('fYearStart').value = m.yearStart||'';
     document.getElementById('fYearLeave').value = m.yearLeaving||'';
     document.getElementById('fDobDay').value    = m.dob_day||'';
@@ -838,19 +847,18 @@
   }
 
   function clearForm() {
-    ['fName','fPhone','fDept','fYearStart','fYearLeave','fDobYear'].forEach(id=>document.getElementById(id).value='');
-    ['fGender','fLevel','fFaculty','fState','fDobDay','fDobMonth'].forEach(id=>document.getElementById(id).value='');
+    ['fName','fPhone','fDept','fYearStart','fYearLeave','fDobYear'].forEach(id => document.getElementById(id).value = '');
+    ['fGender','fLevel','fFaculty','fState','fDobDay','fDobMonth'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('fPosition').value = 'Member';
     selectedPhotoFile = null; currentPhotoUrl = '';
     document.getElementById('fPhoto').value = '';
     document.getElementById('photoPreview').style.display = 'none';
     document.getElementById('photoPlaceholder').style.display = 'block';
     document.getElementById('photoUploading').style.display = 'none';
-    document.querySelectorAll('.field-err').forEach(e=>e.classList.remove('show'));
-    document.querySelectorAll('.invalid').forEach(e=>e.classList.remove('invalid'));
+    document.querySelectorAll('.field-err').forEach(e => e.classList.remove('show'));
+    document.querySelectorAll('.invalid').forEach(e => e.classList.remove('invalid'));
   }
 
-  // ── Photo select — preview only, upload happens on save ──
   function handlePhotoSelect(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -865,38 +873,31 @@
     reader.readAsDataURL(file);
   }
 
-  // ── Save member — upload photo to Firebase Storage first (same pattern as events.html) ──
+  // ── Save member ──
   async function saveMember() {
     if (!isPrivileged) return;
 
-    // Validate required fields
     let valid = true;
     const checks = [
-      ['fName','fNameErr'],['fGender','fGenderErr'],
-      ['fLevel','fLevelErr'],['fDept','fDeptErr'],['fYearLeave','fYearLeaveErr']
+      ['fName','fNameErr'], ['fGender','fGenderErr'], ['fLevel','fLevelErr'],
+      ['fDept','fDeptErr'], ['fYearStart','fYearStartErr'], ['fYearLeave','fYearLeaveErr']
     ];
-    checks.forEach(([fid,eid]) => {
-      document.getElementById(fid).classList.remove('invalid');
+    checks.forEach(([fid, eid]) => {
+      const el = document.getElementById(fid);
+      el.classList.remove('invalid');
       document.getElementById(eid).classList.remove('show');
-      if (!document.getElementById(fid).value.trim()) {
-        document.getElementById(fid).classList.add('invalid');
+      if (!el.value.trim()) {
+        el.classList.add('invalid');
         document.getElementById(eid).classList.add('show');
         valid = false;
       }
     });
-    // Year start optional but check
-    const yearStart = document.getElementById('fYearStart').value.trim();
-    if (!yearStart) {
-      document.getElementById('fYearStart').classList.add('invalid');
-      document.getElementById('fYearStartErr') && document.getElementById('fYearStartErr').classList.add('show');
-      valid = false;
-    }
     if (!valid) { showToast('Please fill all required fields.', 'error'); return; }
 
     const btn = document.getElementById('btnSave');
     btn.disabled = true; btn.textContent = 'Saving…';
 
-    // ── Upload photo to Cloudinary ──
+    // Upload photo to Cloudinary (if a new one was chosen)
     let finalPhotoUrl = currentPhotoUrl;
     if (selectedPhotoFile) {
       try {
@@ -905,20 +906,19 @@
         formData.append('file', selectedPhotoFile);
         formData.append('upload_preset', 'gecc-uniport');
         const res = await fetch('https://api.cloudinary.com/v1_1/df5pitgrp/image/upload', {
-          method: 'POST',
-          body: formData
+          method: 'POST', body: formData
         });
-        const data = await res.json();
-        if (!data.secure_url) throw new Error(data.error?.message || 'Upload failed');
-        finalPhotoUrl = data.secure_url;
+        const up = await res.json();
+        if (!up.secure_url) throw new Error((up.error && up.error.message) || 'Upload failed');
+        finalPhotoUrl = up.secure_url;
         document.getElementById('photoUploading').style.display = 'none';
-      } catch(err) {
+      } catch (err) {
         document.getElementById('photoUploading').style.display = 'none';
         showToast('Photo upload failed: ' + err.message, 'error');
         btn.disabled = false; btn.textContent = editingId ? 'Update Member' : 'Save Member';
         return;
       }
-  }
+    }
 
     const data = {
       name:        document.getElementById('fName').value.trim(),
@@ -928,7 +928,7 @@
       faculty:     document.getElementById('fFaculty').value,
       phone:       document.getElementById('fPhone').value.trim(),
       state:       document.getElementById('fState').value,
-      position:    document.getElementById('fPosition').value,
+      position:    document.getElementById('fPosition').value.trim() || 'Member',
       yearStart:   document.getElementById('fYearStart').value.trim(),
       yearLeaving: document.getElementById('fYearLeave').value.trim(),
       dob_day:     document.getElementById('fDobDay').value,
@@ -938,8 +938,9 @@
       updatedAt:   firebase.firestore.FieldValue.serverTimestamp()
     };
 
+    const wasEditing = !!editingId;
     try {
-      if (editingId) {
+      if (wasEditing) {
         await db.collection('members').doc(editingId).update(data);
         await logAudit('member_edited', `Edited member: ${data.name}`);
         showToast('Member updated!', 'success');
@@ -952,32 +953,34 @@
         showToast('Member added!', 'success');
       }
       closeModal();
-    } catch(err) {
+    } catch (err) {
       showToast('Error: ' + err.message, 'error');
     }
     btn.disabled = false;
-    btn.textContent = editingId ? 'Update Member' : 'Save Member';
+    btn.textContent = wasEditing ? 'Update Member' : 'Save Member';
   }
 
-  async function deleteMember(id, name) {
+  async function deleteMember(id) {
     if (!isPrivileged) return;
+    const m = allMembers.find(x => x.id === id);
+    const name = m ? m.name : 'this member';
     if (!confirm(`Delete ${name}? This cannot be undone.`)) return;
     try {
       await db.collection('members').doc(id).delete();
       await logAudit('member_deleted', `Deleted member: ${name}`);
       showToast('Member deleted.', 'success');
-    } catch(err) { showToast('Error: ' + err.message, 'error'); }
+    } catch (err) { showToast('Error: ' + err.message, 'error'); }
   }
 
   function exportCSV() {
     if (!isPrivileged) return;
+    const q = v => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`;
     const headers = ['Name','Gender','Level','Department','Faculty','Phone','State','Position','Year Started','Year Leaving'];
-    const rows = allMembers.map(m=>[
-      `"${m.name||''}"`,`"${m.gender||''}"`,`"${m.level||''}"`,`"${m.department||''}"`,
-      `"${m.faculty||''}"`,`"${m.phone||''}"`,`"${m.state||''}"`,`"${m.position||''}"`,
-      `"${m.yearStart||''}"`,`"${m.yearLeaving||''}"`
-    ].join(','));
-    const csv = [headers.join(','),...rows].join('\n');
+    const rows = allMembers.map(m => [
+      m.name, m.gender, m.level, m.department, m.faculty,
+      m.phone, m.state, cleanPos(m), m.yearStart, m.yearLeaving
+    ].map(q).join(','));
+    const csv = [headers.join(','), ...rows].join('\n');
     const a = document.createElement('a');
     a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
     a.download = 'gecc-members.csv'; a.click();
@@ -990,7 +993,7 @@
         performedBy: userName, performedByRole: role, userId,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
-    } catch(e) { console.log('Audit log error:', e); }
+    } catch (e) { console.log('Audit log error:', e); }
   }
 
   function doLogout() {
@@ -1003,13 +1006,14 @@
     setTimeout(() => t.className = 'toast', 2800);
   }
 
-  document.getElementById('memberModal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
-  document.getElementById('gradModal').addEventListener('click', function(e){ if(e.target===this) closeGradModal(); });
+  document.getElementById('memberModal').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
+  document.getElementById('gradModal').addEventListener('click', function (e) { if (e.target === this) closeGradModal(); });
 
   const sidebarEl = document.getElementById('sidebar');
   const overlayEl = document.getElementById('overlay');
-  document.getElementById('hamburger').addEventListener('click', ()=>{ sidebarEl.classList.toggle('open'); overlayEl.classList.toggle('show'); });
+  document.getElementById('hamburger').addEventListener('click', () => { sidebarEl.classList.toggle('open'); overlayEl.classList.toggle('show'); });
   function closeSidebar() { sidebarEl.classList.remove('open'); overlayEl.classList.remove('show'); }
 </script>
 </body>
 </html>
+
